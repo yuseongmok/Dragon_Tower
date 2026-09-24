@@ -23,7 +23,7 @@ MonoBehaviour:
   vfxOffset: {x: 0, y: 0}
   vfxEuler: {x: 0, y: 0, z: 0}
   vfxDuration: 1.6
-  vfxSystemLimit: 14
+  vfxSystemLimit: 12
   damage: 16
   cooldown: 5
   hitCount: 3

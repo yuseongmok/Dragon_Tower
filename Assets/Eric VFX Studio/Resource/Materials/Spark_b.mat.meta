@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: d79d5f2a948a0e747b49170518642346
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: fx_textures_particle_materials.unity3d
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 364330
+  packageName: Game VFX - Cartoon Skill Effects
+  packageVersion: 1.01
+  assetPath: Assets/Eric VFX Studio/Resource/Materials/Spark_b.mat
+  uploadId: 980036

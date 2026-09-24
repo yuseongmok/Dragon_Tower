@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 0256370d00cc5034e98d15467ed59ba5
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: fx_textures_ground_materials.unity3d
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 364330
+  packageName: Game VFX - Cartoon Skill Effects
+  packageVersion: 1.01
+  assetPath: Assets/Eric VFX Studio/Resource/Materials/stone02.mat
+  uploadId: 980036

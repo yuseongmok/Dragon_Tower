@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 3bd2e6150bb8ebb4984e5f93d511366f
+timeCreated: 1543827592
+licenseType: Store
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 364330
+  packageName: Game VFX - Cartoon Skill Effects
+  packageVersion: 1.01
+  assetPath: Assets/Eric VFX Studio/Resource/Materials/show_wind1.mat
+  uploadId: 980036

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: fc26bdd20a0e0fb46929d16cd3256acc
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: fx_textures_dust_materials.unity3d
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 364330
+  packageName: Game VFX - Cartoon Skill Effects
+  packageVersion: 1.01
+  assetPath: Assets/Eric VFX Studio/Resource/Materials/Smoke_a.mat
+  uploadId: 980036

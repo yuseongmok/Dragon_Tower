@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: cb2aead8f8bb5874b9a2508c93c7cd47
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 364330
+  packageName: Game VFX - Cartoon Skill Effects
+  packageVersion: 1.01
+  assetPath: Assets/Eric VFX Studio/Resource/Animator/MagicLightning_Exp.controller
+  uploadId: 980036

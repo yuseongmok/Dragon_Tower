@@ -19,7 +19,7 @@ MonoBehaviour:
   effectKind: 4
   icon: {fileID: 0}
   battleVfx: {fileID: 8883886972259098614, guid: 6b39120fedf06e34db8639cf42a2762f, type: 3}
-  vfxScale: 0.65
+  vfxScale: 0.55
   vfxOffset: {x: 0, y: 0}
   vfxEuler: {x: 0, y: 0, z: 0}
   vfxDuration: 1.6

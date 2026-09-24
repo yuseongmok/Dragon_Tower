@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: c561cf967b842ee4099dad1ae1fe7084
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: fx_textures_slash_materials.unity3d
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 364330
+  packageName: Game VFX - Cartoon Skill Effects
+  packageVersion: 1.01
+  assetPath: Assets/Eric VFX Studio/Resource/Materials/dk_effect_002.mat
+  uploadId: 980036

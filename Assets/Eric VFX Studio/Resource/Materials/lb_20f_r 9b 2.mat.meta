@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 038f6fc9d1e367f4b97b2dc0b6bfba85
+timeCreated: 1435135139
+licenseType: Store
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: fx_textures_line_rotate_materials.unity3d
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 364330
+  packageName: Game VFX - Cartoon Skill Effects
+  packageVersion: 1.01
+  assetPath: Assets/Eric VFX Studio/Resource/Materials/lb_20f_r 9b 2.mat
+  uploadId: 980036

@@ -19,11 +19,11 @@ MonoBehaviour:
   effectKind: 2
   icon: {fileID: 0}
   battleVfx: {fileID: 594964199963683135, guid: f0a336cec7167984ebe2be3407eeaefa, type: 3}
-  vfxScale: 0.65
+  vfxScale: 0.55
   vfxOffset: {x: 0, y: 0}
   vfxEuler: {x: 0, y: 0, z: 0}
   vfxDuration: 1.6
-  vfxSystemLimit: 14
+  vfxSystemLimit: 15
   damage: 14
   cooldown: 8.5
   hitCount: 6
