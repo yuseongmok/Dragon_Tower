@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8104a060aef340d2bae800e3c7ba2cac, type: 3}
-  m_Name: item_healing_potion
+  m_Name: item_echo_crystal
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.ItemData
-  contentId: item_healing_potion
-  displayName: "회복약"
-  description: "사용 시 최대 HP의 20% 즉시 회복"
-  rarity: 0
+  contentId: item_echo_crystal
+  displayName: "메아리 수정"
+  description: "다음 스킬이 총 피해의 50%로 한 번 더 울려 퍼짐"
+  rarity: 4
   icon: {fileID: 0}
-  grade: 0
+  grade: 3
   kind: 0
-  mechanic: 12
-  maximumStacks: 9
-  price: 30
-  primaryValue: 20
+  mechanic: 22
+  maximumStacks: 1
+  price: 200
+  primaryValue: 50
   secondaryValue: 0
   duration: 0
   effects: []

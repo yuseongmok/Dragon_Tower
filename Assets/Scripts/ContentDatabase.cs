@@ -27,7 +27,26 @@ namespace DragonTower
         }
         public ItemData[] PickItems(int count,int seed)
         {
-            return PickUnique(items,count,seed);
+            var pool=new List<ItemData>();foreach(var value in items??Array.Empty<ItemData>())if(value!=null)pool.Add(value);
+            var result=new List<ItemData>();var random=new System.Random(seed);
+            while(result.Count<count&&pool.Count>0)
+            {
+                var picked=PickWeightedItem(pool,random);if(picked==null)break;
+                result.Add(picked);pool.Remove(picked);
+            }
+            return result.ToArray();
+        }
+        public static int ItemGradeWeight(ItemGrade grade)
+        {switch(grade){case ItemGrade.Rare:return 30;case ItemGrade.Epic:return 12;case ItemGrade.Unique:return 3;default:return 55;}}
+        public static ItemData PickWeightedItem(IReadOnlyList<ItemData> candidates,System.Random random)
+        {
+            if(candidates==null||candidates.Count==0)return null;if(random==null)throw new ArgumentNullException(nameof(random));
+            var grades=new List<ItemGrade>();foreach(var value in candidates)if(value!=null&&!grades.Contains(value.grade))grades.Add(value.grade);
+            int total=0;foreach(var grade in grades)total+=ItemGradeWeight(grade);
+            if(total<=0)return null;int point=random.Next(total);ItemGrade selected=grades[0];
+            foreach(var grade in grades){int weight=ItemGradeWeight(grade);if(point<weight){selected=grade;break;}point-=weight;}
+            var matching=new List<ItemData>();foreach(var value in candidates)if(value!=null&&value.grade==selected)matching.Add(value);
+            return matching.Count==0?null:matching[random.Next(matching.Count)];
         }
         public AugmentData[] PickAugments(int count,int seed)
         {

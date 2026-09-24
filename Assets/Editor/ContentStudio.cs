@@ -130,7 +130,7 @@ namespace DragonTower.Editor
             else if(tab=="Skills")
             {rows.Add(new[]{"id","name","elementType","damage","cooldown","hitCount","hitInterval","statusEffect","statusChancePercent","statusDuration","statusPower","effectKind","description"});foreach(SkillData s in assets)rows.Add(new[]{s.StableId,s.displayName,s.elementType.ToString(),s.damage.ToString(),F(s.cooldown),s.hitCount.ToString(),F(s.hitInterval),s.statusEffect.ToString(),F(s.statusChancePercent),F(s.statusDuration),F(s.statusPower),s.effectKind.ToString(),Clean(s.description)});}
             else if(tab=="Items")
-            {rows.Add(new[]{"id","name","rarity","price","description","effects"});foreach(ItemData i in assets)rows.Add(new[]{i.StableId,i.displayName,i.rarity.ToString(),i.price.ToString(),Clean(i.description),Effects(i.effects)});}
+            {rows.Add(new[]{"id","name","grade","kind","mechanic","maximumStacks","price","primaryValue","secondaryValue","duration","description","effects"});foreach(ItemData i in assets)rows.Add(new[]{i.StableId,i.displayName,i.grade.ToString(),i.kind.ToString(),i.mechanic.ToString(),i.maximumStacks.ToString(),i.price.ToString(),F(i.primaryValue),F(i.secondaryValue),F(i.duration),Clean(i.description),Effects(i.effects)});}
             else
             {rows.Add(new[]{"id","name","grade","maximumStacks","description","mechanic","primaryValue","secondaryValue","chancePercent","duration","triggerCount","effects"});foreach(AugmentData a in assets)rows.Add(new[]{a.StableId,a.displayName,a.grade.ToString(),a.maximumStacks.ToString(),Clean(a.description),a.mechanic.ToString(),F(a.primaryValue),F(a.secondaryValue),F(a.chancePercent),F(a.duration),a.triggerCount.ToString(),Effects(a.effects)});}
             var builder=new StringBuilder();foreach(var row in rows)builder.AppendLine(string.Join(",",row.Select(Escape)));return builder.ToString();
@@ -160,7 +160,13 @@ namespace DragonTower.Editor
             }
             else if(tab=="Items")
             {
-                var i=FindOrCreate<ItemData>(id,"Assets/Data/Items",x=>x.StableId);i.contentId=id;i.displayName=Get(row,"name");i.rarity=E<ContentRarity>(row,"rarity");i.price=I(row,"price");i.description=Get(row,"description");i.effects=ParseEffects(Get(row,"effects"));EditorUtility.SetDirty(i);
+                var i=FindOrCreate<ItemData>(id,"Assets/Data/Items",x=>x.StableId);i.contentId=id;i.displayName=Get(row,"name");
+                if(row.ContainsKey("grade"))i.grade=E<ItemGrade>(row,"grade");else if(row.ContainsKey("rarity"))i.grade=LegacyItemGrade(E<ContentRarity>(row,"rarity"));
+                i.rarity=i.grade==ItemGrade.Unique?ContentRarity.Legendary:i.grade==ItemGrade.Epic?ContentRarity.Epic:i.grade==ItemGrade.Rare?ContentRarity.Rare:ContentRarity.Common;
+                if(row.ContainsKey("kind"))i.kind=E<ItemKind>(row,"kind");if(row.ContainsKey("mechanic"))i.mechanic=E<ItemMechanic>(row,"mechanic");
+                i.maximumStacks=row.ContainsKey("maximumStacks")?Math.Max(1,I(row,"maximumStacks")):1;i.price=I(row,"price");
+                if(row.ContainsKey("primaryValue"))i.primaryValue=R(row,"primaryValue");if(row.ContainsKey("secondaryValue"))i.secondaryValue=R(row,"secondaryValue");if(row.ContainsKey("duration"))i.duration=R(row,"duration");
+                i.description=Get(row,"description");i.effects=ParseEffects(Get(row,"effects"));EditorUtility.SetDirty(i);
             }
             else
             {
@@ -172,6 +178,8 @@ namespace DragonTower.Editor
         }
         static AugmentGrade LegacyAugmentGrade(ContentRarity rarity)
         {switch(rarity){case ContentRarity.Legendary:return AugmentGrade.Unique;case ContentRarity.Epic:return AugmentGrade.Epic;case ContentRarity.Uncommon:case ContentRarity.Rare:return AugmentGrade.Rare;default:return AugmentGrade.Common;}}
+        static ItemGrade LegacyItemGrade(ContentRarity rarity)
+        {switch(rarity){case ContentRarity.Legendary:return ItemGrade.Unique;case ContentRarity.Epic:return ItemGrade.Epic;case ContentRarity.Uncommon:case ContentRarity.Rare:return ItemGrade.Rare;default:return ItemGrade.Common;}}
         static T FindOrCreate<T>(string id,string folder,Func<T,string> getId) where T:ScriptableObject
         {
             var found=Find(id,getId);if(found!=null)return found;var data=ScriptableObject.CreateInstance<T>();
@@ -199,7 +207,7 @@ namespace DragonTower.Editor
             foreach(string guid in AssetDatabase.FindAssets("t:DragonData",new[]{"Assets/Data"})){var x=AssetDatabase.LoadAssetAtPath<DragonData>(AssetDatabase.GUIDToAssetPath(guid));Id(x.speciesId,x.name);if(x.skill==null)issues.Add(x.name+": 스킬이 없습니다.");if(x.maxHP<1||x.attackDamage<1)issues.Add(x.name+": 능력치는 1 이상이어야 합니다.");}
             foreach(string guid in AssetDatabase.FindAssets("t:MonsterData",new[]{"Assets/Data"})){var x=AssetDatabase.LoadAssetAtPath<MonsterData>(AssetDatabase.GUIDToAssetPath(guid));Id(x.contentId,x.name);if(x.minimumFloor>x.maximumFloor)issues.Add(x.name+": 시작 층이 마지막 층보다 큽니다.");if(x.spawnWeight<=0)issues.Add(x.name+": 등장 가중치가 0입니다.");if(x.battleSprite==null)issues.Add(x.name+": 전투 그림이 없습니다.");}
             foreach(string guid in AssetDatabase.FindAssets("t:SkillData",new[]{"Assets/Data"})){var x=AssetDatabase.LoadAssetAtPath<SkillData>(AssetDatabase.GUIDToAssetPath(guid));Id(x.skillId,x.name);if(x.damage<1||x.cooldown<=0||x.hitCount<1||x.hitInterval<.03f)issues.Add(x.name+": 피해·쿨타임·타격 설정을 확인하세요.");if(x.statusChancePercent<0||x.statusChancePercent>100)issues.Add(x.name+": 상태이상 확률은 0~100이어야 합니다.");}
-            foreach(string guid in AssetDatabase.FindAssets("t:ItemData",new[]{"Assets/Data"})){var x=AssetDatabase.LoadAssetAtPath<ItemData>(AssetDatabase.GUIDToAssetPath(guid));Id(x.contentId,x.name);if(x.effects==null||x.effects.Count==0)issues.Add(x.name+": 아이템 효과가 없습니다.");}
+            foreach(string guid in AssetDatabase.FindAssets("t:ItemData",new[]{"Assets/Data"})){var x=AssetDatabase.LoadAssetAtPath<ItemData>(AssetDatabase.GUIDToAssetPath(guid));Id(x.contentId,x.name);if((x.effects==null||x.effects.Count==0)&&x.mechanic==ItemMechanic.None)issues.Add(x.name+": 아이템 효과가 없습니다.");if(x.maximumStacks<1)issues.Add(x.name+": 최대 중첩은 1 이상이어야 합니다.");}
             foreach(string guid in AssetDatabase.FindAssets("t:AugmentData",new[]{"Assets/Data"})){var x=AssetDatabase.LoadAssetAtPath<AugmentData>(AssetDatabase.GUIDToAssetPath(guid));Id(x.contentId,x.name);if(x.maximumStacks<1)issues.Add(x.name+": 최대 중첩은 1 이상이어야 합니다.");}
             return issues.Count==0?"문제 없음":string.Join("\n",issues.Take(40))+(issues.Count>40?"\n... 외 "+(issues.Count-40)+"개":"");
         }

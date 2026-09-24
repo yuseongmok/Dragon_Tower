@@ -10,15 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8104a060aef340d2bae800e3c7ba2cac, type: 3}
-  m_Name: item_iron_scale
+  m_Name: item_inferno_breath
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.ItemData
-  contentId: item_iron_scale
-  displayName: "\uAC15\uCCA0 \uBE44\uB298"
-  description: 
-  rarity: 0
+  contentId: item_inferno_breath
+  displayName: "업화의 숨결"
+  description: "사용 시 5초간 매초 공격력의 30% 화상 피해"
+  rarity: 2
   icon: {fileID: 0}
-  price: 0
-  effects:
-  - type: 1
-    value: 15
-    note: 
+  grade: 1
+  kind: 0
+  mechanic: 8
+  maximumStacks: 3
+  price: 75
+  primaryValue: 30
+  secondaryValue: 0
+  duration: 5
+  effects: []

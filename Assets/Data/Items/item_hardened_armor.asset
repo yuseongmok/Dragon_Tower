@@ -10,19 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8104a060aef340d2bae800e3c7ba2cac, type: 3}
-  m_Name: item_healing_potion
+  m_Name: item_hardened_armor
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.ItemData
-  contentId: item_healing_potion
-  displayName: "회복약"
-  description: "사용 시 최대 HP의 20% 즉시 회복"
-  rarity: 0
+  contentId: item_hardened_armor
+  displayName: "단단한 갑옷"
+  description: "장착 시 최대 HP 20% 증가"
+  rarity: 2
   icon: {fileID: 0}
-  grade: 0
-  kind: 0
-  mechanic: 12
-  maximumStacks: 9
-  price: 30
-  primaryValue: 20
+  grade: 1
+  kind: 1
+  mechanic: 0
+  maximumStacks: 3
+  price: 80
+  primaryValue: 0
   secondaryValue: 0
   duration: 0
-  effects: []
+  effects:
+  - type: 9
+    value: 20
+    note: 

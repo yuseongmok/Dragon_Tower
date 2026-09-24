@@ -249,13 +249,28 @@ namespace DragonTower
             {
                 ChoiceButtons=new Button[choices.Length];for(int i=0;i<choices.Length;i++){var item=choices[i];ChoiceButtons[i]=ItemChoice(item,285+i*125);}
             }
-            else ChoiceButtons=new[]{ItemChoice("체력 물약","HP 35 회복","healing-potion",285),
-                ItemChoice("강철 비늘","최대 HP +15","iron-scale",410),ItemChoice("날카로운 발톱","공격력 +2","sharp-claw",535)};
+            else {Label("등록된 아이템이 없습니다.",0,390,420,50,22,Color.white);RoomButton=Button("다음 층",0,610,360,68,AdvanceFloor);}
         }
         Button ItemChoice(ItemData item,float y)
-        {return Button(item.displayName+"\n"+EffectSummary(item.effects),0,y,400,96,()=>{towerRun.AddItem(item);ShowRoomResult(item.displayName+"을(를) 획득했습니다.");});}
-        Button ItemChoice(string title,string detail,string id,float y)
-        {return Button(title+"\n"+detail,0,y,400,96,()=>{towerRun.AddItem(id);ShowRoomResult(title+"을(를) 획득했습니다.");});}
+        {return Button("["+ItemGradeName(item.grade)+"] "+item.displayName+"\n"+ItemSummary(item),0,y,400,96,()=>AcquireItem(item,()=>ShowRoomResult(item.displayName+"을(를) 획득했습니다.")));}
+        string ItemSummary(ItemData item)
+        {
+            if(item==null)return "효과 없음";string kind=item.kind==ItemKind.Consumable?"소모품":"장착";
+            return kind+" · "+(!string.IsNullOrWhiteSpace(item.description)?item.description:EffectSummary(item.effects));
+        }
+        void AcquireItem(ItemData item,Action complete)
+        {
+            if(towerRun.CanAddItem(item)){towerRun.AddItem(item);complete();return;}
+            Screen("아이템 교체");Label("새 아이템  ["+ItemGradeName(item.grade)+"] "+item.displayName,0,185,430,54,22,Gold);
+            Label(ItemSummary(item),0,245,420,58,17,Color.white);
+            ChoiceButtons=new Button[towerRun.ItemSlots.Count];
+            for(int i=0;i<towerRun.ItemSlots.Count;i++)
+            {
+                int slot=i;var owned=towerRun.ItemSlots[i];
+                ChoiceButtons[i]=Button((i+1)+"번 교체 · "+owned.DisplayName+(owned.Count>1?" ×"+owned.Count:"")+"\n→ "+item.displayName,0,355+i*120,400,92,()=>{towerRun.AddItem(item,slot);complete();});
+            }
+            notice.text="아이템은 두 종류만 보유할 수 있습니다. 같은 아이템은 한 슬롯에 중첩됩니다.";
+        }
         string EffectSummary(System.Collections.Generic.IReadOnlyList<ContentEffect> effects)
         {
             if(effects==null||effects.Count==0)return "효과 없음";string result="";
@@ -272,7 +287,7 @@ namespace DragonTower
                 case ContentEffectType.DodgeDurationPercent:return "회피 시간 %";case ContentEffectType.MaxHPPercent:return "최대 HP %";
                 case ContentEffectType.AttackDamagePercent:return "일반 공격 피해 %";case ContentEffectType.CriticalChancePercent:return "치명타 확률 %";
                 case ContentEffectType.CriticalDamagePercent:return "치명타 피해 %";case ContentEffectType.SkillDisabled:return "스킬 봉인";
-                case ContentEffectType.SkillCooldownSetZero:return "스킬 쿨타임 삭제";default:return "골드";
+                case ContentEffectType.SkillCooldownSetZero:return "스킬 쿨타임 삭제";case ContentEffectType.DamageReductionPercent:return "받는 피해 감소 %";default:return "골드";
             }
         }
         void ShowRecoveryRoom()
@@ -290,10 +305,19 @@ namespace DragonTower
         void ShowShopRoom()
         {
             Screen("상점방");Label("보유 골드  "+towerRun.Gold,0,175,420,42,24,Gold);
-            RoomButton=Button("회복 물약 구매  ·  30G\nHP 40 회복",0,330,400,100,()=>{
-                if(!towerRun.SpendGold(30)){notice.text="골드가 부족합니다.";return;}int healed=towerRun.Heal(40);ShowRoomResult("HP를 "+healed+" 회복했습니다.");});
-            SecondRoomButton=Button("구매하지 않고 다음 층",0,500,400,72,AdvanceFloor);
-            notice.text="회복은 구매하는 즉시 적용됩니다.";
+            var goods=database==null?Array.Empty<ItemData>():database.PickItems(2,Environment.TickCount^(towerRun.Floor<<10));
+            ChoiceButtons=new Button[goods.Length];
+            for(int i=0;i<goods.Length;i++)
+            {
+                var item=goods[i];ChoiceButtons[i]=Button("["+ItemGradeName(item.grade)+"] "+item.displayName+" · "+item.price+"G\n"+ItemSummary(item),0,315+i*125,400,100,()=>BuyItem(item));
+            }
+            SecondRoomButton=Button("구매하지 않고 다음 층",0,600,400,66,AdvanceFloor);
+            notice.text="구매한 아이템은 빈 슬롯에 넣거나 기존 아이템과 교체합니다.";
+        }
+        void BuyItem(ItemData item)
+        {
+            if(item==null)return;if(!towerRun.SpendGold(item.price)){notice.text="골드가 부족합니다.";return;}
+            AcquireItem(item,()=>ShowRoomResult(item.displayName+"을(를) "+item.price+"G에 구매했습니다."));
         }
         void ShowNestRoom()
         {
@@ -375,6 +399,8 @@ namespace DragonTower
         }
         static string GradeName(AugmentGrade grade)
         {switch(grade){case AugmentGrade.Rare:return "레어";case AugmentGrade.Epic:return "에픽";case AugmentGrade.Unique:return "유니크";default:return "일반";}}
+        static string ItemGradeName(ItemGrade grade)
+        {switch(grade){case ItemGrade.Rare:return "레어";case ItemGrade.Epic:return "에픽";case ItemGrade.Unique:return "유니크";default:return "일반";}}
         static Color GradeColor(AugmentGrade grade)
         {switch(grade){case AugmentGrade.Rare:return new Color(.18f,.38f,.58f);case AugmentGrade.Epic:return new Color(.39f,.22f,.58f);case AugmentGrade.Unique:return new Color(.68f,.40f,.12f);default:return new Color(.18f,.27f,.36f);}}
         string AugmentSummary(AugmentData augment)
@@ -415,7 +441,7 @@ namespace DragonTower
             if(controller.CurrentBattle.Result==BattleResult.Victory)
             {
                 int hp=controller.CurrentBattle.PlayerHP;towerRun.RecordBattleVictory(hp);controller.EndBattle();
-                if(towerRun.PendingEvolutionStage>0)ShowEvolutionCutscene();else ContinueAfterLevelRewards();return;
+                if(TryShowMonsterDrop())return;ContinueAfterBattleRewards();return;
             }
             int floor=towerRun.Floor;towerRun.End();controller.EndBattle();
             Screen("도전 종료");Label(floor+"층에서 모험을 마쳤습니다",0,312,420,70,28,Gold);
@@ -423,6 +449,19 @@ namespace DragonTower
             RoomButton=Button("로비로 돌아가기",0,610,360,68,ShowLobby);
             notice.text="같은 드래곤으로 다시 도전할 수 있습니다.";
         }
+        bool TryShowMonsterDrop()
+        {
+            int chance=towerRun.Room==TowerRoomKind.Boss?25:towerRun.Room==TowerRoomKind.Monster?12:0;
+            if(database==null||database.items==null||database.items.Length==0||UnityEngine.Random.Range(0,100)>=chance)return false;
+            var drops=database.PickItems(1,Environment.TickCount^(towerRun.Floor<<12));if(drops.Length==0)return false;var item=drops[0];
+            Screen("몬스터 전리품");Label("["+ItemGradeName(item.grade)+"] "+item.displayName,0,250,420,54,26,Gold);
+            Label(ItemSummary(item),0,330,420,82,19,Color.white);
+            RoomButton=Button("획득 또는 교체",0,475,360,72,()=>AcquireItem(item,ContinueAfterBattleRewards));
+            SecondRoomButton=Button("두고 간다",0,575,360,62,ContinueAfterBattleRewards);
+            notice.text="몬스터가 아이템을 떨어뜨렸습니다.";return true;
+        }
+        void ContinueAfterBattleRewards()
+        {if(towerRun.PendingEvolutionStage>0)ShowEvolutionCutscene();else ContinueAfterLevelRewards();}
         void ContinueAfterLevelRewards()
         {
             if(towerRun.PendingLevelAugments>0)ShowAugmentChoices(true);else AdvanceFloor();

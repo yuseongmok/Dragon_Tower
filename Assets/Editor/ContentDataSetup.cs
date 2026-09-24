@@ -26,9 +26,7 @@ namespace DragonTower.Editor
             EnsureMonster("monster_cave_bat","동굴 박쥐",ElementType.Dark,240,18,2.4f,1,9,10,false,"cave-bat.png");
             EnsureMonster("monster_armored_skeleton","갑옷 해골 기사",ElementType.Earth,240,18,2.4f,1,9,10,false,"armored-skeleton.png");
             EnsureMonster("boss_ancient_golem","고대 룬 골렘",ElementType.Earth,360,24,2.2f,10,999,10,true,"ancient-golem-boss.png");
-            EnsureItem("item_healing_potion","체력 물약",30,ContentEffectType.Heal,35);
-            EnsureItem("item_iron_scale","강철 비늘",0,ContentEffectType.MaxHP,15);
-            EnsureItem("item_sharp_claw","날카로운 발톱",0,ContentEffectType.AttackDamage,2);
+            EnsureItems();
             EnsureAugments();
             UpdateExistingSkills();
             UpdateExistingDragons();
@@ -57,13 +55,55 @@ namespace DragonTower.Editor
             if(boss){data.hpGrowthPerFloor=6;data.attackGrowthPerFloor=.2f;}
             data.battleSprite=AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/PixelBattle/"+spriteFile);AssetDatabase.CreateAsset(data,path);
         }
-        static void EnsureItem(string id,string name,int price,ContentEffectType type,float value)
+        static void EnsureItem(string id,string name,string description,ItemGrade grade,ItemKind kind,ItemMechanic mechanic,int price,int maximumStacks,float primary=0,float secondary=0,float duration=0,params ContentEffect[] effects)
         {
-            string path=Root+"/Items/"+id+".asset";var data=AssetDatabase.LoadAssetAtPath<ItemData>(path);if(data!=null)return;
-            data=ScriptableObject.CreateInstance<ItemData>();data.contentId=id;data.displayName=name;data.price=price;
-            data.effects.Add(new ContentEffect{type=type,value=value});AssetDatabase.CreateAsset(data,path);
+            string path=Root+"/Items/"+id+".asset";var data=AssetDatabase.LoadAssetAtPath<ItemData>(path);
+            bool initialize=data==null||(string.IsNullOrWhiteSpace(data.description)&&data.maximumStacks<=1);
+            if(data==null){data=ScriptableObject.CreateInstance<ItemData>();AssetDatabase.CreateAsset(data,path);}
+            if(!initialize)return;
+            data.contentId=id;data.displayName=name;data.description=description;data.grade=grade;data.kind=kind;data.mechanic=mechanic;
+            data.price=price;data.maximumStacks=Math.Max(1,maximumStacks);data.primaryValue=primary;data.secondaryValue=secondary;data.duration=duration;
+            data.rarity=grade==ItemGrade.Unique?ContentRarity.Legendary:grade==ItemGrade.Epic?ContentRarity.Epic:grade==ItemGrade.Rare?ContentRarity.Rare:ContentRarity.Common;
+            data.effects.Clear();if(effects!=null)data.effects.AddRange(effects);EditorUtility.SetDirty(data);
         }
         static ContentEffect E(ContentEffectType type,float value)=>new ContentEffect{type=type,value=value};
+        static void EnsureItems()
+        {
+            EnsureItem("item_time_shard","시공의 파편","사용 시 1초간 모든 피해에 무적",ItemGrade.Epic,ItemKind.Consumable,ItemMechanic.TimeShard,120,2,0,0,1);
+            EnsureItem("item_burst_core","버스트 코어","사용 시 남은 스킬 쿨타임 즉시 초기화",ItemGrade.Rare,ItemKind.Consumable,ItemMechanic.BurstCore,70,3);
+            EnsureItem("item_desperate_stand","배수의 진","사용 시 5초간 일반 공격 쿨타임 제거",ItemGrade.Epic,ItemKind.Consumable,ItemMechanic.LastStand,130,2,0,0,5);
+            EnsureItem("item_giant_roar","거인의 외침","사용 시 적의 행동을 3초간 봉쇄",ItemGrade.Rare,ItemKind.Consumable,ItemMechanic.GiantRoar,75,3,0,0,3);
+            EnsureItem("item_blood_tome","혈투의 서","현재 HP 20%를 소모하고 10초간 스킬 피해 200% 증가",ItemGrade.Epic,ItemKind.Consumable,ItemMechanic.BloodTome,140,2,20,200,10);
+            EnsureItem("item_light_purification_rod","빛의 정화봉","사용 시 HP를 100% 회복",ItemGrade.Unique,ItemKind.Consumable,ItemMechanic.PurificationRod,220,1);
+            EnsureItem("item_frost_witch_tear","서리 마녀의 눈물","사용 시 5초간 적 공격속도 50% 둔화",ItemGrade.Rare,ItemKind.Consumable,ItemMechanic.FrostWitchTear,70,3,50,0,5);
+            EnsureItem("item_inferno_breath","업화의 숨결","사용 시 5초간 매초 공격력의 30% 화상 피해",ItemGrade.Rare,ItemKind.Consumable,ItemMechanic.InfernoBreath,75,3,30,0,5);
+            EnsureItem("item_weakness_lens","약점 분석 렌즈","사용 시 5초간 치명타 확률 100% 증가",ItemGrade.Epic,ItemKind.Consumable,ItemMechanic.WeaknessLens,125,2,100,0,5);
+            EnsureItem("item_emergency_accelerator","비상용 가속 장치","사용 시 3초간 스킬 쿨타임 제거",ItemGrade.Unique,ItemKind.Consumable,ItemMechanic.EmergencyAccelerator,210,1,0,0,3);
+            EnsureItem("item_stun_gun","전기충격기","사용 시 적의 행동을 5초간 봉쇄",ItemGrade.Epic,ItemKind.Consumable,ItemMechanic.StunGun,135,2,0,0,5);
+            EnsureItem("item_healing_potion","회복약","사용 시 최대 HP의 20% 즉시 회복",ItemGrade.Common,ItemKind.Consumable,ItemMechanic.HealingPotion,30,9,20);
+            EnsureItem("item_greater_healing_potion","고급 회복약","사용 시 최대 HP의 40% 즉시 회복",ItemGrade.Rare,ItemKind.Consumable,ItemMechanic.GreaterHealingPotion,65,5,40);
+            EnsureItem("item_hardened_claw","단단한 발톱","장착 시 일반 공격 피해 10% 증가",ItemGrade.Common,ItemKind.Equipment,ItemMechanic.None,35,3,0,0,0,E(ContentEffectType.AttackDamagePercent,10));
+            EnsureItem("item_hero_sword","용사의 검","장착 시 스킬 피해 10% 증가",ItemGrade.Common,ItemKind.Equipment,ItemMechanic.None,35,3,0,0,0,E(ContentEffectType.SkillDamagePercent,10));
+            EnsureItem("item_yata_mirror","야타의 거울","장착 시 회피 쿨타임 20% 감소",ItemGrade.Rare,ItemKind.Equipment,ItemMechanic.None,75,3,0,0,0,E(ContentEffectType.DodgeCooldownPercent,20));
+            EnsureItem("item_assassin_sword","암살자의 검","장착 시 치명타 확률 20% 증가",ItemGrade.Epic,ItemKind.Equipment,ItemMechanic.None,125,2,0,0,0,E(ContentEffectType.CriticalChancePercent,20));
+            EnsureItem("item_hardened_armor","단단한 갑옷","장착 시 최대 HP 20% 증가",ItemGrade.Rare,ItemKind.Equipment,ItemMechanic.None,80,3,0,0,0,E(ContentEffectType.MaxHPPercent,20));
+            EnsureItem("item_executioner_mark","처형자의 표식","체력 40% 이하인 적에게 주는 피해 50% 증가",ItemGrade.Epic,ItemKind.Equipment,ItemMechanic.ExecutionerMark,135,2,50);
+            EnsureItem("item_poison_fang","독니","전투 중 10초마다 공격력의 35% 지속 피해",ItemGrade.Rare,ItemKind.Equipment,ItemMechanic.PoisonFang,80,3,35);
+            EnsureItem("item_meteor_fragment","운석 파편","전투 중 10초마다 스킬 피해의 30% 화염 추가 공격",ItemGrade.Epic,ItemKind.Equipment,ItemMechanic.MeteorFragment,130,3,30);
+            EnsureItem("item_infighting_glove","인파이팅 장갑","일반 공격마다 해당 피해의 10% 추가 공격",ItemGrade.Rare,ItemKind.Equipment,ItemMechanic.InfightingGlove,75,3,10);
+
+            EnsureItem("item_chrono_gear","시간의 톱니","장착 시 일반 공격과 스킬 쿨타임 12% 감소",ItemGrade.Epic,ItemKind.Equipment,ItemMechanic.None,125,2,0,0,0,E(ContentEffectType.AttackCooldownPercent,12),E(ContentEffectType.SkillCooldownPercent,12));
+            EnsureItem("item_mana_prism","마력 프리즘","장착 시 스킬 피해 15% 증가",ItemGrade.Rare,ItemKind.Equipment,ItemMechanic.None,70,3,0,0,0,E(ContentEffectType.SkillDamagePercent,15));
+            EnsureItem("item_guardian_brooch","수호자의 브로치","장착 시 받는 피해 12% 감소",ItemGrade.Rare,ItemKind.Equipment,ItemMechanic.GuardianBrooch,80,3,0,0,0,E(ContentEffectType.DamageReductionPercent,12));
+            EnsureItem("item_phoenix_feather","불사조의 깃털","전투당 1회 쓰러질 때 최대 HP의 25%로 부활",ItemGrade.Unique,ItemKind.Equipment,ItemMechanic.PhoenixFeather,220,1,25);
+            EnsureItem("item_blood_potion","피의 물약","최대 HP의 25%를 회복하고 6초간 일반 공격 피해 25% 증가",ItemGrade.Rare,ItemKind.Consumable,ItemMechanic.BloodPotion,75,3,25,25,6);
+            EnsureItem("item_barrier_stone","수호 결계석","사용 시 최대 HP의 30% 보호막을 8초간 획득",ItemGrade.Epic,ItemKind.Consumable,ItemMechanic.BarrierStone,130,2,30,0,8);
+            EnsureItem("item_echo_crystal","메아리 수정","다음 스킬이 총 피해의 50%로 한 번 더 울려 퍼짐",ItemGrade.Unique,ItemKind.Consumable,ItemMechanic.EchoCrystal,200,1,50);
+            EnsureItem("item_balance_talisman","균형의 부적","최대 HP·일반 공격·스킬 피해 8% 증가",ItemGrade.Rare,ItemKind.Equipment,ItemMechanic.None,85,3,0,0,0,E(ContentEffectType.MaxHPPercent,8),E(ContentEffectType.AttackDamagePercent,8),E(ContentEffectType.SkillDamagePercent,8));
+
+            AssetDatabase.DeleteAsset(Root+"/Items/item_iron_scale.asset");
+            AssetDatabase.DeleteAsset(Root+"/Items/item_sharp_claw.asset");
+        }
         static void EnsureAugment(string id,string name,string description,AugmentMechanic mechanic=AugmentMechanic.None,float primary=0,float secondary=0,float chance=0,float duration=0,int count=1,params ContentEffect[] effects)
         {
             string path=Root+"/Augments/"+id+".asset";var data=AssetDatabase.LoadAssetAtPath<AugmentData>(path);if(data!=null)return;

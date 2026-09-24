@@ -14,6 +14,7 @@ namespace DragonTower
             Application.targetFrameRate=60;
             Flow=gameObject.AddComponent<CollectionFlow>();
             view.Bind(()=>{if(battle!=null)battle.Attack();},()=>{if(battle!=null)battle.Skill();},()=>{if(battle!=null)battle.Dodge();},()=>Flow.ResolveBattleResult());
+            view.BindItems(()=>UseItem(0),()=>UseItem(1));
             Flow.Initialize(this,view,dragons);
         }
         public void EndBattle() { battle=null; }
@@ -30,7 +31,14 @@ namespace DragonTower
             battle.Feedback+=text=>view.message.text=text;
             view.message.text="공격을 터치하세요 · 게이지가 차기 직전에 회피";
             view.Show(battle);
+            view.SetItems(Flow==null?null:Flow.CurrentRun);
             view.restartButton.GetComponentInChildren<UnityEngine.UI.Text>().text="결과 확인";
+        }
+        void UseItem(int index)
+        {
+            var run=Flow==null?null:Flow.CurrentRun;var item=run==null?null:run.ItemAt(index);
+            if(battle==null||item==null||!battle.UseItem(item))return;
+            run.ConsumeItem(index);view.SetItems(run);view.Show(battle);
         }
         void Update()
         {

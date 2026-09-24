@@ -10,15 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8104a060aef340d2bae800e3c7ba2cac, type: 3}
-  m_Name: item_sharp_claw
+  m_Name: item_hero_sword
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.ItemData
-  contentId: item_sharp_claw
-  displayName: "\uB0A0\uCE74\uB85C\uC6B4 \uBC1C\uD1B1"
-  description: 
+  contentId: item_hero_sword
+  displayName: "용사의 검"
+  description: "장착 시 스킬 피해 10% 증가"
   rarity: 0
   icon: {fileID: 0}
-  price: 0
+  grade: 0
+  kind: 1
+  mechanic: 0
+  maximumStacks: 3
+  price: 35
+  primaryValue: 0
+  secondaryValue: 0
+  duration: 0
   effects:
-  - type: 2
-    value: 2
+  - type: 3
+    value: 10
     note: 

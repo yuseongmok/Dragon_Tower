@@ -9,7 +9,7 @@ namespace DragonTower
         Heal, MaxHP, AttackDamage, SkillDamagePercent, SkillCooldownPercent,
         AttackCooldownPercent, DodgeCooldownPercent, DodgeDurationPercent, Gold,
         MaxHPPercent, AttackDamagePercent, CriticalChancePercent, CriticalDamagePercent,
-        SkillDisabled, SkillCooldownSetZero
+        SkillDisabled, SkillCooldownSetZero, DamageReductionPercent
     }
     [Serializable]
     public sealed class ContentEffect

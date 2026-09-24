@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8104a060aef340d2bae800e3c7ba2cac, type: 3}
-  m_Name: item_healing_potion
+  m_Name: item_giant_roar
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.ItemData
-  contentId: item_healing_potion
-  displayName: "회복약"
-  description: "사용 시 최대 HP의 20% 즉시 회복"
-  rarity: 0
+  contentId: item_giant_roar
+  displayName: "거인의 외침"
+  description: "사용 시 적의 행동을 3초간 봉쇄"
+  rarity: 2
   icon: {fileID: 0}
-  grade: 0
+  grade: 1
   kind: 0
-  mechanic: 12
-  maximumStacks: 9
-  price: 30
-  primaryValue: 20
+  mechanic: 4
+  maximumStacks: 3
+  price: 75
+  primaryValue: 0
   secondaryValue: 0
-  duration: 0
+  duration: 3
   effects: []

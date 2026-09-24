@@ -7,10 +7,10 @@ namespace DragonTower
     {
         public Font font;
         public RectTransform frame;
-        public Text playerName, playerHP, enemyHP, enemyName, floorLabel, modeLabel, warning, message, skillLabel, attackLabel, dodgeLabel, resultTitle, resultDetail;
+        public Text playerName, playerHP, enemyHP, enemyName, floorLabel, modeLabel, warning, message, skillLabel, attackLabel, dodgeLabel, itemLabel1, itemLabel2, resultTitle, resultDetail;
         public Image playerFill, enemyFill, windupFill;
         public DragonGraphic playerArt, enemyArt;
-        public Button attackButton, skillButton, dodgeButton, restartButton;
+        public Button attackButton, skillButton, dodgeButton, itemButton1, itemButton2, restartButton;
         public GameObject resultPanel;
         public Text dragonInfo;
         BattleSkin skin;
@@ -81,10 +81,13 @@ namespace DragonTower
             playerName=Label("",frame,-60,674,280,28,19,Color.white,TextAnchor.MiddleLeft);
             playerHP=Label("",frame,140,674,120,28,16,Muted,TextAnchor.MiddleRight);
             playerFill=Bar("Player HP",700,C(.36f,.83f,.69f));
-            skillButton=MakeButton("스킬",frame,-154,757,132,78,C(.22f,.30f,.48f),out skillLabel);
-            attackButton=MakeButton("공격",frame,0,757,148,90,C(.76f,.34f,.20f),out attackLabel);
-            dodgeButton=MakeButton("회피",frame,154,757,132,78,C(.17f,.37f,.38f),out dodgeLabel);
-            dragonInfo=Label("",frame,0,825,440,28,12,Muted);
+            itemButton1=MakeButton("아이템 1 · 빈 슬롯",frame,-108,727,204,38,C(.20f,.25f,.31f),out itemLabel1);
+            itemButton2=MakeButton("아이템 2 · 빈 슬롯",frame,108,727,204,38,C(.20f,.25f,.31f),out itemLabel2);
+            itemLabel1.fontSize=itemLabel2.fontSize=13;
+            skillButton=MakeButton("스킬",frame,-154,790,132,60,C(.22f,.30f,.48f),out skillLabel);
+            attackButton=MakeButton("공격",frame,0,790,148,68,C(.76f,.34f,.20f),out attackLabel);
+            dodgeButton=MakeButton("회피",frame,154,790,132,60,C(.17f,.37f,.38f),out dodgeLabel);
+            dragonInfo=Label("",frame,0,835,440,20,11,Muted);
             var modal=Panel("Result overlay",frame,0,425,480,850,new Color(.025f,.04f,.08f,.96f));modal.raycastTarget=true;resultPanel=modal.gameObject;
             Label("D R A G O N   T O W E R",modal.transform,0,244,430,30,16,Muted);
             resultTitle=Label("",modal.transform,0,324,430,65,42,C(1,.77f,.41f));
@@ -94,7 +97,20 @@ namespace DragonTower
             resultPanel.SetActive(false);
             Fit();
         }
-        void Awake() { ApplyPixelSkin(); }
+        void Awake() { EnsureItemControls();ApplyPixelSkin(); }
+        void EnsureItemControls()
+        {
+            if(frame==null||itemButton1!=null)return;
+            itemButton1=MakeButton("아이템 1 · 빈 슬롯",frame,-108,727,204,38,C(.20f,.25f,.31f),out itemLabel1);
+            itemButton2=MakeButton("아이템 2 · 빈 슬롯",frame,108,727,204,38,C(.20f,.25f,.31f),out itemLabel2);
+            itemLabel1.fontSize=itemLabel2.fontSize=13;
+            MoveControl(skillButton,-154,790,132,60);MoveControl(attackButton,0,790,148,68);MoveControl(dodgeButton,154,790,132,60);
+            if(dragonInfo!=null){dragonInfo.rectTransform.anchoredPosition=new Vector2(0,-835);dragonInfo.rectTransform.sizeDelta=new Vector2(440,20);dragonInfo.fontSize=11;}
+        }
+        static void MoveControl(Button button,float x,float y,float w,float h)
+        {
+            if(button==null)return;var rect=button.GetComponent<RectTransform>();rect.anchoredPosition=new Vector2(x,-y);rect.sizeDelta=new Vector2(w,h);
+        }
         public void ApplyPixelSkin()
         {
             if (pixelPlayer != null) return;
@@ -118,6 +134,8 @@ namespace DragonTower
             DecorateButton(attackButton,new Color(1,.67f,.32f));
             DecorateButton(skillButton,new Color(.55f,.69f,.9f));
             DecorateButton(dodgeButton,new Color(.45f,.78f,.70f));
+            DecorateButton(itemButton1,new Color(.64f,.68f,.74f));
+            DecorateButton(itemButton2,new Color(.64f,.68f,.74f));
             restartButton.GetComponentInChildren<Text>().text="다시 도전";
         }
         Image SpriteChild(Transform parent, Sprite sprite)
@@ -203,6 +221,20 @@ namespace DragonTower
         }
         public void Bind(UnityAction attack,UnityAction skill,UnityAction dodge,UnityAction restart)
         {attackButton.onClick.AddListener(attack);skillButton.onClick.AddListener(skill);dodgeButton.onClick.AddListener(dodge);restartButton.onClick.AddListener(restart);}
+        public void BindItems(UnityAction first,UnityAction second)
+        {itemButton1.onClick.AddListener(first);itemButton2.onClick.AddListener(second);}
+        public void SetItems(TowerRun run)
+        {
+            SetItemButton(itemButton1,itemLabel1,run,0);SetItemButton(itemButton2,itemLabel2,run,1);
+        }
+        void SetItemButton(Button button,Text label,TowerRun run,int index)
+        {
+            var item=run==null?null:run.ItemAt(index);int count=run==null?0:run.ItemCountAt(index);
+            if(item==null){label.text="아이템 "+(index+1)+" · 빈 슬롯";button.interactable=false;return;}
+            string countText=count>1?" ×"+count:"";
+            label.text=(item.kind==ItemKind.Consumable?"사용 · ":"장착 · ")+item.displayName+countText;
+            button.interactable=item.kind==ItemKind.Consumable;
+        }
         public void Show(BattleModel b)
         {
             if(lastDragon!=b.Dragon)
@@ -232,6 +264,7 @@ namespace DragonTower
             if(b.Dragon.skillDisabled){skillButton.interactable=false;skillLabel.text="스킬\n봉인됨";}
             else SetButton(skillButton,skillLabel,b.Dragon.skill.displayName,b.SkillReady-b.Time,b,refreshText);
             SetButton(dodgeButton,dodgeLabel,"회피",b.DodgeReady-b.Time,b,refreshText);
+            if(b.Result!=BattleResult.Fighting){itemButton1.interactable=false;itemButton2.interactable=false;}
             resultPanel.SetActive(b.Result!=BattleResult.Fighting && (motion==null || motion.ResultReady));
             if(b.Result!=BattleResult.Fighting)
             {

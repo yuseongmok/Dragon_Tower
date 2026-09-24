@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8104a060aef340d2bae800e3c7ba2cac, type: 3}
-  m_Name: item_healing_potion
+  m_Name: item_executioner_mark
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.ItemData
-  contentId: item_healing_potion
-  displayName: "회복약"
-  description: "사용 시 최대 HP의 20% 즉시 회복"
-  rarity: 0
+  contentId: item_executioner_mark
+  displayName: "처형자의 표식"
+  description: "체력 40% 이하인 적에게 주는 피해 50% 증가"
+  rarity: 3
   icon: {fileID: 0}
-  grade: 0
-  kind: 0
-  mechanic: 12
-  maximumStacks: 9
-  price: 30
-  primaryValue: 20
+  grade: 2
+  kind: 1
+  mechanic: 14
+  maximumStacks: 2
+  price: 135
+  primaryValue: 50
   secondaryValue: 0
   duration: 0
   effects: []

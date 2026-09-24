@@ -4,11 +4,18 @@ using System.Linq;
 namespace DragonTower
 {
     public enum TowerRoomKind { Monster, Item, Augment, Recovery, Nest, Gold, Shop, Boss }
+    public sealed class RunItemSlot
+    {
+        public ItemData Item { get; internal set; }
+        public int Count { get; internal set; }
+        public string DisplayName=>Item==null?"빈 슬롯":Item.displayName;
+    }
 
     // Everything in this class belongs to one tower attempt and is discarded on defeat.
     public sealed class TowerRun
     {
         readonly List<string> items=new List<string>();
+        readonly List<RunItemSlot> itemSlots=new List<RunItemSlot>();
         readonly List<string> augments=new List<string>();
         readonly List<AugmentData> augmentData=new List<AugmentData>();
         readonly ElementType dragonElement;
@@ -32,6 +39,7 @@ namespace DragonTower
         public int AttackCooldownPercent { get; private set; }
         public int DodgeCooldownPercent { get; private set; }
         public int DodgeDurationPercent { get; private set; }
+        public int DamageReductionPercent { get; private set; }
         public int Gold { get; private set; }
         public int PendingLevelAugments { get; private set; }
         public int PendingEvolutionStage { get; private set; }
@@ -41,6 +49,7 @@ namespace DragonTower
         public TowerRoomKind Room { get; private set; }
         public IReadOnlyList<TowerRoomKind> Choices => choices;
         public IReadOnlyList<string> Items => items;
+        public IReadOnlyList<RunItemSlot> ItemSlots => itemSlots;
         public IReadOnlyList<string> Augments => augments;
 
         public TowerRun(int maxHP,int firstRoll,int secondRoll,ElementType element=ElementType.Neutral)
@@ -91,11 +100,16 @@ namespace DragonTower
         public BattleStats BuildBattleStats(BattleStats source)
         {
             var selected=replacedSkill==null?source.skill:replacedSkill.Snapshot();
-            return new BattleStats{displayName=source.displayName,element=source.element,elementType=source.elementType,skillEffect=replacedSkill==null?source.skillEffect:replacedSkill.effectKind,maxHP=MaxHP,attackDamage=Math.Max(1,(int)Math.Round((source.attackDamage+AttackBonus)*(1+AttackDamagePercent/100f))),
-                attackCooldown=ScaleTime(source.attackCooldown,AttackCooldownPercent,.08f),dodgeCooldown=ScaleTime(source.dodgeCooldown,DodgeCooldownPercent,.2f),
-                dodgeDuration=Math.Max(.05f,source.dodgeDuration*(1+DodgeDurationPercent/100f)),criticalChance=Math.Max(0,source.criticalChance+CriticalChancePercent/100f),criticalDamage=Math.Max(1,source.criticalDamage+CriticalDamagePercent/100f),skillDisabled=SkillDisabled,augments=augmentData.Select(x=>x.Snapshot()).ToArray(),
-                skill=new SkillStats{displayName=selected.displayName,elementType=selected.elementType,damage=Math.Max(1,(int)Math.Round(selected.damage*(1+SkillDamagePercent/100f))),
-                    cooldown=SkillCooldownZero?0:ScaleTime(selected.cooldown,SkillCooldownPercent,.2f),hitCount=Math.Max(1,selected.hitCount),hitInterval=Math.Max(.03f,selected.hitInterval),
+            int itemAttack=ItemEffect(ContentEffectType.AttackDamage),itemAttackPercent=ItemEffect(ContentEffectType.AttackDamagePercent);
+            int itemSkillPercent=ItemEffect(ContentEffectType.SkillDamagePercent),itemSkillCooldown=ItemEffect(ContentEffectType.SkillCooldownPercent);
+            int itemAttackCooldown=ItemEffect(ContentEffectType.AttackCooldownPercent),itemDodgeCooldown=ItemEffect(ContentEffectType.DodgeCooldownPercent);
+            int itemDodgeDuration=ItemEffect(ContentEffectType.DodgeDurationPercent),itemCrit=ItemEffect(ContentEffectType.CriticalChancePercent);
+            int itemCritDamage=ItemEffect(ContentEffectType.CriticalDamagePercent),itemReduction=ItemEffect(ContentEffectType.DamageReductionPercent);
+            return new BattleStats{displayName=source.displayName,element=source.element,elementType=source.elementType,skillEffect=replacedSkill==null?source.skillEffect:replacedSkill.effectKind,maxHP=MaxHP,attackDamage=Math.Max(1,(int)Math.Round((source.attackDamage+AttackBonus+itemAttack)*(1+(AttackDamagePercent+itemAttackPercent)/100f))),
+                attackCooldown=ScaleTime(source.attackCooldown,AttackCooldownPercent+itemAttackCooldown,.08f),dodgeCooldown=ScaleTime(source.dodgeCooldown,DodgeCooldownPercent+itemDodgeCooldown,.2f),
+                dodgeDuration=Math.Max(.05f,source.dodgeDuration*(1+(DodgeDurationPercent+itemDodgeDuration)/100f)),criticalChance=Math.Max(0,source.criticalChance+(CriticalChancePercent+itemCrit)/100f),criticalDamage=Math.Max(1,source.criticalDamage+(CriticalDamagePercent+itemCritDamage)/100f),damageReductionPercent=Math.Max(0,Math.Min(80,DamageReductionPercent+itemReduction)),skillDisabled=SkillDisabled,augments=augmentData.Select(x=>x.Snapshot()).ToArray(),items=itemSlots.Where(x=>x.Item!=null&&x.Item.kind==ItemKind.Equipment).Select(x=>x.Item.Snapshot(x.Count)).ToArray(),
+                skill=new SkillStats{displayName=selected.displayName,elementType=selected.elementType,damage=Math.Max(1,(int)Math.Round(selected.damage*(1+(SkillDamagePercent+itemSkillPercent)/100f))),
+                    cooldown=SkillCooldownZero?0:ScaleTime(selected.cooldown,SkillCooldownPercent+itemSkillCooldown,.2f),hitCount=Math.Max(1,selected.hitCount),hitInterval=Math.Max(.03f,selected.hitInterval),
                     statusEffect=selected.statusEffect,statusChancePercent=selected.statusChancePercent,statusDuration=selected.statusDuration,statusPower=selected.statusPower}};
         }
         static float ScaleTime(float value,int reductionPercent,float minimum)=>Math.Max(minimum,value*(1-reductionPercent/100f));
@@ -127,9 +141,28 @@ namespace DragonTower
             else if(id=="iron-scale"){FlatMaxHPBonus+=15;RecalculateMaxHP();}
             else if(id=="sharp-claw")AttackBonus+=2;
         }
-        public void AddItem(ItemData item)
+        public bool CanAddItem(ItemData item)
         {
-            if(item==null)throw new ArgumentNullException(nameof(item));items.Add(item.StableId);ApplyEffects(item.effects);
+            if(item==null)return false;
+            var same=itemSlots.FirstOrDefault(x=>x.Item!=null&&x.Item.StableId==item.StableId);
+            return (same!=null&&same.Count<Math.Max(1,item.maximumStacks))||itemSlots.Count<2;
+        }
+        public void AddItem(ItemData item,int replaceIndex=-1)
+        {
+            if(item==null)throw new ArgumentNullException(nameof(item));
+            var same=itemSlots.FirstOrDefault(x=>x.Item!=null&&x.Item.StableId==item.StableId);
+            if(same!=null&&same.Count<Math.Max(1,item.maximumStacks)){same.Count++;RecalculateMaxHP();return;}
+            if(itemSlots.Count<2){itemSlots.Add(new RunItemSlot{Item=item,Count=1});items.Add(item.StableId);RecalculateMaxHP();return;}
+            if(replaceIndex<0||replaceIndex>=itemSlots.Count)throw new InvalidOperationException("아이템 슬롯이 가득 찼습니다. 교체할 아이템을 선택하세요.");
+            itemSlots[replaceIndex]=new RunItemSlot{Item=item,Count=1};items[replaceIndex]=item.StableId;RecalculateMaxHP();
+        }
+        public ItemData ItemAt(int index)=>index>=0&&index<itemSlots.Count?itemSlots[index].Item:null;
+        public int ItemCountAt(int index)=>index>=0&&index<itemSlots.Count?itemSlots[index].Count:0;
+        public void ConsumeItem(int index)
+        {
+            if(index<0||index>=itemSlots.Count)throw new ArgumentOutOfRangeException(nameof(index));
+            var slot=itemSlots[index];if(slot.Item==null||slot.Item.kind!=ItemKind.Consumable)throw new InvalidOperationException("소모품만 사용할 수 있습니다.");
+            slot.Count--;if(slot.Count<=0){itemSlots.RemoveAt(index);items.RemoveAt(index);}RecalculateMaxHP();
         }
         public void AddAugment(AugmentData augment,bool levelReward)
         {
@@ -166,12 +199,24 @@ namespace DragonTower
                     case ContentEffectType.CriticalDamagePercent:CriticalDamagePercent+=value;break;
                     case ContentEffectType.SkillDisabled:SkillDisabled=value!=0;break;
                     case ContentEffectType.SkillCooldownSetZero:SkillCooldownZero=value!=0;break;
+                    case ContentEffectType.DamageReductionPercent:DamageReductionPercent+=value;break;
                 }
             }
         }
+        int ItemEffect(ContentEffectType type)
+        {
+            float total=0;
+            foreach(var slot in itemSlots)
+            {
+                if(slot.Item==null||slot.Item.kind!=ItemKind.Equipment||slot.Item.effects==null)continue;
+                foreach(var effect in slot.Item.effects)if(effect!=null&&effect.type==type)total+=effect.value*Math.Max(1,slot.Count);
+            }
+            return (int)Math.Round(total,MidpointRounding.AwayFromZero);
+        }
         void RecalculateMaxHP()
         {
-            int previous=MaxHP;MaxHP=Math.Max(1,(int)Math.Round((BaseMaxHP+FlatMaxHPBonus)*(1+MaxHPPercent/100f)));
+            int previous=MaxHP;int itemFlat=ItemEffect(ContentEffectType.MaxHP),itemPercent=ItemEffect(ContentEffectType.MaxHPPercent);
+            MaxHP=Math.Max(1,(int)Math.Round((BaseMaxHP+FlatMaxHPBonus+itemFlat)*(1+(MaxHPPercent+itemPercent)/100f)));
             if(MaxHP>previous)CurrentHP+=MaxHP-previous;else CurrentHP=Math.Min(CurrentHP,MaxHP);
         }
         public void AddAugment(string id,bool levelReward)

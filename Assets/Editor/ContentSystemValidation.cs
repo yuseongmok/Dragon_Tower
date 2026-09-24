@@ -15,7 +15,12 @@ namespace DragonTower.Editor
             Check(database!=null,"Content database exists");
             Check(database.dragons.Length==8,"All eight illustrated dragons are registered");
             Check(database.monsters.Length==6,"First-area monsters and boss are registered");
-            Check(database.items.Length==3,"Starter items are registered");
+            Check(database.items.Length==30,"Thirty balanced items are registered");
+            Check(database.items.Count(i=>i.grade==ItemGrade.Common)==3,"Three common items are registered");
+            Check(database.items.Count(i=>i.grade==ItemGrade.Rare)==13,"Thirteen rare items are registered");
+            Check(database.items.Count(i=>i.grade==ItemGrade.Epic)==10,"Ten epic items are registered");
+            Check(database.items.Count(i=>i.grade==ItemGrade.Unique)==4,"Four unique items are registered");
+            Check(ContentDatabase.ItemGradeWeight(ItemGrade.Common)==55&&ContentDatabase.ItemGradeWeight(ItemGrade.Rare)==30&&ContentDatabase.ItemGradeWeight(ItemGrade.Epic)==12&&ContentDatabase.ItemGradeWeight(ItemGrade.Unique)==3,"Item rarity weights are 55/30/12/3");
             Check(database.augments.Length==43,"Twenty-nine original and fourteen new augments are registered");
             Check(database.augments.Count(a=>a.grade==AugmentGrade.Common)==9,"Nine common augments are registered");
             Check(database.augments.Count(a=>a.grade==AugmentGrade.Rare)==14,"Fourteen rare augments are registered");
@@ -28,11 +33,17 @@ namespace DragonTower.Editor
             var regular=database.PickMonster(1,false,0);Check(regular!=null&&!regular.boss,"Floor one selects a regular monster");
             var boss=database.PickMonster(10,true,0);Check(boss!=null&&boss.boss&&boss.elementType==ElementType.Earth,"Floor ten selects the earth boss");
             var floor20=boss.CreateBattleStats(20);Check(floor20.maxHP==420&&floor20.damage==26,"Boss progression preserves existing floor scaling");
-            var run=new TowerRun(100,0,50);run.AddItem(database.items[0]);
-            Check(run.Items.Count==1,"Data item is recorded in the current run");
-            var maxItem=AssetDatabase.LoadAssetAtPath<ItemData>("Assets/Data/Items/item_iron_scale.asset");run.AddItem(maxItem);Check(run.MaxHP==115&&run.CurrentHP==115,"Item effects are applied from data");
-            var attackItem=AssetDatabase.LoadAssetAtPath<ItemData>("Assets/Data/Items/item_sharp_claw.asset");run.AddItem(attackItem);
-            var stats=run.BuildBattleStats(database.dragons[0].Snapshot());Check(stats.attackDamage==database.dragons[0].attackDamage+2,"Data attack bonus reaches battle stats");
+            var run=new TowerRun(100,0,50);
+            var maxItem=AssetDatabase.LoadAssetAtPath<ItemData>("Assets/Data/Items/item_hardened_armor.asset");run.AddItem(maxItem);Check(run.MaxHP==120&&run.CurrentHP==120,"Equipped maximum HP item updates the run");
+            var attackItem=AssetDatabase.LoadAssetAtPath<ItemData>("Assets/Data/Items/item_hardened_claw.asset");run.AddItem(attackItem);
+            var stats=run.BuildBattleStats(database.dragons[0].Snapshot());Check(stats.attackDamage==(int)Math.Round(database.dragons[0].attackDamage*1.1f),"Equipped attack bonus reaches battle stats");
+            var potion=AssetDatabase.LoadAssetAtPath<ItemData>("Assets/Data/Items/item_healing_potion.asset");Check(!run.CanAddItem(potion),"Two different item types fill both inventory slots");
+            run.AddItem(potion,0);Check(run.Items.Count==2&&run.ItemAt(0)==potion,"A new item can replace either occupied slot");
+            run.AddItem(potion);Check(run.ItemCountAt(0)==2,"Duplicate items stack in one of the two slots");
+            var itemBattle=new BattleModel(run.BuildBattleStats(database.dragons[0].Snapshot()));itemBattle.Tick(2.41f);int wounded=itemBattle.PlayerHP;
+            Check(itemBattle.UseItem(potion)&&itemBattle.PlayerHP>wounded,"A healing consumable can be used during battle");run.ConsumeItem(0);Check(run.ItemCountAt(0)==1,"Using a consumable removes one stack");
+            var shard=AssetDatabase.LoadAssetAtPath<ItemData>("Assets/Data/Items/item_time_shard.asset");var invulnerableBattle=new BattleModel(database.dragons[0].Snapshot());invulnerableBattle.Tick(2f);
+            Check(invulnerableBattle.UseItem(shard),"A timed combat consumable activates");invulnerableBattle.Tick(.5f);Check(invulnerableBattle.PlayerHP==database.dragons[0].maxHP,"Time shard blocks an enemy strike during its one-second window");
             Check(ContentValidation.Report()=="문제 없음","Content identifiers and required fields are valid");
             Debug.Log("CONTENT_SYSTEM_VALIDATION_OK_NO_BUILD: "+checks+" checks");
         }
