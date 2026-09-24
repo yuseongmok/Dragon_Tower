@@ -166,6 +166,9 @@ namespace DragonTower.Editor
                     {
                         Check(flow.ScreenName=="부화 성공!","Hatch animation reaches reveal");Capture(controller.view,"02-hatched");
                         flow.ContinueButton.onClick.Invoke();Check(flow.ScreenName=="드래곤 로비","Continue opens lobby");Capture(controller.view,"03-lobby");
+                        Check(flow.DragonButton!=null,"Lobby dragon portrait is selectable");
+                        flow.DragonButton.onClick.Invoke();Check(flow.ScreenName=="플레이 드래곤 선택"&&flow.ChoiceButtons.Length==1,"Portrait opens owned dragon selection");
+                        flow.ChoiceButtons[0].onClick.Invoke();Check(flow.ScreenName=="드래곤 로비","Dragon selection returns to lobby");
                         flow.ShowCodex();Check(flow.ScreenName=="드래곤 도감","Codex opens");Capture(controller.view,"04-codex");
                         flow.ShowStatus();Check(flow.ScreenName=="드래곤 상태","Status opens");Capture(controller.view,"05-status");
                         flow.ShowLobby();flow.EnterTowerWithRoll(45,80);

@@ -23,6 +23,7 @@ namespace DragonTower
         public Button ContinueButton { get; private set; }
         public Button RoomButton { get; private set; }
         public Button SecondRoomButton { get; private set; }
+        public Button DragonButton { get; private set; }
         public Button[] ChoiceButtons { get; private set; }
         static Color Background=>new Color(.035f,.055f,.09f);
         static Color Gold=>new Color(1,.76f,.42f);
@@ -66,21 +67,27 @@ namespace DragonTower
         void Screen(string name)
         {
             if(body!=null){body.gameObject.SetActive(false);Destroy(body.gameObject);}
-            portrait=null;roomIcon=null;egg=null;HatchButton=TowerButton=ContinueButton=RoomButton=SecondRoomButton=null;ChoiceButtons=null;
+            portrait=null;roomIcon=null;egg=null;HatchButton=TowerButton=ContinueButton=RoomButton=SecondRoomButton=DragonButton=null;ChoiceButtons=null;
             ScreenName=name;root.gameObject.SetActive(true);root.SetAsLastSibling();
             body=Rect(name,root,0,425,480,850);
             Label("D R A G O N   T O W E R",0,42,440,32,21,Color.white);
             Label(name,0,95,420,45,28,Gold);
             notice=Label("이 기기에 자동 저장됩니다",0,805,430,58,14,Muted);
         }
-        void Portrait(DragonData dragon,float y=348,int level=1)
+        void Portrait(DragonData dragon,float y=348,int level=1,UnityAction onClick=null)
         {
             portrait=Rect("Selected dragon",body,0,y,260,260);
             var activeSprite=dragon.BattleSpriteAtLevel(level);
+            Graphic target;
             if(activeSprite!=null)
-            {var image=portrait.gameObject.AddComponent<Image>();image.sprite=activeSprite;image.preserveAspect=true;image.raycastTarget=false;}
+            {var image=portrait.gameObject.AddComponent<Image>();image.sprite=activeSprite;image.preserveAspect=true;image.raycastTarget=onClick!=null;target=image;}
             else
-            {portrait.gameObject.AddComponent<CanvasRenderer>();var graphic=portrait.gameObject.AddComponent<DragonGraphic>();graphic.color=dragon.color;graphic.raycastTarget=false;}
+            {portrait.gameObject.AddComponent<CanvasRenderer>();var graphic=portrait.gameObject.AddComponent<DragonGraphic>();graphic.color=dragon.color;graphic.raycastTarget=onClick!=null;target=graphic;}
+            if(onClick!=null)
+            {
+                DragonButton=portrait.gameObject.AddComponent<Button>();DragonButton.targetGraphic=target;DragonButton.onClick.AddListener(onClick);
+                var nav=DragonButton.navigation;nav.mode=Navigation.Mode.None;DragonButton.navigation=nav;
+            }
         }
         public void ShowEgg()
         {
@@ -124,9 +131,9 @@ namespace DragonTower
             if(hatchTime>=0)return;
             controller.EndBattle();towerRun=null;
             if(Session.Selected==null){ShowEgg();return;}
-            Screen("드래곤 로비");var d=Session.Selected;Portrait(d,324);
+            Screen("드래곤 로비");var d=Session.Selected;Portrait(d,324,1,ShowDragonSelect);
             Label(d.displayName,0,493,410,52,32,Gold);
-            Label(d.element+"  ·  다음 모험을 준비 중",0,541,410,34,17,Muted);
+            Label(d.element+"  ·  드래곤을 눌러 교체",0,541,410,34,17,Muted);
             TowerButton=Button("타워 오르기",0,622,400,70,EnterTower);
             Button("드래곤 도감",-105,713,190,62,ShowCodex);Button("드래곤 상태",105,713,190,62,ShowStatus);
             if(Session.Profile.eggs>0)Button("보관 알 "+Session.Profile.eggs,135,159,155,40,ShowEgg);
@@ -513,17 +520,85 @@ namespace DragonTower
         public void ShowCodex()
         {
             Screen("드래곤 도감");int found=0;foreach(var d in catalog)if(Session.Owns(d.StableId))found++;
-            Label("발견한 드래곤  "+found+" / "+catalog.Length,0,166,420,38,20,Muted);
+            Label("발견한 드래곤  "+found+" / "+catalog.Length,0,145,420,34,19,Muted);
             for(int i=0;i<catalog.Length;i++)
             {
                 var d=catalog[i];bool owns=Session.Owns(d.StableId);
-                int column=i%2,row=i/2;float x=column==0?-106:106,y=250+row*106;
-                var b=Button(owns?d.displayName+"\n"+d.element:"???\n미발견",x,y,198,82,()=>SelectSpecies(d));
-                b.GetComponentInChildren<Text>().fontSize=16;
-                b.interactable=owns;
+                int column=i%2,row=i/2;float x=column==0?-106:106,y=215+row*100;
+                var b=Button(owns?d.displayName+"\n"+d.element:"???\n미발견",x,y,198,86,()=>ShowCodexEntry(d));
+                b.targetGraphic.color=owns?new Color(.15f,.24f,.33f):new Color(.08f,.1f,.14f);
+                var text=b.GetComponentInChildren<Text>();text.fontSize=14;text.rectTransform.anchoredPosition=new Vector2(35,-43);text.rectTransform.sizeDelta=new Vector2(112,76);
+                DragonArtwork(b.transform,d,0,-57,43,68,68,!owns);
             }
-            Label("만난 드래곤을 눌러 함께할 친구를 선택하세요",0,649,430,50,16,Muted);
+            Label("드래곤을 눌러 진화 모습과 능력을 확인하세요",0,638,430,44,16,Muted);
             Button("로비로 돌아가기",0,728,380,60,ShowLobby);
+        }
+        void ShowCodexEntry(DragonData dragon)
+        {
+            bool owns=Session.Owns(dragon.StableId);Screen("드래곤 도감");
+            Label(owns?dragon.displayName:"미발견 드래곤",0,142,420,40,25,owns?Gold:Muted);
+            for(int stage=0;stage<3;stage++)
+            {
+                float x=(stage-1)*145;var card=Rect("Evolution form "+stage,body,x,306,136,190);
+                var panel=card.gameObject.AddComponent<Image>();panel.color=new Color(.075f,.105f,.15f,.9f);panel.raycastTarget=false;
+                DragonArtwork(card,dragon,stage,0,84,124,124,!owns);
+                string formName=owns?dragon.NameForStage(stage):"???";
+                var title=Label(formName,0,390,130,46,14,owns?Color.white:Muted);title.transform.SetParent(card,false);title.rectTransform.anchoredPosition=new Vector2(0,-166);
+                var stageText=Label(stage==0?"기본":stage==1?"중간 진화":"최종 진화",0,426,130,24,12,Muted);stageText.transform.SetParent(card,false);stageText.rectTransform.anchoredPosition=new Vector2(0,-188);
+            }
+            if(owns)
+            {
+                var skill=dragon.skill;
+                string hit=skill.hitCount>1?" × "+skill.hitCount:"";
+                string status=SkillStatus(skill);
+                string description=string.IsNullOrWhiteSpace(dragon.description)?"함께 타워를 오르는 "+dragon.element+" 속성 드래곤입니다.":dragon.description;
+                string skillDescription=string.IsNullOrWhiteSpace(skill.description)?"전투 중 스킬 버튼으로 사용하는 고유 기술":skill.description;
+                Label(dragon.element+" 속성  ·  HP "+dragon.maxHP+"  ·  공격력 "+dragon.attackDamage+"\n"+
+                    skill.displayName+"  ·  피해 "+skill.damage+hit+"  ·  쿨타임 "+skill.cooldown+"초"+status+"\n"+
+                    description+"\n"+skillDescription,0,560,430,170,16,Color.white);
+                notice.text="도감은 관찰용입니다. 플레이 드래곤은 로비의 드래곤을 눌러 교체합니다.";
+            }
+            else
+            {
+                Label("아직 발견하지 못한 드래곤입니다.\n알을 부화하거나 드래곤 둥지에서 발견할 수 있습니다.",0,555,420,110,17,Muted);
+                notice.text="미발견 드래곤의 정보는 실루엣으로 표시됩니다.";
+            }
+            Button("도감 목록으로",0,718,380,60,ShowCodex);
+        }
+        static string SkillStatus(SkillData skill)
+        {
+            if(skill==null||skill.statusEffect==CombatStatusEffect.None||skill.statusChancePercent<=0)return "";
+            string name=skill.statusEffect==CombatStatusEffect.Burn?"화상":skill.statusEffect==CombatStatusEffect.Slow?"둔화":"마비";
+            return "  ·  "+name+" "+Mathf.RoundToInt(skill.statusChancePercent)+"%";
+        }
+        Image DragonArtwork(Transform parent,DragonData dragon,int stage,float x,float y,float w,float h,bool silhouette)
+        {
+            var art=Rect("Dragon art",parent,x,y,w,h);var sprite=dragon.SpriteForStage(stage);
+            if(sprite==null)
+            {
+                var graphic=art.gameObject.AddComponent<DragonGraphic>();graphic.color=silhouette?Color.black:dragon.color;graphic.raycastTarget=false;return null;
+            }
+            var image=art.gameObject.AddComponent<Image>();image.sprite=sprite;image.preserveAspect=true;image.raycastTarget=false;
+            image.color=silhouette?new Color(0,0,0,1):Color.white;
+            return image;
+        }
+        public void ShowDragonSelect()
+        {
+            Screen("플레이 드래곤 선택");
+            var owned=catalog.Where(d=>Session.Owns(d.StableId)).ToArray();
+            Label("함께 타워를 오를 드래곤을 선택하세요",0,145,420,34,18,Muted);
+            ChoiceButtons=new Button[owned.Length];
+            for(int i=0;i<owned.Length;i++)
+            {
+                var dragon=owned[i];bool selected=Session.Selected!=null&&Session.Selected.StableId==dragon.StableId;
+                int column=i%2,row=i/2;float x=column==0?-106:106,y=215+row*100;
+                var b=Button(dragon.displayName+(selected?"\n선택 중":"\n"+dragon.element),x,y,198,86,()=>SelectSpecies(dragon));
+                b.targetGraphic.color=selected?new Color(.38f,.27f,.11f):new Color(.15f,.24f,.33f);
+                var text=b.GetComponentInChildren<Text>();text.fontSize=14;text.rectTransform.anchoredPosition=new Vector2(35,-43);text.rectTransform.sizeDelta=new Vector2(112,76);
+                DragonArtwork(b.transform,dragon,0,-57,43,68,68,false);ChoiceButtons[i]=b;
+            }
+            Button("선택하지 않고 돌아가기",0,728,380,60,ShowLobby);
+            notice.text="도감 정보와 플레이 드래곤 선택은 서로 분리되어 있습니다.";
         }
         void SelectSpecies(DragonData data)
         {
