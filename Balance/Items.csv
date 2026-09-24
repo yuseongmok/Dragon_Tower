@@ -1,0 +1,4 @@
+id,name,rarity,price,description,effects
+item_healing_potion,체력 물약,Common,30,,Heal:35
+item_iron_scale,강철 비늘,Common,0,,MaxHP:15
+item_sharp_claw,날카로운 발톱,Common,0,,AttackDamage:2

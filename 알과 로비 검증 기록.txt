@@ -1,0 +1,48 @@
+COLLECTION_CHECK One starter egg for fresh profile 0
+COLLECTION_CHECK Hatch catalog species 0
+COLLECTION_CHECK Repeated tap cannot duplicate hatch 0
+COLLECTION_CHECK Reload preserves hatch 0
+COLLECTION_CHECK Unowned selection rejected 0
+COLLECTION_CHECK Hatched species registered 0
+COLLECTION_CHECK Stable ID survives renamed asset and label 0
+COLLECTION_CHECK Corrupted slot recovers valid backup 0
+COLLECTION_CHECK Both corrupt slots preserved, no reset 0
+COLLECTION_CHECK Future schema not overwritten 0
+COLLECTION_CHECK One starter egg for fresh profile 1
+COLLECTION_CHECK Hatch catalog species 1
+COLLECTION_CHECK Repeated tap cannot duplicate hatch 1
+COLLECTION_CHECK Reload preserves hatch 1
+COLLECTION_CHECK Unowned selection rejected 1
+COLLECTION_CHECK Hatched species registered 1
+COLLECTION_CHECK Stable ID survives renamed asset and label 1
+COLLECTION_CHECK Corrupted slot recovers valid backup 1
+COLLECTION_CHECK Both corrupt slots preserved, no reset 1
+COLLECTION_CHECK Future schema not overwritten 1
+COLLECTION_CHECK One starter egg for fresh profile 2
+COLLECTION_CHECK Hatch catalog species 2
+COLLECTION_CHECK Repeated tap cannot duplicate hatch 2
+COLLECTION_CHECK Reload preserves hatch 2
+COLLECTION_CHECK Unowned selection rejected 2
+COLLECTION_CHECK Hatched species registered 2
+COLLECTION_CHECK Stable ID survives renamed asset and label 2
+COLLECTION_CHECK Corrupted slot recovers valid backup 2
+COLLECTION_CHECK Both corrupt slots preserved, no reset 2
+COLLECTION_CHECK Future schema not overwritten 2
+COLLECTION_CHECK Real startup shows first egg
+COLLECTION_CHECK No battle runs behind egg screen
+COLLECTION_CHECK Double click commits one hatch
+COLLECTION_CHECK Closing during animation retains committed hatch
+COLLECTION_CHECK Hatch animation reaches reveal
+COLLECTION_CHECK Continue opens lobby
+COLLECTION_CHECK Codex opens
+COLLECTION_CHECK Status opens
+COLLECTION_CHECK Tower uses selected dragon
+COLLECTION_CHECK Existing attack still works
+COLLECTION_CHECK Defeat opens existing result
+COLLECTION_CHECK Result returns to lobby, battle stopped
+COLLECTION_CHECK Defeat retains collection without new egg
+COLLECTION_CHECK Second Play starts at saved lobby
+COLLECTION_CHECK Second Play retains same individual dragon
+COLLECTION_CHECK Starter gift not repeated
+COLLECTION_CHECK New battle starts at base HP
+COLLECTION_PLAYMODE_OK_NO_BUILD

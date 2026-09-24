@@ -1,0 +1,9 @@
+id,name,elementType,damage,cooldown,effectKind,description
+skill_fire_burst,화염 폭발,Fire,38,4,Fire,
+skill_frost_breath,서리 숨결,Ice,52,5.5,Frost,
+skill_gale_strike,질풍 강타,Wind,24,2.5,Wind,
+skill_sandstorm,모래 돌풍,Earth,24,2.5,Earth,
+skill_electric_shock,전기 쇼크,Lightning,24,2.5,Lightning,
+skill_bubble_shot,버블 샷,Water,24,2.5,Water,
+skill_dark_strike,어둠 일격,Dark,24,2.5,Dark,
+skill_flash_burst,섬광 폭발,Light,24,2.5,Light,

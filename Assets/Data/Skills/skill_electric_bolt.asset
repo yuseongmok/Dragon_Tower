@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a37d10c4b83957e4c868b03176c6d57b, type: 3}
+  m_Name: skill_electric_bolt
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
+  skillId: skill_electric_bolt
+  displayName: "\uC804\uACA9"
+  description: "14 \uD53C\uD574\uB97C 3\uD68C \xB7 Paralyze 20%"
+  elementType: 6
+  effectKind: 4
+  icon: {fileID: 0}
+  battleVfx: {fileID: 6702296993860459083, guid: e2724853d1a7a9e41af59bf1ad6f168c, type: 3}
+  vfxScale: 0.65
+  vfxOffset: {x: 0, y: 0}
+  vfxEuler: {x: 0, y: 0, z: 0}
+  vfxDuration: 1.6
+  vfxSystemLimit: 14
+  damage: 14
+  cooldown: 4
+  hitCount: 3
+  hitInterval: 0.1
+  statusEffect: 2
+  statusChancePercent: 20
+  statusDuration: 0.8
+  statusPower: 0

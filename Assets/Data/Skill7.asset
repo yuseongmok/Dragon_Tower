@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a37d10c4b83957e4c868b03176c6d57b, type: 3}
+  m_Name: Skill7
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
+  skillId: skill_flash_burst
+  displayName: "\uC12C\uAD11 \uD3ED\uBC1C"
+  description: 
+  elementType: 8
+  effectKind: 7
+  icon: {fileID: 0}
+  battleVfx: {fileID: 961174416394122208, guid: a1e16322c756a7f49bcaae53d86fc648, type: 3}
+  vfxScale: 0.6
+  vfxOffset: {x: 0, y: 10}
+  vfxEuler: {x: 0, y: 0, z: 0}
+  vfxDuration: 1.4
+  vfxSystemLimit: 13
+  damage: 24
+  cooldown: 2.5
+  hitCount: 1
+  hitInterval: 0.14
+  statusEffect: 0
+  statusChancePercent: 0
+  statusDuration: 0
+  statusPower: 0

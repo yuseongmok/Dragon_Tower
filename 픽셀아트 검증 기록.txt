@@ -1,0 +1,9 @@
+DRAGON_TOWER_TESTS_PASSED: 18 assertions
+PIXEL_TEXTURE ember-baby 128x128 readable=False filter=Point
+PIXEL_TEXTURE rock-slime 128x128 readable=False filter=Point
+PIXEL_TEXTURE tower-chamber 288x512 readable=False filter=Point
+PIXEL_UI_BINDINGS_OK
+DRAGON_TOWER_TESTS_PASSED: 18 assertions
+DRAGON_TOWER_WEB_BUILD_OK
+DRAGON_TOWER_TESTS_PASSED: 18 assertions
+DRAGON_TOWER_WEB_BUILD_OK

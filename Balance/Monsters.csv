@@ -1,0 +1,7 @@
+id,name,elementType,rarity,baseHP,attackDamage,attackInterval,hpGrowthPerFloor,attackGrowthPerFloor,hpGrowthPerFloorPercent,attackGrowthPerFloorPercent,minimumFloor,maximumFloor,spawnWeight,boss
+monster_rock_slime,바위 슬라임,Neutral,Common,240,18,2.4,0,0,0,0,1,9,10,False
+monster_small_golem,소형 골렘,Earth,Common,240,18,2.4,0,0,0,0,1,9,10,False
+monster_dungeon_zombie,던전 좀비,Dark,Common,240,18,2.4,0,0,0,0,1,9,10,False
+monster_cave_bat,동굴 박쥐,Dark,Common,240,18,2.4,0,0,0,0,1,9,10,False
+monster_armored_skeleton,갑옷 해골 기사,Earth,Common,240,18,2.4,0,0,0,0,1,9,10,False
+boss_ancient_golem,고대 룬 골렘,Earth,Common,360,24,2.2,6,0.2,0,0,10,999,10,True

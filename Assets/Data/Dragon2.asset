@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0efa5d3dd9dbc83419f66022a349c41f, type: 3}
+  m_Name: Dragon2
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.DragonData
+  speciesId: zephyr
+  displayName: "\uC81C\uD53C\uB974"
+  description: 
+  rarity: 2
+  element: "\uBC14\uB78C"
+  elementType: 4
+  maxHP: 90
+  attackDamage: 9
+  color: {r: 0.44, g: 0.87, b: 0.66, a: 1}
+  battleSprite: {fileID: 21300000, guid: dbdd4ca74bc4e9448805589b13ba9cb8, type: 3}
+  evolutionSheet: {fileID: 2800000, guid: ff5629449d684c058e9d16dd74c1e98b, type: 3}
+  intermediateName: "\uC9C8\uD48D\uB8E1 \uC81C\uD53C\uB974"
+  finalName: "\uD3ED\uD48D\uAD70\uC8FC \uC81C\uD53C\uB974"
+  skillEffect: 2
+  skill: {fileID: 11400000, guid: d370770991892fe47869e1cad083b670, type: 2}

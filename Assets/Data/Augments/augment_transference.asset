@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
+  m_Name: augment_transference
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.AugmentData
+  contentId: augment_transference
+  displayName: "\uC804\uC774"
+  description: "\uC77C\uBC18 \uACF5\uACA9 \uD53C\uD574 70% \uAC10\uC18C \xB7 \uC77C\uBC18
+    \uACF5\uACA9 \uC801\uC911\uB9C8\uB2E4 \uB0A8\uC740 \uC2A4\uD0AC \uCFE8\uD0C0\uC784
+    1\uCD08 \uAC10\uC18C"
+  rarity: 0
+  icon: {fileID: 0}
+  grade: 2
+  maximumStacks: 1
+  mechanic: 15
+  primaryValue: 1
+  secondaryValue: 0
+  chancePercent: 0
+  duration: 0
+  triggerCount: 1
+  effects:
+  - type: 10
+    value: -70
+    note: 

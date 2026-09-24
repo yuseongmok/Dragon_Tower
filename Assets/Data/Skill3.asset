@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a37d10c4b83957e4c868b03176c6d57b, type: 3}
+  m_Name: Skill3
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
+  skillId: skill_sandstorm
+  displayName: "\uC9F1\uB3CC \uC2A4\uB9E4\uC26C"
+  description: 
+  elementType: 5
+  effectKind: 3
+  icon: {fileID: 0}
+  battleVfx: {fileID: 2470284903044977092, guid: f0dc881e8af566c49b61e96aa3ea0ae7, type: 3}
+  vfxScale: 0.45
+  vfxOffset: {x: 0, y: -55}
+  vfxEuler: {x: 0, y: 0, z: 0}
+  vfxDuration: 1.7
+  vfxSystemLimit: 18
+  damage: 24
+  cooldown: 2.5
+  hitCount: 1
+  hitInterval: 0.14
+  statusEffect: 0
+  statusChancePercent: 0
+  statusDuration: 0
+  statusPower: 0

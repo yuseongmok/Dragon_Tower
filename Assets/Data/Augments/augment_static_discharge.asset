@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
+  m_Name: augment_static_discharge
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.AugmentData
+  contentId: augment_static_discharge
+  displayName: "\uC815\uC804\uAE30 \uBC29\uCD9C"
+  description: "\uC77C\uBC18 \uACF5\uACA9 5\uD68C\uB9C8\uB2E4 \uACF5\uACA9 \uD53C\uD574\uC758
+    70% \uC804\uAE30 \uCD94\uAC00 \uACF5\uACA9"
+  rarity: 0
+  icon: {fileID: 0}
+  grade: 1
+  maximumStacks: 1
+  mechanic: 9
+  primaryValue: 70
+  secondaryValue: 0
+  chancePercent: 0
+  duration: 0
+  triggerCount: 5
+  effects: []

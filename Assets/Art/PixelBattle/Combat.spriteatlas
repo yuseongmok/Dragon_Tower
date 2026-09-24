@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Combat
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 0
+      compressionQuality: 0
+      maxTextureSize: 0
+      textureCompression: 0
+      filterMode: 0
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 4
+      m_BuildTarget: DefaultTexturePlatform
+      m_MaxTextureSize: 512
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: 4
+      m_TextureCompression: 0
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 0
+      m_IgnorePlatformSupport: 0
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 0
+      allowAlphaSplitting: 0
+      enableRotation: 0
+      enableTightPacking: 0
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 21300000, guid: 96dcbbe9d274d104ba7b012538cc8078, type: 3}
+    - {fileID: 21300000, guid: 5354b3f78902d804ba639c839dc0b75c, type: 3}
+    - {fileID: 21300000, guid: b31a8e1e16329b04c9eff2b6eb8ec35b, type: 3}
+    - {fileID: 21300000, guid: dbdd4ca74bc4e9448805589b13ba9cb8, type: 3}
+    - {fileID: 21300000, guid: 75f2d42c259eb794d93790a98fe61050, type: 3}
+    - {fileID: 21300000, guid: 6599ee416fdf2e548b90cd796eac79f8, type: 3}
+    - {fileID: 21300000, guid: a11a5716be0e02046b166172f698fccf, type: 3}
+    - {fileID: 21300000, guid: f6f9126be476d0e48857d25f185e450c, type: 3}
+    - {fileID: 21300000, guid: 3b950f7e3c759564e84ccdec5eee999b, type: 3}
+    - {fileID: 21300000, guid: 09fa39f068cd418393791a02576081b8, type: 3}
+    - {fileID: 21300000, guid: dcc6c41409c84e0ca60329884b4a98bb, type: 3}
+    - {fileID: 21300000, guid: 26821ea75ff14ca4a34abff433e60d27, type: 3}
+    - {fileID: 21300000, guid: 65d9e1d5a8484a6a96f88780dd1a07d2, type: 3}
+    - {fileID: 21300000, guid: 753f05e96c3443558af16eeb901e0595, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+    packedSpriteRenderDataKeys: []
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites: []
+  m_PackedSpriteNamesToIndex: []
+  m_RenderDataMap: {}
+  m_Tag: Combat
+  m_IsVariant: 0
+

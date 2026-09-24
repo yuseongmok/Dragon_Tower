@@ -1,0 +1,9 @@
+id,name,displayElement,elementType,rarity,maxHP,attackDamage,skillId
+ember,엠버,불꽃,Fire,Common,100,9,skill_fire_burst
+luna,루나,얼음,Ice,Common,115,9,skill_frost_breath
+zephyr,제피르,바람,Wind,Common,90,9,skill_gale_strike
+brandy,블랜디,흙,Earth,Common,90,9,skill_sandstorm
+volt,볼트,번개,Lightning,Common,90,9,skill_electric_shock
+okta,옥타,물,Water,Common,90,9,skill_bubble_shot
+nova,노바,어둠,Dark,Common,90,9,skill_dark_strike
+dante,단테,빛,Light,Common,90,9,skill_flash_burst

@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a37d10c4b83957e4c868b03176c6d57b, type: 3}
+  m_Name: skill_gale_slash
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
+  skillId: skill_gale_slash
+  displayName: "\uC9C8\uD48D\uCC38"
+  description: "11 \uD53C\uD574\uB97C 5\uD68C \xB7 Slow 35%"
+  elementType: 4
+  effectKind: 2
+  icon: {fileID: 0}
+  battleVfx: {fileID: 5132599651350533342, guid: 858546d21acc17f4296f95eab9e8c269, type: 3}
+  vfxScale: 0.65
+  vfxOffset: {x: 0, y: 0}
+  vfxEuler: {x: 0, y: 0, z: 0}
+  vfxDuration: 1.6
+  vfxSystemLimit: 14
+  damage: 11
+  cooldown: 5.5
+  hitCount: 5
+  hitInterval: 0.09
+  statusEffect: 3
+  statusChancePercent: 35
+  statusDuration: 3
+  statusPower: 20

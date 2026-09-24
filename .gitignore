@@ -104,3 +104,8 @@ InitTestScene*.unity*
 
 # Auto-generated cache in Assets folder
 /[Aa]ssets/[Ss]ceneDependencyCache*
+
+# Third-party Asset Store package; install locally from the owner's licensed copy.
+/Assets/Eric VFX Studio/
+/Assets/Eric VFX Studio.meta
+

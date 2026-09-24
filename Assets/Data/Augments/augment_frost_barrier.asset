@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
+  m_Name: augment_frost_barrier
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.AugmentData
+  contentId: augment_frost_barrier
+  displayName: "\uC11C\uB9AC \uC7A5\uBCBD"
+  description: "\uD68C\uD53C \uC2E4\uD328 \uC2DC \uCD5C\uB300 HP 15% \uBCF4\uD638\uB9C9\uC744
+    4\uCD08\uAC04 \uD68D\uB4DD (\uCFE8\uD0C0\uC784 15\uCD08)"
+  rarity: 0
+  icon: {fileID: 0}
+  grade: 2
+  maximumStacks: 1
+  mechanic: 10
+  primaryValue: 15
+  secondaryValue: 15
+  chancePercent: 0
+  duration: 4
+  triggerCount: 1
+  effects: []

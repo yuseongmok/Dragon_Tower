@@ -1,0 +1,37 @@
+VISIBILITY_CHECK Preserves user element label
+VISIBILITY_CHECK Dragon data has its own sprite
+VISIBILITY_CHECK Visible sprite: 불꽃
+VISIBILITY_CHECK Placeholder disabled while sprite visible
+VISIBILITY_CHECK Sprite has nonzero layout
+VISIBILITY_CHECK Visible sprite: FIRE
+VISIBILITY_CHECK Placeholder disabled while sprite visible
+VISIBILITY_CHECK Sprite has nonzero layout
+VISIBILITY_CHECK Visible sprite: 불꽃
+VISIBILITY_CHECK Placeholder disabled while sprite visible
+VISIBILITY_CHECK Sprite has nonzero layout
+VISIBILITY_CHECK Visible sprite: 표시 이름 변경
+VISIBILITY_CHECK Placeholder disabled while sprite visible
+VISIBILITY_CHECK Sprite has nonzero layout
+VISIBILITY_CHECK Missing image falls back to placeholder
+VISIBILITY_CHECK Visible sprite: 불꽃
+VISIBILITY_CHECK Placeholder disabled while sprite visible
+VISIBILITY_CHECK Sprite has nonzero layout
+VISIBILITY_CHECK Preserves user element label
+VISIBILITY_CHECK Dragon data has its own sprite
+VISIBILITY_CHECK Visible sprite: 불꽃
+VISIBILITY_CHECK Placeholder disabled while sprite visible
+VISIBILITY_CHECK Sprite has nonzero layout
+VISIBILITY_CHECK Visible sprite: FIRE
+VISIBILITY_CHECK Placeholder disabled while sprite visible
+VISIBILITY_CHECK Sprite has nonzero layout
+VISIBILITY_CHECK Visible sprite: 불꽃
+VISIBILITY_CHECK Placeholder disabled while sprite visible
+VISIBILITY_CHECK Sprite has nonzero layout
+VISIBILITY_CHECK Visible sprite: 표시 이름 변경
+VISIBILITY_CHECK Placeholder disabled while sprite visible
+VISIBILITY_CHECK Sprite has nonzero layout
+VISIBILITY_CHECK Missing image falls back to placeholder
+VISIBILITY_CHECK Visible sprite: 불꽃
+VISIBILITY_CHECK Placeholder disabled while sprite visible
+VISIBILITY_CHECK Sprite has nonzero layout
+DRAGON_VISIBILITY_PLAYMODE_OK_NO_BUILD

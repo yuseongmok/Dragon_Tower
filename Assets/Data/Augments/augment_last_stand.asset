@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
+  m_Name: augment_last_stand
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.AugmentData
+  contentId: augment_last_stand
+  displayName: "\uBC30\uC218\uC758 \uC9C4"
+  description: "\uC783\uC740 \uCCB4\uB825 10%\uB2F9 \uC77C\uBC18 \uACF5\uACA9\uACFC
+    \uC2A4\uD0AC \uD53C\uD574 5% \uC99D\uAC00"
+  rarity: 0
+  icon: {fileID: 0}
+  grade: 2
+  maximumStacks: 1
+  mechanic: 5
+  primaryValue: 5
+  secondaryValue: 0
+  chancePercent: 0
+  duration: 0
+  triggerCount: 1
+  effects: []

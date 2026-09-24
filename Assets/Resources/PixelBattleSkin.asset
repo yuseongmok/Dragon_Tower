@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fdb7c7044393dd4c9314d1e47c711b7, type: 3}
+  m_Name: PixelBattleSkin
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.BattleSkin
+  babyDragon: {fileID: 21300000, guid: 96dcbbe9d274d104ba7b012538cc8078, type: 3}
+  rockSlime: {fileID: 21300000, guid: 5354b3f78902d804ba639c839dc0b75c, type: 3}
+  floorMonsters:
+  - {fileID: 21300000, guid: 5354b3f78902d804ba639c839dc0b75c, type: 3}
+  - {fileID: 21300000, guid: 75f2d42c259eb794d93790a98fe61050, type: 3}
+  - {fileID: 21300000, guid: 6599ee416fdf2e548b90cd796eac79f8, type: 3}
+  - {fileID: 21300000, guid: a11a5716be0e02046b166172f698fccf, type: 3}
+  - {fileID: 21300000, guid: f6f9126be476d0e48857d25f185e450c, type: 3}
+  ancientGolemBoss: {fileID: 21300000, guid: 3b950f7e3c759564e84ccdec5eee999b, type: 3}
+  towerBackground: {fileID: 21300000, guid: c9e5b2702cafd4d45b87c224bcd64575, type: 3}

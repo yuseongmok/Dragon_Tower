@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0efa5d3dd9dbc83419f66022a349c41f, type: 3}
+  m_Name: Dragon7
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.DragonData
+  speciesId: dante
+  displayName: "\uB2E8\uD14C"
+  description: 
+  rarity: 4
+  element: "\uBE5B"
+  elementType: 8
+  maxHP: 90
+  attackDamage: 9
+  color: {r: 1, g: 0.90783745, b: 0.4009434, a: 1}
+  battleSprite: {fileID: 21300000, guid: 65d9e1d5a8484a6a96f88780dd1a07d2, type: 3}
+  evolutionSheet: {fileID: 2800000, guid: ba6a2afca01e473d9879337b8ae5dee8, type: 3}
+  intermediateName: "\uC131\uD718\uB8E1 \uB2E8\uD14C"
+  finalName: "\uAD11\uD718\uAD70\uC8FC \uB2E8\uD14C"
+  skillEffect: 7
+  skill: {fileID: 11400000, guid: f7b679ceee739de4c9300f1688ecd937, type: 2}

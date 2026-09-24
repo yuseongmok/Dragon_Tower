@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a37d10c4b83957e4c868b03176c6d57b, type: 3}
+  m_Name: skill_purgatory
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
+  skillId: skill_purgatory
+  displayName: "\uC5F0\uC625"
+  description: "18 \uD53C\uD574\uB97C 6\uD68C \xB7 Burn 70%"
+  elementType: 2
+  effectKind: 0
+  icon: {fileID: 0}
+  battleVfx: {fileID: 7682016290860117464, guid: fe368c965e82e424c8a29b69445d9002, type: 3}
+  vfxScale: 0.65
+  vfxOffset: {x: 0, y: 0}
+  vfxEuler: {x: 0, y: 0, z: 0}
+  vfxDuration: 1.6
+  vfxSystemLimit: 14
+  damage: 18
+  cooldown: 11
+  hitCount: 6
+  hitInterval: 0.16
+  statusEffect: 1
+  statusChancePercent: 70
+  statusDuration: 5
+  statusPower: 8

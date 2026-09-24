@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a37d10c4b83957e4c868b03176c6d57b, type: 3}
+  m_Name: Skill1
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
+  skillId: skill_frost_Icicle
+  displayName: "\uACE0\uB4DC\uB984\uCE68"
+  description: 
+  elementType: 3
+  effectKind: 1
+  icon: {fileID: 0}
+  battleVfx: {fileID: 4156968546351773348, guid: 9c70804fce2cbbf4f81c45b9a5130b8d, type: 3}
+  vfxScale: 0.55
+  vfxOffset: {x: 0, y: 0}
+  vfxEuler: {x: 0, y: 0, z: 0}
+  vfxDuration: 1.4
+  vfxSystemLimit: 10
+  damage: 52
+  cooldown: 5.5
+  hitCount: 1
+  hitInterval: 0.14
+  statusEffect: 0
+  statusChancePercent: 0
+  statusDuration: 0
+  statusPower: 0

@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
+  m_Name: augment_time_compression
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.AugmentData
+  contentId: augment_time_compression
+  displayName: 시간 압축
+  description: 최대 HP 15% 감소 · 일반 공격과 스킬 쿨타임 25% 감소
+  rarity: 0
+  icon: {fileID: 0}
+  grade: 2
+  maximumStacks: 1
+  mechanic: 0
+  primaryValue: 0
+  secondaryValue: 0
+  chancePercent: 0
+  duration: 0
+  triggerCount: 1
+  effects:
+  - type: 9
+    value: -15
+    note: 
+  - type: 5
+    value: 25
+    note: 
+  - type: 4
+    value: 25
+    note: 

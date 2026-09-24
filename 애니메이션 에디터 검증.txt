@@ -1,0 +1,12 @@
+ANIMATION_CHECK Idle pose changes
+ANIMATION_CHECK Enemy animation active
+ANIMATION_CHECK Effect images active
+ANIMATION_CHECK Dodge prevents damage
+ANIMATION_CHECK Enemy damage and reaction
+ANIMATION_CHECK Effect pool stays bounded during spam
+ANIMATION_CHECK No extra effect objects created
+ANIMATION_CHECK Restart clears active particles and numbers
+ANIMATION_CHECK Restart resets transforms
+ANIMATION_CHECK Final hit animation precedes result
+ANIMATION_CHECK Result shown after short animation
+ANIMATION_VALIDATION_OK_NO_BUILD

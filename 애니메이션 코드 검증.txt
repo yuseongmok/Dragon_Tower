@@ -1,0 +1,34 @@
+warning CS2023: 지시 파일에 지정되었기 때문에 /noconfig 옵션을 무시합니다.
+﻿PASS first attack
+PASS rapid tap rejected
+PASS attack unavailable before 0.3 seconds
+PASS attack available after 0.3 seconds
+PASS two accepted attacks deal exactly 18
+PASS skill first use
+PASS skill spam rejected
+PASS skill recharge
+PASS dodge first use
+PASS dodge spam rejected
+PASS timed dodge prevents damage
+PASS subsequent enemy attack deals damage
+PASS early dodge does not protect indefinitely
+PASS victory and zero clamp
+PASS actions blocked after victory
+PASS enemy stops after victory
+PASS defeat and zero clamp
+PASS actions blocked after defeat
+PASS restart clean state
+PASS alternate dragon damage
+PASS alternate dragon longer cooldown
+PASS alternate dragon recharges independently
+PASS one attack cue, no rejected-input effect
+PASS one skill cue, correct damage
+PASS one dodge cue
+PASS successful dodge emits miss, not damage
+PASS enemy hit emits damage cue
+PASS no cues after defeat
+COMBAT CHECKS PASSED: 28
+﻿
+warning CS2023: 지시 파일에 지정되었기 때문에 /noconfig 옵션을 무시합니다.
+warning CS2023: 지시 파일에 지정되었기 때문에 /noconfig 옵션을 무시합니다.
+PROJECT_CSHARP_COMPILE_OK

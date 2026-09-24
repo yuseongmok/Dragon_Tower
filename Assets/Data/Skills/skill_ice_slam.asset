@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a37d10c4b83957e4c868b03176c6d57b, type: 3}
+  m_Name: skill_ice_slam
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
+  skillId: skill_ice_slam
+  displayName: "\uC5BC\uC74C \uAC15\uD0C0"
+  description: "32 \uD53C\uD574\uB97C 2\uD68C \xB7 Slow 50%"
+  elementType: 3
+  effectKind: 1
+  icon: {fileID: 0}
+  battleVfx: {fileID: 7601337638830464383, guid: c5e81b2f1d33f7347adfb6aaf4c5a4d6, type: 3}
+  vfxScale: 0.65
+  vfxOffset: {x: 0, y: 0}
+  vfxEuler: {x: 0, y: 0, z: 0}
+  vfxDuration: 1.6
+  vfxSystemLimit: 14
+  damage: 32
+  cooldown: 7
+  hitCount: 2
+  hitInterval: 0.22
+  statusEffect: 3
+  statusChancePercent: 50
+  statusDuration: 4
+  statusPower: 30

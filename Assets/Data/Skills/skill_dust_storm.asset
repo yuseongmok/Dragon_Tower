@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a37d10c4b83957e4c868b03176c6d57b, type: 3}
+  m_Name: skill_dust_storm
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
+  skillId: skill_dust_storm
+  displayName: "\uBAA8\uB798\uD3ED\uD48D"
+  description: "13 \uD53C\uD574\uB97C 4\uD68C \xB7 Slow 35%"
+  elementType: 5
+  effectKind: 3
+  icon: {fileID: 0}
+  battleVfx: {fileID: 1578780317956153704, guid: 61757c9eb8f1b4247b48469c13360cc2, type: 3}
+  vfxScale: 0.65
+  vfxOffset: {x: 0, y: 0}
+  vfxEuler: {x: 0, y: 0, z: 0}
+  vfxDuration: 1.6
+  vfxSystemLimit: 14
+  damage: 13
+  cooldown: 5
+  hitCount: 4
+  hitInterval: 0.18
+  statusEffect: 3
+  statusChancePercent: 35
+  statusDuration: 3
+  statusPower: 20
