@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: boss_kraken_guardian
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.MonsterData
   contentId: boss_kraken_guardian
-  displayName: 크라켄 수호자
+  displayName: "\uD06C\uB77C\uCF04 \uC218\uD638\uC790"
   description: 침수된 탑의 심장을 지키며 촉수 기습을 사용하는 20층 수호자
   rarity: 0
   icon: {fileID: 0}
@@ -36,4 +36,7 @@ MonoBehaviour:
   patternEveryAttacks: 3
   patternIntervalMultiplier: 0.42
   patternDamageMultiplier: 0.8
+  barrierHP: 0
+  barrierDuration: 4.5
+  barrierFailureDamagePercent: 35
   battleSprite: {fileID: 21300000, guid: 1911814178cd34745bf1c60e01a6766d, type: 3}

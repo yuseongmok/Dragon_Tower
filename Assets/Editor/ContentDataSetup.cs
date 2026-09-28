@@ -25,7 +25,7 @@ namespace DragonTower.Editor
             EnsureMonster("monster_dungeon_zombie","던전 좀비",ElementType.Dark,240,18,2.4f,1,9,10,false,"dungeon-zombie.png");
             EnsureMonster("monster_cave_bat","동굴 박쥐",ElementType.Dark,240,18,2.4f,1,9,10,false,"cave-bat.png");
             EnsureMonster("monster_armored_skeleton","갑옷 해골 기사",ElementType.Earth,240,18,2.4f,1,9,10,false,"armored-skeleton.png");
-            EnsureMonster("boss_ancient_golem","고대 룬 골렘",ElementType.Earth,360,24,2.2f,10,10,10,true,"ancient-golem-boss.png");
+            EnsureMonster("boss_ancient_golem","고대 문지기",ElementType.Earth,360,24,2.2f,10,10,10,true,"ancient-golem-boss.png");
             EnsureSecondAreaMonster("monster_electric_jellyfish","전격 해파리",ElementType.Lightning,300,21,2f,"electric-jellyfish.png",18,25,.55f);
             EnsureSecondAreaMonster("monster_mud_snail","진흙 달팽이",ElementType.Water,380,26,2.9f,"mud-snail.png",25,10,.65f);
             EnsureSecondAreaMonster("monster_water_gargoyle","물의 석상",ElementType.Water,420,28,2.7f,"water-gargoyle.png",15,15,.6f);
@@ -59,22 +59,24 @@ namespace DragonTower.Editor
         static void EnsureFolder(string parent,string child){string path=parent+"/"+child;if(!AssetDatabase.IsValidFolder(path))AssetDatabase.CreateFolder(parent,child);}
         static void EnsureMonster(string id,string name,ElementType element,int hp,int damage,float interval,int minFloor,int maxFloor,int weight,bool boss,string spriteFile)
         {
-            string path=Root+"/Monsters/"+id+".asset";var data=AssetDatabase.LoadAssetAtPath<MonsterData>(path);if(data!=null)return;
-            data=ScriptableObject.CreateInstance<MonsterData>();data.contentId=id;data.displayName=name;data.elementType=element;data.baseHP=hp;data.attackDamage=damage;
+            string path=Root+"/Monsters/"+id+".asset";var data=AssetDatabase.LoadAssetAtPath<MonsterData>(path);
+            if(data==null){data=ScriptableObject.CreateInstance<MonsterData>();AssetDatabase.CreateAsset(data,path);}
+            data.name=id;data.contentId=id;data.displayName=name;data.elementType=element;data.baseHP=hp;data.attackDamage=damage;
             data.attackInterval=interval;data.minimumFloor=minFloor;data.maximumFloor=maxFloor;data.spawnWeight=weight;data.boss=boss;
-            if(boss){data.hpGrowthPerFloor=6;data.attackGrowthPerFloor=.2f;}
-            data.battleSprite=AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/PixelBattle/"+spriteFile);AssetDatabase.CreateAsset(data,path);
+            if(boss){data.hpGrowthPerFloor=6;data.attackGrowthPerFloor=.2f;data.timingVariancePercent=8;data.bossPattern=EnemyBossPattern.EarthShatter;data.patternEveryAttacks=4;data.patternIntervalMultiplier=1.3f;data.patternDamageMultiplier=1.6f;}
+            data.battleSprite=AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/PixelBattle/"+spriteFile);EditorUtility.SetDirty(data);
         }
         static void EnsureSecondAreaMonster(string id,string name,ElementType element,int hp,int damage,float interval,string spriteFile,float variance,float quickChance,float quickMultiplier,bool boss=false)
         {
-            string path=Root+"/Monsters/"+id+".asset";if(AssetDatabase.LoadAssetAtPath<MonsterData>(path)!=null)return;
-            var data=ScriptableObject.CreateInstance<MonsterData>();data.contentId=id;data.displayName=name;data.elementType=element;
+            string path=Root+"/Monsters/"+id+".asset";var data=AssetDatabase.LoadAssetAtPath<MonsterData>(path);
+            if(data==null){data=ScriptableObject.CreateInstance<MonsterData>();AssetDatabase.CreateAsset(data,path);}
+            data.name=id;data.contentId=id;data.displayName=name;data.elementType=element;
             data.baseHP=hp;data.attackDamage=damage;data.attackInterval=interval;data.minimumFloor=boss?20:11;data.maximumFloor=boss?20:19;
             data.spawnWeight=10;data.boss=boss;data.hpGrowthPerFloor=boss?0:8;data.attackGrowthPerFloor=boss?0:.35f;
             data.hpGrowthPerFloorPercent=boss?0:1.5f;data.attackGrowthPerFloorPercent=boss?0:.5f;
             data.timingVariancePercent=variance;data.quickAttackChancePercent=quickChance;data.quickAttackIntervalMultiplier=quickMultiplier;
             if(boss){data.bossPattern=EnemyBossPattern.AbyssalRush;data.patternEveryAttacks=3;data.patternIntervalMultiplier=.42f;data.patternDamageMultiplier=.8f;}
-            data.battleSprite=AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/PixelBattle/"+spriteFile);AssetDatabase.CreateAsset(data,path);
+            data.battleSprite=AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/PixelBattle/"+spriteFile);EditorUtility.SetDirty(data);
         }
         static void EnsureThirdAreaMonster(string id,string name,ElementType element,int hp,int damage,float interval,string spriteFile,float variance,float quickChance,float quickMultiplier,bool boss=false)
         {

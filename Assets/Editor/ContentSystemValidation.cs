@@ -42,6 +42,10 @@ namespace DragonTower.Editor
             Check(kraken.contentId=="boss_kraken_guardian"&&floor20.maxHP==650&&floor20.damage==32&&floor20.bossPattern==EnemyBossPattern.AbyssalRush,"Floor twenty selects the Kraken Guardian and its tentacle pattern");
             var vulcan=database.PickMonster(30,true,0);var floor30=vulcan.CreateBattleStats(30);
             Check(vulcan.contentId=="boss_forge_warden_vulcan"&&floor30.maxHP==1100&&floor30.bossPattern==EnemyBossPattern.ForgeBarrier&&floor30.barrierHP==220,"Floor thirty selects Vulcan and its forge barrier pattern");
+            var legacyBoss=ScriptableObject.CreateInstance<MonsterData>();legacyBoss.contentId="legacy";legacyBoss.boss=true;legacyBoss.minimumFloor=10;legacyBoss.maximumFloor=999;legacyBoss.spawnWeight=999;
+            var exactBoss=ScriptableObject.CreateInstance<MonsterData>();exactBoss.contentId="exact";exactBoss.boss=true;exactBoss.minimumFloor=20;exactBoss.maximumFloor=20;exactBoss.spawnWeight=1;
+            var bossSelector=ScriptableObject.CreateInstance<ContentDatabase>();bossSelector.monsters=new[]{legacyBoss,exactBoss};Check(bossSelector.PickMonster(20,true,0)==exactBoss,"An exact-floor boss overrides legacy broad boss ranges");
+            UnityEngine.Object.DestroyImmediate(legacyBoss);UnityEngine.Object.DestroyImmediate(exactBoss);UnityEngine.Object.DestroyImmediate(bossSelector);
             var barrierStats=new BattleEnemyStats{displayName="barrier test",maxHP=999,damage=0,interval=.1f,bossPattern=EnemyBossPattern.ForgeBarrier,patternEveryAttacks=2,barrierHP=100,barrierDuration=1,barrierFailureDamagePercent=50};
             var barrierBattle=new BattleModel(database.dragons[0].Snapshot(),barrierStats,100,()=>.9);barrierBattle.Tick(.11f);
             Check(barrierBattle.EnemyShieldHP==100,"Vulcan creates a separate breakable shield");barrierBattle.Tick(1.01f);Check(barrierBattle.PlayerHP==50,"An unbroken forge barrier deals guard-ignoring maximum-HP damage");

@@ -14,10 +14,14 @@ namespace DragonTower
         public static ContentDatabase Load()=>Resources.Load<ContentDatabase>("ContentDatabase");
         public MonsterData PickMonster(int floor,bool boss,int roll)
         {
+            bool hasFloorBoss=false;
+            if(boss)foreach(var monster in monsters??Array.Empty<MonsterData>())
+                if(monster!=null&&monster.boss&&monster.minimumFloor==floor&&monster.maximumFloor==floor&&monster.spawnWeight>0){hasFloorBoss=true;break;}
             var candidates=new List<MonsterData>();int total=0;
             foreach(var monster in monsters??Array.Empty<MonsterData>())
             {
                 if(monster==null||monster.boss!=boss||floor<monster.minimumFloor||floor>monster.maximumFloor||monster.spawnWeight<=0)continue;
+                if(hasFloorBoss&&(monster.minimumFloor!=floor||monster.maximumFloor!=floor))continue;
                 candidates.Add(monster);total+=monster.spawnWeight;
             }
             if(candidates.Count==0)return null;
