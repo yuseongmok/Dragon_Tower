@@ -207,7 +207,8 @@ namespace DragonTower
             }
             Screen("타워 "+towerRun.Floor+"층 · "+RoomName(towerRun.Room));
             bool boss=towerRun.Room==TowerRoomKind.Boss;
-            Label(boss?"고대 룬 골렘이 깨어납니다.":"이 층의 몬스터가 길을 막고 있습니다.",0,300,420,80,22,Color.white);
+            string encounter=boss?(towerRun.Floor==20?"크라켄 수호자가 심해에서 깨어납니다.":"고대 룬 골렘이 깨어납니다."):"이 층의 몬스터가 길을 막고 있습니다.";
+            Label(encounter,0,300,420,80,22,Color.white);
             Label("LV "+towerRun.Level+"   HP "+towerRun.CurrentHP+" / "+towerRun.MaxHP,0,438,420,35,17,Muted);
             RoomButton=Button(boss?"보스 전투":"전투 시작",0,585,360,72,StartCurrentBattle);
             notice.text="다음 층에서도 현재 HP가 그대로 이어집니다.";

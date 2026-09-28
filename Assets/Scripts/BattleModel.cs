@@ -61,6 +61,8 @@ namespace DragonTower
     public sealed class BattleEnemyStats
     {
         public string displayName;public ElementType elementType;public int maxHP,damage;public float interval;
+        public float timingVariancePercent,quickAttackChancePercent,quickAttackIntervalMultiplier=.6f;
+        public EnemyBossPattern bossPattern;public int patternEveryAttacks=4;public float patternIntervalMultiplier=1,patternDamageMultiplier=1;
         public static BattleEnemyStats Normal()=>new BattleEnemyStats{displayName="바위 슬라임",elementType=ElementType.Neutral,maxHP=240,damage=18,interval=2.4f};
         public const int FirstAreaCount=5;
         public static BattleEnemyStats FirstArea(int index)
@@ -77,7 +79,8 @@ namespace DragonTower
             }
         }
         public static BattleEnemyStats AncientGolem(int floor)=>new BattleEnemyStats
-        {displayName="고대 룬 골렘",elementType=ElementType.Earth,maxHP=360+(floor/10-1)*60,damage=24+(floor/10-1)*2,interval=2.2f};
+        {displayName="고대 룬 골렘",elementType=ElementType.Earth,maxHP=360+(floor/10-1)*60,damage=24+(floor/10-1)*2,interval=2.2f,
+            bossPattern=EnemyBossPattern.EarthShatter,patternEveryAttacks=4,patternIntervalMultiplier=1.3f,patternDamageMultiplier=1.6f};
     }
     public enum BattleResult { Fighting, Victory, Defeat }
     public enum CombatCue { Attack, Skill, SkillHit, Dodge, EnemyHit, EnemyMiss }
@@ -98,10 +101,12 @@ namespace DragonTower
         public double AttackReady, SkillReady, DodgeReady;
         public double DodgeUntil { get; private set; } = -1;
         public double NextEnemyStrike { get; private set; } = EnemyInterval;
+        public string EnemyIntent { get; private set; } = "일반 공격";
         public BattleStats Dragon { get; }
         public BattleEnemyStats Enemy { get; }
         readonly Func<double> random;
-        int attackHits;int shieldHP;int burnDamage;int pendingSkillHits;double nextSkillHit;
+        int attackHits,enemyAttackCount;int shieldHP;int burnDamage;int pendingSkillHits;double nextSkillHit;
+        float nextEnemyDamageMultiplier=1;
         double shieldUntil,burnUntil,burnNext,slowUntil,rapidUntil,firstAidUntil,frostBarrierReady;
         double invulnerableUntil,noAttackCooldownUntil,noSkillCooldownUntil,skillDamageBuffUntil,criticalBuffUntil,attackDamageBuffUntil;
         double poisonNext=10,meteorNext=10;float slowPercent,skillDamageBuffPercent,criticalBuffPercent,attackDamageBuffPercent;
@@ -158,7 +163,8 @@ namespace DragonTower
                 }
                 else
                 {
-                    int damage=ElementRules.Damage(Enemy.damage,Enemy.elementType,Dragon.elementType);
+                    int patternedDamage=Math.Max(0,(int)Math.Round(Enemy.damage*nextEnemyDamageMultiplier,MidpointRounding.AwayFromZero));
+                    int damage=ElementRules.Damage(patternedDamage,Enemy.elementType,Dragon.elementType);
                     damage=Math.Max(0,(int)Math.Round(damage*(1-Math.Min(80,Math.Max(0,Dragon.damageReductionPercent))/100f),MidpointRounding.AwayFromZero));
                     int absorbed=Math.Min(ShieldHP,damage);shieldHP-=absorbed;damage-=absorbed;
                     PlayerHP = Math.Max(0, PlayerHP - damage);
@@ -177,8 +183,32 @@ namespace DragonTower
                     {shieldHP=Math.Max(shieldHP,Math.Max(1,(int)Math.Ceiling(Dragon.maxHP*barrier.primaryValue/100f)));shieldUntil=Time+barrier.duration;frostBarrierReady=Time+barrier.secondaryValue;Feedback?.Invoke("서리 장벽! 보호막 "+shieldHP);}
                 }
                 dodgeAttemptedForStrike=false;
-                NextEnemyStrike += Enemy.interval*(Time<slowUntil?1+slowPercent/100f:1f);
+                ScheduleNextEnemyAttack();
             }
+        }
+        void ScheduleNextEnemyAttack()
+        {
+            enemyAttackCount++;float slow=Time<slowUntil?1+slowPercent/100f:1f;
+            float variance=Math.Min(40,Math.Max(0,Enemy.timingVariancePercent))/100f;
+            float jitter=1f+(float)(random()*2-1)*variance;
+            float interval=Math.Max(.45f,Enemy.interval*slow*jitter);
+            nextEnemyDamageMultiplier=1;EnemyIntent="일반 공격";
+            int every=Math.Max(2,Enemy.patternEveryAttacks);
+            if(Enemy.bossPattern!=EnemyBossPattern.None&&(enemyAttackCount+1)%every==0)
+            {
+                interval=Math.Max(.45f,Enemy.interval*slow*Math.Max(.35f,Enemy.patternIntervalMultiplier));
+                nextEnemyDamageMultiplier=Math.Max(.25f,Enemy.patternDamageMultiplier);
+                if(Enemy.bossPattern==EnemyBossPattern.EarthShatter)
+                {EnemyIntent="대지 분쇄";Feedback?.Invoke("보스 패턴 · 대지 분쇄를 준비합니다!");}
+                else
+                {EnemyIntent="심해 촉수 기습";Feedback?.Invoke("보스 패턴 · 촉수가 빠르게 덮쳐옵니다!");}
+            }
+            else if(Enemy.quickAttackChancePercent>0&&Roll(Enemy.quickAttackChancePercent))
+            {
+                interval=Math.Max(.5f,Enemy.interval*slow*Math.Max(.35f,Enemy.quickAttackIntervalMultiplier));
+                EnemyIntent="기습 공격";Feedback?.Invoke("적의 움직임이 갑자기 빨라집니다!");
+            }
+            NextEnemyStrike+=interval;
         }
         public bool Attack()
         {

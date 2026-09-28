@@ -21,7 +21,9 @@ namespace DragonTower.Editor
                 return;
             }
             if (!assetPath.StartsWith("Assets/Art/PixelBattle/")) return;
-            Configure((TextureImporter)assetImporter, assetPath.EndsWith("tower-chamber.png"),assetPath.EndsWith("ancient-golem-boss.png"));
+            bool background=assetPath.EndsWith("tower-chamber.png")||assetPath.EndsWith("flooded-sewer.png");
+            bool boss=assetPath.EndsWith("ancient-golem-boss.png")||assetPath.EndsWith("kraken-guardian-boss.png");
+            Configure((TextureImporter)assetImporter,background,boss);
         }
         public static void Configure(TextureImporter importer, bool background,bool boss=false)
         {
@@ -58,20 +60,22 @@ namespace DragonTower.Editor
             bool missingDragon=false;
             string[] dragonFiles={"ember-baby.png","luna-baby.png","zephyr-baby.png","brandy-baby.png","volt-baby.png","okta-baby.png","nova-baby.png","dante-baby.png"};
             for(int i=0;i<dragonFiles.Length;i++){var dragon=AssetDatabase.LoadAssetAtPath<DragonData>("Assets/Data/Dragon"+i+".asset");if(File.Exists(Root+dragonFiles[i])&&dragon!=null&&dragon.battleSprite==null)missingDragon=true;}
-            if (!File.Exists(SkinPath) || missingDragon ||
+            bool missingSecondArea=File.Exists(Root+"flooded-sewer.png")&&(skin==null||skin.floodedSewerBackground==null);
+            if (!File.Exists(SkinPath) || missingDragon || missingSecondArea ||
                 (File.Exists(Root + "ancient-golem-boss.png") && (skin == null || skin.floorMonsters == null || skin.floorMonsters.Length < 5 || skin.ancientGolemBoss == null)))
                 Install();
         }
         [MenuItem("Dragon Tower/Apply pixel art assets")]
         public static void Install()
         {
-            string[] files = { "ember-baby.png", "luna-baby.png", "zephyr-baby.png", "brandy-baby.png", "volt-baby.png", "okta-baby.png", "nova-baby.png", "dante-baby.png", "rock-slime.png", "small-golem.png", "dungeon-zombie.png", "cave-bat.png", "armored-skeleton.png", "ancient-golem-boss.png", "tower-chamber.png" };
+            string[] files = { "ember-baby.png", "luna-baby.png", "zephyr-baby.png", "brandy-baby.png", "volt-baby.png", "okta-baby.png", "nova-baby.png", "dante-baby.png", "rock-slime.png", "small-golem.png", "dungeon-zombie.png", "cave-bat.png", "armored-skeleton.png", "ancient-golem-boss.png", "tower-chamber.png",
+                "electric-jellyfish.png","mud-snail.png","water-gargoyle.png","volt-ray.png","kraken-guardian-boss.png","flooded-sewer.png" };
             foreach (var file in files)
             {
                 if (!File.Exists(Root + file)) continue;
                 AssetDatabase.ImportAsset(Root + file, ImportAssetOptions.ForceSynchronousImport);
                 var importer = (TextureImporter)AssetImporter.GetAtPath(Root + file);
-                PixelArtImporter.Configure(importer, file == "tower-chamber.png",file == "ancient-golem-boss.png");
+                PixelArtImporter.Configure(importer, file == "tower-chamber.png"||file=="flooded-sewer.png",file == "ancient-golem-boss.png"||file=="kraken-guardian-boss.png");
                 importer.SaveAndReimport();
             }
             Directory.CreateDirectory("Assets/Resources");
@@ -87,6 +91,18 @@ namespace DragonTower.Editor
                 AssetDatabase.LoadAssetAtPath<Sprite>(Root + "armored-skeleton.png") };
             skin.ancientGolemBoss = AssetDatabase.LoadAssetAtPath<Sprite>(Root + "ancient-golem-boss.png");
             skin.towerBackground = AssetDatabase.LoadAssetAtPath<Sprite>(Root + "tower-chamber.png");
+            skin.floodedSewerBackground = AssetDatabase.LoadAssetAtPath<Sprite>(Root + "flooded-sewer.png");
+            string[,] secondArea={
+                {"Assets/Data/Monsters/monster_electric_jellyfish.asset","electric-jellyfish.png"},
+                {"Assets/Data/Monsters/monster_mud_snail.asset","mud-snail.png"},
+                {"Assets/Data/Monsters/monster_water_gargoyle.asset","water-gargoyle.png"},
+                {"Assets/Data/Monsters/monster_volt_ray.asset","volt-ray.png"},
+                {"Assets/Data/Monsters/boss_kraken_guardian.asset","kraken-guardian-boss.png"}};
+            for(int i=0;i<secondArea.GetLength(0);i++)
+            {
+                var monster=AssetDatabase.LoadAssetAtPath<MonsterData>(secondArea[i,0]);var sprite=AssetDatabase.LoadAssetAtPath<Sprite>(Root+secondArea[i,1]);
+                if(monster!=null&&sprite!=null){monster.battleSprite=sprite;EditorUtility.SetDirty(monster);}
+            }
             string[] dragonFiles = { "ember-baby.png", "luna-baby.png", "zephyr-baby.png", "brandy-baby.png", "volt-baby.png", "okta-baby.png", "nova-baby.png", "dante-baby.png" };
             for (int i = 0; i < dragonFiles.Length; i++)
             {
@@ -110,7 +126,8 @@ namespace DragonTower.Editor
                 AssetDatabase.CreateAsset(atlas, atlasPath);
             }
             var packables = atlas.GetPackables();
-            foreach (var file in new[] { "ember-baby.png", "luna-baby.png", "zephyr-baby.png", "brandy-baby.png", "volt-baby.png", "okta-baby.png", "nova-baby.png", "dante-baby.png", "rock-slime.png", "small-golem.png", "dungeon-zombie.png", "cave-bat.png", "armored-skeleton.png", "ancient-golem-boss.png" })
+            foreach (var file in new[] { "ember-baby.png", "luna-baby.png", "zephyr-baby.png", "brandy-baby.png", "volt-baby.png", "okta-baby.png", "nova-baby.png", "dante-baby.png", "rock-slime.png", "small-golem.png", "dungeon-zombie.png", "cave-bat.png", "armored-skeleton.png", "ancient-golem-boss.png",
+                "electric-jellyfish.png","mud-snail.png","water-gargoyle.png","volt-ray.png","kraken-guardian-boss.png" })
             {
                 var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(Root + file);
                 if (sprite == null) continue;

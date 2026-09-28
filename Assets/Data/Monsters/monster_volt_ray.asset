@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ab168aee88f48c0ac6e0dea2c3c85c4, type: 3}
+  m_Name: monster_volt_ray
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.MonsterData
+  contentId: monster_volt_ray
+  displayName: 전기 가오리
+  description: 수면 위를 미끄러지며 매우 짧은 간격으로 방전을 일으키는 마수
+  rarity: 0
+  icon: {fileID: 0}
+  elementType: 6
+  baseHP: 330
+  attackDamage: 23
+  attackInterval: 1.8
+  hpGrowthPerFloor: 8
+  attackGrowthPerFloor: .35
+  hpGrowthPerFloorPercent: 1.5
+  attackGrowthPerFloorPercent: .5
+  minimumFloor: 11
+  maximumFloor: 19
+  spawnWeight: 10
+  boss: 0
+  timingVariancePercent: 20
+  quickAttackChancePercent: 28
+  quickAttackIntervalMultiplier: 0.6
+  bossPattern: 0
+  patternEveryAttacks: 4
+  patternIntervalMultiplier: 1
+  patternDamageMultiplier: 1
+  battleSprite: {fileID: 21300000, guid: 4ce2bf04b61fa044d9c84b7048174a16, type: 3}

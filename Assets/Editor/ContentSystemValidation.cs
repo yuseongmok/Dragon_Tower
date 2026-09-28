@@ -14,7 +14,7 @@ namespace DragonTower.Editor
             checks=0;var database=ContentDataSetup.Install(false);
             Check(database!=null,"Content database exists");
             Check(database.dragons.Length==8,"All eight illustrated dragons are registered");
-            Check(database.monsters.Length==6,"First-area monsters and boss are registered");
+            Check(database.monsters.Length==11,"Floor one through twenty monsters and bosses are registered");
             Check(database.items.Length==30,"Thirty balanced items are registered");
             Check(database.items.Count(i=>i.grade==ItemGrade.Common)==3,"Three common items are registered");
             Check(database.items.Count(i=>i.grade==ItemGrade.Rare)==13,"Thirteen rare items are registered");
@@ -32,7 +32,13 @@ namespace DragonTower.Editor
                 Check(database.skills.Count(s=>s.elementType==element)==4,"Each dragon element has four skills: "+element);
             var regular=database.PickMonster(1,false,0);Check(regular!=null&&!regular.boss,"Floor one selects a regular monster");
             var boss=database.PickMonster(10,true,0);Check(boss!=null&&boss.boss&&boss.elementType==ElementType.Earth,"Floor ten selects the earth boss");
-            var floor20=boss.CreateBattleStats(20);Check(floor20.maxHP==420&&floor20.damage==26,"Boss progression preserves existing floor scaling");
+            var floor10=boss.CreateBattleStats(10);Check(floor10.maxHP==360&&floor10.damage==24&&floor10.bossPattern==EnemyBossPattern.EarthShatter,"Floor ten boss uses the charged earth-shatter pattern");
+            var secondArea=database.PickMonster(11,false,0);Check(secondArea!=null&&secondArea.minimumFloor==11&&secondArea.timingVariancePercent>0,"Floor eleven selects a stronger irregular attacker");
+            var kraken=database.PickMonster(20,true,0);var floor20=kraken.CreateBattleStats(20);
+            Check(kraken.contentId=="boss_kraken_guardian"&&floor20.maxHP==650&&floor20.damage==32&&floor20.bossPattern==EnemyBossPattern.AbyssalRush,"Floor twenty selects the Kraken Guardian and its tentacle pattern");
+            var quickStats=new BattleEnemyStats{displayName="timing test",maxHP=999,damage=1,interval=2,quickAttackChancePercent=100,quickAttackIntervalMultiplier=.5f};
+            var quickBattle=new BattleModel(database.dragons[0].Snapshot(),quickStats,database.dragons[0].maxHP,()=>0);
+            quickBattle.Tick(2.01f);Check(quickBattle.EnemyIntent=="기습 공격"&&quickBattle.NextEnemyStrike<3.1,"Irregular enemies can suddenly schedule a faster attack");
             var run=new TowerRun(100,0,50);
             var maxItem=AssetDatabase.LoadAssetAtPath<ItemData>("Assets/Data/Items/item_hardened_armor.asset");run.AddItem(maxItem);Check(run.MaxHP==120&&run.CurrentHP==120,"Equipped maximum HP item updates the run");
             var attackItem=AssetDatabase.LoadAssetAtPath<ItemData>("Assets/Data/Items/item_hardened_claw.asset");run.AddItem(attackItem);

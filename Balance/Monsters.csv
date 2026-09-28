@@ -1,7 +1,12 @@
-id,name,elementType,rarity,baseHP,attackDamage,attackInterval,hpGrowthPerFloor,attackGrowthPerFloor,hpGrowthPerFloorPercent,attackGrowthPerFloorPercent,minimumFloor,maximumFloor,spawnWeight,boss
-monster_rock_slime,바위 슬라임,Neutral,Common,240,18,2.4,0,0,0,0,1,9,10,False
-monster_small_golem,소형 골렘,Earth,Common,240,18,2.4,0,0,0,0,1,9,10,False
-monster_dungeon_zombie,던전 좀비,Dark,Common,240,18,2.4,0,0,0,0,1,9,10,False
-monster_cave_bat,동굴 박쥐,Dark,Common,240,18,2.4,0,0,0,0,1,9,10,False
-monster_armored_skeleton,갑옷 해골 기사,Earth,Common,240,18,2.4,0,0,0,0,1,9,10,False
-boss_ancient_golem,고대 룬 골렘,Earth,Common,360,24,2.2,6,0.2,0,0,10,999,10,True
+id,name,elementType,rarity,baseHP,attackDamage,attackInterval,hpGrowthPerFloor,attackGrowthPerFloor,hpGrowthPerFloorPercent,attackGrowthPerFloorPercent,minimumFloor,maximumFloor,spawnWeight,boss,timingVariancePercent,quickAttackChancePercent,quickAttackIntervalMultiplier,bossPattern,patternEveryAttacks,patternIntervalMultiplier,patternDamageMultiplier
+monster_rock_slime,바위 슬라임,Earth,Common,240,18,2.4,0,0,0,0,1,9,10,False,0,0,0.6,None,4,1,1
+monster_small_golem,흙 골렘,Earth,Common,240,18,2.4,0,0,0,0,1,9,10,False,0,0,0.6,None,4,1,1
+monster_dungeon_zombie,암흑 좀비,Dark,Common,240,18,2.4,0,0,0,0,1,9,10,False,0,0,0.6,None,4,1,1
+monster_cave_bat,동굴 박쥐,Dark,Common,240,18,2.4,0,0,0,0,1,9,10,False,0,0,0.6,None,4,1,1
+monster_armored_skeleton,해골 기사,Earth,Common,240,18,2.4,0,0,0,0,1,9,10,False,0,0,0.6,None,4,1,1
+boss_ancient_golem,고대 문지기,Earth,Common,360,24,2.2,6,0.2,0,0,10,10,10,True,8,0,0.6,EarthShatter,4,1.3,1.6
+monster_electric_jellyfish,전격 해파리,Lightning,Common,300,21,2,8,0.35,1.5,0.5,11,19,10,False,18,25,0.55,None,4,1,1
+monster_mud_snail,진흙 달팽이,Water,Common,380,26,2.9,8,0.35,1.5,0.5,11,19,10,False,25,10,0.65,None,4,1,1
+monster_water_gargoyle,물의 석상,Water,Common,420,28,2.7,8,0.35,1.5,0.5,11,19,10,False,15,15,0.6,None,4,1,1
+monster_volt_ray,전기 가오리,Lightning,Common,330,23,1.8,8,0.35,1.5,0.5,11,19,10,False,20,28,0.6,None,4,1,1
+boss_kraken_guardian,크라켄 수호자,Water,Common,650,32,2.4,0,0,0,0,20,20,10,True,10,0,0.6,AbyssalRush,3,0.42,0.8

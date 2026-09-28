@@ -14,7 +14,7 @@ namespace DragonTower
         public GameObject resultPanel;
         public Text dragonInfo;
         BattleSkin skin;
-        Image pixelPlayer, pixelEnemy;
+        Image pixelPlayer, pixelEnemy,arenaImage;
         int lastPlayerHP = -1, lastEnemyHP = -1,lastShieldHP=-1;
         BattleStats lastDragon;
         double nextTextRefresh;
@@ -116,9 +116,9 @@ namespace DragonTower
             if (pixelPlayer != null) return;
             skin = Resources.Load<BattleSkin>("PixelBattleSkin");
             if (skin == null || frame == null) return;
-            var arena = frame.Find("Arena").GetComponent<Image>();
-            arena.sprite = skin.towerBackground;
-            arena.color = Color.white;
+            arenaImage = frame.Find("Arena").GetComponent<Image>();
+            arenaImage.sprite = skin.towerBackground;
+            arenaImage.color = Color.white;
             foreach (Transform child in frame)
                 if (child.name == "Tower step") child.gameObject.SetActive(false);
             enemyArt.enabled = false;
@@ -128,7 +128,7 @@ namespace DragonTower
             playerArt.rectTransform.sizeDelta = new Vector2(256,256);
             // Small opaque panels preserve text contrast without expensive effects or masks.
             var header = Panel("Pixel header",frame,0,44,480,88,new Color(.025f,.04f,.07f,.92f));
-            header.transform.SetSiblingIndex(arena.transform.GetSiblingIndex()+1);
+            header.transform.SetSiblingIndex(arenaImage.transform.GetSiblingIndex()+1);
             var footer = Panel("Pixel controls backing",frame,0,738,480,224,new Color(.025f,.04f,.07f,.96f));
             footer.transform.SetSiblingIndex(header.transform.GetSiblingIndex()+1);
             DecorateButton(attackButton,new Color(1,.67f,.32f));
@@ -203,6 +203,8 @@ namespace DragonTower
                 throw new System.InvalidOperationException("Battle encounter labels are missing.");
             enemyName.text=enemy.displayName+"  /  "+ElementRules.DisplayName(enemy.elementType);floorLabel.text=floor.ToString("00");
             modeLabel.text="타워 "+floor+"층  /  "+(boss?"BOSS ROOM":"MONSTER ROOM");
+            var skin=Resources.Load<BattleSkin>("PixelBattleSkin");
+            if(arenaImage!=null&&skin!=null)arenaImage.sprite=floor>=11&&skin.floodedSewerBackground!=null?skin.floodedSewerBackground:skin.towerBackground;
             if(pixelEnemy!=null&&enemySprite!=null)pixelEnemy.sprite=enemySprite;
             enemyArt.rectTransform.sizeDelta=boss?new Vector2(310,310):new Vector2(256,256);
         }
@@ -258,7 +260,7 @@ namespace DragonTower
             float progress=1-Mathf.Clamp01(until/BattleModel.WindupDuration);
             windupFill.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,400*progress);
             bool refreshText=b.Time>=nextTextRefresh;
-            if(refreshText) { warning.text=until<=BattleModel.WindupDuration ? "공격 임박!  "+until.ToString("0.0")+"초  ·  회피 준비" : "적의 움직임을 살피세요";nextTextRefresh=b.Time+.1; }
+            if(refreshText) { warning.text=until<=BattleModel.WindupDuration ? b.EnemyIntent+" 임박!  "+until.ToString("0.0")+"초  ·  회피 준비" : (b.EnemyIntent=="일반 공격"?"적의 움직임을 살피세요":b.EnemyIntent+"을 준비 중");nextTextRefresh=b.Time+.1; }
             warning.color=until<.42f ? new Color(1,.4f,.3f) : new Color(1,.75f,.43f);
             SetButton(attackButton,attackLabel,"공격",b.AttackReady-b.Time,b,refreshText);
             if(b.Dragon.skillDisabled){skillButton.interactable=false;skillLabel.text="스킬\n봉인됨";}

@@ -10,30 +10,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2ab168aee88f48c0ac6e0dea2c3c85c4, type: 3}
-  m_Name: boss_ancient_golem
+  m_Name: boss_kraken_guardian
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.MonsterData
-  contentId: boss_ancient_golem
-  displayName: "\uACE0\uB300 \uBB38\uC9C0\uAE30"
-  description: 
+  contentId: boss_kraken_guardian
+  displayName: 크라켄 수호자
+  description: 침수된 탑의 심장을 지키며 촉수 기습을 사용하는 20층 수호자
   rarity: 0
   icon: {fileID: 0}
-  elementType: 5
-  baseHP: 360
-  attackDamage: 24
-  attackInterval: 2.2
-  hpGrowthPerFloor: 6
-  attackGrowthPerFloor: 0.2
+  elementType: 1
+  baseHP: 650
+  attackDamage: 32
+  attackInterval: 2.4
+  hpGrowthPerFloor: 0
+  attackGrowthPerFloor: 0
   hpGrowthPerFloorPercent: 0
   attackGrowthPerFloorPercent: 0
-  minimumFloor: 10
-  maximumFloor: 10
+  minimumFloor: 20
+  maximumFloor: 20
   spawnWeight: 10
   boss: 1
-  timingVariancePercent: 8
+  timingVariancePercent: 10
   quickAttackChancePercent: 0
   quickAttackIntervalMultiplier: 0.6
-  bossPattern: 1
-  patternEveryAttacks: 4
-  patternIntervalMultiplier: 1.3
-  patternDamageMultiplier: 1.6
-  battleSprite: {fileID: 21300000, guid: 3b950f7e3c759564e84ccdec5eee999b, type: 3}
+  bossPattern: 2
+  patternEveryAttacks: 3
+  patternIntervalMultiplier: 0.42
+  patternDamageMultiplier: 0.8
+  battleSprite: {fileID: 21300000, guid: 1911814178cd34745bf1c60e01a6766d, type: 3}

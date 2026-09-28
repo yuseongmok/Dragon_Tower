@@ -9,5 +9,6 @@ namespace DragonTower
         public Sprite[] floorMonsters;
         public Sprite ancientGolemBoss;
         public Sprite towerBackground;
+        public Sprite floodedSewerBackground;
     }
 }
