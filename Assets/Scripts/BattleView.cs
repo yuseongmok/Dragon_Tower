@@ -68,7 +68,7 @@ namespace DragonTower
             Label("D R A G O N   T O W E R",frame,-30,34,390,28,21,Color.white);
             floorLabel=Label("01",frame,204,33,45,32,23,C(.96f,.75f,.40f));
             modeLabel=Label("타워 1층  /  MONSTER ROOM",frame,0,66,400,24,12,Muted);
-            Panel("Enemy card",frame,0,129,440,80,C(.09f,.13f,.20f));
+            var enemyCard=Panel("Enemy card",frame,0,129,440,80,new Color(.045f,.065f,.10f,.94f));DragonTowerTheme.Frame(enemyCard,DragonTowerTheme.GoldDim);
             enemyName=Label("바위 슬라임",frame,-60,111,280,28,20,Color.white,TextAnchor.MiddleLeft);
             enemyHP=Label("240 / 240",frame,140,111,120,26,16,Muted,TextAnchor.MiddleRight);
             enemyFill=Bar("Enemy HP",146,C(.89f,.42f,.47f));
@@ -90,6 +90,7 @@ namespace DragonTower
             dodgeButton=MakeButton("회피",frame,154,790,132,60,C(.17f,.37f,.38f),out dodgeLabel);
             dragonInfo=Label("",frame,0,835,440,20,11,Muted);
             var modal=Panel("Result overlay",frame,0,425,480,850,new Color(.025f,.04f,.08f,.96f));modal.raycastTarget=true;resultPanel=modal.gameObject;
+            var resultCard=Panel("Result card",modal.transform,0,420,420,390,new Color(.08f,.09f,.12f,.98f));DragonTowerTheme.Frame(resultCard,DragonTowerTheme.Gold);
             Label("D R A G O N   T O W E R",modal.transform,0,244,430,30,16,Muted);
             resultTitle=Label("",modal.transform,0,324,430,65,42,C(1,.77f,.41f));
             resultDetail=Label("",modal.transform,0,409,390,90,19,Color.white);
@@ -128,9 +129,9 @@ namespace DragonTower
             pixelPlayer = SpriteChild(playerArt.transform, skin.babyDragon);
             playerArt.rectTransform.sizeDelta = new Vector2(256,256);
             // Small opaque panels preserve text contrast without expensive effects or masks.
-            var header = Panel("Pixel header",frame,0,44,480,88,new Color(.025f,.04f,.07f,.92f));
+            var header = Panel("Pixel header",frame,0,44,480,88,new Color(.018f,.027f,.048f,.95f));DragonTowerTheme.Frame(header,DragonTowerTheme.GoldDim,false);
             header.transform.SetSiblingIndex(arenaImage.transform.GetSiblingIndex()+1);
-            var footer = Panel("Pixel controls backing",frame,0,738,480,224,new Color(.025f,.04f,.07f,.96f));
+            var footer = Panel("Pixel controls backing",frame,0,738,480,224,new Color(.018f,.027f,.048f,.97f));DragonTowerTheme.Frame(footer,DragonTowerTheme.GoldDim,false);
             footer.transform.SetSiblingIndex(header.transform.GetSiblingIndex()+1);
             DecorateButton(attackButton,new Color(1,.67f,.32f));
             DecorateButton(skillButton,new Color(.55f,.69f,.9f));
@@ -149,11 +150,7 @@ namespace DragonTower
         }
         void DecorateButton(Button button,Color edge)
         {
-            var r=button.GetComponent<RectTransform>().rect;
-            Panel("Top pixel edge",button.transform,0,2,r.width,4,edge);
-            Panel("Bottom pixel edge",button.transform,0,r.height-2,r.width,4,new Color(.04f,.055f,.08f));
-            Panel("Left pixel edge",button.transform,-r.width/2+2,r.height/2,4,r.height,edge);
-            Panel("Right pixel edge",button.transform,r.width/2-2,r.height/2,4,r.height,new Color(.04f,.055f,.08f));
+            DragonTowerTheme.StyleButton(button,edge);
         }
         public void SetDragonArt(DragonData dragon,int level=1)
         {

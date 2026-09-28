@@ -55,28 +55,41 @@ namespace DragonTower
             var go=new GameObject(name,typeof(RectTransform));var r=go.GetComponent<RectTransform>();r.SetParent(parent,false);
             r.anchorMin=r.anchorMax=new Vector2(.5f,1);r.pivot=new Vector2(.5f,.5f);r.anchoredPosition=new Vector2(x,-y);r.sizeDelta=new Vector2(width,height);return r;
         }
+        Image Panel(string name,Transform parent,float x,float y,float w,float h,Color color,Color edge)
+        {
+            var r=Rect(name,parent,x,y,w,h);var image=r.gameObject.AddComponent<Image>();image.color=color;image.raycastTarget=false;DragonTowerTheme.Frame(image,edge);return image;
+        }
         Text Label(string text,float x,float y,float w,float h,int size,Color color)
         {
             var r=Rect(text,body,x,y,w,h);var t=r.gameObject.AddComponent<Text>();t.font=battleView.font;t.text=text;t.fontSize=size;t.color=color;t.alignment=TextAnchor.MiddleCenter;t.raycastTarget=false;return t;
         }
         Button Button(string title,float x,float y,float w,float h,UnityAction action)
         {
-            var r=Rect(title,body,x,y,w,h);var image=r.gameObject.AddComponent<Image>();image.color=new Color(.18f,.27f,.36f);
+            var r=Rect(title,body,x,y,w,h);var image=r.gameObject.AddComponent<Image>();image.color=DragonTowerTheme.SlateLight;
             var b=r.gameObject.AddComponent<Button>();b.targetGraphic=image;b.onClick.AddListener(action);var nav=b.navigation;nav.mode=Navigation.Mode.None;b.navigation=nav;
-            var text=Rect("Label",r,0,h/2,w-12,h-8).gameObject.AddComponent<Text>();text.font=battleView.font;text.text=title;text.fontSize=20;text.color=Color.white;text.alignment=TextAnchor.MiddleCenter;text.raycastTarget=false;return b;
+            var text=Rect("Label",r,0,h/2,w-18,h-12).gameObject.AddComponent<Text>();text.font=battleView.font;text.text=title;text.fontSize=20;text.color=Color.white;text.alignment=TextAnchor.MiddleCenter;text.raycastTarget=false;
+            DragonTowerTheme.StyleButton(b,DragonTowerTheme.Gold);return b;
         }
+        void StyleCard(Button button,Color fill,Color accent){if(button==null)return;button.targetGraphic.color=fill;DragonTowerTheme.StyleButton(button,accent);}
         void Screen(string name)
         {
             if(body!=null){body.gameObject.SetActive(false);Destroy(body.gameObject);}
             portrait=null;roomIcon=null;egg=null;HatchButton=TowerButton=ContinueButton=RoomButton=SecondRoomButton=DragonButton=null;ChoiceButtons=null;
             ScreenName=name;root.gameObject.SetActive(true);root.SetAsLastSibling();
             body=Rect(name,root,0,425,480,850);
+            var baseLayer=body.gameObject.AddComponent<Image>();baseLayer.color=DragonTowerTheme.Night;baseLayer.raycastTarget=false;
+            var skin=Resources.Load<BattleSkin>("PixelBattleSkin");if(skin!=null&&skin.towerBackground!=null)
+            {var scenic=Rect("Dim tower backdrop",body,0,425,480,850).gameObject.AddComponent<Image>();scenic.sprite=skin.towerBackground;scenic.preserveAspect=false;scenic.color=new Color(.23f,.29f,.38f,.28f);scenic.raycastTarget=false;}
+            Panel("Ornate content frame",body,0,454,454,674,new Color(.035f,.055f,.085f,.88f),DragonTowerTheme.GoldDim);
+            Panel("Title ribbon",body,0,94,420,54,new Color(.12f,.105f,.105f,.96f),DragonTowerTheme.Gold);
             Label("D R A G O N   T O W E R",0,42,440,32,21,Color.white);
             Label(name,0,95,420,45,28,Gold);
+            Label("◆",-216,94,24,30,12,DragonTowerTheme.Gold);Label("◆",216,94,24,30,12,DragonTowerTheme.Gold);
             notice=Label("이 기기에 자동 저장됩니다",0,805,430,58,14,Muted);
         }
         void Portrait(DragonData dragon,float y=348,int level=1,UnityAction onClick=null)
         {
+            Panel("Dragon portrait frame",body,0,y,286,286,new Color(.025f,.04f,.065f,.72f),new Color(dragon.color.r,dragon.color.g,dragon.color.b,1));
             portrait=Rect("Selected dragon",body,0,y,260,260);
             var activeSprite=dragon.BattleSpriteAtLevel(level);
             Graphic target;
@@ -97,7 +110,7 @@ namespace DragonTower
             controller.EndBattle();Screen("새로운 만남");
             Label("당신의 첫 모험을 기다리는 알",0,177,430,44,20,Color.white);
             HatchButton=Button("",0,350,230,250,Hatch);
-            HatchButton.targetGraphic.color=new Color(.07f,.105f,.155f);
+            StyleCard(HatchButton,new Color(.035f,.06f,.10f,.98f),DragonTowerTheme.Gold);
             var eggRect=Rect("Dragon egg",HatchButton.transform,0,125,180,200);
             eggRect.gameObject.AddComponent<CanvasRenderer>();egg=eggRect.gameObject.AddComponent<EggGraphic>();egg.raycastTarget=false;
             Label("알을 터치해 부화시키세요",0,535,430,45,23,Gold);
@@ -191,7 +204,7 @@ namespace DragonTower
         }
         Button IconButton(string symbol,string caption,Color color,UnityAction action)
         {
-            var button=Button("",0,384,230,210,action);button.targetGraphic.color=color;roomIcon=button.GetComponent<RectTransform>();
+            var button=Button("",0,384,230,210,action);StyleCard(button,Color.Lerp(color,DragonTowerTheme.Night,.38f),color);roomIcon=button.GetComponent<RectTransform>();
             var mark=Label(symbol,0,340,210,105,76,Color.white);mark.transform.SetParent(button.transform,false);mark.rectTransform.anchoredPosition=new Vector2(0,52);
             var text=button.GetComponentInChildren<Text>();text.text=caption;text.fontSize=20;
             return button;
@@ -261,7 +274,7 @@ namespace DragonTower
             else {Label("등록된 아이템이 없습니다.",0,390,420,50,22,Color.white);RoomButton=Button("다음 층",0,610,360,68,AdvanceFloor);}
         }
         Button ItemChoice(ItemData item,float y)
-        {return Button("["+ItemGradeName(item.grade)+"] "+item.displayName+"\n"+ItemSummary(item),0,y,400,96,()=>AcquireItem(item,()=>ShowRoomResult(item.displayName+"을(를) 획득했습니다.")));}
+        {var b=Button("["+ItemGradeName(item.grade)+"] "+item.displayName+"\n"+ItemSummary(item),0,y,400,96,()=>AcquireItem(item,()=>ShowRoomResult(item.displayName+"을(를) 획득했습니다.")));StyleCard(b,DragonTowerTheme.Slate,DragonTowerTheme.Grade(item.grade));return b;}
         string ItemSummary(ItemData item)
         {
             if(item==null)return "효과 없음";string kind=item.kind==ItemKind.Consumable?"소모품":"장착";
@@ -319,6 +332,7 @@ namespace DragonTower
             for(int i=0;i<goods.Length;i++)
             {
                 var item=goods[i];ChoiceButtons[i]=Button("["+ItemGradeName(item.grade)+"] "+item.displayName+" · "+item.price+"G\n"+ItemSummary(item),0,315+i*125,400,100,()=>BuyItem(item));
+                StyleCard(ChoiceButtons[i],DragonTowerTheme.Slate,DragonTowerTheme.Grade(item.grade));
             }
             SecondRoomButton=Button("구매하지 않고 다음 층",0,600,400,66,AdvanceFloor);
             notice.text="구매한 아이템은 빈 슬롯에 넣거나 기존 아이템과 교체합니다.";
@@ -331,7 +345,7 @@ namespace DragonTower
         void ShowNestRoom()
         {
             Screen("드래곤 둥지");Label("알을 터치해 부화시키세요",0,178,420,44,23,Gold);
-            RoomButton=Button("",0,375,230,245,HatchNestEgg);RoomButton.targetGraphic.color=new Color(.07f,.105f,.155f);roomIcon=RoomButton.GetComponent<RectTransform>();
+            RoomButton=Button("",0,375,230,245,HatchNestEgg);StyleCard(RoomButton,new Color(.035f,.06f,.10f,.98f),DragonTowerTheme.Gold);roomIcon=RoomButton.GetComponent<RectTransform>();
             var eggRect=Rect("Nest egg",RoomButton.transform,0,126,170,190);eggRect.gameObject.AddComponent<CanvasRenderer>();egg=eggRect.gameObject.AddComponent<EggGraphic>();egg.raycastTarget=false;
             notice.text="태어난 드래곤은 즉시 도감과 보유 목록에 등록됩니다.";
         }
@@ -364,13 +378,13 @@ namespace DragonTower
                     {
                         var augment=reward.augment;
                         choice=Button("["+GradeName(augment.grade)+"] "+augment.displayName+"\n"+AugmentSummary(augment),0,300+slot*120,400,100,()=>ChooseAugment(augment,levelReward));
-                        choice.targetGraphic.color=GradeColor(augment.grade);
+                        StyleCard(choice,GradeColor(augment.grade),DragonTowerTheme.Grade(augment.grade));
                     }
                     else
                     {
                         var skill=reward.skill;
                         choice=Button("[스킬] "+skill.displayName+"\n"+SkillSummary(skill),0,300+slot*120,400,100,()=>ChooseSkill(skill,levelReward));
-                        choice.targetGraphic.color=new Color(.22f,.34f,.52f);
+                        StyleCard(choice,new Color(.12f,.22f,.36f,.98f),new Color(.35f,.72f,1));
                     }
                     choice.GetComponentInChildren<Text>().fontSize=15;ChoiceButtons[slot]=choice;
                 }
@@ -529,7 +543,7 @@ namespace DragonTower
                 var d=catalog[i];bool owns=Session.Owns(d.StableId);
                 int local=i-start,column=local%2,row=local/2;float x=column==0?-106:106,y=215+row*100;
                 var b=Button(owns?d.displayName+"\n"+d.element:"???\n미발견",x,y,198,86,()=>ShowCodexEntry(d));
-                b.targetGraphic.color=owns?new Color(.15f,.24f,.33f):new Color(.08f,.1f,.14f);
+                StyleCard(b,owns?new Color(.09f,.16f,.23f,.98f):new Color(.035f,.045f,.065f,.98f),owns?new Color(d.color.r,d.color.g,d.color.b,1):new Color(.22f,.24f,.28f));
                 var text=b.GetComponentInChildren<Text>();text.fontSize=14;text.rectTransform.anchoredPosition=new Vector2(35,-43);text.rectTransform.sizeDelta=new Vector2(112,76);
                 DragonArtwork(b.transform,d,0,-57,43,68,68,!owns);
             }
@@ -601,7 +615,7 @@ namespace DragonTower
                 var dragon=owned[i];bool selected=Session.Selected!=null&&Session.Selected.StableId==dragon.StableId;
                 int local=i-start,column=local%2,row=local/2;float x=column==0?-106:106,y=215+row*100;
                 var b=Button(dragon.displayName+(selected?"\n선택 중":"\n"+dragon.element),x,y,198,86,()=>SelectSpecies(dragon));
-                b.targetGraphic.color=selected?new Color(.38f,.27f,.11f):new Color(.15f,.24f,.33f);
+                StyleCard(b,selected?new Color(.30f,.20f,.07f,.98f):new Color(.09f,.16f,.23f,.98f),selected?DragonTowerTheme.Gold:new Color(dragon.color.r,dragon.color.g,dragon.color.b,1));
                 var text=b.GetComponentInChildren<Text>();text.fontSize=14;text.rectTransform.anchoredPosition=new Vector2(35,-43);text.rectTransform.sizeDelta=new Vector2(112,76);
                 DragonArtwork(b.transform,dragon,0,-57,43,68,68,false);ChoiceButtons[local]=b;
             }
