@@ -75,7 +75,9 @@ namespace DragonTower.Editor
             Verify();
             PlayerSettings.WebGL.compressionFormat=WebGLCompressionFormat.Gzip;
             PlayerSettings.WebGL.decompressionFallback=true;
-            var report=BuildPipeline.BuildPlayer(new BuildPlayerOptions{scenes=new[]{"Assets/Scenes/Battle.unity"},locationPathName="Builds/Web",target=BuildTarget.WebGL,options=BuildOptions.None});
+            Directory.CreateDirectory("docs");
+            File.WriteAllText("docs/.nojekyll",string.Empty);
+            var report=BuildPipeline.BuildPlayer(new BuildPlayerOptions{scenes=new[]{"Assets/Scenes/Battle.unity"},locationPathName="docs",target=BuildTarget.WebGL,options=BuildOptions.None});
             if(report.summary.result!=UnityEditor.Build.Reporting.BuildResult.Succeeded)throw new Exception("Web build failed: "+report.summary.result);
             Debug.Log("DRAGON_TOWER_WEB_BUILD_OK");
         }

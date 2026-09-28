@@ -42,7 +42,7 @@ namespace DragonTower
         [Tooltip("New three-form sheets include the baby form in the left third.")]
         public bool evolutionSheetIncludesBase;
         [NonSerialized] Sprite baseSprite,intermediateSprite,finalSprite;
-        public static int EvolutionStage(int level) => level>=40?2:level>=20?1:0;
+        public static int EvolutionStage(int level) => level>=20?2:level>=10?1:0;
         public string NameAtLevel(int level) => NameForStage(EvolutionStage(level));
         public string NameForStage(int stage)
         {

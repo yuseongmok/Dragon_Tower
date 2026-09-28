@@ -78,11 +78,11 @@ namespace DragonTower.Editor
             Check(carried.PlayerHP==42,"Remaining HP carries into the next battle");
             growth.AddAugment("test",true);Check(growth.PendingLevelAugments==0&&growth.Augments.Count==1,"Level augment selection is recorded");
             var evolution=new TowerRun(100,0,50);
-            for(int i=1;i<20;i++)evolution.RecordBattleVictory(100);
-            Check(evolution.Level==20&&evolution.PendingEvolutionStage==1,"Level twenty queues intermediate evolution");
+            for(int i=1;i<10;i++)evolution.RecordBattleVictory(100);
+            Check(evolution.Level==10&&evolution.PendingEvolutionStage==1,"Level ten queues intermediate evolution");
             evolution.ConsumeEvolution();Check(evolution.PendingEvolutionStage==0,"Intermediate evolution is consumed once");
-            for(int i=20;i<40;i++)evolution.RecordBattleVictory(100);
-            Check(evolution.Level==40&&evolution.PendingEvolutionStage==2,"Level forty queues final evolution");
+            for(int i=10;i<20;i++)evolution.RecordBattleVictory(100);
+            Check(evolution.Level==20&&evolution.PendingEvolutionStage==2,"Level twenty queues final evolution");
             evolution.ConsumeEvolution();Check(evolution.PendingEvolutionStage==0,"Final evolution is consumed once");
             growth.Heal(20);Check(growth.CurrentHP==62,"Healing changes run HP only when requested");
             growth.AddGold(50);Check(growth.SpendGold(30)&&growth.Gold==20,"Gold can pay shop cost");

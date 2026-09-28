@@ -591,7 +591,7 @@ namespace DragonTower
             art.rectTransform.localScale=Vector3.one;aura.color=new Color(dragon.color.r,dragon.color.g,dragon.color.b,.12f);
             evolutionText.text=dragon.NameForStage(stage)+"(으)로 진화했습니다!";evolutionText.color=Gold;evolutionText.fontSize=24;
             ContinueButton=Button(towerRun.PendingLevelAugments>0?"증강 선택으로":"다음 층으로",0,710,360,66,FinishEvolution);
-            notice.text=stage==1?"레벨 40에서 최종 진화합니다.":"최종 진화를 완료했습니다.";
+            notice.text=stage==1?"레벨 20에서 최종 진화합니다.":"최종 진화를 완료했습니다.";
         }
         void FinishEvolution()
         {
