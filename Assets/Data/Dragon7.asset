@@ -27,9 +27,9 @@ MonoBehaviour:
   finalName: "\uB2E8\uD14C\uB9AC\uC5D8"
   skillEffect: 7
   skill: {fileID: 11400000, guid: f7b679ceee739de4c9300f1688ecd937, type: 2}
-  passiveName: "성스러운 빛"
-  passiveDescription: "회피 성공 시 10% 확률로 최대 HP의 20%를 회복합니다."
+  passiveName: "\uC131\uC2A4\uB7EC\uC6B4 \uBE5B"
+  passiveDescription: "\uD68C\uD53C \uC131\uACF5 \uC2DC 10% \uD655\uB960\uB85C \uCD5C\uB300
+    HP\uC758 20%\uB97C \uD68C\uBCF5\uD569\uB2C8\uB2E4."
   passiveMechanic: 13
   alternateSkillElement: 0
   evolutionSheetIncludesBase: 0
-

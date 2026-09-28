@@ -27,9 +27,9 @@ MonoBehaviour:
   finalName: "\uBCFC\uD2B8\uB77C\uD06C"
   skillEffect: 4
   skill: {fileID: 11400000, guid: 5e1219208f2f8c94c8a7e6d322485ec8, type: 2}
-  passiveName: "전기충격"
-  passiveDescription: "일반 공격과 스킬 공격 사용 시 20% 확률로 적을 마비시킵니다."
+  passiveName: "\uC804\uAE30\uCDA9\uACA9"
+  passiveDescription: "\uC77C\uBC18 \uACF5\uACA9\uACFC \uC2A4\uD0AC \uACF5\uACA9
+    \uC0AC\uC6A9 \uC2DC 20% \uD655\uB960\uB85C \uC801\uC744 \uB9C8\uBE44\uC2DC\uD0B5\uB2C8\uB2E4."
   passiveMechanic: 9
   alternateSkillElement: 0
   evolutionSheetIncludesBase: 0
-

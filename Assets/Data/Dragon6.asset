@@ -27,9 +27,9 @@ MonoBehaviour:
   finalName: "\uB178\uBC14\uC2A4\uD2B8\uB77C"
   skillEffect: 6
   skill: {fileID: 11400000, guid: 6144f79c8c63b2a438d7a7ff921114a1, type: 2}
-  passiveName: "공허 가속기"
-  passiveDescription: "쿨타임 중에도 스킬을 사용할 수 있으며 최대 HP의 10%를 소모합니다."
+  passiveName: "\uACF5\uD5C8 \uAC00\uC18D\uAE30"
+  passiveDescription: "\uCFE8\uD0C0\uC784 \uC911\uC5D0\uB3C4 \uC2A4\uD0AC\uC744 \uC0AC\uC6A9\uD560
+    \uC218 \uC788\uC73C\uBA70 \uCD5C\uB300 HP\uC758 10%\uB97C \uC18C\uBAA8\uD569\uB2C8\uB2E4."
   passiveMechanic: 15
   alternateSkillElement: 0
   evolutionSheetIncludesBase: 0
-

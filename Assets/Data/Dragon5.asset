@@ -27,9 +27,9 @@ MonoBehaviour:
   finalName: "\uC625\uD0C0\uBCA8"
   skillEffect: 5
   skill: {fileID: 11400000, guid: d5ab714f67d832543a42a291f5432720, type: 2}
-  passiveName: "촉수"
-  passiveDescription: "일반 공격 시 20% 확률로 피해량의 10% 추가 공격을 합니다."
+  passiveName: "\uCD09\uC218"
+  passiveDescription: "\uC77C\uBC18 \uACF5\uACA9 \uC2DC 20% \uD655\uB960\uB85C \uD53C\uD574\uB7C9\uC758
+    10% \uCD94\uAC00 \uACF5\uACA9\uC744 \uD569\uB2C8\uB2E4."
   passiveMechanic: 11
   alternateSkillElement: 0
   evolutionSheetIncludesBase: 0
-

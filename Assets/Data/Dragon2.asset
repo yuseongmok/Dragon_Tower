@@ -27,9 +27,9 @@ MonoBehaviour:
   finalName: "\uC81C\uD53C\uB9AC\uC628"
   skillEffect: 2
   skill: {fileID: 11400000, guid: d370770991892fe47869e1cad083b670, type: 2}
-  passiveName: "제트기류"
-  passiveDescription: "스킬 사용 시 1초간 일반 공격 쿨타임이 50% 감소합니다."
+  passiveName: "\uC81C\uD2B8\uAE30\uB958"
+  passiveDescription: "\uC2A4\uD0AC \uC0AC\uC6A9 \uC2DC 1\uCD08\uAC04 \uC77C\uBC18
+    \uACF5\uACA9 \uCFE8\uD0C0\uC784\uC774 50% \uAC10\uC18C\uD569\uB2C8\uB2E4."
   passiveMechanic: 5
   alternateSkillElement: 0
   evolutionSheetIncludesBase: 0
-
