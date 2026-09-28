@@ -10,5 +10,6 @@ namespace DragonTower
         public Sprite ancientGolemBoss;
         public Sprite towerBackground;
         public Sprite floodedSewerBackground;
+        public Sprite forgeDepthsBackground;
     }
 }

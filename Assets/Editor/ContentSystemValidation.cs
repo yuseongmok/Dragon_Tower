@@ -18,7 +18,7 @@ namespace DragonTower.Editor
             var storm=database.dragons.First(d=>d.StableId=="storm");var sharkid=database.dragons.First(d=>d.StableId=="sharkid");
             Check(storm.CanLearnSkill(ElementType.Wind)&&storm.CanLearnSkill(ElementType.Lightning),"Storm can learn lightning and wind skills");
             Check(sharkid.CanLearnSkill(ElementType.Water)&&sharkid.CanLearnSkill(ElementType.Ice),"Sharkid can learn water and ice skills");
-            Check(database.monsters.Length==11,"Floor one through twenty monsters and bosses are registered");
+            Check(database.monsters.Length==16,"Floor one through thirty monsters and bosses are registered");
             Check(database.items.Length==30,"Thirty balanced items are registered");
             Check(database.items.Count(i=>i.grade==ItemGrade.Common)==3,"Three common items are registered");
             Check(database.items.Count(i=>i.grade==ItemGrade.Rare)==13,"Thirteen rare items are registered");
@@ -40,6 +40,11 @@ namespace DragonTower.Editor
             var secondArea=database.PickMonster(11,false,0);Check(secondArea!=null&&secondArea.minimumFloor==11&&secondArea.timingVariancePercent>0,"Floor eleven selects a stronger irregular attacker");
             var kraken=database.PickMonster(20,true,0);var floor20=kraken.CreateBattleStats(20);
             Check(kraken.contentId=="boss_kraken_guardian"&&floor20.maxHP==650&&floor20.damage==32&&floor20.bossPattern==EnemyBossPattern.AbyssalRush,"Floor twenty selects the Kraken Guardian and its tentacle pattern");
+            var vulcan=database.PickMonster(30,true,0);var floor30=vulcan.CreateBattleStats(30);
+            Check(vulcan.contentId=="boss_forge_warden_vulcan"&&floor30.maxHP==1100&&floor30.bossPattern==EnemyBossPattern.ForgeBarrier&&floor30.barrierHP==220,"Floor thirty selects Vulcan and its forge barrier pattern");
+            var barrierStats=new BattleEnemyStats{displayName="barrier test",maxHP=999,damage=0,interval=.1f,bossPattern=EnemyBossPattern.ForgeBarrier,patternEveryAttacks=2,barrierHP=100,barrierDuration=1,barrierFailureDamagePercent=50};
+            var barrierBattle=new BattleModel(database.dragons[0].Snapshot(),barrierStats,100,()=>.9);barrierBattle.Tick(.11f);
+            Check(barrierBattle.EnemyShieldHP==100,"Vulcan creates a separate breakable shield");barrierBattle.Tick(1.01f);Check(barrierBattle.PlayerHP==50,"An unbroken forge barrier deals guard-ignoring maximum-HP damage");
             var quickStats=new BattleEnemyStats{displayName="timing test",maxHP=999,damage=1,interval=2,quickAttackChancePercent=100,quickAttackIntervalMultiplier=.5f};
             var quickBattle=new BattleModel(database.dragons[0].Snapshot(),quickStats,database.dragons[0].maxHP,()=>0);
             quickBattle.Tick(2.01f);Check(quickBattle.EnemyIntent=="기습 공격"&&quickBattle.NextEnemyStrike<3.1,"Irregular enemies can suddenly schedule a faster attack");

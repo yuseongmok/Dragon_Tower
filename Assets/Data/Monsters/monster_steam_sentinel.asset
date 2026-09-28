@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ab168aee88f48c0ac6e0dea2c3c85c4, type: 3}
+  m_Name: monster_steam_sentinel
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.MonsterData
+  contentId: monster_steam_sentinel
+  displayName: 증기 파수병
+  description: 두꺼운 장갑과 고압 증기로 전장을 압박하는 수호병
+  rarity: 0
+  icon: {fileID: 0}
+  elementType: 1
+  baseHP: 650
+  attackDamage: 34
+  attackInterval: 2.5
+  hpGrowthPerFloor: 10
+  attackGrowthPerFloor: 0.5
+  hpGrowthPerFloorPercent: 2
+  attackGrowthPerFloorPercent: 0.7
+  minimumFloor: 21
+  maximumFloor: 29
+  spawnWeight: 10
+  boss: 0
+  timingVariancePercent: 20
+  quickAttackChancePercent: 15
+  quickAttackIntervalMultiplier: 0.62
+  bossPattern: 0
+  patternEveryAttacks: 3
+  patternIntervalMultiplier: 1
+  patternDamageMultiplier: 1
+  barrierHP: 0
+  barrierDuration: 0
+  barrierFailureDamagePercent: 0
+  battleSprite: {fileID: 21300000, guid: 3d0140a1f42e4f3b817ea7e9e8071b44, type: 3}

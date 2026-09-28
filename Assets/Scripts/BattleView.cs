@@ -15,7 +15,7 @@ namespace DragonTower
         public Text dragonInfo;
         BattleSkin skin;
         Image pixelPlayer, pixelEnemy,arenaImage;
-        int lastPlayerHP = -1, lastEnemyHP = -1,lastShieldHP=-1;
+        int lastPlayerHP = -1, lastEnemyHP = -1,lastShieldHP=-1,lastEnemyShieldHP=-1;
         BattleStats lastDragon;
         double nextTextRefresh;
         Rect lastSafeArea;
@@ -173,7 +173,7 @@ namespace DragonTower
             if(usePixel)playerArt.rectTransform.sizeDelta=new Vector2(256,256);
             else if(playerArt.GetComponent<CanvasRenderer>()==null)
                 playerArt.gameObject.AddComponent<CanvasRenderer>();
-            lastDragon=null;lastPlayerHP=lastEnemyHP=lastShieldHP=-1;nextTextRefresh=0;
+            lastDragon=null;lastPlayerHP=lastEnemyHP=lastShieldHP=lastEnemyShieldHP=-1;nextTextRefresh=0;
             if(motion==null)
             {
                 motion=gameObject.AddComponent<BattleAnimation>();
@@ -205,7 +205,7 @@ namespace DragonTower
             enemyName.text=enemy.displayName+"  /  "+ElementRules.DisplayName(enemy.elementType);floorLabel.text=floor.ToString("00");
             modeLabel.text="타워 "+floor+"층  /  "+(boss?"BOSS ROOM":"MONSTER ROOM");
             var skin=Resources.Load<BattleSkin>("PixelBattleSkin");
-            if(arenaImage!=null&&skin!=null)arenaImage.sprite=floor>=11&&skin.floodedSewerBackground!=null?skin.floodedSewerBackground:skin.towerBackground;
+            if(arenaImage!=null&&skin!=null)arenaImage.sprite=floor>=21&&skin.forgeDepthsBackground!=null?skin.forgeDepthsBackground:floor>=11&&skin.floodedSewerBackground!=null?skin.floodedSewerBackground:skin.towerBackground;
             if(pixelEnemy!=null&&enemySprite!=null)pixelEnemy.sprite=enemySprite;
             enemyArt.rectTransform.sizeDelta=boss?new Vector2(310,310):new Vector2(256,256);
         }
@@ -253,9 +253,9 @@ namespace DragonTower
                 lastPlayerHP=b.PlayerHP;lastShieldHP=b.ShieldHP;playerHP.text=b.PlayerHP+" / "+b.Dragon.maxHP+(b.ShieldHP>0?"  + 보호막 "+b.ShieldHP:"");
                 playerFill.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,400f*b.PlayerHP/b.Dragon.maxHP);
             }
-            if(lastEnemyHP!=b.EnemyHP)
+            if(lastEnemyHP!=b.EnemyHP||lastEnemyShieldHP!=b.EnemyShieldHP)
             {
-                lastEnemyHP=b.EnemyHP;enemyHP.text=b.EnemyHP+" / "+b.CurrentEnemyMaxHP;
+                lastEnemyHP=b.EnemyHP;lastEnemyShieldHP=b.EnemyShieldHP;enemyHP.text=b.EnemyHP+" / "+b.CurrentEnemyMaxHP+(b.EnemyShieldHP>0?"  + 방벽 "+b.EnemyShieldHP:"");
                 enemyFill.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,400f*b.EnemyHP/b.CurrentEnemyMaxHP);
             }
             float until=(float)(b.NextEnemyStrike-b.Time);
@@ -270,6 +270,7 @@ namespace DragonTower
             if(b.EnemyParalyzed){status+="[마비] ";tint=new Color(1,.92f,.38f);}
             if(b.EnemyStunned){status+="[기절] ";tint=new Color(.8f,.6f,1);}
             if(b.EnemyPoisoned){status+="[중독]";tint=new Color(.48f,1,.42f);}
+            if(b.EnemyShieldHP>0){status="[용광로 방벽 "+b.EnemyShieldHP+" / "+b.EnemyShieldMaxHP+" · "+b.EnemyShieldRemaining.ToString("0.0")+"초]";tint=new Color(1,.48f,.16f);}
             enemyStatus.text=status;enemyStatus.color=tint;if(pixelEnemy!=null)pixelEnemy.color=status.Length==0?Color.white:Color.Lerp(Color.white,tint,.22f+.08f*Mathf.Sin((float)b.Time*9));
             SetButton(attackButton,attackLabel,"공격",b.AttackReady-b.Time,b,refreshText);
             if(b.Dragon.skillDisabled){skillButton.interactable=false;skillLabel.text="스킬\n봉인됨";}

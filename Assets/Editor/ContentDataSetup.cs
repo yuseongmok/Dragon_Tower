@@ -31,6 +31,11 @@ namespace DragonTower.Editor
             EnsureSecondAreaMonster("monster_water_gargoyle","물의 석상",ElementType.Water,420,28,2.7f,"water-gargoyle.png",15,15,.6f);
             EnsureSecondAreaMonster("monster_volt_ray","전기 가오리",ElementType.Lightning,330,23,1.8f,"volt-ray.png",20,28,.6f);
             EnsureSecondAreaMonster("boss_kraken_guardian","크라켄 수호자",ElementType.Water,650,32,2.4f,"kraken-guardian-boss.png",10,0,.6f,true);
+            EnsureThirdAreaMonster("monster_gear_bat","톱니 박쥐",ElementType.Wind,460,30,1.55f,"gear-bat.png",30,35,.5f);
+            EnsureThirdAreaMonster("monster_magma_core","마그마 코어",ElementType.Fire,600,36,2.8f,"magma-core.png",15,10,.65f);
+            EnsureThirdAreaMonster("monster_steam_sentinel","증기 파수병",ElementType.Water,650,34,2.5f,"steam-sentinel.png",20,15,.62f);
+            EnsureThirdAreaMonster("monster_clockwork_duelist","태엽 결투가",ElementType.Lightning,520,32,1.75f,"clockwork-duelist.png",30,30,.52f);
+            EnsureThirdAreaMonster("boss_forge_warden_vulcan","용광로 수문장 불칸",ElementType.Fire,1100,45,2.25f,"forge-warden-vulcan.png",16,12,.58f,true);
             EnsureItems();
             EnsureAugments();
             UpdateExistingSkills();
@@ -70,6 +75,17 @@ namespace DragonTower.Editor
             data.timingVariancePercent=variance;data.quickAttackChancePercent=quickChance;data.quickAttackIntervalMultiplier=quickMultiplier;
             if(boss){data.bossPattern=EnemyBossPattern.AbyssalRush;data.patternEveryAttacks=3;data.patternIntervalMultiplier=.42f;data.patternDamageMultiplier=.8f;}
             data.battleSprite=AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/PixelBattle/"+spriteFile);AssetDatabase.CreateAsset(data,path);
+        }
+        static void EnsureThirdAreaMonster(string id,string name,ElementType element,int hp,int damage,float interval,string spriteFile,float variance,float quickChance,float quickMultiplier,bool boss=false)
+        {
+            string path=Root+"/Monsters/"+id+".asset";var data=AssetDatabase.LoadAssetAtPath<MonsterData>(path);
+            if(data==null){data=ScriptableObject.CreateInstance<MonsterData>();AssetDatabase.CreateAsset(data,path);}
+            data.contentId=id;data.displayName=name;data.elementType=element;data.baseHP=hp;data.attackDamage=damage;data.attackInterval=interval;
+            data.minimumFloor=boss?30:21;data.maximumFloor=boss?30:29;data.spawnWeight=10;data.boss=boss;
+            data.hpGrowthPerFloor=boss?0:10;data.attackGrowthPerFloor=boss?0:.5f;data.hpGrowthPerFloorPercent=boss?0:2;data.attackGrowthPerFloorPercent=boss?0:.7f;
+            data.timingVariancePercent=variance;data.quickAttackChancePercent=quickChance;data.quickAttackIntervalMultiplier=quickMultiplier;
+            if(boss){data.bossPattern=EnemyBossPattern.ForgeBarrier;data.patternEveryAttacks=3;data.patternIntervalMultiplier=1;data.patternDamageMultiplier=1;data.barrierHP=220;data.barrierDuration=4.5f;data.barrierFailureDamagePercent=35;}
+            data.battleSprite=AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/PixelBattle/"+spriteFile);EditorUtility.SetDirty(data);
         }
         static void EnsureItem(string id,string name,string description,ItemGrade grade,ItemKind kind,ItemMechanic mechanic,int price,int maximumStacks,float primary=0,float secondary=0,float duration=0,params ContentEffect[] effects)
         {

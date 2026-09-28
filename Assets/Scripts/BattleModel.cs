@@ -65,6 +65,7 @@ namespace DragonTower
         public string displayName;public ElementType elementType;public int maxHP,damage;public float interval;
         public float timingVariancePercent,quickAttackChancePercent,quickAttackIntervalMultiplier=.6f;
         public EnemyBossPattern bossPattern;public int patternEveryAttacks=4;public float patternIntervalMultiplier=1,patternDamageMultiplier=1;
+        public int barrierHP;public float barrierDuration=4.5f,barrierFailureDamagePercent=35;
         public static BattleEnemyStats Normal()=>new BattleEnemyStats{displayName="바위 슬라임",elementType=ElementType.Neutral,maxHP=240,damage=18,interval=2.4f};
         public const int FirstAreaCount=5;
         public static BattleEnemyStats FirstArea(int index)
@@ -99,6 +100,9 @@ namespace DragonTower
         public bool EnemyParalyzed => Time<paralyzeUntil;
         public bool EnemyStunned => Time<stunUntil;
         public bool EnemyPoisoned => poisonDamage>0;
+        public int EnemyShieldHP => enemyShieldHP;
+        public int EnemyShieldMaxHP { get; private set; }
+        public double EnemyShieldRemaining => enemyShieldHP>0?Math.Max(0,enemyShieldUntil-Time):0;
         public bool PassiveConsumed { get; private set; }
         public bool CanUseSkill => Result==BattleResult.Fighting&&!Dragon.skillDisabled&&(Time>=SkillReady||Dragon.passiveMechanic==DragonPassiveMechanic.VoidAccelerator);
         public const int EnemyMaxHP = 240, EnemyDamage = 18;
@@ -112,9 +116,9 @@ namespace DragonTower
         public BattleStats Dragon { get; }
         public BattleEnemyStats Enemy { get; }
         readonly Func<double> random;
-        int attackHits,enemyAttackCount;int shieldHP;int burnDamage,poisonDamage;int pendingSkillHits;double nextSkillHit;
+        int attackHits,enemyAttackCount;int shieldHP,enemyShieldHP;int burnDamage,poisonDamage;int pendingSkillHits;double nextSkillHit;
         float nextEnemyDamageMultiplier=1;
-        double shieldUntil,burnUntil,burnNext,slowUntil,paralyzeUntil,stunUntil,passiveRapidUntil,passivePoisonNext,rapidUntil,firstAidUntil,frostBarrierReady;
+        double shieldUntil,enemyShieldUntil,burnUntil,burnNext,slowUntil,paralyzeUntil,stunUntil,passiveRapidUntil,passivePoisonNext,rapidUntil,firstAidUntil,frostBarrierReady;
         double invulnerableUntil,noAttackCooldownUntil,noSkillCooldownUntil,skillDamageBuffUntil,criticalBuffUntil,attackDamageBuffUntil;
         double poisonNext=10,meteorNext=10;float slowPercent,skillDamageBuffPercent,criticalBuffPercent,attackDamageBuffPercent;
         bool firstAidUsed,dodgeAttemptedForStrike,phoenixUsed,echoReady;
@@ -138,6 +142,7 @@ namespace DragonTower
             if (Result != BattleResult.Fighting || delta <= 0) return;
             Time += delta;
             if(Time>=shieldUntil)shieldHP=0;
+            if(enemyShieldHP>0&&Time>=enemyShieldUntil)ResolveForgeBarrierFailure();
             while(pendingSkillHits>0&&nextSkillHit<=Time&&Result==BattleResult.Fighting)
             {
                 PerformSkillHit(false);
@@ -146,11 +151,11 @@ namespace DragonTower
             }
             while(burnNext>0&&burnNext<=Time&&burnNext<=burnUntil&&Result==BattleResult.Fighting)
             {
-                int burn=Math.Max(1,burnDamage);EnemyHP=Math.Max(0,EnemyHP-burn);Feedback?.Invoke("화상 피해  −"+burn);burnNext+=1;
+                int burn=Math.Max(1,burnDamage);DamageEnemy(burn);Feedback?.Invoke("화상 피해  −"+burn);burnNext+=1;
                 if(EnemyHP==0)Result=BattleResult.Victory;
             }
             while(poisonDamage>0&&passivePoisonNext<=Time&&Result==BattleResult.Fighting)
-            {EnemyHP=Math.Max(0,EnemyHP-poisonDamage);Cue?.Invoke(CombatCue.SkillHit,poisonDamage);Feedback?.Invoke("중독 피해  −"+poisonDamage);passivePoisonNext+=2;if(EnemyHP==0)Result=BattleResult.Victory;}
+            {DamageEnemy(poisonDamage);Cue?.Invoke(CombatCue.SkillHit,poisonDamage);Feedback?.Invoke("중독 피해  −"+poisonDamage);passivePoisonNext+=2;if(EnemyHP==0)Result=BattleResult.Victory;}
             var poison=ItemRule(ItemMechanic.PoisonFang);
             while(poison!=null&&poisonNext<=Time&&Result==BattleResult.Fighting)
             {
@@ -216,8 +221,10 @@ namespace DragonTower
                 nextEnemyDamageMultiplier=Math.Max(.25f,Enemy.patternDamageMultiplier);
                 if(Enemy.bossPattern==EnemyBossPattern.EarthShatter)
                 {EnemyIntent="대지 분쇄";Feedback?.Invoke("보스 패턴 · 대지 분쇄를 준비합니다!");}
-                else
+                else if(Enemy.bossPattern==EnemyBossPattern.AbyssalRush)
                 {EnemyIntent="심해 촉수 기습";Feedback?.Invoke("보스 패턴 · 촉수가 빠르게 덮쳐옵니다!");}
+                else
+                {EnemyIntent="용광로 과열";ActivateForgeBarrier();}
             }
             else if(Enemy.quickAttackChancePercent>0&&Roll(Enemy.quickAttackChancePercent))
             {
@@ -353,12 +360,31 @@ namespace DragonTower
             var mark=ItemRule(ItemMechanic.ExecutionerMark);if(mark!=null&&EnemyHP<=Enemy.maxHP*.4f)damage=Percent(damage,mark.primaryValue*Math.Max(1,mark.stacks));
             float chance=Dragon.criticalChance*100f+(Time<criticalBuffUntil?criticalBuffPercent:0);if(EnemyBurning&&Has(AugmentMechanic.Inferno))chance+=Value(AugmentMechanic.Inferno,50);
             critical=Roll(chance);if(critical)damage=Math.Max(1,(int)Math.Round(damage*Dragon.criticalDamage,MidpointRounding.AwayFromZero));
-            EnemyHP = Math.Max(0, EnemyHP - damage);
+            damage=DamageEnemy(damage);
             if (EnemyHP == 0) Result = BattleResult.Victory;
             return damage;
         }
-        int RawExtra(int referenceDamage,float percent){int value=Math.Max(1,(int)Math.Round(referenceDamage*percent/100f,MidpointRounding.AwayFromZero));EnemyHP=Math.Max(0,EnemyHP-value);if(EnemyHP==0)Result=BattleResult.Victory;return value;}
-        int ElementalExtra(int baseDamage,float percent,ElementType element){int value=Math.Max(1,(int)Math.Round(baseDamage*percent/100f,MidpointRounding.AwayFromZero));value=ElementRules.Damage(value,element,Enemy.elementType);EnemyHP=Math.Max(0,EnemyHP-value);if(EnemyHP==0)Result=BattleResult.Victory;return value;}
+        int RawExtra(int referenceDamage,float percent){int value=Math.Max(1,(int)Math.Round(referenceDamage*percent/100f,MidpointRounding.AwayFromZero));value=DamageEnemy(value);if(EnemyHP==0)Result=BattleResult.Victory;return value;}
+        int ElementalExtra(int baseDamage,float percent,ElementType element){int value=Math.Max(1,(int)Math.Round(baseDamage*percent/100f,MidpointRounding.AwayFromZero));value=ElementRules.Damage(value,element,Enemy.elementType);value=DamageEnemy(value);if(EnemyHP==0)Result=BattleResult.Victory;return value;}
+        int DamageEnemy(int value)
+        {
+            value=Math.Max(0,value);if(enemyShieldHP<=0){EnemyHP=Math.Max(0,EnemyHP-value);return value;}
+            int absorbed=Math.Min(enemyShieldHP,value);enemyShieldHP-=absorbed;int overflow=value-absorbed;if(overflow>0)EnemyHP=Math.Max(0,EnemyHP-overflow);
+            if(enemyShieldHP==0){enemyShieldUntil=0;Feedback?.Invoke("용광로 방벽 파괴! 폭발을 저지했습니다");}
+            return value;
+        }
+        void ActivateForgeBarrier()
+        {
+            if(enemyShieldHP>0)return;EnemyShieldMaxHP=Math.Max(1,Enemy.barrierHP);enemyShieldHP=EnemyShieldMaxHP;enemyShieldUntil=Time+Math.Max(.5f,Enemy.barrierDuration);
+            Feedback?.Invoke("용광로 방벽! "+Enemy.barrierDuration.ToString("0.#")+"초 안에 보호막을 파괴하세요");
+        }
+        void ResolveForgeBarrierFailure()
+        {
+            enemyShieldHP=0;enemyShieldUntil=0;int damage=Math.Max(1,(int)Math.Ceiling(Dragon.maxHP*Enemy.barrierFailureDamagePercent/100f));PlayerHP=Math.Max(0,PlayerHP-damage);
+            Cue?.Invoke(CombatCue.EnemyHit,damage);Feedback?.Invoke("방벽 과열 폭발! 가드 불가 피해  −"+damage+" HP");
+            if(Dragon.passiveMechanic==DragonPassiveMechanic.Phoenix&&Dragon.passiveAvailable&&!PassiveConsumed&&PlayerHP<=Dragon.maxHP*.2f){PlayerHP=Dragon.maxHP;PassiveConsumed=true;Feedback?.Invoke("불사조! 체력을 완전히 회복했습니다");}
+            if(PlayerHP==0)Result=BattleResult.Defeat;
+        }
         int Percent(int value,float bonus)=>Math.Max(0,(int)Math.Round(value*(1+bonus/100f),MidpointRounding.AwayFromZero));
         float AttackCooldownNow()
         {

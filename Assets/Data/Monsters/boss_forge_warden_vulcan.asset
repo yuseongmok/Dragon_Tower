@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ab168aee88f48c0ac6e0dea2c3c85c4, type: 3}
+  m_Name: boss_forge_warden_vulcan
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.MonsterData
+  contentId: boss_forge_warden_vulcan
+  displayName: 용광로 수문장 불칸
+  description: 용광로 방벽을 제때 파괴하지 못하면 막을 수 없는 과열 폭발을 일으키는 30층 수문장
+  rarity: 0
+  icon: {fileID: 0}
+  elementType: 2
+  baseHP: 1100
+  attackDamage: 45
+  attackInterval: 2.25
+  hpGrowthPerFloor: 0
+  attackGrowthPerFloor: 0
+  hpGrowthPerFloorPercent: 0
+  attackGrowthPerFloorPercent: 0
+  minimumFloor: 30
+  maximumFloor: 30
+  spawnWeight: 10
+  boss: 1
+  timingVariancePercent: 16
+  quickAttackChancePercent: 12
+  quickAttackIntervalMultiplier: 0.58
+  bossPattern: 3
+  patternEveryAttacks: 3
+  patternIntervalMultiplier: 1
+  patternDamageMultiplier: 1
+  barrierHP: 220
+  barrierDuration: 4.5
+  barrierFailureDamagePercent: 35
+  battleSprite: {fileID: 21300000, guid: df61b26a2dd849d3a43fd836677128c9, type: 3}

@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 namespace DragonTower
 {
-    public enum EnemyBossPattern { None, EarthShatter, AbyssalRush }
+    public enum EnemyBossPattern { None, EarthShatter, AbyssalRush, ForgeBarrier }
     [CreateAssetMenu(menuName="Dragon Tower/Monster")]
     public sealed class MonsterData : IdentifiedContent
     {
@@ -27,6 +27,10 @@ namespace DragonTower
         [Min(2)] public int patternEveryAttacks=4;
         [Range(.35f,2)] public float patternIntervalMultiplier=1;
         [Range(.25f,3)] public float patternDamageMultiplier=1;
+        [Header("Forge barrier pattern")]
+        [Min(0)] public int barrierHP;
+        [Min(.1f)] public float barrierDuration=4.5f;
+        [Range(0,100)] public float barrierFailureDamagePercent=35;
         public Sprite battleSprite;
         public BattleEnemyStats CreateBattleStats(int floor)
         {
@@ -37,7 +41,8 @@ namespace DragonTower
                 timingVariancePercent=timingVariancePercent,quickAttackChancePercent=quickAttackChancePercent,
                 quickAttackIntervalMultiplier=Math.Max(.35f,quickAttackIntervalMultiplier),bossPattern=bossPattern,
                 patternEveryAttacks=Math.Max(2,patternEveryAttacks),patternIntervalMultiplier=Math.Max(.35f,patternIntervalMultiplier),
-                patternDamageMultiplier=Math.Max(.25f,patternDamageMultiplier)};
+                patternDamageMultiplier=Math.Max(.25f,patternDamageMultiplier),barrierHP=Math.Max(0,barrierHP),
+                barrierDuration=Math.Max(.1f,barrierDuration),barrierFailureDamagePercent=Math.Max(0,barrierFailureDamagePercent)};
         }
     }
 }
