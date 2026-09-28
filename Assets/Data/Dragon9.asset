@@ -10,26 +10,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0efa5d3dd9dbc83419f66022a349c41f, type: 3}
-  m_Name: Dragon1
+  m_Name: Dragon9
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.DragonData
-  speciesId: luna
-  displayName: "\uB8E8\uB098"
+  speciesId: aurora
+  displayName: "\uC624\uB85C\uB77C"
   description: 
   rarity: 0
   element: "\uC5BC\uC74C"
   elementType: 3
   maxHP: 115
   attackDamage: 9
-  color: {r: 0.4, g: 0.77, b: 0.95, a: 1}
+  color: {r: 0.6127626, g: 0.84742796, b: 0.9622642, a: 1}
   battleSprite: {fileID: 21300000, guid: b31a8e1e16329b04c9eff2b6eb8ec35b, type: 3}
-  evolutionSheet: {fileID: 2800000, guid: 4ab9fdb551384163aad5c4bc761e3e65, type: 3}
-  intermediateName: "\uB8E8\uB098\uB9AC\uC2A4"
-  finalName: "\uB8E8\uB098\uB9AC\uC544"
+  evolutionSheet: {fileID: 2800000, guid: 1159b36a415942059ff0e4eb21cd6173, type: 3}
+  intermediateName: "\uC624\uB85C\uB77C\uC5D8"
+  finalName: "\uB77C\uB2C8\uC548"
   skillEffect: 1
   skill: {fileID: 11400000, guid: a37ad0e35c725d146955656de300dc3d, type: 2}
-  passiveName: "얼어붙는 시선"
-  passiveDescription: "일반 공격과 스킬 공격 사용 시 20% 확률로 적을 3초간 둔화시킵니다."
-  passiveMechanic: 3
+  passiveName: "신기루"
+  passiveDescription: "피격 시 20% 확률로 피해를 완전히 무시합니다."
+  passiveMechanic: 4
   alternateSkillElement: 0
-  evolutionSheetIncludesBase: 0
+  evolutionSheetIncludesBase: 1
+
 

@@ -13,6 +13,7 @@ namespace DragonTower
         Text notice;
         EggGraphic egg;
         float hatchTime=-1,clock;
+        int codexPage,selectPage;
         DragonData hatched;
         TowerRun towerRun;
         public CollectionSession Session { get; private set; }
@@ -147,7 +148,7 @@ namespace DragonTower
         public void EnterTowerWithRoll(int firstRoll,int secondRoll)
         {
             if(Session.Selected==null||hatchTime>=0)return;
-            towerRun=new TowerRun(Session.Selected.maxHP,firstRoll,secondRoll,Session.Selected.elementType);ShowTowerChoices();
+            towerRun=new TowerRun(Session.Selected.maxHP,firstRoll,secondRoll,Session.Selected.elementType,Session.Selected.alternateSkillElement);ShowTowerChoices();
         }
         string RoomName(TowerRoomKind room)
         {
@@ -386,7 +387,7 @@ namespace DragonTower
         {
             if(database==null)return Array.Empty<RandomReward>();
             var augments=(database.augments??Array.Empty<AugmentData>()).Where(a=>a!=null&&towerRun.CanTakeAugment(a)).ToList();
-            var skills=(database.skills??Array.Empty<SkillData>()).Where(s=>s!=null&&s.elementType==Session.Selected.elementType&&s.StableId!=towerRun.CurrentSkillId(Session.Selected.skill)).ToList();
+            var skills=(database.skills??Array.Empty<SkillData>()).Where(s=>s!=null&&Session.Selected.CanLearnSkill(s.elementType)&&s.StableId!=towerRun.CurrentSkillId(Session.Selected.skill)).ToList();
             var result=new System.Collections.Generic.List<RandomReward>();var random=new System.Random(seed);
             while(result.Count<count&&(augments.Count>0||skills.Count>0))
             {
@@ -423,8 +424,7 @@ namespace DragonTower
             string status=skill.statusEffect==CombatStatusEffect.None?"":(" · "+StatusName(skill.statusEffect)+" "+skill.statusChancePercent.ToString("0")+"%");
             return hits+" 피해 · "+skill.cooldown.ToString("0.#")+"초"+status;
         }
-        string StatusName(CombatStatusEffect effect)
-        {switch(effect){case CombatStatusEffect.Burn:return "화상";case CombatStatusEffect.Paralyze:return "마비";case CombatStatusEffect.Slow:return "둔화";default:return "";}}
+        string StatusName(CombatStatusEffect effect)=>StatusDisplay(effect);
         void ChooseAugment(AugmentData augment,bool levelReward)
         {try{towerRun.AddAugment(augment,levelReward);ShowRoomResult(augment.displayName+"을(를) 선택했습니다.");}catch(Exception e){notice.text=e.Message;}}
         void ChooseAugment(string id,bool levelReward)
@@ -446,6 +446,7 @@ namespace DragonTower
         public void ResolveBattleResult()
         {
             if(towerRun==null||controller.CurrentBattle==null||controller.CurrentBattle.Result==BattleResult.Fighting)return;
+            towerRun.RecordPassiveUse(controller.CurrentBattle.PassiveConsumed);
             if(controller.CurrentBattle.Result==BattleResult.Victory)
             {
                 int hp=controller.CurrentBattle.PlayerHP;towerRun.RecordBattleVictory(hp);controller.EndBattle();
@@ -522,16 +523,19 @@ namespace DragonTower
         {
             Screen("드래곤 도감");int found=0;foreach(var d in catalog)if(Session.Owns(d.StableId))found++;
             Label("발견한 드래곤  "+found+" / "+catalog.Length,0,145,420,34,19,Muted);
-            for(int i=0;i<catalog.Length;i++)
+            int start=codexPage*8,end=Math.Min(catalog.Length,start+8);
+            for(int i=start;i<end;i++)
             {
                 var d=catalog[i];bool owns=Session.Owns(d.StableId);
-                int column=i%2,row=i/2;float x=column==0?-106:106,y=215+row*100;
+                int local=i-start,column=local%2,row=local/2;float x=column==0?-106:106,y=215+row*100;
                 var b=Button(owns?d.displayName+"\n"+d.element:"???\n미발견",x,y,198,86,()=>ShowCodexEntry(d));
                 b.targetGraphic.color=owns?new Color(.15f,.24f,.33f):new Color(.08f,.1f,.14f);
                 var text=b.GetComponentInChildren<Text>();text.fontSize=14;text.rectTransform.anchoredPosition=new Vector2(35,-43);text.rectTransform.sizeDelta=new Vector2(112,76);
                 DragonArtwork(b.transform,d,0,-57,43,68,68,!owns);
             }
-            Label("드래곤을 눌러 진화 모습과 능력을 확인하세요",0,638,430,44,16,Muted);
+            if(codexPage>0)Button("◀",-105,650,90,46,()=>{codexPage--;ShowCodex();});
+            Label((codexPage+1)+" / "+Math.Max(1,(catalog.Length+7)/8),0,650,100,42,16,Muted);
+            if(end<catalog.Length)Button("▶",105,650,90,46,()=>{codexPage++;ShowCodex();});
             Button("로비로 돌아가기",0,728,380,60,ShowLobby);
         }
         void ShowCodexEntry(DragonData dragon)
@@ -555,8 +559,9 @@ namespace DragonTower
                 string description=string.IsNullOrWhiteSpace(dragon.description)?"함께 타워를 오르는 "+dragon.element+" 속성 드래곤입니다.":dragon.description;
                 string skillDescription=string.IsNullOrWhiteSpace(skill.description)?"전투 중 스킬 버튼으로 사용하는 고유 기술":skill.description;
                 Label(dragon.element+" 속성  ·  HP "+dragon.maxHP+"  ·  공격력 "+dragon.attackDamage+"\n"+
+                    "패시브 · "+dragon.passiveName+" — "+dragon.passiveDescription+"\n"+
                     skill.displayName+"  ·  피해 "+skill.damage+hit+"  ·  쿨타임 "+skill.cooldown+"초"+status+"\n"+
-                    description+"\n"+skillDescription,0,560,430,170,16,Color.white);
+                    description+"\n"+skillDescription,0,550,430,190,15,Color.white);
                 notice.text="도감은 관찰용입니다. 플레이 드래곤은 로비의 드래곤을 눌러 교체합니다.";
             }
             else
@@ -569,9 +574,11 @@ namespace DragonTower
         static string SkillStatus(SkillData skill)
         {
             if(skill==null||skill.statusEffect==CombatStatusEffect.None||skill.statusChancePercent<=0)return "";
-            string name=skill.statusEffect==CombatStatusEffect.Burn?"화상":skill.statusEffect==CombatStatusEffect.Slow?"둔화":"마비";
+            string name=StatusDisplay(skill.statusEffect);
             return "  ·  "+name+" "+Mathf.RoundToInt(skill.statusChancePercent)+"%";
         }
+        static string StatusDisplay(CombatStatusEffect effect)
+        {switch(effect){case CombatStatusEffect.Burn:return "화상";case CombatStatusEffect.Slow:return "둔화";case CombatStatusEffect.Paralyze:return "마비";case CombatStatusEffect.Stun:return "기절";case CombatStatusEffect.Poison:return "중독";default:return "";}}
         Image DragonArtwork(Transform parent,DragonData dragon,int stage,float x,float y,float w,float h,bool silhouette)
         {
             var art=Rect("Dragon art",parent,x,y,w,h);var sprite=dragon.SpriteForStage(stage);
@@ -588,16 +595,19 @@ namespace DragonTower
             Screen("플레이 드래곤 선택");
             var owned=catalog.Where(d=>Session.Owns(d.StableId)).ToArray();
             Label("함께 타워를 오를 드래곤을 선택하세요",0,145,420,34,18,Muted);
-            ChoiceButtons=new Button[owned.Length];
-            for(int i=0;i<owned.Length;i++)
+            int start=selectPage*8,end=Math.Min(owned.Length,start+8);ChoiceButtons=new Button[end-start];
+            for(int i=start;i<end;i++)
             {
                 var dragon=owned[i];bool selected=Session.Selected!=null&&Session.Selected.StableId==dragon.StableId;
-                int column=i%2,row=i/2;float x=column==0?-106:106,y=215+row*100;
+                int local=i-start,column=local%2,row=local/2;float x=column==0?-106:106,y=215+row*100;
                 var b=Button(dragon.displayName+(selected?"\n선택 중":"\n"+dragon.element),x,y,198,86,()=>SelectSpecies(dragon));
                 b.targetGraphic.color=selected?new Color(.38f,.27f,.11f):new Color(.15f,.24f,.33f);
                 var text=b.GetComponentInChildren<Text>();text.fontSize=14;text.rectTransform.anchoredPosition=new Vector2(35,-43);text.rectTransform.sizeDelta=new Vector2(112,76);
-                DragonArtwork(b.transform,dragon,0,-57,43,68,68,false);ChoiceButtons[i]=b;
+                DragonArtwork(b.transform,dragon,0,-57,43,68,68,false);ChoiceButtons[local]=b;
             }
+            if(selectPage>0)Button("◀",-105,650,90,46,()=>{selectPage--;ShowDragonSelect();});
+            Label((selectPage+1)+" / "+Math.Max(1,(owned.Length+7)/8),0,650,100,42,16,Muted);
+            if(end<owned.Length)Button("▶",105,650,90,46,()=>{selectPage++;ShowDragonSelect();});
             Button("선택하지 않고 돌아가기",0,728,380,60,ShowLobby);
             notice.text="도감 정보와 플레이 드래곤 선택은 서로 분리되어 있습니다.";
         }
@@ -614,7 +624,7 @@ namespace DragonTower
             var d=Session.Selected;if(d==null)return;
             Screen("드래곤 상태");Portrait(d,271);
             Label(d.displayName+"  /  "+d.element,0,440,420,48,27,Gold);
-            Label("기본 체력  "+d.maxHP+"\n기본 공격력  "+d.attackDamage+"\n공격 간격  0.3초\n"+d.skill.displayName+"  ·  피해 "+d.skill.damage+"\n스킬 쿨타임  "+d.skill.cooldown+"초",0,572,430,184,21,Color.white);
+            Label("기본 체력  "+d.maxHP+"\n기본 공격력  "+d.attackDamage+"\n패시브  "+d.passiveName+"\n"+d.passiveDescription+"\n"+d.skill.displayName+"  ·  피해 "+d.skill.damage+" / "+d.skill.cooldown+"초",0,560,430,210,18,Color.white);
             Button("로비로 돌아가기",0,728,380,60,ShowLobby);
             notice.text="레벨·진화·아이템·증강은 타워 도전 중에만 적용됩니다.";
         }

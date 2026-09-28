@@ -21,18 +21,26 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ea2113cbaad474445926180cacc9f388, type: 2}
   - {fileID: 11400000, guid: be9a5480d80c0d748a4fa259a78ef83b, type: 2}
   - {fileID: 11400000, guid: db8f654ec30b28445936de334eaa95c9, type: 2}
+  - {fileID: 11400000, guid: 493567959b0631146854a141d09c355e, type: 2}
+  - {fileID: 11400000, guid: bda0bc8db83fcc343830435a95b3d8ba, type: 2}
+  - {fileID: 11400000, guid: 04885bcfa77f71c40b48f877fcef5814, type: 2}
+  - {fileID: 11400000, guid: 10ded9c03ad4b84438eb6a9389a77dd3, type: 2}
+  - {fileID: 11400000, guid: 09ef28875ecce354f863fe55c39c4944, type: 2}
+  - {fileID: 11400000, guid: 16b67f5b331ce2a4b8f3f2e84bf2acef, type: 2}
+  - {fileID: 11400000, guid: 43ec438b3dd06ca4a84beb2b8aa6bdc5, type: 2}
+  - {fileID: 11400000, guid: 325943fc5c5eabe49996fc94b67c8914, type: 2}
   monsters:
   - {fileID: 11400000, guid: d6970b446d224e8fabd37bc999463cf5, type: 2}
   - {fileID: 11400000, guid: 28511d8c133b1114f91f979afb59038b, type: 2}
   - {fileID: 11400000, guid: baad7b1e585945529e7faa01fdde1af2, type: 2}
   - {fileID: 11400000, guid: cc4037b8bfb34c6dbff3612f12334adc, type: 2}
+  - {fileID: 11400000, guid: ce0be641069346219a8c97e32fb70de6, type: 2}
   - {fileID: 11400000, guid: fae25cba22e25824aa752a0315dd152c, type: 2}
   - {fileID: 11400000, guid: b658cc3b18055b54098bd155843afdff, type: 2}
-  - {fileID: 11400000, guid: 3f6bd6f9477751d4881f036575888aa1, type: 2}
-  - {fileID: 11400000, guid: 778c66a828e3e1944bfb9c10ff1d82b2, type: 2}
-  - {fileID: 11400000, guid: ce0be641069346219a8c97e32fb70de6, type: 2}
   - {fileID: 11400000, guid: 27fa1b09ec314ec984e8cfca4a420c3a, type: 2}
   - {fileID: 11400000, guid: 7d24791ef9a64cac88618a09f3ec4aae, type: 2}
+  - {fileID: 11400000, guid: 778c66a828e3e1944bfb9c10ff1d82b2, type: 2}
+  - {fileID: 11400000, guid: 3f6bd6f9477751d4881f036575888aa1, type: 2}
   skills:
   - {fileID: 11400000, guid: 070adf2d61bdde8449ae75c0c29ed811, type: 2}
   - {fileID: 11400000, guid: 88467eaec09141a4180c4f786a6d7cc9, type: 2}
@@ -141,3 +149,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 174a4448c77b40f40b61cbdaedb1cbb0, type: 2}
   - {fileID: 11400000, guid: ba0956ed00b68f54b93cc675af3d76d8, type: 2}
   - {fileID: 11400000, guid: cbbed3fb023d4783af607def2e2354c9, type: 2}
+

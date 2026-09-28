@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0efa5d3dd9dbc83419f66022a349c41f, type: 3}
-  m_Name: Dragon2
+  m_Name: Dragon10
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.DragonData
-  speciesId: zephyr
-  displayName: "\uC81C\uD53C\uB974"
+  speciesId: mir
+  displayName: "\uBBF8\uB974"
   description: 
   rarity: 2
   element: "\uBC14\uB78C"
@@ -22,14 +22,15 @@ MonoBehaviour:
   attackDamage: 9
   color: {r: 0.44, g: 0.87, b: 0.66, a: 1}
   battleSprite: {fileID: 21300000, guid: dbdd4ca74bc4e9448805589b13ba9cb8, type: 3}
-  evolutionSheet: {fileID: 2800000, guid: ff5629449d684c058e9d16dd74c1e98b, type: 3}
-  intermediateName: "\uC81C\uD53C\uB85C\uC2A4"
-  finalName: "\uC81C\uD53C\uB9AC\uC628"
+  evolutionSheet: {fileID: 2800000, guid: bc554da34c504203bf318da31e46f1a9, type: 3}
+  intermediateName: "\uBBF8\uB9AC\uC628"
+  finalName: "\uC624\uB974\uB3C4\uC2A4"
   skillEffect: 2
   skill: {fileID: 11400000, guid: d370770991892fe47869e1cad083b670, type: 2}
-  passiveName: "제트기류"
-  passiveDescription: "스킬 사용 시 1초간 일반 공격 쿨타임이 50% 감소합니다."
-  passiveMechanic: 5
+  passiveName: "여의주"
+  passiveDescription: "일반 공격이 절반의 피해를 주는 2회의 연속 공격으로 바뀝니다."
+  passiveMechanic: 6
   alternateSkillElement: 0
-  evolutionSheetIncludesBase: 0
+  evolutionSheetIncludesBase: 1
+
 

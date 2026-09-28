@@ -13,7 +13,11 @@ namespace DragonTower.Editor
         {
             checks=0;var database=ContentDataSetup.Install(false);
             Check(database!=null,"Content database exists");
-            Check(database.dragons.Length==8,"All eight illustrated dragons are registered");
+            Check(database.dragons.Length==16,"All sixteen illustrated dragons are registered");
+            Check(database.dragons.Select(d=>d.passiveMechanic).Distinct().Count()==16,"Every dragon has a distinct passive mechanic");
+            var storm=database.dragons.First(d=>d.StableId=="storm");var sharkid=database.dragons.First(d=>d.StableId=="sharkid");
+            Check(storm.CanLearnSkill(ElementType.Wind)&&storm.CanLearnSkill(ElementType.Lightning),"Storm can learn lightning and wind skills");
+            Check(sharkid.CanLearnSkill(ElementType.Water)&&sharkid.CanLearnSkill(ElementType.Ice),"Sharkid can learn water and ice skills");
             Check(database.monsters.Length==11,"Floor one through twenty monsters and bosses are registered");
             Check(database.items.Length==30,"Thirty balanced items are registered");
             Check(database.items.Count(i=>i.grade==ItemGrade.Common)==3,"Three common items are registered");

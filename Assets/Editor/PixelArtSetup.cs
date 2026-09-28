@@ -16,7 +16,7 @@ namespace DragonTower.Editor
                 evolution.textureType=TextureImporterType.Default;
                 evolution.filterMode=FilterMode.Point;evolution.wrapMode=TextureWrapMode.Clamp;
                 evolution.mipmapEnabled=false;evolution.isReadable=false;evolution.alphaIsTransparency=true;
-                evolution.npotScale=TextureImporterNPOTScale.None;evolution.maxTextureSize=512;
+                evolution.npotScale=TextureImporterNPOTScale.None;evolution.maxTextureSize=2048;
                 evolution.textureCompression=TextureImporterCompression.Uncompressed;
                 return;
             }
@@ -61,13 +61,16 @@ namespace DragonTower.Editor
             string[] dragonFiles={"ember-baby.png","luna-baby.png","zephyr-baby.png","brandy-baby.png","volt-baby.png","okta-baby.png","nova-baby.png","dante-baby.png"};
             for(int i=0;i<dragonFiles.Length;i++){var dragon=AssetDatabase.LoadAssetAtPath<DragonData>("Assets/Data/Dragon"+i+".asset");if(File.Exists(Root+dragonFiles[i])&&dragon!=null&&dragon.battleSprite==null)missingDragon=true;}
             bool missingSecondArea=File.Exists(Root+"flooded-sewer.png")&&(skin==null||skin.floodedSewerBackground==null);
-            if (!File.Exists(SkinPath) || missingDragon || missingSecondArea ||
+            bool missingNew=File.Exists("Assets/Art/Evolution/sol-evolution-sheet.png")&&(AssetDatabase.LoadAssetAtPath<DragonData>("Assets/Data/Dragon8.asset")==null||AssetDatabase.LoadAssetAtPath<DragonData>("Assets/Data/Dragon8.asset").evolutionSheet==null);
+            if (!File.Exists(SkinPath) || missingDragon || missingSecondArea || missingNew ||
                 (File.Exists(Root + "ancient-golem-boss.png") && (skin == null || skin.floorMonsters == null || skin.floorMonsters.Length < 5 || skin.ancientGolemBoss == null)))
                 Install();
         }
         [MenuItem("Dragon Tower/Apply pixel art assets")]
         public static void Install()
         {
+            string[] evolutionFiles={"sol","aurora","mir","titan","storm","sharkid","venom","chrono"};
+            foreach(var id in evolutionFiles)if(File.Exists("Assets/Art/Evolution/"+id+"-evolution-sheet.png"))AssetDatabase.ImportAsset("Assets/Art/Evolution/"+id+"-evolution-sheet.png",ImportAssetOptions.ForceSynchronousImport);
             string[] files = { "ember-baby.png", "luna-baby.png", "zephyr-baby.png", "brandy-baby.png", "volt-baby.png", "okta-baby.png", "nova-baby.png", "dante-baby.png", "rock-slime.png", "small-golem.png", "dungeon-zombie.png", "cave-bat.png", "armored-skeleton.png", "ancient-golem-boss.png", "tower-chamber.png",
                 "electric-jellyfish.png","mud-snail.png","water-gargoyle.png","volt-ray.png","kraken-guardian-boss.png","flooded-sewer.png" };
             foreach (var file in files)
@@ -114,6 +117,16 @@ namespace DragonTower.Editor
                     EditorUtility.SetDirty(dragon);
                 }
             }
+            int[] fallback={0,1,2,3,4,5,6,7};
+            for(int i=0;i<evolutionFiles.Length;i++)
+            {
+                var dragon=AssetDatabase.LoadAssetAtPath<DragonData>("Assets/Data/Dragon"+(i+8)+".asset");
+                if(dragon==null)continue;
+                dragon.evolutionSheet=AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Art/Evolution/"+evolutionFiles[i]+"-evolution-sheet.png");
+                var original=AssetDatabase.LoadAssetAtPath<DragonData>("Assets/Data/Dragon"+fallback[i]+".asset");
+                if(dragon.battleSprite==null&&original!=null)dragon.battleSprite=original.battleSprite;
+                dragon.evolutionSheetIncludesBase=true;EditorUtility.SetDirty(dragon);
+            }
             EditorUtility.SetDirty(skin);
             const string atlasPath = "Assets/Art/PixelBattle/Combat.spriteatlas";
             var atlas = AssetDatabase.LoadAssetAtPath<SpriteAtlas>(atlasPath);
@@ -136,6 +149,7 @@ namespace DragonTower.Editor
                 if (!found) atlas.Add(new Object[] { sprite });
             }
             AssetDatabase.SaveAssets();
+            ContentDataSetup.Rebuild();
             Debug.Log("PIXEL_ART_READY: 128px sprites, <=512px background, point filtering, mipmaps/read-write off. Scene unchanged; press Play.");
         }
     }

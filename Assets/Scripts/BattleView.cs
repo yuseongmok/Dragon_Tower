@@ -7,7 +7,7 @@ namespace DragonTower
     {
         public Font font;
         public RectTransform frame;
-        public Text playerName, playerHP, enemyHP, enemyName, floorLabel, modeLabel, warning, message, skillLabel, attackLabel, dodgeLabel, itemLabel1, itemLabel2, resultTitle, resultDetail;
+        public Text playerName, playerHP, enemyHP, enemyName, enemyStatus, floorLabel, modeLabel, warning, message, skillLabel, attackLabel, dodgeLabel, itemLabel1, itemLabel2, resultTitle, resultDetail;
         public Image playerFill, enemyFill, windupFill;
         public DragonGraphic playerArt, enemyArt;
         public Button attackButton, skillButton, dodgeButton, itemButton1, itemButton2, restartButton;
@@ -74,6 +74,7 @@ namespace DragonTower
             enemyFill=Bar("Enemy HP",146,C(.89f,.42f,.47f));
             for(int i=0;i<7;i++) Panel("Tower step",frame,0,208+i*28,330-i*22,1,C(.12f,.17f,.24f));
             var e=Rect("Enemy Dragon",frame,30,264,235,235);enemyArt=e.gameObject.AddComponent<DragonGraphic>();enemyArt.color=C(.65f,.53f,.85f);enemyArt.enemy=true;enemyArt.raycastTarget=false;
+            enemyStatus=Label("",frame,0,352,420,30,16,Color.white);
             warning=Label("",frame,0,385,440,36,18,C(1,.74f,.38f));
             windupFill=Bar("Attack timing",414,C(1,.65f,.30f));
             var p=Rect("Player Dragon",frame,-26,532,210,210);playerArt=p.gameObject.AddComponent<DragonGraphic>();playerArt.raycastTarget=false;
@@ -239,6 +240,7 @@ namespace DragonTower
         }
         public void Show(BattleModel b)
         {
+            if(enemyStatus==null&&frame!=null)enemyStatus=Label("",frame,0,352,420,30,16,Color.white);
             if(lastDragon!=b.Dragon)
             {
                 lastDragon=b.Dragon;
@@ -262,8 +264,16 @@ namespace DragonTower
             bool refreshText=b.Time>=nextTextRefresh;
             if(refreshText) { warning.text=until<=BattleModel.WindupDuration ? b.EnemyIntent+" 임박!  "+until.ToString("0.0")+"초  ·  회피 준비" : (b.EnemyIntent=="일반 공격"?"적의 움직임을 살피세요":b.EnemyIntent+"을 준비 중");nextTextRefresh=b.Time+.1; }
             warning.color=until<.42f ? new Color(1,.4f,.3f) : new Color(1,.75f,.43f);
+            string status="";Color tint=Color.white;
+            if(b.EnemyBurning){status+="[화상] ";tint=new Color(1,.55f,.28f);}
+            if(b.EnemySlowed){status+="[둔화] ";tint=new Color(.55f,.9f,1);}
+            if(b.EnemyParalyzed){status+="[마비] ";tint=new Color(1,.92f,.38f);}
+            if(b.EnemyStunned){status+="[기절] ";tint=new Color(.8f,.6f,1);}
+            if(b.EnemyPoisoned){status+="[중독]";tint=new Color(.48f,1,.42f);}
+            enemyStatus.text=status;enemyStatus.color=tint;if(pixelEnemy!=null)pixelEnemy.color=status.Length==0?Color.white:Color.Lerp(Color.white,tint,.22f+.08f*Mathf.Sin((float)b.Time*9));
             SetButton(attackButton,attackLabel,"공격",b.AttackReady-b.Time,b,refreshText);
             if(b.Dragon.skillDisabled){skillButton.interactable=false;skillLabel.text="스킬\n봉인됨";}
+            else if(b.Dragon.passiveMechanic==DragonPassiveMechanic.VoidAccelerator&&b.Result==BattleResult.Fighting){skillButton.interactable=true;skillLabel.text=b.Dragon.skill.displayName+"\n"+(b.SkillReady>b.Time?"HP 10%":"TAP");}
             else SetButton(skillButton,skillLabel,b.Dragon.skill.displayName,b.SkillReady-b.Time,b,refreshText);
             SetButton(dodgeButton,dodgeLabel,"회피",b.DodgeReady-b.Time,b,refreshText);
             if(b.Result!=BattleResult.Fighting){itemButton1.interactable=false;itemButton2.interactable=false;}

@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0efa5d3dd9dbc83419f66022a349c41f, type: 3}
-  m_Name: Dragon4
+  m_Name: Dragon12
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.DragonData
-  speciesId: volt
-  displayName: "\uBCFC\uD2B8"
+  speciesId: storm
+  displayName: "\uC2A4\uD1B0"
   description: 
   rarity: 2
   element: "\uBC88\uAC1C"
@@ -22,14 +22,15 @@ MonoBehaviour:
   attackDamage: 9
   color: {r: 0, g: 0.2666664, b: 1, a: 1}
   battleSprite: {fileID: 21300000, guid: dcc6c41409c84e0ca60329884b4a98bb, type: 3}
-  evolutionSheet: {fileID: 2800000, guid: 4d1185cb4d3a4931908398d7896565c4, type: 3}
-  intermediateName: "\uBCFC\uD2F0\uC2A4"
-  finalName: "\uBCFC\uD2B8\uB77C\uD06C"
+  evolutionSheet: {fileID: 2800000, guid: 08c1162dfaf14cc0ad11b4b91dee74a0, type: 3}
+  intermediateName: "\uC2A4\uD1A0\uBA38"
+  finalName: "\uC0AC\uC774\uD074\uB860"
   skillEffect: 4
   skill: {fileID: 11400000, guid: 5e1219208f2f8c94c8a7e6d322485ec8, type: 2}
-  passiveName: "전기충격"
-  passiveDescription: "일반 공격과 스킬 공격 사용 시 20% 확률로 적을 마비시킵니다."
-  passiveMechanic: 9
-  alternateSkillElement: 0
-  evolutionSheetIncludesBase: 0
+  passiveName: "폭풍우"
+  passiveDescription: "번개 타입과 바람 타입 스킬을 모두 습득할 수 있습니다."
+  passiveMechanic: 10
+  alternateSkillElement: 4
+  evolutionSheetIncludesBase: 1
+
 

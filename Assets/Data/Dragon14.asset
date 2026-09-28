@@ -10,26 +10,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0efa5d3dd9dbc83419f66022a349c41f, type: 3}
-  m_Name: Dragon6
+  m_Name: Dragon14
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.DragonData
-  speciesId: nova
-  displayName: "\uB178\uBC14"
+  speciesId: venom
+  displayName: "\uBCA0\uB188"
   description: 
   rarity: 4
   element: "\uC554\uD751"
   elementType: 7
   maxHP: 90
   attackDamage: 9
-  color: {r: 0.2186558, g: 0, b: 0.5283019, a: 1}
+  color: {r: 0.093920365, g: 0, b: 0.2264151, a: 1}
   battleSprite: {fileID: 21300000, guid: 26821ea75ff14ca4a34abff433e60d27, type: 3}
-  evolutionSheet: {fileID: 2800000, guid: fab418999bac46f796ecff2eab6c3d6d, type: 3}
-  intermediateName: "\uB178\uBDF8\uB77C"
-  finalName: "\uB178\uBC14\uC2A4\uD2B8\uB77C"
+  evolutionSheet: {fileID: 2800000, guid: 8a867082e55b4a20816412273f8acf8a, type: 3}
+  intermediateName: "\uBCA0\uBCA0\uB188"
+  finalName: "\uBC14\uC774\uD37C"
   skillEffect: 6
   skill: {fileID: 11400000, guid: 6144f79c8c63b2a438d7a7ff921114a1, type: 2}
-  passiveName: "공허 가속기"
-  passiveDescription: "쿨타임 중에도 스킬을 사용할 수 있으며 최대 HP의 10%를 소모합니다."
-  passiveMechanic: 15
+  passiveName: "히드라의 독니"
+  passiveDescription: "전투 내내 적에게 2초마다 지속 중독 피해를 줍니다."
+  passiveMechanic: 16
   alternateSkillElement: 0
-  evolutionSheetIncludesBase: 0
+  evolutionSheetIncludesBase: 1
+
 
