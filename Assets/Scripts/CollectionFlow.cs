@@ -32,6 +32,7 @@ namespace DragonTower
         BattleController controller;BattleView battleView;DragonData[] catalog;ContentDatabase database;
         RectTransform root,body,portrait,roomIcon;
         Text notice;
+        static Sprite[] rewardIcons;
         EggGraphic egg;
         float hatchTime=-1,clock;
         int codexPage,selectPage;
@@ -91,6 +92,50 @@ namespace DragonTower
             var text=Rect("Label",r,0,h/2,w-18,h-12).gameObject.AddComponent<Text>();text.font=battleView.font;text.text=title;text.fontSize=20;text.color=Color.white;text.alignment=TextAnchor.MiddleCenter;text.raycastTarget=false;
             DragonTowerTheme.StyleButton(b,DragonTowerTheme.Gold);return b;
         }
+        Text CardText(Transform parent,string name,string value,float x,float y,float w,float h,int size,Color color,TextAnchor alignment)
+        {
+            var r=Rect(name,parent,x,y,w,h);var text=r.gameObject.AddComponent<Text>();text.font=battleView.font;text.text=value;text.fontSize=size;text.color=color;text.alignment=alignment;text.raycastTarget=false;text.horizontalOverflow=HorizontalWrapMode.Wrap;text.verticalOverflow=VerticalWrapMode.Truncate;return text;
+        }
+        Button RewardCard(string badge,string title,string summary,Sprite icon,float y,Color fill,Color accent,UnityAction action)
+        {
+            var card=Button("",0,y,410,108,action);StyleCard(card,fill,accent);
+            var iconFrame=Rect("Reward icon frame",card.transform,-154,54,76,76);var frame=iconFrame.gameObject.AddComponent<Image>();frame.color=new Color(.025f,.035f,.055f,.9f);frame.raycastTarget=false;DragonTowerTheme.Frame(frame,accent,false);
+            var art=Rect("Reward icon",iconFrame,0,38,64,64).gameObject.AddComponent<Image>();art.sprite=icon;art.preserveAspect=true;art.color=icon==null?accent:Color.white;art.raycastTarget=false;
+            if(icon==null)CardText(iconFrame,"Fallback icon","◆",0,38,64,64,31,accent,TextAnchor.MiddleCenter);
+            CardText(card.transform,"Reward badge",badge,35,17,250,22,13,accent,TextAnchor.MiddleLeft);
+            CardText(card.transform,"Reward title",title,35,43,250,28,19,Color.white,TextAnchor.MiddleLeft);
+            CardText(card.transform,"Reward summary",summary,35,77,250,36,14,new Color(.80f,.85f,.9f),TextAnchor.UpperLeft);
+            return card;
+        }
+        static Sprite RewardIcon(int index)
+        {
+            if(rewardIcons==null)
+            {
+                rewardIcons=new Sprite[16];var texture=Resources.Load<Texture2D>("UI/reward-icons");
+                if(texture!=null){texture.filterMode=FilterMode.Point;float cw=texture.width/4f,ch=texture.height/4f;for(int i=0;i<16;i++){int col=i%4,row=i/4;rewardIcons[i]=Sprite.Create(texture,new Rect(col*cw,(3-row)*ch,cw,ch),new Vector2(.5f,.5f),100);rewardIcons[i].name="Reward icon "+i;}}
+            }
+            return index>=0&&index<rewardIcons.Length?rewardIcons[index]:null;
+        }
+        static int EffectIcon(System.Collections.Generic.IReadOnlyList<ContentEffect> effects,string name)
+        {
+            if(effects!=null)foreach(var effect in effects) switch(effect.type)
+            {case ContentEffectType.Heal:case ContentEffectType.MaxHP:case ContentEffectType.MaxHPPercent:return 2;case ContentEffectType.DamageReductionPercent:return 3;case ContentEffectType.SkillCooldownPercent:case ContentEffectType.AttackCooldownPercent:return 4;case ContentEffectType.DodgeCooldownPercent:case ContentEffectType.DodgeDurationPercent:return 5;case ContentEffectType.CriticalChancePercent:case ContentEffectType.CriticalDamagePercent:return 10;case ContentEffectType.AttackDamage:case ContentEffectType.AttackDamagePercent:return 0;case ContentEffectType.SkillDamagePercent:return 1;case ContentEffectType.SkillDisabled:return 15;}
+            string n=(name??"").ToLowerInvariant();if(n.Contains("화염")||n.Contains("업화"))return 6;if(n.Contains("서리")||n.Contains("얼음"))return 7;if(n.Contains("전기")||n.Contains("찌릿"))return 8;if(n.Contains("독")||n.Contains("뱀파"))return 9;if(n.Contains("발톱")||n.Contains("베기")||n.Contains("분신"))return 11;if(n.Contains("보호")||n.Contains("갑옷")||n.Contains("비늘"))return 3;if(n.Contains("시간")||n.Contains("가속"))return 4;return 14;
+        }
+        static Sprite AugmentIcon(AugmentData value)
+        {
+            if(value==null)return null;if(value.icon!=null)return value.icon;int icon;
+            switch(value.mechanic){case AugmentMechanic.RapidFireInstinct:case AugmentMechanic.DodgeMaster:icon=5;break;case AugmentMechanic.FlameRemnant:case AugmentMechanic.Inferno:icon=6;break;case AugmentMechanic.FrostBarrier:case AugmentMechanic.IceCream:icon=7;break;case AugmentMechanic.StaticDischarge:case AugmentMechanic.Tingly:icon=8;break;case AugmentMechanic.Vampire:icon=9;break;case AugmentMechanic.ExploitWeakness:icon=10;break;case AugmentMechanic.ConsecutiveSlash:case AugmentMechanic.Spread:case AugmentMechanic.Clone:icon=11;break;case AugmentMechanic.FirstAid:case AugmentMechanic.LastStand:icon=2;break;case AugmentMechanic.IndomitableWill:icon=3;break;case AugmentMechanic.OverloadCore:case AugmentMechanic.ManaRampage:case AugmentMechanic.Transference:case AugmentMechanic.DoubleCasting:icon=14;break;default:icon=EffectIcon(value.effects,value.displayName);break;}return RewardIcon(icon);
+        }
+        static Sprite ItemIcon(ItemData value)
+        {
+            if(value==null)return null;if(value.icon!=null)return value.icon;int icon;
+            switch(value.mechanic){case ItemMechanic.HealingPotion:case ItemMechanic.GreaterHealingPotion:case ItemMechanic.BloodPotion:icon=12;break;case ItemMechanic.TimeShard:case ItemMechanic.EmergencyAccelerator:icon=4;break;case ItemMechanic.BurstCore:case ItemMechanic.EchoCrystal:icon=14;break;case ItemMechanic.GiantRoar:case ItemMechanic.StunGun:icon=8;break;case ItemMechanic.BloodTome:case ItemMechanic.InfernoBreath:icon=6;break;case ItemMechanic.FrostWitchTear:icon=7;break;case ItemMechanic.WeaknessLens:case ItemMechanic.ExecutionerMark:icon=10;break;case ItemMechanic.PoisonFang:icon=9;break;case ItemMechanic.MeteorFragment:icon=1;break;case ItemMechanic.InfightingGlove:icon=13;break;case ItemMechanic.GuardianBrooch:case ItemMechanic.BarrierStone:icon=3;break;case ItemMechanic.PhoenixFeather:icon=5;break;default:icon=EffectIcon(value.effects,value.displayName);break;}return RewardIcon(icon);
+        }
+        static Sprite SkillIcon(SkillData value)
+        {if(value==null)return null;if(value.icon!=null)return value.icon;switch(value.elementType){case ElementType.Fire:return RewardIcon(6);case ElementType.Ice:return RewardIcon(7);case ElementType.Lightning:return RewardIcon(8);case ElementType.Wind:return RewardIcon(5);default:return RewardIcon(1);}}
+        static string ElementLabel(ElementType value)
+        {switch(value){case ElementType.Fire:return "불";case ElementType.Ice:return "얼음";case ElementType.Wind:return "바람";case ElementType.Earth:return "땅";case ElementType.Lightning:return "전기";case ElementType.Water:return "물";case ElementType.Dark:return "어둠";case ElementType.Light:return "빛";default:return "무속성";}}
         void StyleCard(Button button,Color fill,Color accent){if(button==null)return;button.targetGraphic.color=fill;DragonTowerTheme.StyleButton(button,accent);}
         void Screen(string name)
         {
@@ -295,12 +340,14 @@ namespace DragonTower
             else {Label("등록된 아이템이 없습니다.",0,390,420,50,22,Color.white);RoomButton=Button("다음 층",0,610,360,68,AdvanceFloor);}
         }
         Button ItemChoice(ItemData item,float y)
-        {var b=Button("["+ItemGradeName(item.grade)+"] "+item.displayName+"\n"+ItemSummary(item),0,y,400,96,()=>AcquireItem(item,()=>ShowRoomResult(item.displayName+"을(를) 획득했습니다.")));StyleCard(b,DragonTowerTheme.Slate,DragonTowerTheme.Grade(item.grade));return b;}
+        {return RewardCard(ItemGradeName(item.grade)+" · "+(item.kind==ItemKind.Consumable?"소모품":"장착"),item.displayName,ItemCardSummary(item),ItemIcon(item),y,DragonTowerTheme.Slate,DragonTowerTheme.Grade(item.grade),()=>AcquireItem(item,()=>ShowRoomResult(item.displayName+"을(를) 획득했습니다.")));}
         string ItemSummary(ItemData item)
         {
             if(item==null)return "효과 없음";string kind=item.kind==ItemKind.Consumable?"소모품":"장착";
             return kind+" · "+(!string.IsNullOrWhiteSpace(item.description)?item.description:EffectSummary(item.effects));
         }
+        string ItemCardSummary(ItemData item)
+        {return item==null?"효과 없음":(!string.IsNullOrWhiteSpace(item.description)?item.description:EffectSummary(item.effects));}
         void AcquireItem(ItemData item,Action complete)
         {
             if(towerRun.CanAddItem(item)){towerRun.AddItem(item);complete();return;}
@@ -352,8 +399,7 @@ namespace DragonTower
             ChoiceButtons=new Button[goods.Length];
             for(int i=0;i<goods.Length;i++)
             {
-                var item=goods[i];ChoiceButtons[i]=Button("["+ItemGradeName(item.grade)+"] "+item.displayName+" · "+item.price+"G\n"+ItemSummary(item),0,315+i*125,400,100,()=>BuyItem(item));
-                StyleCard(ChoiceButtons[i],DragonTowerTheme.Slate,DragonTowerTheme.Grade(item.grade));
+                var item=goods[i];ChoiceButtons[i]=RewardCard(ItemGradeName(item.grade)+" · "+(item.kind==ItemKind.Consumable?"소모품":"장착")+" · "+item.price+"G",item.displayName,ItemCardSummary(item),ItemIcon(item),315+i*125,DragonTowerTheme.Slate,DragonTowerTheme.Grade(item.grade),()=>BuyItem(item));
             }
             SecondRoomButton=Button("구매하지 않고 다음 층",0,600,400,66,AdvanceFloor);
             notice.text="구매한 아이템은 빈 슬롯에 넣거나 기존 아이템과 교체합니다.";
@@ -398,16 +444,14 @@ namespace DragonTower
                     if(reward.augment!=null)
                     {
                         var augment=reward.augment;
-                        choice=Button("["+GradeName(augment.grade)+"] "+augment.displayName+"\n"+AugmentSummary(augment),0,300+slot*120,400,100,()=>ChooseAugment(augment,levelReward));
-                        StyleCard(choice,GradeColor(augment.grade),DragonTowerTheme.Grade(augment.grade));
+                        choice=RewardCard(GradeName(augment.grade)+" · 증강",augment.displayName,AugmentSummary(augment),AugmentIcon(augment),300+slot*120,GradeColor(augment.grade),DragonTowerTheme.Grade(augment.grade),()=>ChooseAugment(augment,levelReward));
                     }
                     else
                     {
                         var skill=reward.skill;
-                        choice=Button("[스킬] "+skill.displayName+"\n"+SkillSummary(skill),0,300+slot*120,400,100,()=>ChooseSkill(skill,levelReward));
-                        StyleCard(choice,new Color(.12f,.22f,.36f,.98f),new Color(.35f,.72f,1));
+                        choice=RewardCard("스킬 · "+ElementLabel(skill.elementType),skill.displayName,SkillSummary(skill),SkillIcon(skill),300+slot*120,new Color(.12f,.22f,.36f,.98f),new Color(.35f,.72f,1),()=>ChooseSkill(skill,levelReward));
                     }
-                    choice.GetComponentInChildren<Text>().fontSize=15;ChoiceButtons[slot]=choice;
+                    ChoiceButtons[slot]=choice;
                 }
                 notice.text="일반 60% · 레어 28% · 에픽 10% · 유니크 2%";
             }
