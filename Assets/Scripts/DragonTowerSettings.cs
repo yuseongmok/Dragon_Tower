@@ -17,6 +17,8 @@ namespace DragonTower
         float previousTimeScale=1;
         bool open;
         Rect lastSafeArea;
+        Vector2 lastScreen;
+        static Sprite circleSprite;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         static void Bootstrap()
@@ -49,25 +51,48 @@ namespace DragonTower
             var nav=button.navigation;nav.mode=Navigation.Mode.None;button.navigation=nav;button.gameObject.AddComponent<DragonTowerUiSound>();
             DragonTowerTheme.StyleButton(button,DragonTowerTheme.Gold);Label(title,button.transform,new Vector2(.5f,.5f),Vector2.zero,new Vector2(size.x-14,size.y-8),18,Color.white);return button;
         }
+        static Sprite CircleSprite()
+        {
+            if(circleSprite!=null)return circleSprite;
+            const int size=64;var texture=new Texture2D(size,size,TextureFormat.RGBA32,false);texture.name="Settings circle";texture.filterMode=FilterMode.Bilinear;texture.wrapMode=TextureWrapMode.Clamp;
+            var pixels=new Color32[size*size];var center=new Vector2((size-1)*.5f,(size-1)*.5f);float radius=size*.5f-1;
+            for(int y=0;y<size;y++)for(int x=0;x<size;x++){float distance=Vector2.Distance(new Vector2(x,y),center);byte alpha=(byte)Mathf.RoundToInt(Mathf.Clamp01(radius-distance)*255);pixels[y*size+x]=new Color32(255,255,255,alpha);}
+            texture.SetPixels32(pixels);texture.Apply(false,true);circleSprite=Sprite.Create(texture,new Rect(0,0,size,size),new Vector2(.5f,.5f),100);circleSprite.name="Settings circle";return circleSprite;
+        }
+        Button MakeGearButton(Transform parent)
+        {
+            var outer=Box("설정",parent,new Vector2(0,1),new Vector2(14,-14),new Vector2(58,58),DragonTowerTheme.Gold);outer.sprite=CircleSprite();
+            var button=outer.gameObject.AddComponent<Button>();button.targetGraphic=outer;button.onClick.AddListener(Toggle);button.gameObject.AddComponent<DragonTowerUiSound>();
+            var colors=button.colors;colors.normalColor=Color.white;colors.highlightedColor=new Color(1,.92f,.7f);colors.pressedColor=new Color(.78f,.68f,.48f);button.colors=colors;
+            var inner=Box("Dark center",outer.transform,new Vector2(.5f,.5f),Vector2.zero,new Vector2(50,50),new Color(.045f,.065f,.10f,1));inner.sprite=CircleSprite();inner.raycastTarget=false;
+            for(int i=0;i<8;i++)
+            {
+                float angle=i*45;float radians=angle*Mathf.Deg2Rad;var tooth=Box("Gear tooth",inner.transform,new Vector2(.5f,.5f),new Vector2(Mathf.Sin(radians)*13,Mathf.Cos(radians)*13),new Vector2(7,20),new Color(1,.73f,.27f,1));
+                tooth.rectTransform.localEulerAngles=new Vector3(0,0,-angle);tooth.raycastTarget=false;
+            }
+            var gear=Box("Gear ring",inner.transform,new Vector2(.5f,.5f),Vector2.zero,new Vector2(31,31),new Color(1,.78f,.34f,1));gear.sprite=CircleSprite();gear.raycastTarget=false;
+            var hub=Box("Gear hub",gear.transform,new Vector2(.5f,.5f),Vector2.zero,new Vector2(14,14),new Color(.045f,.065f,.10f,1));hub.sprite=CircleSprite();hub.raycastTarget=false;
+            return button;
+        }
         void Build()
         {
             var battleView=FindFirstObjectByType<BattleView>();font=battleView!=null&&battleView.font!=null?battleView.font:Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
             canvas=gameObject.AddComponent<Canvas>();canvas.renderMode=RenderMode.ScreenSpaceOverlay;canvas.sortingOrder=1000;
-            var scaler=gameObject.AddComponent<CanvasScaler>();scaler.uiScaleMode=CanvasScaler.ScaleMode.ScaleWithScreenSize;scaler.referenceResolution=new Vector2(480,850);scaler.matchWidthOrHeight=.5f;
+            var scaler=gameObject.AddComponent<CanvasScaler>();scaler.uiScaleMode=CanvasScaler.ScaleMode.ConstantPixelSize;
             gameObject.AddComponent<GraphicRaycaster>();
 
-            safeAreaRoot=Rect("Mobile safe area",transform,Vector2.zero,Vector2.zero,Vector2.zero);safeAreaRoot.anchorMax=Vector2.one;safeAreaRoot.offsetMin=safeAreaRoot.offsetMax=Vector2.zero;
-            var gear=MakeButton("⚙",safeAreaRoot,new Vector2(1,1),new Vector2(-14,-14),new Vector2(50,50),new Color(.07f,.10f,.15f,.96f),Toggle);
-            gear.GetComponentInChildren<Text>().fontSize=29;
+            safeAreaRoot=Rect("Portrait game area",transform,new Vector2(.5f,.5f),Vector2.zero,new Vector2(480,850));
+            MakeGearButton(safeAreaRoot);
 
-            panel=Box("Settings dimmer",transform,Vector2.zero,Vector2.zero,Vector2.zero,new Color(.01f,.015f,.025f,.82f)).gameObject;
+            panel=Box("Settings dimmer",safeAreaRoot,Vector2.zero,Vector2.zero,Vector2.zero,new Color(.01f,.015f,.025f,.86f)).gameObject;
             var dim=panel.GetComponent<RectTransform>();dim.anchorMin=Vector2.zero;dim.anchorMax=Vector2.one;dim.offsetMin=dim.offsetMax=Vector2.zero;
-            var card=Box("Settings card",panel.transform,new Vector2(.5f,.5f),Vector2.zero,new Vector2(410,570),new Color(.045f,.065f,.10f,.99f));DragonTowerTheme.Frame(card,DragonTowerTheme.Gold);
-            Label("설정",card.transform,new Vector2(.5f,1),new Vector2(0,-42),new Vector2(350,56),30,DragonTowerTheme.Gold);
-            musicSlider=MakeSlider("배경음",card.transform,-122,out musicValue);sfxSlider=MakeSlider("효과음",card.transform,-225,out sfxValue);
-            MakeButton("로비로 돌아가기",card.transform,new Vector2(.5f,1),new Vector2(0,-340),new Vector2(330,62),new Color(.13f,.25f,.31f,.98f),ReturnLobby);
-            MakeButton("게임 데이터 초기화",card.transform,new Vector2(.5f,1),new Vector2(0,-425),new Vector2(330,58),new Color(.42f,.15f,.14f,.98f),ShowResetConfirmation);
-            MakeButton("계속하기",card.transform,new Vector2(.5f,1),new Vector2(0,-510),new Vector2(330,62),new Color(.20f,.38f,.28f,.98f),Close);
+            var card=Box("Settings card",panel.transform,new Vector2(.5f,.5f),Vector2.zero,new Vector2(420,650),new Color(.045f,.065f,.10f,.99f));DragonTowerTheme.Frame(card,DragonTowerTheme.Gold);
+            Label("설정",card.transform,new Vector2(.5f,1),new Vector2(0,-40),new Vector2(350,52),30,DragonTowerTheme.Gold);
+            musicSlider=MakeSlider("배경음",card.transform,-105,out musicValue);sfxSlider=MakeSlider("효과음",card.transform,-200,out sfxValue);
+            MakeButton("로비로 돌아가기",card.transform,new Vector2(.5f,1),new Vector2(0,-330),new Vector2(340,60),new Color(.13f,.25f,.31f,.98f),ReturnLobby);
+            MakeButton("게임 데이터 초기화",card.transform,new Vector2(.5f,1),new Vector2(0,-415),new Vector2(340,58),new Color(.42f,.15f,.14f,.98f),ShowResetConfirmation);
+            MakeButton("계속하기",card.transform,new Vector2(.5f,1),new Vector2(0,-500),new Vector2(340,60),new Color(.20f,.38f,.28f,.98f),Close);
+            Label("설정을 닫으면 게임이 다시 시작됩니다.",card.transform,new Vector2(.5f,1),new Vector2(0,-570),new Vector2(350,32),14,new Color(.66f,.72f,.78f));
 
             confirmation=Box("Reset confirmation",panel.transform,new Vector2(.5f,.5f),Vector2.zero,new Vector2(380,300),new Color(.075f,.065f,.07f,1)).gameObject;
             DragonTowerTheme.Frame(confirmation.GetComponent<Image>(),new Color(1,.38f,.28f));
@@ -78,13 +103,13 @@ namespace DragonTower
             confirmation.SetActive(false);panel.SetActive(false);
             ApplySafeArea();
         }
-        void Update(){if(Screen.safeArea!=lastSafeArea)ApplySafeArea();}
+        void Update(){if(Screen.safeArea!=lastSafeArea||lastScreen.x!=Screen.width||lastScreen.y!=Screen.height)ApplySafeArea();}
         void ApplySafeArea()
         {
-            if(safeAreaRoot==null||Screen.width<=0||Screen.height<=0)return;lastSafeArea=Screen.safeArea;
-            safeAreaRoot.anchorMin=new Vector2(lastSafeArea.xMin/Screen.width,lastSafeArea.yMin/Screen.height);
-            safeAreaRoot.anchorMax=new Vector2(lastSafeArea.xMax/Screen.width,lastSafeArea.yMax/Screen.height);
-            safeAreaRoot.offsetMin=safeAreaRoot.offsetMax=Vector2.zero;
+            if(safeAreaRoot==null||Screen.width<=0||Screen.height<=0)return;lastSafeArea=Screen.safeArea;lastScreen=new Vector2(Screen.width,Screen.height);
+            float scale=Mathf.Min(lastSafeArea.width/480f,lastSafeArea.height/850f);
+            safeAreaRoot.localScale=Vector3.one*scale;
+            safeAreaRoot.anchoredPosition=lastSafeArea.center-new Vector2(Screen.width,Screen.height)*.5f;
         }
         Slider MakeSlider(string title,Transform parent,float y,out Text valueLabel)
         {
