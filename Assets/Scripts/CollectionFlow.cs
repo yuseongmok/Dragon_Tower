@@ -330,17 +330,26 @@ namespace DragonTower
         {
             Screen("아이템방");Label("상자를 터치하세요",0,190,420,46,25,Gold);
             RoomButton=IconButton("▣","상자 열기",new Color(.38f,.24f,.12f),()=>{DragonTowerAudio.PlayChest();StartCoroutine(AnimateRoomAction(ShowItemChoices));});
-            notice.text="세 아이템 중 하나만 가져갈 수 있습니다.";
+            Label(CurrentItemsSummary(),0,570,420,82,14,Color.white);
+            SecondRoomButton=Button("상자를 열지 않고 나간다",0,680,360,56,AdvanceFloor);
+            notice.text="아이템을 얻지 않고 다음 층으로 이동할 수도 있습니다.";
         }
         void ShowItemChoices()
         {
-            Screen("아이템 선택");Label("하나를 선택하세요",0,168,420,40,21,Muted);
+            Screen("아이템 선택");Label("하나를 선택하거나 그냥 나갈 수 있습니다",0,154,420,34,18,Muted);
+            Label(CurrentItemsSummary(),0,205,420,58,13,Color.white);
             var choices=database==null?Array.Empty<ItemData>():database.PickItems(3,Environment.TickCount^towerRun.Floor);
             if(choices.Length>0)
             {
-                ChoiceButtons=new Button[choices.Length];for(int i=0;i<choices.Length;i++){var item=choices[i];ChoiceButtons[i]=ItemChoice(item,285+i*125);}
+                ChoiceButtons=new Button[choices.Length];for(int i=0;i<choices.Length;i++){var item=choices[i];ChoiceButtons[i]=ItemChoice(item,300+i*120);}
+                SecondRoomButton=Button("아무것도 가져가지 않는다",0,690,360,54,AdvanceFloor);
             }
             else {Label("등록된 아이템이 없습니다.",0,390,420,50,22,Color.white);RoomButton=Button("다음 층",0,610,360,68,AdvanceFloor);}
+        }
+        string CurrentItemsSummary()
+        {
+            if(towerRun==null||towerRun.ItemSlots.Count==0)return "현재 보유 아이템 · 없음";string text="현재 보유 아이템";
+            for(int i=0;i<towerRun.ItemSlots.Count;i++){var slot=towerRun.ItemSlots[i];text+="\n"+(i+1)+". "+slot.DisplayName+(slot.Count>1?" ×"+slot.Count:"")+" — "+ItemCardSummary(slot.Item);}return text;
         }
         Button ItemChoice(ItemData item,float y)
         {return RewardCard(ItemGradeName(item.grade)+" · "+(item.kind==ItemKind.Consumable?"소모품":"장착"),item.displayName,ItemCardSummary(item),ItemIcon(item),y,DragonTowerTheme.Slate,DragonTowerTheme.Grade(item.grade),()=>AcquireItem(item,()=>ShowRoomResult(item.displayName+"을(를) 획득했습니다.")));}
@@ -360,8 +369,10 @@ namespace DragonTower
             for(int i=0;i<towerRun.ItemSlots.Count;i++)
             {
                 int slot=i;var owned=towerRun.ItemSlots[i];
-                ChoiceButtons[i]=Button((i+1)+"번 교체 · "+owned.DisplayName+(owned.Count>1?" ×"+owned.Count:"")+"\n→ "+item.displayName,0,355+i*120,400,92,()=>{towerRun.AddItem(item,slot);complete();});
+                ChoiceButtons[i]=Button((i+1)+"번 교체 · "+owned.DisplayName+(owned.Count>1?" ×"+owned.Count:"")+"\n"+ItemCardSummary(owned.Item)+"\n→ "+item.displayName,0,355+i*120,400,102,()=>{towerRun.AddItem(item,slot);complete();});
+                ChoiceButtons[i].GetComponentInChildren<Text>().fontSize=16;
             }
+            SecondRoomButton=Button("교체하지 않고 나간다",0,640,360,56,AdvanceFloor);
             notice.text="아이템은 두 종류만 보유할 수 있습니다. 같은 아이템은 한 슬롯에 중첩됩니다.";
         }
         string EffectSummary(System.Collections.Generic.IReadOnlyList<ContentEffect> effects)
@@ -532,8 +543,8 @@ namespace DragonTower
             towerRun.RecordPassiveUse(controller.CurrentBattle.PassiveConsumed);
             if(controller.CurrentBattle.Result==BattleResult.Victory)
             {
-                int hp=controller.CurrentBattle.PlayerHP;towerRun.RecordBattleVictory(hp);DragonTowerAudio.PlayLevelUp();controller.EndBattle();
-                if(TryShowMonsterDrop())return;ContinueAfterBattleRewards();return;
+                int hp=controller.CurrentBattle.PlayerHP,previousLevel=towerRun.Level,previousExperience=towerRun.Experience;
+                towerRun.RecordBattleVictory(hp);controller.EndBattle();ShowExperienceReward(previousLevel,previousExperience);return;
             }
             int floor=towerRun.Floor;towerRun.End();controller.EndBattle();
             Screen("도전 종료");Label(floor+"층에서 모험을 마쳤습니다",0,312,420,70,28,Gold);
@@ -541,6 +552,34 @@ namespace DragonTower
             RoomButton=Button("로비로 돌아가기",0,610,360,68,ShowLobby);
             notice.text="같은 드래곤으로 다시 도전할 수 있습니다.";
         }
+        void ShowExperienceReward(int previousLevel,int previousExperience)
+        {
+            Screen("전투 경험치");
+            var levelText=Label("LV "+previousLevel,0,230,420,54,31,Color.white);
+            var expText=Label("EXP "+previousExperience+" / "+towerRun.ExperienceToNext,0,294,420,34,17,Muted);
+            var back=Panel("Experience gauge",body,0,350,390,24,new Color(.07f,.10f,.15f,.98f),DragonTowerTheme.GoldDim);
+            var fill=Rect("Experience fill",back.transform,-195,12,390,18).gameObject.AddComponent<Image>();fill.color=new Color(.35f,.76f,1);fill.raycastTarget=false;
+            fill.rectTransform.anchorMin=fill.rectTransform.anchorMax=new Vector2(0,.5f);fill.rectTransform.pivot=new Vector2(0,.5f);fill.rectTransform.anchoredPosition=Vector2.zero;
+            fill.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,390f*previousExperience/towerRun.ExperienceToNext);
+            Label("몬스터 처치  +"+towerRun.LastExperienceGain+" EXP",0,410,420,42,21,Gold);
+            notice.text="경험치가 가득 차면 레벨이 상승합니다.";StartCoroutine(AnimateExperience(previousLevel,previousExperience,fill,expText,levelText));
+        }
+        IEnumerator AnimateExperience(int previousLevel,int previousExperience,Image fill,Text expText,Text levelText)
+        {
+            float time=0,duration=1.15f;int required=towerRun.ExperienceToNext;
+            while(time<duration)
+            {
+                time+=Mathf.Min(Time.deltaTime,.1f);float t=Mathf.Clamp01(time/duration),value=Mathf.Lerp(previousExperience,required,t);
+                fill.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,390f*value/required);expText.text="EXP "+Mathf.RoundToInt(value)+" / "+required;yield return null;
+            }
+            if(towerRun.Level>previousLevel)
+            {
+                DragonTowerAudio.PlayLevelUp();levelText.text="LEVEL UP!   LV "+previousLevel+"  →  LV "+towerRun.Level;levelText.color=Gold;levelText.fontSize=27;
+                fill.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,390f*towerRun.Experience/required);expText.text="EXP "+towerRun.Experience+" / "+required;
+            }
+            ContinueButton=Button("보상 확인",0,610,360,68,ContinueAfterExperienceReward);
+        }
+        void ContinueAfterExperienceReward(){if(TryShowMonsterDrop())return;ContinueAfterBattleRewards();}
         bool TryShowMonsterDrop()
         {
             int chance=towerRun.Room==TowerRoomKind.Boss?25:towerRun.Room==TowerRoomKind.Monster?12:0;

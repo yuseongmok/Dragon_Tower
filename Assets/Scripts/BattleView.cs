@@ -7,8 +7,8 @@ namespace DragonTower
     {
         public Font font;
         public RectTransform frame;
-        public Text playerName, playerHP, enemyHP, enemyName, enemyStatus, floorLabel, modeLabel, warning, message, skillLabel, attackLabel, dodgeLabel, itemLabel1, itemLabel2, resultTitle, resultDetail;
-        public Image playerFill, enemyFill, windupFill, playerElementIcon, enemyElementIcon;
+        public Text playerName, playerHP, enemyHP, enemyName, enemyStatus, floorLabel, modeLabel, levelLabel, warning, message, skillLabel, attackLabel, dodgeLabel, itemLabel1, itemLabel2, resultTitle, resultDetail;
+        public Image playerFill, enemyFill, windupFill, experienceFill, playerElementIcon, enemyElementIcon;
         public DragonGraphic playerArt, enemyArt;
         public Button attackButton, skillButton, dodgeButton, itemButton1, itemButton2, restartButton;
         public GameObject resultPanel;
@@ -71,7 +71,11 @@ namespace DragonTower
             Panel("Arena",frame,0,425,480,850,C(.065f,.095f,.15f));
             Label("D R A G O N   T O W E R",frame,-55,34,330,28,20,Color.white);
             floorLabel=Label("01",frame,145,33,45,32,22,C(.96f,.75f,.40f));
-            modeLabel=Label("타워 1층  /  MONSTER ROOM",frame,0,66,400,24,12,Muted);
+            modeLabel=Label("타워 1층  /  MONSTER ROOM",frame,42,66,310,24,12,Muted);
+            levelLabel=Label("LV 1",frame,-190,60,72,20,16,C(1,.76f,.42f),TextAnchor.MiddleLeft);
+            var expBack=Panel("EXP gauge",frame,-151,75,78,5,C(.10f,.14f,.20f));
+            experienceFill=Panel("EXP fill",expBack.transform,-39,2.5f,78,5,C(.45f,.78f,1));
+            experienceFill.rectTransform.anchorMin=experienceFill.rectTransform.anchorMax=new Vector2(0,.5f);experienceFill.rectTransform.pivot=new Vector2(0,.5f);experienceFill.rectTransform.anchoredPosition=Vector2.zero;
             var enemyCard=Panel("Enemy card",frame,0,129,440,80,new Color(.045f,.065f,.10f,.94f));DragonTowerTheme.Frame(enemyCard,DragonTowerTheme.GoldDim);
             enemyElementIcon=ElementIcon(frame,-198,111,28);
             enemyName=Label("바위 슬라임",frame,-45,111,245,28,20,Color.white,TextAnchor.MiddleLeft);
@@ -90,7 +94,7 @@ namespace DragonTower
             playerFill=Bar("Player HP",700,C(.36f,.83f,.69f));
             itemButton1=MakeButton("아이템 1 · 빈 슬롯",frame,-108,727,204,38,C(.20f,.25f,.31f),out itemLabel1);
             itemButton2=MakeButton("아이템 2 · 빈 슬롯",frame,108,727,204,38,C(.20f,.25f,.31f),out itemLabel2);
-            itemLabel1.fontSize=itemLabel2.fontSize=13;
+            itemLabel1.fontSize=itemLabel2.fontSize=12;
             skillButton=MakeButton("스킬",frame,-154,790,132,60,C(.22f,.30f,.48f),out skillLabel);
             attackButton=MakeButton("공격",frame,0,790,148,68,C(.76f,.34f,.20f),out attackLabel);
             dodgeButton=MakeButton("회피",frame,154,790,132,60,C(.17f,.37f,.38f),out dodgeLabel);
@@ -124,12 +128,24 @@ namespace DragonTower
         {
             if(image==null)return;image.sprite=ElementIconLibrary.Get(element);image.gameObject.SetActive(image.sprite!=null);
         }
+        public void SetRunProgress(int level,int experience,int required)
+        {
+            if(frame==null)return;
+            if(modeLabel!=null){modeLabel.rectTransform.anchoredPosition=new Vector2(42,-66);modeLabel.rectTransform.sizeDelta=new Vector2(310,24);}
+            if(levelLabel==null)levelLabel=Label("",frame,-190,60,72,20,16,C(1,.76f,.42f),TextAnchor.MiddleLeft);
+            if(experienceFill==null)
+            {
+                var back=Panel("EXP gauge",frame,-151,75,78,5,C(.10f,.14f,.20f));experienceFill=Panel("EXP fill",back.transform,-39,2.5f,78,5,C(.45f,.78f,1));
+                experienceFill.rectTransform.anchorMin=experienceFill.rectTransform.anchorMax=new Vector2(0,.5f);experienceFill.rectTransform.pivot=new Vector2(0,.5f);experienceFill.rectTransform.anchoredPosition=Vector2.zero;
+            }
+            levelLabel.text="LV "+level;experienceFill.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,78f*Mathf.Clamp01(experience/(float)Mathf.Max(1,required)));
+        }
         void EnsureItemControls()
         {
             if(frame==null||itemButton1!=null)return;
             itemButton1=MakeButton("아이템 1 · 빈 슬롯",frame,-108,727,204,38,C(.20f,.25f,.31f),out itemLabel1);
             itemButton2=MakeButton("아이템 2 · 빈 슬롯",frame,108,727,204,38,C(.20f,.25f,.31f),out itemLabel2);
-            itemLabel1.fontSize=itemLabel2.fontSize=13;
+            itemLabel1.fontSize=itemLabel2.fontSize=12;
             MoveControl(skillButton,-154,790,132,60);MoveControl(attackButton,0,790,148,68);MoveControl(dodgeButton,154,790,132,60);
             if(dragonInfo!=null){dragonInfo.rectTransform.anchoredPosition=new Vector2(0,-835);dragonInfo.rectTransform.sizeDelta=new Vector2(440,20);dragonInfo.fontSize=11;}
         }
@@ -261,8 +277,19 @@ namespace DragonTower
             var item=run==null?null:run.ItemAt(index);int count=run==null?0:run.ItemCountAt(index);
             if(item==null){label.text="아이템 "+(index+1)+" · 빈 슬롯";button.interactable=false;return;}
             string countText=count>1?" ×"+count:"";
-            label.text=(item.kind==ItemKind.Consumable?"사용 · ":"장착 · ")+item.displayName+countText;
+            string effect=ItemEffectSummary(item);if(effect.Length>22)effect=effect.Substring(0,22)+"…";
+            label.text=(item.kind==ItemKind.Consumable?"사용 · ":"장착 · ")+item.displayName+countText+"\n"+effect;
             button.interactable=item.kind==ItemKind.Consumable;
+        }
+        static string ItemEffectSummary(ItemData item)
+        {
+            if(item==null)return "효과 없음";if(!string.IsNullOrWhiteSpace(item.description))return item.description;
+            if(item.effects==null||item.effects.Count==0)return "효과 없음";string result="";
+            for(int i=0;i<item.effects.Count;i++){if(i>0)result+=" · ";result+=ItemEffectName(item.effects[i].type)+" "+item.effects[i].value.ToString("+0.##;-0.##;0");}return result;
+        }
+        static string ItemEffectName(ContentEffectType type)
+        {
+            switch(type){case ContentEffectType.Heal:return "HP 회복";case ContentEffectType.MaxHP:return "최대 HP";case ContentEffectType.MaxHPPercent:return "최대 HP %";case ContentEffectType.AttackDamage:return "공격력";case ContentEffectType.AttackDamagePercent:return "공격 피해 %";case ContentEffectType.SkillDamagePercent:return "스킬 피해 %";case ContentEffectType.SkillCooldownPercent:return "스킬 쿨타임 %";case ContentEffectType.AttackCooldownPercent:return "공격 쿨타임 %";case ContentEffectType.DodgeCooldownPercent:return "회피 쿨타임 %";case ContentEffectType.CriticalChancePercent:return "치명타 확률 %";case ContentEffectType.CriticalDamagePercent:return "치명타 피해 %";case ContentEffectType.DamageReductionPercent:return "피해 감소 %";default:return type.ToString();}
         }
         public void Show(BattleModel b)
         {

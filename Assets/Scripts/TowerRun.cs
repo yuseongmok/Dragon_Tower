@@ -23,6 +23,9 @@ namespace DragonTower
         TowerRoomKind[] choices;
         public int Floor { get; private set; }=1;
         public int Level { get; private set; }=1;
+        public int Experience { get; private set; }
+        public int ExperienceToNext => 100;
+        public int LastExperienceGain { get; private set; }
         public int CurrentHP { get; private set; }
         public int MaxHP { get; private set; }
         public int BaseMaxHP { get; private set; }
@@ -118,7 +121,9 @@ namespace DragonTower
         public void RecordBattleVictory(int remainingHP)
         {
             int previousStage=DragonData.EvolutionStage(Level);
-            CurrentHP=Math.Max(0,Math.Min(MaxHP,remainingHP));MonstersDefeated++;Level++;
+            CurrentHP=Math.Max(0,Math.Min(MaxHP,remainingHP));MonstersDefeated++;
+            LastExperienceGain=ExperienceToNext;Experience+=LastExperienceGain;
+            while(Experience>=ExperienceToNext){Experience-=ExperienceToNext;Level++;}
             int currentStage=DragonData.EvolutionStage(Level);
             if(currentStage>previousStage)PendingEvolutionStage=currentStage;
             if(Level%5==0)PendingLevelAugments++;

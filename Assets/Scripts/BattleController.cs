@@ -27,6 +27,7 @@ namespace DragonTower
             view.SetDragonArt(dragon,dragonLevel);
             view.SetSkillPresentation(activeSkill??dragon.skill);
             view.SetEncounter(enemy,floor,boss,enemySprite);
+            view.SetRunProgress(Flow==null?dragonLevel:Flow.CurrentRun.Level,Flow==null?0:Flow.CurrentRun.Experience,Flow==null?100:Flow.CurrentRun.ExperienceToNext);
             battle.Cue+=view.PlayCue;
             battle.Feedback+=text=>view.message.text=text;
             view.message.text="공격을 터치하세요 · 게이지가 차기 직전에 회피";
