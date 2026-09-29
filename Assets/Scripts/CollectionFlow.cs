@@ -260,7 +260,8 @@ namespace DragonTower
         public void EnterTowerWithRoll(int firstRoll,int secondRoll)
         {
             if(Session.Selected==null||hatchTime>=0)return;
-            towerRun=new TowerRun(Session.Selected.maxHP,firstRoll,secondRoll,Session.Selected.elementType,Session.Selected.alternateSkillElement);ShowTowerChoices();
+            towerRun=new TowerRun(Session.Selected.maxHP,firstRoll,secondRoll,Session.Selected.elementType,Session.Selected.alternateSkillElement);
+            StartCoroutine(ShowFloorTransition(0,1,true));
         }
         string RoomName(TowerRoomKind room)
         {
@@ -567,8 +568,11 @@ namespace DragonTower
         {
             if(towerRun==null)return;int clearedFloor=towerRun.Floor;
             towerRun.AdvanceFloor(UnityEngine.Random.Range(0,100),UnityEngine.Random.Range(0,100));
-            StartCoroutine(ShowFloorTransition(clearedFloor,towerRun.Floor));
+            if(towerRun.Floor%10==1)StartCoroutine(ShowFloorTransition(clearedFloor,towerRun.Floor,false));
+            else ShowTowerChoices();
         }
+        static int TowerAreaIndex(int floor)
+        {return floor>=100?10:Mathf.Clamp((Mathf.Max(1,floor)-1)/10,0,9);}
         static string TowerAreaName(int floor)
         {
             if(floor<=10)return "지하 감옥";if(floor<=20)return "버려진 고대 수로";if(floor<=30)return "잊혀진 용광로 공방";
@@ -576,34 +580,38 @@ namespace DragonTower
             if(floor<=70)return "잊혀진 대도서관";if(floor<=80)return "영겁의 일광 성소";if(floor<=90)return "찢겨진 공허 회랑";
             if(floor<100)return "왕좌로 가는 길";return "태초의 용좌";
         }
-        IEnumerator ShowFloorTransition(int clearedFloor,int targetFloor)
+        IEnumerator ShowFloorTransition(int clearedFloor,int targetFloor,bool firstEntry)
         {
-            Screen("탑 이동");notice.text="다음 목적지를 향해 올라갑니다.";
+            Screen("탑 이동");notice.gameObject.SetActive(false);
             var viewport=Rect("Tower map viewport",body,0,425,480,850);viewport.gameObject.AddComponent<RectMask2D>();
-            var content=Rect("Scrolling tower map",viewport,0,425,480,850);
-            var map=Rect("유대의 탑 전체 지도",content,0,425,620,1250).gameObject.AddComponent<Image>();map.sprite=Resources.Load<Sprite>("UI/bond-tower-world-map");map.preserveAspect=false;map.raycastTarget=false;
-            var shade=Rect("Map shade",content,0,425,480,1150).gameObject.AddComponent<Image>();shade.color=new Color(.015f,.025f,.055f,.16f);shade.raycastTarget=false;
-            var route=Rect("Route",content,0,420,8,118).gameObject.AddComponent<Image>();route.color=new Color(1,.78f,.32f,.9f);route.raycastTarget=false;
-            var current=Panel("Cleared floor",content,0,492,150,58,new Color(.055f,.08f,.12f,.96f),new Color(.55f,.66f,.75f));
-            CardText(current.transform,"Cleared label","완료  "+clearedFloor+"층",0,29,138,48,19,new Color(.76f,.82f,.88f),TextAnchor.MiddleCenter);
-            var target=Panel("Target floor",content,0,340,176,64,new Color(.23f,.12f,.035f,.98f),DragonTowerTheme.Gold);
-            CardText(target.transform,"Target label","다음  "+targetFloor+"층",0,32,164,52,22,new Color(1,.85f,.48f),TextAnchor.MiddleCenter);
-            var header=Panel("Map header",body,0,76,430,92,new Color(.025f,.04f,.075f,.94f),DragonTowerTheme.Gold);
-            CardText(header.transform,"Area name",TowerAreaName(targetFloor),0,30,400,36,24,Color.white,TextAnchor.MiddleCenter);
-            CardText(header.transform,"Floor progress",clearedFloor+"F   →   "+targetFloor+"F",0,66,400,25,16,new Color(1,.77f,.39f),TextAnchor.MiddleCenter);
-            content.anchoredPosition+=new Vector2(0,4);Vector2 start=content.anchoredPosition,end=start+new Vector2(0,-152);
-            float elapsed=0,duration=1.45f;
+            const float mapHeight=2400,mapWidth=1600,areaCount=11;
+            var mapRect=Rect("유대의 탑 확대 지도",viewport,0,425,mapWidth,mapHeight);mapRect.anchorMin=mapRect.anchorMax=mapRect.pivot=new Vector2(.5f,.5f);
+            var map=mapRect.gameObject.AddComponent<Image>();map.sprite=Resources.Load<Sprite>("UI/bond-tower-world-map");map.preserveAspect=false;map.raycastTarget=false;
+            float AreaOffset(int floor)
+            {int area=TowerAreaIndex(floor);float localY=-mapHeight*.5f+(area+.5f)*(mapHeight/areaCount);return -localY;}
+            float destination=AreaOffset(targetFloor),origin=firstEntry?destination+115:AreaOffset(clearedFloor);
+            mapRect.anchoredPosition=new Vector2(0,origin);
+            var shade=Rect("Map cinematic shade",viewport,0,425,480,850).gameObject.AddComponent<Image>();shade.color=new Color(.01f,.02f,.045f,.23f);shade.raycastTarget=false;
+            var focus=Panel("Current area focus",viewport,0,425,310,132,new Color(.025f,.04f,.07f,.42f),new Color(1,.71f,.28f,.78f));
+            var areaText=CardText(focus.transform,"Area name",TowerAreaName(firstEntry?targetFloor:clearedFloor),0,47,292,42,25,Color.white,TextAnchor.MiddleCenter);
+            var floorText=CardText(focus.transform,"Floor progress",firstEntry?"1층에서 여정을 시작합니다":clearedFloor+"층 돌파",0,91,292,30,17,new Color(1,.80f,.43f),TextAnchor.MiddleCenter);
+            var header=Panel("Map header",viewport,0,74,390,58,new Color(.025f,.04f,.075f,.88f),DragonTowerTheme.Gold);
+            CardText(header.transform,"Transition title",firstEntry?"유대의 탑 입장":"새로운 구역으로 상승",0,29,370,44,22,Color.white,TextAnchor.MiddleCenter);
+            yield return new WaitForSecondsRealtime(firstEntry?.55f:.35f);
+            float elapsed=0,duration=firstEntry?1.25f:2.15f;
             while(elapsed<duration)
             {
                 elapsed+=Time.unscaledDeltaTime;float t=Mathf.Clamp01(elapsed/duration);t=t*t*(3-2*t);
-                content.anchoredPosition=Vector2.LerpUnclamped(start,end,t);yield return null;
+                mapRect.anchoredPosition=new Vector2(0,Mathf.Lerp(origin,destination,t));
+                if(!firstEntry&&t>.52f){areaText.text=TowerAreaName(targetFloor);floorText.text=targetFloor+"층 도착";}
+                yield return null;
             }
             DragonTowerAudio.PlayUi();float pulse=0;
             while(pulse<.55f)
             {
-                pulse+=Time.unscaledDeltaTime;float scale=1+Mathf.Sin(pulse*18)*.08f;target.rectTransform.localScale=Vector3.one*scale;yield return null;
+                pulse+=Time.unscaledDeltaTime;float scale=1+Mathf.Sin(pulse*18)*.035f;focus.rectTransform.localScale=Vector3.one*scale;yield return null;
             }
-            target.rectTransform.localScale=Vector3.one;yield return new WaitForSecondsRealtime(.25f);ShowTowerChoices();
+            focus.rectTransform.localScale=Vector3.one;yield return new WaitForSecondsRealtime(.3f);ShowTowerChoices();
         }
         public void ResolveBattleResult()
         {
