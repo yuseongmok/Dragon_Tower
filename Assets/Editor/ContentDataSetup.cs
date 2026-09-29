@@ -316,6 +316,7 @@ namespace DragonTower.Editor
             {
                 var dragon=AssetDatabase.LoadAssetAtPath<DragonData>(Root+"/Dragon"+i+".asset");if(dragon==null)continue;
                 if(dragon.evolutionSheet==null)dragon.evolutionSheet=AssetDatabase.LoadAssetAtPath<Texture2D>(artRoot+files[i]);
+                dragon.battleSprite=AssetDatabase.LoadAssetAtPath<Sprite>(artRoot+"Separated/"+species[i]+"-base.png");
                 dragon.intermediateEvolutionSprite=AssetDatabase.LoadAssetAtPath<Sprite>(artRoot+"Separated/"+species[i]+"-intermediate.png");
                 dragon.finalEvolutionSprite=AssetDatabase.LoadAssetAtPath<Sprite>(artRoot+"Separated/"+species[i]+"-final.png");
                 if(string.IsNullOrWhiteSpace(dragon.intermediateName))dragon.intermediateName=middle[i];
