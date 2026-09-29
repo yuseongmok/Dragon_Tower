@@ -61,17 +61,19 @@ namespace DragonTower
         }
         Button MakeGearButton(Transform parent)
         {
-            var outer=Box("설정",parent,new Vector2(0,1),new Vector2(14,-14),new Vector2(58,58),DragonTowerTheme.Gold);outer.sprite=CircleSprite();
-            var button=outer.gameObject.AddComponent<Button>();button.targetGraphic=outer;button.onClick.AddListener(Toggle);button.gameObject.AddComponent<DragonTowerUiSound>();
-            var colors=button.colors;colors.normalColor=Color.white;colors.highlightedColor=new Color(1,.92f,.7f);colors.pressedColor=new Color(.78f,.68f,.48f);button.colors=colors;
-            var inner=Box("Dark center",outer.transform,new Vector2(.5f,.5f),Vector2.zero,new Vector2(50,50),new Color(.045f,.065f,.10f,1));inner.sprite=CircleSprite();inner.raycastTarget=false;
+            // Keep a comfortable mobile touch target while drawing a much smaller,
+            // translucent icon so the battle header remains readable.
+            var hitArea=Box("설정",parent,new Vector2(0,1),new Vector2(7,-7),new Vector2(48,48),Color.clear);
+            var button=hitArea.gameObject.AddComponent<Button>();button.targetGraphic=hitArea;button.onClick.AddListener(Toggle);button.gameObject.AddComponent<DragonTowerUiSound>();
+            var outer=Box("Gear rim",hitArea.transform,new Vector2(.5f,.5f),Vector2.zero,new Vector2(40,40),new Color(1,.70f,.25f,.82f));outer.sprite=CircleSprite();outer.raycastTarget=false;
+            var inner=Box("Dark center",outer.transform,new Vector2(.5f,.5f),Vector2.zero,new Vector2(35,35),new Color(.025f,.04f,.07f,.76f));inner.sprite=CircleSprite();inner.raycastTarget=false;
             for(int i=0;i<8;i++)
             {
-                float angle=i*45;float radians=angle*Mathf.Deg2Rad;var tooth=Box("Gear tooth",inner.transform,new Vector2(.5f,.5f),new Vector2(Mathf.Sin(radians)*13,Mathf.Cos(radians)*13),new Vector2(7,20),new Color(1,.73f,.27f,1));
+                float angle=i*45;float radians=angle*Mathf.Deg2Rad;var tooth=Box("Gear tooth",inner.transform,new Vector2(.5f,.5f),new Vector2(Mathf.Sin(radians)*9,Mathf.Cos(radians)*9),new Vector2(5,14),new Color(1,.75f,.31f,.9f));
                 tooth.rectTransform.localEulerAngles=new Vector3(0,0,-angle);tooth.raycastTarget=false;
             }
-            var gear=Box("Gear ring",inner.transform,new Vector2(.5f,.5f),Vector2.zero,new Vector2(31,31),new Color(1,.78f,.34f,1));gear.sprite=CircleSprite();gear.raycastTarget=false;
-            var hub=Box("Gear hub",gear.transform,new Vector2(.5f,.5f),Vector2.zero,new Vector2(14,14),new Color(.045f,.065f,.10f,1));hub.sprite=CircleSprite();hub.raycastTarget=false;
+            var gear=Box("Gear ring",inner.transform,new Vector2(.5f,.5f),Vector2.zero,new Vector2(23,23),new Color(1,.78f,.34f,.94f));gear.sprite=CircleSprite();gear.raycastTarget=false;
+            var hub=Box("Gear hub",gear.transform,new Vector2(.5f,.5f),Vector2.zero,new Vector2(10,10),new Color(.025f,.04f,.07f,.9f));hub.sprite=CircleSprite();hub.raycastTarget=false;
             return button;
         }
         void Build()
