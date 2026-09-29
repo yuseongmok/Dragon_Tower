@@ -307,11 +307,14 @@ namespace DragonTower.Editor
             var files=new[]{"ember-evolution.png","luna-evolution.png","zephyr-evolution.png","brandy-evolution.png","volt-evolution.png","okta-evolution.png","nova-evolution.png","dante-evolution.png"};
             var middle=new[]{"화염룡 엠버","월빙룡 루나","질풍룡 제피르","지진상어","뇌전룡 볼트","옥탈리아","성운룡 노바","성휘룡 단테"};
             var finalNames=new[]{"용암군주 엠버","달의 여왕 루나","폭풍군주 제피르","심연모래두지상어","천둥의 군주 볼트","옥타벨","은하군주 노바","광휘군주 단테"};
+            var species=new[]{"ember","luna","zephyr","brandy","volt","okta","nova","dante"};
             const string artRoot="Assets/Art/Evolution/";
             for(int i=0;i<files.Length;i++)
             {
                 var dragon=AssetDatabase.LoadAssetAtPath<DragonData>(Root+"/Dragon"+i+".asset");if(dragon==null)continue;
                 if(dragon.evolutionSheet==null)dragon.evolutionSheet=AssetDatabase.LoadAssetAtPath<Texture2D>(artRoot+files[i]);
+                dragon.intermediateEvolutionSprite=AssetDatabase.LoadAssetAtPath<Sprite>(artRoot+"Separated/"+species[i]+"-intermediate.png");
+                dragon.finalEvolutionSprite=AssetDatabase.LoadAssetAtPath<Sprite>(artRoot+"Separated/"+species[i]+"-final.png");
                 if(string.IsNullOrWhiteSpace(dragon.intermediateName))dragon.intermediateName=middle[i];
                 if(string.IsNullOrWhiteSpace(dragon.finalName))dragon.finalName=finalNames[i];
                 EditorUtility.SetDirty(dragon);

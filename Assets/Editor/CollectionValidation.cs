@@ -41,7 +41,7 @@ namespace DragonTower.Editor
             var catalog=Catalog();
             for(int i=0;i<catalog.Length;i++)
             {
-                Check(catalog[i]!=null&&catalog[i].evolutionSheet!=null,"Evolution sheet is linked for dragon "+i);
+                Check(catalog[i]!=null&&catalog[i].intermediateEvolutionSprite!=null&&catalog[i].finalEvolutionSprite!=null,"Separated evolution sprites are linked for dragon "+i);
                 Check(!string.IsNullOrWhiteSpace(catalog[i].intermediateName)&&!string.IsNullOrWhiteSpace(catalog[i].finalName),"Evolution names are linked for dragon "+i);
                 Check(catalog[i].SpriteForStage(1)!=null&&catalog[i].SpriteForStage(2)!=null,"Both evolution sprites can be created for dragon "+i);
             }

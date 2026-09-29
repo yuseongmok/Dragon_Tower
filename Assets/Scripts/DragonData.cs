@@ -26,6 +26,10 @@ namespace DragonTower
         [Tooltip("Battle artwork is independent of the displayed element name.")]
         public Sprite battleSprite;
         [Header("Tower evolution")]
+        [Tooltip("Separated artwork used from level 10.")]
+        public Sprite intermediateEvolutionSprite;
+        [Tooltip("Separated artwork used from level 20.")]
+        public Sprite finalEvolutionSprite;
         [Tooltip("Horizontal transparent sheet: intermediate form on the left, final form on the right.")]
         public Texture2D evolutionSheet;
         public string intermediateName;
@@ -41,7 +45,7 @@ namespace DragonTower
         public ElementType alternateSkillElement;
         [Tooltip("New three-form sheets include the baby form in the left third.")]
         public bool evolutionSheetIncludesBase;
-        [NonSerialized] Sprite baseSprite,intermediateSprite,finalSprite;
+        [NonSerialized] Sprite intermediateSprite,finalSprite;
         public static int EvolutionStage(int level) => level>=20?2:level>=10?1:0;
         public string NameAtLevel(int level) => NameForStage(EvolutionStage(level));
         public string NameForStage(int stage)
@@ -53,15 +57,18 @@ namespace DragonTower
         public Sprite BattleSpriteAtLevel(int level) => SpriteForStage(EvolutionStage(level));
         public Sprite SpriteForStage(int stage)
         {
+            if(stage<=0)return battleSprite;
+            if(stage==1&&intermediateEvolutionSprite!=null)return intermediateEvolutionSprite;
+            if(stage>=2&&finalEvolutionSprite!=null)return finalEvolutionSprite;
             if(evolutionSheetIncludesBase&&evolutionSheet!=null)
             {
-                if(stage<=0&&baseSprite!=null)return baseSprite;if(stage==1&&intermediateSprite!=null)return intermediateSprite;if(stage>=2&&finalSprite!=null)return finalSprite;
-                int third=evolutionSheet.width/3;int x=stage<=0?0:stage==1?third:third*2;
+                if(stage==1&&intermediateSprite!=null)return intermediateSprite;if(stage>=2&&finalSprite!=null)return finalSprite;
+                int third=evolutionSheet.width/3;int x=stage==1?third:third*2;
                 int width=stage>=2?evolutionSheet.width-third*2:third;
                 var created=Sprite.Create(evolutionSheet,new Rect(x,0,width,evolutionSheet.height),new Vector2(.5f,.5f),100,0,SpriteMeshType.FullRect);
-                created.name=StableId+"_stage_"+stage;if(stage<=0)baseSprite=created;else if(stage==1)intermediateSprite=created;else finalSprite=created;return created;
+                created.name=StableId+"_stage_"+stage;if(stage==1)intermediateSprite=created;else finalSprite=created;return created;
             }
-            if(stage<=0||evolutionSheet==null)return battleSprite;
+            if(evolutionSheet==null)return battleSprite;
             if(stage==1&&intermediateSprite!=null)return intermediateSprite;
             if(stage>=2&&finalSprite!=null)return finalSprite;
             int half=evolutionSheet.width/2;

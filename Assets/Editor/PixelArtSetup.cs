@@ -125,14 +125,15 @@ namespace DragonTower.Editor
                     EditorUtility.SetDirty(dragon);
                 }
             }
-            int[] fallback={0,1,2,3,4,5,6,7};
             for(int i=0;i<evolutionFiles.Length;i++)
             {
                 var dragon=AssetDatabase.LoadAssetAtPath<DragonData>("Assets/Data/Dragon"+(i+8)+".asset");
                 if(dragon==null)continue;
                 dragon.evolutionSheet=AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Art/Evolution/"+evolutionFiles[i]+"-evolution-sheet.png");
-                var original=AssetDatabase.LoadAssetAtPath<DragonData>("Assets/Data/Dragon"+fallback[i]+".asset");
-                if(dragon.battleSprite==null&&original!=null)dragon.battleSprite=original.battleSprite;
+                string separated="Assets/Art/Evolution/Separated/"+evolutionFiles[i];
+                dragon.battleSprite=AssetDatabase.LoadAssetAtPath<Sprite>(separated+"-base.png");
+                dragon.intermediateEvolutionSprite=AssetDatabase.LoadAssetAtPath<Sprite>(separated+"-intermediate.png");
+                dragon.finalEvolutionSprite=AssetDatabase.LoadAssetAtPath<Sprite>(separated+"-final.png");
                 dragon.evolutionSheetIncludesBase=true;EditorUtility.SetDirty(dragon);
             }
             EditorUtility.SetDirty(skin);
