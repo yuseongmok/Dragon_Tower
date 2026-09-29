@@ -13,6 +13,7 @@ namespace DragonTower
         const int Rate=22050;
         static DragonTowerAudio instance;
         AudioSource music,sfx;
+        AudioListener fallbackListener;
         AudioClip lobby,battle,boss,ui,attack,impact,skill,dodge,hurt,bossSkill,chest,victory,defeat,evolution;
         MusicMood mood;float scanAt;
         public static DragonTowerAudio Instance
@@ -30,12 +31,21 @@ namespace DragonTower
             if(instance!=null&&instance!=this){Destroy(gameObject);return;}instance=this;DontDestroyOnLoad(gameObject);
             music=gameObject.AddComponent<AudioSource>();music.loop=true;music.playOnAwake=false;music.volume=PlayerPrefs.GetFloat("DragonTower.MusicVolume",.28f);
             sfx=gameObject.AddComponent<AudioSource>();sfx.playOnAwake=false;sfx.volume=PlayerPrefs.GetFloat("DragonTower.SfxVolume",.72f);
+            fallbackListener=gameObject.AddComponent<AudioListener>();
             BuildClips();SetMusic(MusicMood.Lobby);
         }
         void Update()
         {
             if(Time.unscaledTime<scanAt)return;scanAt=Time.unscaledTime+1;
+            EnsureListener();
             foreach(var button in FindObjectsByType<Button>(FindObjectsInactive.Include,FindObjectsSortMode.None))if(button.GetComponent<DragonTowerUiSound>()==null)button.gameObject.AddComponent<DragonTowerUiSound>();
+        }
+        void EnsureListener()
+        {
+            bool hasOther=false;
+            foreach(var listener in FindObjectsByType<AudioListener>(FindObjectsInactive.Exclude,FindObjectsSortMode.None))
+                if(listener!=fallbackListener&&listener.enabled){hasOther=true;break;}
+            fallbackListener.enabled=!hasOther;
         }
         public static void SetMusic(MusicMood value)
         {
