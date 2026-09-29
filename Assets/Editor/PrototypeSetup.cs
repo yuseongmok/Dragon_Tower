@@ -44,7 +44,7 @@ namespace DragonTower.Editor
             PlayerSettings.defaultScreenWidth=480;PlayerSettings.defaultScreenHeight=850;
             PlayerSettings.defaultInterfaceOrientation=UIOrientation.Portrait;
             PlayerSettings.runInBackground=false;
-            PlayerSettings.WebGL.compressionFormat=WebGLCompressionFormat.Gzip;
+            PlayerSettings.WebGL.compressionFormat=WebGLCompressionFormat.Brotli;
             PlayerSettings.WebGL.decompressionFallback=true;
             PlayerSettings.WebGL.template="PROJECT:DragonTower";
             QualitySettings.vSyncCount=0;QualitySettings.antiAliasing=0;
@@ -73,7 +73,7 @@ namespace DragonTower.Editor
         public static void BuildWeb()
         {
             Verify();
-            PlayerSettings.WebGL.compressionFormat=WebGLCompressionFormat.Gzip;
+            PlayerSettings.WebGL.compressionFormat=WebGLCompressionFormat.Brotli;
             PlayerSettings.WebGL.decompressionFallback=true;
             Directory.CreateDirectory("docs");
             File.WriteAllText("docs/.nojekyll",string.Empty);
