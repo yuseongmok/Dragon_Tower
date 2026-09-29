@@ -13,7 +13,9 @@ namespace DragonTower.Editor
             if (assetPath.StartsWith("Assets/Art/Evolution/"))
             {
                 var evolution=(TextureImporter)assetImporter;
-                evolution.textureType=TextureImporterType.Default;
+                bool separated=assetPath.StartsWith("Assets/Art/Evolution/Separated/");
+                evolution.textureType=separated?TextureImporterType.Sprite:TextureImporterType.Default;
+                if(separated){evolution.spriteImportMode=SpriteImportMode.Single;evolution.spritePixelsPerUnit=100;}
                 evolution.filterMode=FilterMode.Point;evolution.wrapMode=TextureWrapMode.Clamp;
                 evolution.mipmapEnabled=false;evolution.isReadable=false;evolution.alphaIsTransparency=true;
                 evolution.npotScale=TextureImporterNPOTScale.None;evolution.maxTextureSize=2048;
