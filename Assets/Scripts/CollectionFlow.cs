@@ -153,11 +153,18 @@ namespace DragonTower
             if(lobby){baseLayer.sprite=Resources.Load<Sprite>("UI/dragon-nest-lobby");baseLayer.preserveAspect=false;}
             var skin=Resources.Load<BattleSkin>("PixelBattleSkin");if(!lobby&&skin!=null&&skin.towerBackground!=null)
             {var scenic=Rect("Dim tower backdrop",body,0,425,480,850).gameObject.AddComponent<Image>();scenic.sprite=skin.towerBackground;scenic.preserveAspect=false;scenic.color=new Color(.23f,.29f,.38f,.28f);scenic.raycastTarget=false;}
-            Panel("Ornate content frame",body,0,454,454,674,lobby?new Color(.055f,.035f,.045f,.55f):new Color(.035f,.055f,.085f,.88f),lobby?new Color(1,.58f,.25f,.72f):DragonTowerTheme.GoldDim);
-            Panel("Title ribbon",body,0,94,420,54,lobby?new Color(.20f,.08f,.07f,.86f):new Color(.12f,.105f,.105f,.96f),DragonTowerTheme.Gold);
-            Label("D R A G O N   T O W E R",0,42,440,32,21,Color.white);
-            Label(name,0,95,420,45,28,Gold);
-            Label("◆",-216,94,24,30,12,DragonTowerTheme.Gold);Label("◆",216,94,24,30,12,DragonTowerTheme.Gold);
+            if(lobby)
+            {
+                var logo=Rect("유대의 탑 로고",body,0,70,430,124).gameObject.AddComponent<Image>();logo.sprite=Resources.Load<Sprite>("UI/bond-tower-logo");logo.preserveAspect=true;logo.raycastTarget=false;
+                Panel("Lobby badge",body,0,145,170,34,new Color(.12f,.055f,.035f,.78f),new Color(1,.65f,.30f,.78f));Label("드래곤 로비",0,145,160,30,18,Color.white);
+            }
+            else
+            {
+                Panel("Ornate content frame",body,0,454,454,674,new Color(.035f,.055f,.085f,.88f),DragonTowerTheme.GoldDim);
+                Panel("Title ribbon",body,0,94,420,54,new Color(.12f,.105f,.105f,.96f),DragonTowerTheme.Gold);
+                Label("유 대 의   탑",0,42,440,32,21,Color.white);Label(name,0,95,420,45,28,Gold);
+                Label("◆",-216,94,24,30,12,DragonTowerTheme.Gold);Label("◆",216,94,24,30,12,DragonTowerTheme.Gold);
+            }
             notice=Label("이 기기에 자동 저장됩니다",0,805,430,58,14,Muted);
         }
         void Portrait(DragonData dragon,float y=348,int level=1,UnityAction onClick=null)
