@@ -50,7 +50,10 @@ namespace DragonTower.Editor
         {
             if(database==null)database=AssetDatabase.LoadAssetAtPath<ContentDatabase>(DatabasePath);
             if(database==null)return;
-            database.dragons=FindAll<DragonData>().Where(d=>!string.IsNullOrWhiteSpace(d.speciesId)&&d.skill!=null&&d.battleSprite!=null).ToArray();database.monsters=FindAll<MonsterData>();database.skills=FindAll<SkillData>();
+            // Keep every valid species in the catalog even while Unity is reimporting its artwork.
+            // Runtime already has a procedural fallback graphic, so a temporarily missing sprite
+            // must not remove that dragon from the codex and egg hatch pool.
+            database.dragons=FindAll<DragonData>().Where(d=>!string.IsNullOrWhiteSpace(d.speciesId)&&d.skill!=null).ToArray();database.monsters=FindAll<MonsterData>();database.skills=FindAll<SkillData>();
             database.items=FindAll<ItemData>();database.augments=FindAll<AugmentData>();
             EditorUtility.SetDirty(database);AssetDatabase.SaveAssets();
         }
