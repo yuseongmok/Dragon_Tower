@@ -10,11 +10,13 @@ namespace DragonTower
         static DragonTowerSettings instance;
         Font font;
         Canvas canvas;
+        RectTransform safeAreaRoot;
         GameObject panel,confirmation;
         Slider musicSlider,sfxSlider;
         Text musicValue,sfxValue;
         float previousTimeScale=1;
         bool open;
+        Rect lastSafeArea;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         static void Bootstrap()
@@ -54,7 +56,8 @@ namespace DragonTower
             var scaler=gameObject.AddComponent<CanvasScaler>();scaler.uiScaleMode=CanvasScaler.ScaleMode.ScaleWithScreenSize;scaler.referenceResolution=new Vector2(480,850);scaler.matchWidthOrHeight=.5f;
             gameObject.AddComponent<GraphicRaycaster>();
 
-            var gear=MakeButton("⚙",transform,new Vector2(0,1),new Vector2(14,-14),new Vector2(54,54),new Color(.07f,.10f,.15f,.96f),Toggle);
+            safeAreaRoot=Rect("Mobile safe area",transform,Vector2.zero,Vector2.zero,Vector2.zero);safeAreaRoot.anchorMax=Vector2.one;safeAreaRoot.offsetMin=safeAreaRoot.offsetMax=Vector2.zero;
+            var gear=MakeButton("⚙",safeAreaRoot,new Vector2(1,1),new Vector2(-14,-14),new Vector2(50,50),new Color(.07f,.10f,.15f,.96f),Toggle);
             gear.GetComponentInChildren<Text>().fontSize=29;
 
             panel=Box("Settings dimmer",transform,Vector2.zero,Vector2.zero,Vector2.zero,new Color(.01f,.015f,.025f,.82f)).gameObject;
@@ -73,6 +76,15 @@ namespace DragonTower
             MakeButton("취소",confirmation.transform,new Vector2(.5f,1),new Vector2(-88,-232),new Vector2(150,52),DragonTowerTheme.SlateLight,()=>confirmation.SetActive(false));
             MakeButton("초기화",confirmation.transform,new Vector2(.5f,1),new Vector2(88,-232),new Vector2(150,52),new Color(.52f,.15f,.13f),ResetGame);
             confirmation.SetActive(false);panel.SetActive(false);
+            ApplySafeArea();
+        }
+        void Update(){if(Screen.safeArea!=lastSafeArea)ApplySafeArea();}
+        void ApplySafeArea()
+        {
+            if(safeAreaRoot==null||Screen.width<=0||Screen.height<=0)return;lastSafeArea=Screen.safeArea;
+            safeAreaRoot.anchorMin=new Vector2(lastSafeArea.xMin/Screen.width,lastSafeArea.yMin/Screen.height);
+            safeAreaRoot.anchorMax=new Vector2(lastSafeArea.xMax/Screen.width,lastSafeArea.yMax/Screen.height);
+            safeAreaRoot.offsetMin=safeAreaRoot.offsetMax=Vector2.zero;
         }
         Slider MakeSlider(string title,Transform parent,float y,out Text valueLabel)
         {

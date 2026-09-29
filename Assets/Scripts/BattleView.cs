@@ -69,8 +69,8 @@ namespace DragonTower
             bg.rectTransform.anchorMin=Vector2.zero;bg.rectTransform.anchorMax=Vector2.one;bg.rectTransform.sizeDelta=Vector2.zero;bg.rectTransform.anchoredPosition=Vector2.zero;
             frame=Rect("Portrait Battle · 480 x 850",transform,0,0,480,850);frame.anchorMin=frame.anchorMax=new Vector2(.5f,.5f);frame.pivot=new Vector2(.5f,.5f);frame.anchoredPosition=Vector2.zero;
             Panel("Arena",frame,0,425,480,850,C(.065f,.095f,.15f));
-            Label("D R A G O N   T O W E R",frame,-30,34,390,28,21,Color.white);
-            floorLabel=Label("01",frame,204,33,45,32,23,C(.96f,.75f,.40f));
+            Label("D R A G O N   T O W E R",frame,-55,34,330,28,20,Color.white);
+            floorLabel=Label("01",frame,145,33,45,32,22,C(.96f,.75f,.40f));
             modeLabel=Label("타워 1층  /  MONSTER ROOM",frame,0,66,400,24,12,Muted);
             var enemyCard=Panel("Enemy card",frame,0,129,440,80,new Color(.045f,.065f,.10f,.94f));DragonTowerTheme.Frame(enemyCard,DragonTowerTheme.GoldDim);
             enemyName=Label("바위 슬라임",frame,-60,111,280,28,20,Color.white,TextAnchor.MiddleLeft);
