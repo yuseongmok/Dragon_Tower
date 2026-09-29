@@ -61,7 +61,7 @@ namespace DragonTower
         }
         public void Build()
         {
-            if(font==null) font=Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            LoadGameFont();
             var canvas=gameObject.AddComponent<Canvas>();canvas.renderMode=RenderMode.ScreenSpaceOverlay;
             var scaler=gameObject.AddComponent<CanvasScaler>();scaler.uiScaleMode=CanvasScaler.ScaleMode.ConstantPixelSize;
             gameObject.AddComponent<GraphicRaycaster>();
@@ -109,7 +109,8 @@ namespace DragonTower
             resultPanel.SetActive(false);
             Fit();
         }
-        void Awake() { EnsureItemControls();EnsureElementIcons();ApplyPixelSkin(); }
+        void LoadGameFont(){var gameFont=Resources.Load<Font>("Fonts/Jua-Regular");if(gameFont!=null)font=gameFont;else if(font==null)font=Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");}
+        void Awake() { LoadGameFont();EnsureItemControls();EnsureElementIcons();ApplyPixelSkin(); }
         Image ElementIcon(Transform parent,float x,float y,float size)
         {
             var rect=Rect("Element symbol",parent,x,y,size,size);

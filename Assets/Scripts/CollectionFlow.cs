@@ -9,16 +9,20 @@ namespace DragonTower
     public static class DragonTowerTheme
     {
         public static readonly Color Night=new Color(.025f,.035f,.06f,1),Slate=new Color(.075f,.105f,.15f,.94f),SlateLight=new Color(.12f,.16f,.22f,.96f),Gold=new Color(.88f,.66f,.30f,1),GoldDim=new Color(.43f,.31f,.15f,1),Parchment=new Color(.82f,.74f,.59f,1);
-        static RectTransform Strip(string name,Transform parent,Vector2 anchorMin,Vector2 anchorMax,Vector2 size,Color color)
+        static Sprite roundedPanel;
+        static Sprite RoundedPanel()
         {
-            var go=new GameObject(name,typeof(RectTransform),typeof(Image));var rect=go.GetComponent<RectTransform>();rect.SetParent(parent,false);rect.anchorMin=anchorMin;rect.anchorMax=anchorMax;rect.pivot=new Vector2(.5f,.5f);rect.anchoredPosition=Vector2.zero;rect.sizeDelta=size;
-            var image=go.GetComponent<Image>();image.color=color;image.raycastTarget=false;return rect;
+            if(roundedPanel!=null)return roundedPanel;
+            const int size=64,radius=15;var texture=new Texture2D(size,size,TextureFormat.RGBA32,false);texture.name="Rounded UI panel";texture.filterMode=FilterMode.Bilinear;texture.wrapMode=TextureWrapMode.Clamp;
+            var pixels=new Color32[size*size];for(int y=0;y<size;y++)for(int x=0;x<size;x++)
+            {float dx=Mathf.Max(radius-Mathf.Min(x,size-1-x),0),dy=Mathf.Max(radius-Mathf.Min(y,size-1-y),0);float distance=Mathf.Sqrt(dx*dx+dy*dy);byte alpha=(byte)Mathf.RoundToInt(255*Mathf.Clamp01(radius+1-distance));pixels[y*size+x]=new Color32(255,255,255,alpha);}
+            texture.SetPixels32(pixels);texture.Apply(false,true);roundedPanel=Sprite.Create(texture,new Rect(0,0,size,size),new Vector2(.5f,.5f),100,0,SpriteMeshType.FullRect,new Vector4(18,18,18,18));roundedPanel.name="Rounded UI panel";return roundedPanel;
         }
         public static void Frame(Image panel,Color edge,bool corners=true)
         {
-            if(panel==null||panel.transform.Find("Theme top")!=null)return;var outline=panel.gameObject.GetComponent<Outline>()??panel.gameObject.AddComponent<Outline>();outline.effectColor=new Color(0,0,0,.8f);outline.effectDistance=new Vector2(3,-3);outline.useGraphicAlpha=true;
-            Strip("Theme top",panel.transform,new Vector2(0,1),new Vector2(1,1),new Vector2(-10,3),edge);Strip("Theme bottom",panel.transform,new Vector2(0,0),new Vector2(1,0),new Vector2(-10,3),GoldDim);Strip("Theme left",panel.transform,new Vector2(0,0),new Vector2(0,1),new Vector2(3,-10),edge);Strip("Theme right",panel.transform,new Vector2(1,0),new Vector2(1,1),new Vector2(3,-10),GoldDim);
-            if(!corners)return;foreach(var p in new[]{new Vector2(0,0),new Vector2(0,1),new Vector2(1,0),new Vector2(1,1)}){var c=Strip("Theme corner",panel.transform,p,p,new Vector2(10,10),edge);c.localRotation=Quaternion.Euler(0,0,45);}
+            if(panel==null)return;panel.sprite=RoundedPanel();panel.type=Image.Type.Sliced;
+            var shadow=panel.gameObject.AddComponent<Shadow>();shadow.effectColor=new Color(0,0,0,.58f);shadow.effectDistance=new Vector2(0,-4);shadow.useGraphicAlpha=true;
+            var outline=panel.gameObject.GetComponent<Outline>()??panel.gameObject.AddComponent<Outline>();outline.effectColor=new Color(edge.r,edge.g,edge.b,.92f);outline.effectDistance=new Vector2(2.5f,-2.5f);outline.useGraphicAlpha=true;
         }
         public static void StyleButton(Button button,Color accent)
         {
@@ -145,11 +149,12 @@ namespace DragonTower
             portrait=null;roomIcon=null;egg=null;HatchButton=TowerButton=ContinueButton=RoomButton=SecondRoomButton=DragonButton=null;ChoiceButtons=null;
             ScreenName=name;root.gameObject.SetActive(true);root.SetAsLastSibling();
             body=Rect(name,root,0,425,480,850);
-            var baseLayer=body.gameObject.AddComponent<Image>();baseLayer.color=DragonTowerTheme.Night;baseLayer.raycastTarget=false;
-            var skin=Resources.Load<BattleSkin>("PixelBattleSkin");if(skin!=null&&skin.towerBackground!=null)
+            bool lobby=name=="드래곤 로비";var baseLayer=body.gameObject.AddComponent<Image>();baseLayer.color=lobby?Color.white:DragonTowerTheme.Night;baseLayer.raycastTarget=false;
+            if(lobby){baseLayer.sprite=Resources.Load<Sprite>("UI/dragon-nest-lobby");baseLayer.preserveAspect=false;}
+            var skin=Resources.Load<BattleSkin>("PixelBattleSkin");if(!lobby&&skin!=null&&skin.towerBackground!=null)
             {var scenic=Rect("Dim tower backdrop",body,0,425,480,850).gameObject.AddComponent<Image>();scenic.sprite=skin.towerBackground;scenic.preserveAspect=false;scenic.color=new Color(.23f,.29f,.38f,.28f);scenic.raycastTarget=false;}
-            Panel("Ornate content frame",body,0,454,454,674,new Color(.035f,.055f,.085f,.88f),DragonTowerTheme.GoldDim);
-            Panel("Title ribbon",body,0,94,420,54,new Color(.12f,.105f,.105f,.96f),DragonTowerTheme.Gold);
+            Panel("Ornate content frame",body,0,454,454,674,lobby?new Color(.055f,.035f,.045f,.55f):new Color(.035f,.055f,.085f,.88f),lobby?new Color(1,.58f,.25f,.72f):DragonTowerTheme.GoldDim);
+            Panel("Title ribbon",body,0,94,420,54,lobby?new Color(.20f,.08f,.07f,.86f):new Color(.12f,.105f,.105f,.96f),DragonTowerTheme.Gold);
             Label("D R A G O N   T O W E R",0,42,440,32,21,Color.white);
             Label(name,0,95,420,45,28,Gold);
             Label("◆",-216,94,24,30,12,DragonTowerTheme.Gold);Label("◆",216,94,24,30,12,DragonTowerTheme.Gold);
@@ -217,7 +222,7 @@ namespace DragonTower
             Screen("드래곤 로비");var d=Session.Selected;Portrait(d,324,1,ShowDragonSelect);
             Label(d.displayName,0,493,410,52,32,Gold);
             Label(d.element+"  ·  드래곤을 눌러 교체",0,541,410,34,17,Muted);
-            TowerButton=Button("타워 오르기",0,622,400,70,EnterTower);
+            TowerButton=Button("타워 오르기",0,622,400,70,EnterTower);TowerButton.targetGraphic.color=new Color(.74f,.27f,.12f,.98f);
             Button("드래곤 도감",-105,713,190,62,ShowCodex);Button("드래곤 상태",105,713,190,62,ShowStatus);
             if(Session.Profile.eggs>0)Button("보관 알 "+Session.Profile.eggs,135,159,155,40,ShowEgg);
             notice.text="도전 중 얻는 성장과 보상은 로비의 수집 정보와 분리됩니다.";
