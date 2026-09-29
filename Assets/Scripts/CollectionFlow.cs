@@ -34,7 +34,7 @@ namespace DragonTower
     public sealed class CollectionFlow : MonoBehaviour
     {
         BattleController controller;BattleView battleView;DragonData[] catalog;ContentDatabase database;
-        RectTransform root,body,portrait,roomIcon;
+        RectTransform root,body,portrait,roomIcon,startPrompt;
         Text notice;
         static Sprite[] rewardIcons;
         EggGraphic egg;
@@ -71,7 +71,7 @@ namespace DragonTower
                 if(!string.IsNullOrEmpty(isolated))key=isolated;
 #endif
                 Session=new CollectionSession(new ProfileStore(key),catalog);
-                if(Session.Selected==null)ShowEgg();else ShowLobby();
+                ShowTitleScreen();
                 if(Session.RecoveredBackup)notice.text="이전 정상 저장 데이터를 복구했습니다.";
             }
             catch(Exception e){Screen("저장 확인 필요");Label(e.Message,0,340,402,180,20,Color.white);notice.text="기존 저장을 보존했습니다. 오류를 확인한 뒤 다시 실행해 주세요.";Debug.LogException(e);}
@@ -146,19 +146,19 @@ namespace DragonTower
         {
             DragonTowerAudio.SetMusic(MusicMood.Lobby);
             if(body!=null){body.gameObject.SetActive(false);Destroy(body.gameObject);}
-            portrait=null;roomIcon=null;egg=null;HatchButton=TowerButton=ContinueButton=RoomButton=SecondRoomButton=DragonButton=null;ChoiceButtons=null;
+            portrait=null;roomIcon=null;startPrompt=null;egg=null;HatchButton=TowerButton=ContinueButton=RoomButton=SecondRoomButton=DragonButton=null;ChoiceButtons=null;
             ScreenName=name;root.gameObject.SetActive(true);root.SetAsLastSibling();
             body=Rect(name,root,0,425,480,850);
-            bool lobby=name=="드래곤 로비";var baseLayer=body.gameObject.AddComponent<Image>();baseLayer.color=lobby?Color.white:DragonTowerTheme.Night;baseLayer.raycastTarget=false;
-            if(lobby){baseLayer.sprite=Resources.Load<Sprite>("UI/dragon-nest-lobby");baseLayer.preserveAspect=false;}
-            var skin=Resources.Load<BattleSkin>("PixelBattleSkin");if(!lobby&&skin!=null&&skin.towerBackground!=null)
+            bool lobby=name=="드래곤 로비",title=name=="시작 화면",nestScene=lobby||title;var baseLayer=body.gameObject.AddComponent<Image>();baseLayer.color=nestScene?Color.white:DragonTowerTheme.Night;baseLayer.raycastTarget=false;
+            if(nestScene){baseLayer.sprite=Resources.Load<Sprite>("UI/dragon-nest-lobby");baseLayer.preserveAspect=false;}
+            var skin=Resources.Load<BattleSkin>("PixelBattleSkin");if(!nestScene&&skin!=null&&skin.towerBackground!=null)
             {var scenic=Rect("Dim tower backdrop",body,0,425,480,850).gameObject.AddComponent<Image>();scenic.sprite=skin.towerBackground;scenic.preserveAspect=false;scenic.color=new Color(.23f,.29f,.38f,.28f);scenic.raycastTarget=false;}
             if(lobby)
             {
                 var logo=Rect("유대의 탑 로고",body,0,70,430,124).gameObject.AddComponent<Image>();logo.sprite=Resources.Load<Sprite>("UI/bond-tower-logo");logo.preserveAspect=true;logo.raycastTarget=false;
                 Panel("Lobby badge",body,0,145,170,34,new Color(.12f,.055f,.035f,.78f),new Color(1,.65f,.30f,.78f));Label("드래곤 로비",0,145,160,30,18,Color.white);
             }
-            else
+            else if(!title)
             {
                 Panel("Ornate content frame",body,0,454,454,674,new Color(.035f,.055f,.085f,.88f),DragonTowerTheme.GoldDim);
                 Panel("Title ribbon",body,0,94,420,54,new Color(.12f,.105f,.105f,.96f),DragonTowerTheme.Gold);
@@ -167,22 +167,40 @@ namespace DragonTower
             }
             notice=Label("이 기기에 자동 저장됩니다",0,805,430,58,14,Muted);
         }
-        void Portrait(DragonData dragon,float y=348,int level=1,UnityAction onClick=null)
+        void Portrait(DragonData dragon,float y=348,int level=1,UnityAction onClick=null,bool framed=true)
         {
-            Panel("Dragon portrait frame",body,0,y,286,286,new Color(.025f,.04f,.065f,.72f),new Color(dragon.color.r,dragon.color.g,dragon.color.b,1));
-            portrait=Rect("Selected dragon",body,0,y,260,260);
+            if(framed)Panel("Dragon portrait frame",body,0,y,286,286,new Color(.025f,.04f,.065f,.72f),new Color(dragon.color.r,dragon.color.g,dragon.color.b,1));
+            portrait=Rect("Selected dragon",body,0,y,framed?260:310,framed?260:310);
             var activeSprite=dragon.BattleSpriteAtLevel(level);
             Graphic target;
             if(activeSprite!=null)
             {var image=portrait.gameObject.AddComponent<Image>();image.sprite=activeSprite;image.preserveAspect=true;image.raycastTarget=onClick!=null;target=image;}
             else
             {portrait.gameObject.AddComponent<CanvasRenderer>();var graphic=portrait.gameObject.AddComponent<DragonGraphic>();graphic.color=dragon.color;graphic.raycastTarget=onClick!=null;target=graphic;}
+            if(!framed){var shadow=portrait.gameObject.AddComponent<Shadow>();shadow.effectColor=new Color(0,0,0,.66f);shadow.effectDistance=new Vector2(0,-8);shadow.useGraphicAlpha=true;}
             if(onClick!=null)
             {
                 DragonButton=portrait.gameObject.AddComponent<Button>();DragonButton.targetGraphic=target;DragonButton.onClick.AddListener(onClick);
                 var nav=DragonButton.navigation;nav.mode=Navigation.Mode.None;DragonButton.navigation=nav;
             }
         }
+        public void ShowTitleScreen()
+        {
+            controller.EndBattle();Screen("시작 화면");
+            var logo=Rect("유대의 탑 타이틀",body,0,145,450,190).gameObject.AddComponent<Image>();logo.sprite=Resources.Load<Sprite>("UI/bond-tower-logo");logo.preserveAspect=true;logo.raycastTarget=false;
+            if(Session.Selected!=null)Portrait(Session.Selected,430,1,null,false);
+            else
+            {
+                var eggRect=Rect("타이틀 드래곤 알",body,0,430,210,240);eggRect.gameObject.AddComponent<CanvasRenderer>();egg=eggRect.gameObject.AddComponent<EggGraphic>();egg.raycastTarget=false;
+            }
+            Panel("Start prompt",body,0,690,350,66,new Color(.08f,.035f,.025f,.84f),new Color(1,.68f,.30f,.92f));
+            var prompt=Label("화면을 터치해 모험 시작",0,690,330,54,23,Color.white);startPrompt=prompt.rectTransform;
+            Label("당신의 드래곤과 함께 탑의 정상으로",0,752,410,34,16,new Color(1,.88f,.68f));
+            var tapRect=Rect("화면 전체 시작 버튼",body,0,425,480,850);var tapImage=tapRect.gameObject.AddComponent<Image>();tapImage.color=new Color(0,0,0,0);tapImage.raycastTarget=true;
+            var tap=tapRect.gameObject.AddComponent<Button>();tap.targetGraphic=tapImage;tap.onClick.AddListener(StartFromTitle);var nav=tap.navigation;nav.mode=Navigation.Mode.None;tap.navigation=nav;tap.gameObject.AddComponent<DragonTowerUiSound>();
+            notice.text="";
+        }
+        void StartFromTitle(){if(Session.Selected==null)ShowEgg();else ShowLobby();}
         public void ShowEgg()
         {
             if(hatchTime>=0)return;
@@ -226,7 +244,7 @@ namespace DragonTower
             if(hatchTime>=0)return;
             controller.EndBattle();towerRun=null;
             if(Session.Selected==null){ShowEgg();return;}
-            Screen("드래곤 로비");var d=Session.Selected;Portrait(d,324,1,ShowDragonSelect);
+            Screen("드래곤 로비");var d=Session.Selected;Portrait(d,324,1,ShowDragonSelect,false);
             Label(d.displayName,0,493,410,52,32,Gold);
             Label(d.element+"  ·  드래곤을 눌러 교체",0,541,410,34,17,Muted);
             TowerButton=Button("타워 오르기",0,622,400,70,EnterTower);TowerButton.targetGraphic.color=new Color(.74f,.27f,.12f,.98f);
@@ -771,6 +789,7 @@ namespace DragonTower
             if(root==null||!root.gameObject.activeInHierarchy)return;
             float dt=Mathf.Min(Time.deltaTime,.1f);clock+=dt;
             if(portrait!=null)portrait.localScale=new Vector3(1-Mathf.Sin(clock*3)*.015f,1+Mathf.Sin(clock*3)*.025f,1);
+            if(startPrompt!=null)startPrompt.localScale=Vector3.one*(1+Mathf.Sin(clock*4)*.035f);
             if(hatchTime<0)return;
             hatchTime+=dt;if(egg!=null)egg.rectTransform.localRotation=Quaternion.Euler(0,0,Mathf.Sin(hatchTime*38)*10);
             if(hatchTime>=.85f){hatchTime=-1;ShowHatched();}
