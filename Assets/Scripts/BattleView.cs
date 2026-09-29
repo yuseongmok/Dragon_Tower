@@ -22,6 +22,7 @@ namespace DragonTower
         Vector2 lastScreen;
         BattleAnimation motion;
         SkillEffectKind activeSkillEffect;
+        string activeSkillName;
         BattleResult lastAudioResult=BattleResult.Fighting;
         public Sprite CurrentEnemySprite => pixelEnemy==null ? null : pixelEnemy.sprite;
         static readonly Color Ink = new Color(.055f,.075f,.12f), Muted = new Color(.57f,.66f,.76f);
@@ -157,7 +158,7 @@ namespace DragonTower
         }
         public void SetDragonArt(DragonData dragon,int level=1)
         {
-            activeSkillEffect=dragon.skillEffect;lastAudioResult=BattleResult.Fighting;
+            activeSkillEffect=dragon.skillEffect;activeSkillName=dragon.skill==null?null:dragon.skill.displayName;lastAudioResult=BattleResult.Fighting;
             ApplyPixelSkin();
             var activeSprite=dragon.BattleSpriteAtLevel(level);
             if(pixelPlayer==null && activeSprite!=null)
@@ -186,11 +187,11 @@ namespace DragonTower
         public void SetSkillPresentation(SkillData skill)
         {
             if(skill==null)return;
-            activeSkillEffect=skill.effectKind;
+            activeSkillEffect=skill.effectKind;activeSkillName=skill.displayName;
             if(motion==null){motion=gameObject.AddComponent<BattleAnimation>();motion.Initialize(this);}
             motion.ResetBattle(skill);
         }
-        public void PlayCue(CombatCue cue,int damage) { DragonTowerAudio.PlayCombat(cue,activeSkillEffect);if(motion!=null) motion.Play(cue,damage); }
+        public void PlayCue(CombatCue cue,int damage) { DragonTowerAudio.PlayCombat(cue,activeSkillEffect,activeSkillName);if(motion!=null) motion.Play(cue,damage); }
         public void SetEncounter(BattleEnemyStats enemy,int floor,bool boss,Sprite enemySprite=null)
         {
             if(floorLabel==null||modeLabel==null||enemyName==null)
@@ -206,7 +207,7 @@ namespace DragonTower
                 throw new System.InvalidOperationException("Battle encounter labels are missing.");
             enemyName.text=enemy.displayName+"  /  "+ElementRules.DisplayName(enemy.elementType);floorLabel.text=floor.ToString("00");
             modeLabel.text="타워 "+floor+"층  /  "+(boss?"BOSS ROOM":"MONSTER ROOM");
-            DragonTowerAudio.SetMusic(boss?MusicMood.Boss:MusicMood.Battle);
+            DragonTowerAudio.SetBattleMusic(floor,boss);
             var skin=Resources.Load<BattleSkin>("PixelBattleSkin");
             if(arenaImage!=null&&skin!=null)arenaImage.sprite=floor>=21&&skin.forgeDepthsBackground!=null?skin.forgeDepthsBackground:floor>=11&&skin.floodedSewerBackground!=null?skin.floodedSewerBackground:skin.towerBackground;
             if(pixelEnemy!=null&&enemySprite!=null)pixelEnemy.sprite=enemySprite;

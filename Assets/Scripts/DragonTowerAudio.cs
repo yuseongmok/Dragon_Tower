@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -14,7 +15,8 @@ namespace DragonTower
         static DragonTowerAudio instance;
         AudioSource music,sfx;
         AudioListener fallbackListener;
-        AudioClip lobby,battle,boss,ui,attack,impact,skill,dodge,hurt,bossSkill,chest,victory,defeat,evolution;
+        AudioClip lobby,battle,boss,stage2,stage3,ancientBoss,krakenBoss,vulcanBoss,ui,attack,impact,skill,dodge,hurt,bossSkill,chest,victory,defeat,evolution,augment,purchase,levelUp;
+        readonly Dictionary<string,AudioClip> skillClips=new Dictionary<string,AudioClip>();
         MusicMood mood;float scanAt;
         public static DragonTowerAudio Instance
         {
@@ -50,8 +52,13 @@ namespace DragonTower
         public static void SetMusic(MusicMood value)
         {
             var a=Instance;if(a.mood==value&&a.music.isPlaying)return;a.mood=value;
-            a.music.clip=value==MusicMood.Boss?a.boss:value==MusicMood.Battle?a.battle:a.lobby;
-            a.music.pitch=1;a.music.Play();
+            a.SwitchMusic(value==MusicMood.Boss?a.boss:value==MusicMood.Battle?a.battle:a.lobby);
+        }
+        public static void SetBattleMusic(int floor,bool isBoss)
+        {
+            var a=Instance;a.mood=isBoss?MusicMood.Boss:MusicMood.Battle;
+            AudioClip clip=isBoss?(floor>=30?a.vulcanBoss:floor>=20?a.krakenBoss:a.ancientBoss):(floor>=21?a.stage3:floor>=11?a.stage2:a.battle);
+            a.SwitchMusic(clip);
         }
         public static void SetVolumes(float musicVolume,float sfxVolume)
         {
@@ -61,14 +68,17 @@ namespace DragonTower
         public static void PlayUi(){var a=Instance;a.UnlockWebAudio();a.One(a.ui,.72f,UnityEngine.Random.Range(.96f,1.05f));}
         public static void PlayChest(){Instance.One(Instance.chest,1);}
         public static void PlayEvolution(){Instance.One(Instance.evolution,1);}
+        public static void PlayAugment(){Instance.One(Instance.augment,1);}
+        public static void PlayPurchase(){Instance.One(Instance.purchase,1);}
+        public static void PlayLevelUp(){Instance.One(Instance.levelUp,1);}
         public static void PlayResult(bool won){var a=Instance;a.One(won?a.victory:a.defeat,1);}
-        public static void PlayCombat(CombatCue cue,SkillEffectKind element)
+        public static void PlayCombat(CombatCue cue,SkillEffectKind element,string skillName=null)
         {
             var a=Instance;
             switch(cue)
             {
                 case CombatCue.Attack:a.One(a.attack,.85f,UnityEngine.Random.Range(.96f,1.07f));break;
-                case CombatCue.Skill:a.One(a.skill,1,ElementPitch(element));break;
+                case CombatCue.Skill:a.One(a.SkillClip(skillName),1,a.HasSkillClip(skillName)?1:ElementPitch(element));break;
                 case CombatCue.SkillHit:a.One(a.impact,.7f,UnityEngine.Random.Range(.9f,1.1f));break;
                 case CombatCue.Dodge:case CombatCue.EnemyMiss:a.One(a.dodge,.8f);break;
                 case CombatCue.EnemyHit:a.One(a.hurt,.9f,UnityEngine.Random.Range(.94f,1.04f));break;
@@ -78,7 +88,12 @@ namespace DragonTower
         static float ElementPitch(SkillEffectKind element)
         {switch(element){case SkillEffectKind.Frost:return 1.2f;case SkillEffectKind.Wind:return 1.12f;case SkillEffectKind.Earth:return .78f;case SkillEffectKind.Lightning:return 1.35f;case SkillEffectKind.Water:return .92f;case SkillEffectKind.Dark:return .7f;case SkillEffectKind.Light:return 1.28f;default:return 1;}}
         void UnlockWebAudio(){if(music.clip!=null&&!music.isPlaying)music.Play();}
+        void SwitchMusic(AudioClip clip){if(clip==null||music.clip==clip&&music.isPlaying)return;music.clip=clip;music.pitch=1;music.Play();}
         void One(AudioClip clip,float volume,float pitch=1){if(clip==null)return;sfx.pitch=pitch;sfx.PlayOneShot(clip,volume);}
+        static string Key(string value)=>(value??string.Empty).Replace(" ",string.Empty).Replace("_",string.Empty).ToLowerInvariant();
+        bool HasSkillClip(string skillName)=>skillClips.ContainsKey(Key(skillName));
+        AudioClip SkillClip(string skillName){AudioClip clip;return skillClips.TryGetValue(Key(skillName),out clip)?clip:skill;}
+        static AudioClip External(string name,AudioClip fallback){var clip=Resources.Load<AudioClip>("Audio/"+name);return clip==null?fallback:clip;}
 
         void BuildClips()
         {
@@ -92,6 +107,11 @@ namespace DragonTower
             lobby=Music("Lobby music",new[]{220f,277.18f,329.63f,440f},84,false);
             battle=Music("Battle music",new[]{146.83f,174.61f,220f,261.63f},132,true);
             boss=Music("Boss music",new[]{110f,130.81f,164.81f,196f},154,true);
+            lobby=External("로비BGM",lobby);battle=External("스테이지1",battle);stage2=External("스테이지2",battle);stage3=External("스테이지3",battle);
+            ancientBoss=External("고대 문지기",boss);krakenBoss=External("크라켄 수호자",boss);vulcanBoss=External("용광로 수문장 불칸",boss);
+            ui=External("UI클릭",ui);attack=External("일반공격",attack);hurt=External("적공격",hurt);evolution=External("진화",evolution);
+            augment=External("증강선택",ui);purchase=External("상점구매,코인얻기",ui);levelUp=External("레벨업",evolution);
+            foreach(var clip in Resources.LoadAll<AudioClip>("Audio/Skill"))if(clip!=null)skillClips[Key(clip.name)]=clip;
         }
         enum Wave{Sine,Triangle,Saw,Square}
         static float Osc(Wave w,double phase)

@@ -392,7 +392,7 @@ namespace DragonTower
         void ShowGoldRoom()
         {
             Screen("골드방");Label("골드 더미를 터치하세요",0,185,420,42,24,Gold);
-            RoomButton=IconButton("G","골드 획득",new Color(.68f,.48f,.08f),()=>StartCoroutine(AnimateRoomAction(()=>{towerRun.AddGold(50);ShowRoomResult("50 골드를 획득했습니다.");})));
+            RoomButton=IconButton("G","골드 획득",new Color(.68f,.48f,.08f),()=>StartCoroutine(AnimateRoomAction(()=>{towerRun.AddGold(50);DragonTowerAudio.PlayPurchase();ShowRoomResult("50 골드를 획득했습니다.");})));
             notice.text="골드는 이번 도전의 상점에서 사용합니다.";
         }
         void ShowShopRoom()
@@ -410,6 +410,7 @@ namespace DragonTower
         void BuyItem(ItemData item)
         {
             if(item==null)return;if(!towerRun.SpendGold(item.price)){notice.text="골드가 부족합니다.";return;}
+            DragonTowerAudio.PlayPurchase();
             AcquireItem(item,()=>ShowRoomResult(item.displayName+"을(를) "+item.price+"G에 구매했습니다."));
         }
         void ShowNestRoom()
@@ -423,7 +424,7 @@ namespace DragonTower
         {
             if(RoomButton==null||!RoomButton.interactable)return;
             hatched=catalog[UnityEngine.Random.Range(0,catalog.Length)];
-            try{Session.RegisterHatchedDragon(hatched);if(egg!=null){egg.cracked=true;egg.SetVerticesDirty();}StartCoroutine(AnimateRoomAction(ShowNestResult));}
+            try{Session.RegisterHatchedDragon(hatched);DragonTowerAudio.PlayEvolution();if(egg!=null){egg.cracked=true;egg.SetVerticesDirty();}StartCoroutine(AnimateRoomAction(ShowNestResult));}
             catch(Exception e){notice.text="등록하지 못했습니다. 알은 유지됩니다.";Debug.LogException(e);}
         }
         void ShowNestResult()
@@ -508,13 +509,13 @@ namespace DragonTower
         }
         string StatusName(CombatStatusEffect effect)=>StatusDisplay(effect);
         void ChooseAugment(AugmentData augment,bool levelReward)
-        {try{towerRun.AddAugment(augment,levelReward);ShowRoomResult(augment.displayName+"을(를) 선택했습니다.");}catch(Exception e){notice.text=e.Message;}}
+        {try{towerRun.AddAugment(augment,levelReward);DragonTowerAudio.PlayAugment();ShowRoomResult(augment.displayName+"을(를) 선택했습니다.");}catch(Exception e){notice.text=e.Message;}}
         void ChooseAugment(string id,bool levelReward)
         {
-            towerRun.AddAugment(id,levelReward);ShowRoomResult("증강을 선택했습니다.");
+            towerRun.AddAugment(id,levelReward);DragonTowerAudio.PlayAugment();ShowRoomResult("증강을 선택했습니다.");
         }
         void ChooseSkill(SkillData skill,bool levelReward)
-        {try{towerRun.ReplaceSkill(skill,levelReward);ShowRoomResult(skill.displayName+" 스킬로 교체했습니다.");}catch(Exception e){notice.text=e.Message;}}
+        {try{towerRun.ReplaceSkill(skill,levelReward);DragonTowerAudio.PlayAugment();ShowRoomResult(skill.displayName+" 스킬로 교체했습니다.");}catch(Exception e){notice.text=e.Message;}}
         void ShowRoomResult(string result)
         {
             Screen("방 완료");Label(result,0,310,420,100,24,Color.white);
@@ -531,7 +532,7 @@ namespace DragonTower
             towerRun.RecordPassiveUse(controller.CurrentBattle.PassiveConsumed);
             if(controller.CurrentBattle.Result==BattleResult.Victory)
             {
-                int hp=controller.CurrentBattle.PlayerHP;towerRun.RecordBattleVictory(hp);controller.EndBattle();
+                int hp=controller.CurrentBattle.PlayerHP;towerRun.RecordBattleVictory(hp);DragonTowerAudio.PlayLevelUp();controller.EndBattle();
                 if(TryShowMonsterDrop())return;ContinueAfterBattleRewards();return;
             }
             int floor=towerRun.Floor;towerRun.End();controller.EndBattle();
