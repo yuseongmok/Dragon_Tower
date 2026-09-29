@@ -65,6 +65,14 @@ namespace DragonTower
             var a=Instance;a.music.volume=Mathf.Clamp01(musicVolume);a.sfx.volume=Mathf.Clamp01(sfxVolume);
             PlayerPrefs.SetFloat("DragonTower.MusicVolume",a.music.volume);PlayerPrefs.SetFloat("DragonTower.SfxVolume",a.sfx.volume);PlayerPrefs.Save();
         }
+        public static void GetVolumes(out float musicVolume,out float sfxVolume)
+        {var a=Instance;musicVolume=a.music.volume;sfxVolume=a.sfx.volume;}
+        public static void SetPaused(bool paused)
+        {
+            var a=Instance;a.sfx.ignoreListenerPause=true;
+            if(paused){a.music.Pause();a.sfx.Stop();}
+            else if(a.music.clip!=null)a.music.UnPause();
+        }
         public static void PlayUi(){var a=Instance;a.UnlockWebAudio();a.One(a.ui,.72f,UnityEngine.Random.Range(.96f,1.05f));}
         public static void PlayChest(){Instance.One(Instance.chest,1);}
         public static void PlayEvolution(){Instance.One(Instance.evolution,1);}
