@@ -149,7 +149,7 @@ namespace DragonTower
             portrait=null;roomIcon=null;startPrompt=null;egg=null;HatchButton=TowerButton=ContinueButton=RoomButton=SecondRoomButton=DragonButton=null;ChoiceButtons=null;
             ScreenName=name;root.gameObject.SetActive(true);root.SetAsLastSibling();
             body=Rect(name,root,0,425,480,850);
-            bool lobby=name=="드래곤 로비",title=name=="시작 화면",nestScene=lobby||title;var baseLayer=body.gameObject.AddComponent<Image>();baseLayer.color=nestScene?Color.white:DragonTowerTheme.Night;baseLayer.raycastTarget=false;
+            bool lobby=name=="드래곤 로비",title=name=="시작 화면",mapTransition=name=="탑 이동",nestScene=lobby||title;var baseLayer=body.gameObject.AddComponent<Image>();baseLayer.color=nestScene?Color.white:DragonTowerTheme.Night;baseLayer.raycastTarget=false;
             if(nestScene){baseLayer.sprite=Resources.Load<Sprite>("UI/dragon-nest-lobby");baseLayer.preserveAspect=false;}
             var skin=Resources.Load<BattleSkin>("PixelBattleSkin");if(!nestScene&&skin!=null&&skin.towerBackground!=null)
             {var scenic=Rect("Dim tower backdrop",body,0,425,480,850).gameObject.AddComponent<Image>();scenic.sprite=skin.towerBackground;scenic.preserveAspect=false;scenic.color=new Color(.23f,.29f,.38f,.28f);scenic.raycastTarget=false;}
@@ -158,7 +158,7 @@ namespace DragonTower
                 var logo=Rect("유대의 탑 로고",body,0,70,430,124).gameObject.AddComponent<Image>();logo.sprite=Resources.Load<Sprite>("UI/bond-tower-logo");logo.preserveAspect=true;logo.raycastTarget=false;
                 Panel("Lobby badge",body,0,145,170,34,new Color(.12f,.055f,.035f,.78f),new Color(1,.65f,.30f,.78f));Label("드래곤 로비",0,145,160,30,18,Color.white);
             }
-            else if(!title)
+            else if(!title&&!mapTransition)
             {
                 Panel("Ornate content frame",body,0,454,454,674,new Color(.035f,.055f,.085f,.88f),DragonTowerTheme.GoldDim);
                 Panel("Title ribbon",body,0,94,420,54,new Color(.12f,.105f,.105f,.96f),DragonTowerTheme.Gold);
@@ -565,7 +565,45 @@ namespace DragonTower
         }
         void AdvanceFloor()
         {
-            towerRun.AdvanceFloor(UnityEngine.Random.Range(0,100),UnityEngine.Random.Range(0,100));ShowTowerChoices();
+            if(towerRun==null)return;int clearedFloor=towerRun.Floor;
+            towerRun.AdvanceFloor(UnityEngine.Random.Range(0,100),UnityEngine.Random.Range(0,100));
+            StartCoroutine(ShowFloorTransition(clearedFloor,towerRun.Floor));
+        }
+        static string TowerAreaName(int floor)
+        {
+            if(floor<=10)return "지하 감옥";if(floor<=20)return "버려진 고대 수로";if(floor<=30)return "잊혀진 용광로 공방";
+            if(floor<=40)return "휘몰아치는 천공 회랑";if(floor<=50)return "뇌운의 피뢰탑";if(floor<=60)return "영구동토의 수정 궁전";
+            if(floor<=70)return "잊혀진 대도서관";if(floor<=80)return "영겁의 일광 성소";if(floor<=90)return "찢겨진 공허 회랑";
+            if(floor<100)return "왕좌로 가는 길";return "태초의 용좌";
+        }
+        IEnumerator ShowFloorTransition(int clearedFloor,int targetFloor)
+        {
+            Screen("탑 이동");notice.text="다음 목적지를 향해 올라갑니다.";
+            var viewport=Rect("Tower map viewport",body,0,425,480,850);viewport.gameObject.AddComponent<RectMask2D>();
+            var content=Rect("Scrolling tower map",viewport,0,425,480,850);
+            var map=Rect("유대의 탑 전체 지도",content,0,425,620,1250).gameObject.AddComponent<Image>();map.sprite=Resources.Load<Sprite>("UI/bond-tower-world-map");map.preserveAspect=false;map.raycastTarget=false;
+            var shade=Rect("Map shade",content,0,425,480,1150).gameObject.AddComponent<Image>();shade.color=new Color(.015f,.025f,.055f,.16f);shade.raycastTarget=false;
+            var route=Rect("Route",content,0,420,8,118).gameObject.AddComponent<Image>();route.color=new Color(1,.78f,.32f,.9f);route.raycastTarget=false;
+            var current=Panel("Cleared floor",content,0,492,150,58,new Color(.055f,.08f,.12f,.96f),new Color(.55f,.66f,.75f));
+            CardText(current.transform,"Cleared label","완료  "+clearedFloor+"층",0,29,138,48,19,new Color(.76f,.82f,.88f),TextAnchor.MiddleCenter);
+            var target=Panel("Target floor",content,0,340,176,64,new Color(.23f,.12f,.035f,.98f),DragonTowerTheme.Gold);
+            CardText(target.transform,"Target label","다음  "+targetFloor+"층",0,32,164,52,22,new Color(1,.85f,.48f),TextAnchor.MiddleCenter);
+            var header=Panel("Map header",body,0,76,430,92,new Color(.025f,.04f,.075f,.94f),DragonTowerTheme.Gold);
+            CardText(header.transform,"Area name",TowerAreaName(targetFloor),0,30,400,36,24,Color.white,TextAnchor.MiddleCenter);
+            CardText(header.transform,"Floor progress",clearedFloor+"F   →   "+targetFloor+"F",0,66,400,25,16,new Color(1,.77f,.39f),TextAnchor.MiddleCenter);
+            content.anchoredPosition+=new Vector2(0,4);Vector2 start=content.anchoredPosition,end=start+new Vector2(0,-152);
+            float elapsed=0,duration=1.45f;
+            while(elapsed<duration)
+            {
+                elapsed+=Time.unscaledDeltaTime;float t=Mathf.Clamp01(elapsed/duration);t=t*t*(3-2*t);
+                content.anchoredPosition=Vector2.LerpUnclamped(start,end,t);yield return null;
+            }
+            DragonTowerAudio.PlayUi();float pulse=0;
+            while(pulse<.55f)
+            {
+                pulse+=Time.unscaledDeltaTime;float scale=1+Mathf.Sin(pulse*18)*.08f;target.rectTransform.localScale=Vector3.one*scale;yield return null;
+            }
+            target.rectTransform.localScale=Vector3.one;yield return new WaitForSecondsRealtime(.25f);ShowTowerChoices();
         }
         public void ResolveBattleResult()
         {
