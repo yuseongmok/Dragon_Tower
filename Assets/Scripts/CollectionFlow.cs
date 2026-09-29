@@ -612,10 +612,11 @@ namespace DragonTower
             {
                 var d=catalog[i];bool owns=Session.Owns(d.StableId);
                 int local=i-start,column=local%2,row=local/2;float x=column==0?-106:106,y=215+row*100;
-                var b=Button(owns?d.displayName+"\n"+d.element:"???\n미발견",x,y,198,86,()=>ShowCodexEntry(d));
+                var b=Button(owns?d.displayName+"\n"+ElementRules.DisplayName(d.elementType):"???\n미발견",x,y,198,86,()=>ShowCodexEntry(d));
                 StyleCard(b,owns?new Color(.09f,.16f,.23f,.98f):new Color(.035f,.045f,.065f,.98f),owns?new Color(d.color.r,d.color.g,d.color.b,1):new Color(.22f,.24f,.28f));
-                var text=b.GetComponentInChildren<Text>();text.fontSize=14;text.rectTransform.anchoredPosition=new Vector2(35,-43);text.rectTransform.sizeDelta=new Vector2(112,76);
+                var text=b.GetComponentInChildren<Text>();text.fontSize=14;text.rectTransform.anchoredPosition=new Vector2(37,-43);text.rectTransform.sizeDelta=new Vector2(108,76);
                 DragonArtwork(b.transform,d,0,-57,43,68,68,!owns);
+                if(owns)ElementBadge(b.transform,d.elementType,78,18,24);
             }
             if(codexPage>0)Button("◀",-105,650,90,46,()=>{codexPage--;ShowCodex();});
             Label((codexPage+1)+" / "+Math.Max(1,(catalog.Length+7)/8),0,650,100,42,16,Muted);
@@ -626,6 +627,7 @@ namespace DragonTower
         {
             bool owns=Session.Owns(dragon.StableId);Screen("드래곤 도감");
             Label(owns?dragon.displayName:"미발견 드래곤",0,142,420,40,25,owns?Gold:Muted);
+            if(owns)ElementBadge(body,dragon.elementType,-150,142,30);
             for(int stage=0;stage<3;stage++)
             {
                 float x=(stage-1)*145;var card=Rect("Evolution form "+stage,body,x,306,136,190);
@@ -637,16 +639,11 @@ namespace DragonTower
             }
             if(owns)
             {
-                var skill=dragon.skill;
-                string hit=skill.hitCount>1?" × "+skill.hitCount:"";
-                string status=SkillStatus(skill);
                 string description=string.IsNullOrWhiteSpace(dragon.description)?"함께 타워를 오르는 "+dragon.element+" 속성 드래곤입니다.":dragon.description;
-                string skillDescription=string.IsNullOrWhiteSpace(skill.description)?"전투 중 스킬 버튼으로 사용하는 고유 기술":skill.description;
-                Label(dragon.element+" 속성  ·  HP "+dragon.maxHP+"  ·  공격력 "+dragon.attackDamage+"\n"+
+                Label(ElementRules.DisplayName(dragon.elementType)+" 속성  ·  HP "+dragon.maxHP+"  ·  공격력 "+dragon.attackDamage+"\n"+
                     "패시브 · "+dragon.passiveName+" — "+dragon.passiveDescription+"\n"+
-                    skill.displayName+"  ·  피해 "+skill.damage+hit+"  ·  쿨타임 "+skill.cooldown+"초"+status+"\n"+
-                    description+"\n"+skillDescription,0,550,430,190,15,Color.white);
-                notice.text="도감은 관찰용입니다. 플레이 드래곤은 로비의 드래곤을 눌러 교체합니다.";
+                    "\n소개\n"+description,0,550,430,190,15,Color.white);
+                notice.text="소개 문구는 DragonData의 '도감 소개 코멘트'에서 직접 수정할 수 있습니다.";
             }
             else
             {
@@ -673,6 +670,12 @@ namespace DragonTower
             var image=art.gameObject.AddComponent<Image>();image.sprite=sprite;image.preserveAspect=true;image.raycastTarget=false;
             image.color=silhouette?new Color(0,0,0,1):Color.white;
             return image;
+        }
+        Image ElementBadge(Transform parent,ElementType element,float x,float y,float size)
+        {
+            var sprite=ElementIconLibrary.Get(element);if(sprite==null)return null;
+            var rect=Rect("Element symbol",parent,x,y,size,size);var image=rect.gameObject.AddComponent<Image>();
+            image.sprite=sprite;image.preserveAspect=true;image.raycastTarget=false;return image;
         }
         public void ShowDragonSelect()
         {

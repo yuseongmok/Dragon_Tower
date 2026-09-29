@@ -15,7 +15,11 @@ namespace DragonTower
         public string speciesId;
         public string StableId => string.IsNullOrEmpty(speciesId) ? name : speciesId;
         public string displayName = "Ember";
-        [TextArea] public string description;
+        [Header("Codex")]
+        [InspectorName("도감 소개 코멘트")]
+        [TextArea(3,6)]
+        [Tooltip("드래곤 도감에 표시할 짧은 소개입니다. 스킬 설명과 별도로 자유롭게 작성할 수 있습니다.")]
+        public string description;
         public ContentRarity rarity;
         public string element = "FIRE";
         [Tooltip("Combat element used for strengths and weaknesses. Independent of the display label.")]

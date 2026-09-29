@@ -8,7 +8,7 @@ namespace DragonTower
         public Font font;
         public RectTransform frame;
         public Text playerName, playerHP, enemyHP, enemyName, enemyStatus, floorLabel, modeLabel, warning, message, skillLabel, attackLabel, dodgeLabel, itemLabel1, itemLabel2, resultTitle, resultDetail;
-        public Image playerFill, enemyFill, windupFill;
+        public Image playerFill, enemyFill, windupFill, playerElementIcon, enemyElementIcon;
         public DragonGraphic playerArt, enemyArt;
         public Button attackButton, skillButton, dodgeButton, itemButton1, itemButton2, restartButton;
         public GameObject resultPanel;
@@ -73,7 +73,8 @@ namespace DragonTower
             floorLabel=Label("01",frame,145,33,45,32,22,C(.96f,.75f,.40f));
             modeLabel=Label("타워 1층  /  MONSTER ROOM",frame,0,66,400,24,12,Muted);
             var enemyCard=Panel("Enemy card",frame,0,129,440,80,new Color(.045f,.065f,.10f,.94f));DragonTowerTheme.Frame(enemyCard,DragonTowerTheme.GoldDim);
-            enemyName=Label("바위 슬라임",frame,-60,111,280,28,20,Color.white,TextAnchor.MiddleLeft);
+            enemyElementIcon=ElementIcon(frame,-198,111,28);
+            enemyName=Label("바위 슬라임",frame,-45,111,245,28,20,Color.white,TextAnchor.MiddleLeft);
             enemyHP=Label("240 / 240",frame,140,111,120,26,16,Muted,TextAnchor.MiddleRight);
             enemyFill=Bar("Enemy HP",146,C(.89f,.42f,.47f));
             for(int i=0;i<7;i++) Panel("Tower step",frame,0,208+i*28,330-i*22,1,C(.12f,.17f,.24f));
@@ -83,7 +84,8 @@ namespace DragonTower
             windupFill=Bar("Attack timing",414,C(1,.65f,.30f));
             var p=Rect("Player Dragon",frame,-26,532,210,210);playerArt=p.gameObject.AddComponent<DragonGraphic>();playerArt.raycastTarget=false;
             message=Label("",frame,0,634,440,30,16,C(.7f,.82f,.9f));
-            playerName=Label("",frame,-60,674,280,28,19,Color.white,TextAnchor.MiddleLeft);
+            playerElementIcon=ElementIcon(frame,-198,674,28);
+            playerName=Label("",frame,-45,674,245,28,19,Color.white,TextAnchor.MiddleLeft);
             playerHP=Label("",frame,140,674,120,28,16,Muted,TextAnchor.MiddleRight);
             playerFill=Bar("Player HP",700,C(.36f,.83f,.69f));
             itemButton1=MakeButton("아이템 1 · 빈 슬롯",frame,-108,727,204,38,C(.20f,.25f,.31f),out itemLabel1);
@@ -103,7 +105,25 @@ namespace DragonTower
             resultPanel.SetActive(false);
             Fit();
         }
-        void Awake() { EnsureItemControls();ApplyPixelSkin(); }
+        void Awake() { EnsureItemControls();EnsureElementIcons();ApplyPixelSkin(); }
+        Image ElementIcon(Transform parent,float x,float y,float size)
+        {
+            var rect=Rect("Element symbol",parent,x,y,size,size);
+            var image=rect.gameObject.AddComponent<Image>();image.preserveAspect=true;image.raycastTarget=false;
+            return image;
+        }
+        void EnsureElementIcons()
+        {
+            if(frame==null)return;
+            if(enemyElementIcon==null)enemyElementIcon=ElementIcon(frame,-198,111,28);
+            if(playerElementIcon==null)playerElementIcon=ElementIcon(frame,-198,674,28);
+            if(enemyName!=null){enemyName.rectTransform.anchoredPosition=new Vector2(-45,-111);enemyName.rectTransform.sizeDelta=new Vector2(245,28);}
+            if(playerName!=null){playerName.rectTransform.anchoredPosition=new Vector2(-45,-674);playerName.rectTransform.sizeDelta=new Vector2(245,28);}
+        }
+        void SetElementIcon(Image image,ElementType element)
+        {
+            if(image==null)return;image.sprite=ElementIconLibrary.Get(element);image.gameObject.SetActive(image.sprite!=null);
+        }
         void EnsureItemControls()
         {
             if(frame==null||itemButton1!=null)return;
@@ -158,6 +178,7 @@ namespace DragonTower
         }
         public void SetDragonArt(DragonData dragon,int level=1)
         {
+            EnsureElementIcons();SetElementIcon(playerElementIcon,dragon.elementType);
             activeSkillEffect=dragon.skillEffect;activeSkillName=dragon.skill==null?null:dragon.skill.displayName;lastAudioResult=BattleResult.Fighting;
             ApplyPixelSkin();
             var activeSprite=dragon.BattleSpriteAtLevel(level);
@@ -194,6 +215,7 @@ namespace DragonTower
         public void PlayCue(CombatCue cue,int damage) { DragonTowerAudio.PlayCombat(cue,activeSkillEffect,activeSkillName);if(motion!=null) motion.Play(cue,damage); }
         public void SetEncounter(BattleEnemyStats enemy,int floor,bool boss,Sprite enemySprite=null)
         {
+            EnsureElementIcons();SetElementIcon(enemyElementIcon,enemy.elementType);
             if(floorLabel==null||modeLabel==null||enemyName==null)
             {
                 foreach(var label in frame.GetComponentsInChildren<Text>(true))
