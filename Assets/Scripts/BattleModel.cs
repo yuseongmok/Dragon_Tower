@@ -86,7 +86,7 @@ namespace DragonTower
             bossPattern=EnemyBossPattern.EarthShatter,patternEveryAttacks=4,patternIntervalMultiplier=1.3f,patternDamageMultiplier=1.6f};
     }
     public enum BattleResult { Fighting, Victory, Defeat }
-    public enum CombatCue { Attack, Skill, SkillHit, Dodge, EnemyHit, EnemyMiss }
+    public enum CombatCue { Attack, Skill, SkillHit, Dodge, EnemyHit, EnemyMiss, BossSkill }
     // Pure combat rules: no scene dependencies; can be tested without rendering.
     public sealed class BattleModel
     {
@@ -217,6 +217,7 @@ namespace DragonTower
             int every=Math.Max(2,Enemy.patternEveryAttacks);
             if(Enemy.bossPattern!=EnemyBossPattern.None&&(enemyAttackCount+1)%every==0)
             {
+                Cue?.Invoke(CombatCue.BossSkill,0);
                 interval=Math.Max(.45f,Enemy.interval*slow*Math.Max(.35f,Enemy.patternIntervalMultiplier));
                 nextEnemyDamageMultiplier=Math.Max(.25f,Enemy.patternDamageMultiplier);
                 if(Enemy.bossPattern==EnemyBossPattern.EarthShatter)

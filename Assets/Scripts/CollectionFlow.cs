@@ -89,6 +89,7 @@ namespace DragonTower
         {
             var r=Rect(title,body,x,y,w,h);var image=r.gameObject.AddComponent<Image>();image.color=DragonTowerTheme.SlateLight;
             var b=r.gameObject.AddComponent<Button>();b.targetGraphic=image;b.onClick.AddListener(action);var nav=b.navigation;nav.mode=Navigation.Mode.None;b.navigation=nav;
+            b.gameObject.AddComponent<DragonTowerUiSound>();
             var text=Rect("Label",r,0,h/2,w-18,h-12).gameObject.AddComponent<Text>();text.font=battleView.font;text.text=title;text.fontSize=20;text.color=Color.white;text.alignment=TextAnchor.MiddleCenter;text.raycastTarget=false;
             DragonTowerTheme.StyleButton(b,DragonTowerTheme.Gold);return b;
         }
@@ -139,6 +140,7 @@ namespace DragonTower
         void StyleCard(Button button,Color fill,Color accent){if(button==null)return;button.targetGraphic.color=fill;DragonTowerTheme.StyleButton(button,accent);}
         void Screen(string name)
         {
+            DragonTowerAudio.SetMusic(MusicMood.Lobby);
             if(body!=null){body.gameObject.SetActive(false);Destroy(body.gameObject);}
             portrait=null;roomIcon=null;egg=null;HatchButton=TowerButton=ContinueButton=RoomButton=SecondRoomButton=DragonButton=null;ChoiceButtons=null;
             ScreenName=name;root.gameObject.SetActive(true);root.SetAsLastSibling();
@@ -192,6 +194,7 @@ namespace DragonTower
                 // Commit the outcome before animation so closing/reloading cannot reroll it.
                 hatched=Session.Hatch(UnityEngine.Random.Range(0,catalog.Length));
                 if(hatched==null)return;
+                DragonTowerAudio.PlayEvolution();
                 hatchTime=0;if(HatchButton!=null)HatchButton.interactable=false;
                 if(egg!=null){egg.cracked=true;egg.SetVerticesDirty();}
                 notice.text="새 친구가 깨어나고 있어요…";
@@ -326,7 +329,7 @@ namespace DragonTower
         void ShowItemRoom()
         {
             Screen("아이템방");Label("상자를 터치하세요",0,190,420,46,25,Gold);
-            RoomButton=IconButton("▣","상자 열기",new Color(.38f,.24f,.12f),()=>StartCoroutine(AnimateRoomAction(ShowItemChoices)));
+            RoomButton=IconButton("▣","상자 열기",new Color(.38f,.24f,.12f),()=>{DragonTowerAudio.PlayChest();StartCoroutine(AnimateRoomAction(ShowItemChoices));});
             notice.text="세 아이템 중 하나만 가져갈 수 있습니다.";
         }
         void ShowItemChoices()
@@ -557,6 +560,7 @@ namespace DragonTower
         void ShowEvolutionCutscene()
         {
             int stage=towerRun.PendingEvolutionStage;var dragon=Session.Selected;
+            DragonTowerAudio.PlayEvolution();
             Screen(stage==1?"중간 진화":"최종 진화");
             Label("LEVEL "+towerRun.Level,0,148,420,38,19,Muted);
             Label(dragon.NameForStage(stage-1)+"  →  "+dragon.NameForStage(stage),0,202,440,44,23,Gold);
