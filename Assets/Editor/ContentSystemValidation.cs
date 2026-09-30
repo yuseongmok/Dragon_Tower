@@ -56,11 +56,12 @@ namespace DragonTower.Editor
             var maxItem=AssetDatabase.LoadAssetAtPath<ItemData>("Assets/Data/Items/item_hardened_armor.asset");run.AddItem(maxItem);Check(run.MaxHP==120&&run.CurrentHP==120,"Equipped maximum HP item updates the run");
             var attackItem=AssetDatabase.LoadAssetAtPath<ItemData>("Assets/Data/Items/item_hardened_claw.asset");run.AddItem(attackItem);
             var stats=run.BuildBattleStats(database.dragons[0].Snapshot());Check(stats.attackDamage==(int)Math.Round(database.dragons[0].attackDamage*1.1f),"Equipped attack bonus reaches battle stats");
-            var potion=AssetDatabase.LoadAssetAtPath<ItemData>("Assets/Data/Items/item_healing_potion.asset");Check(!run.CanAddItem(potion),"Two different item types fill both inventory slots");
-            run.AddItem(potion,0);Check(run.Items.Count==2&&run.ItemAt(0)==potion,"A new item can replace either occupied slot");
-            run.AddItem(potion);Check(run.ItemCountAt(0)==2,"Duplicate items stack in one of the two slots");
+            var potion=AssetDatabase.LoadAssetAtPath<ItemData>("Assets/Data/Items/item_healing_potion.asset");Check(run.CanAddItem(potion),"A third different item fits the expanded inventory");
+            run.AddItem(potion);Check(run.Items.Count==3&&run.ItemAt(2)==potion,"Three independent item slots are available");
+            var shardForCapacity=AssetDatabase.LoadAssetAtPath<ItemData>("Assets/Data/Items/item_time_shard.asset");Check(!run.CanAddItem(shardForCapacity),"Three different item types fill all inventory slots");
+            run.AddItem(potion);Check(run.ItemCountAt(2)==2,"Duplicate items stack in one of the three slots");
             var itemBattle=new BattleModel(run.BuildBattleStats(database.dragons[0].Snapshot()));itemBattle.Tick(2.41f);int wounded=itemBattle.PlayerHP;
-            Check(itemBattle.UseItem(potion)&&itemBattle.PlayerHP>wounded,"A healing consumable can be used during battle");run.ConsumeItem(0);Check(run.ItemCountAt(0)==1,"Using a consumable removes one stack");
+            Check(itemBattle.UseItem(potion)&&itemBattle.PlayerHP>wounded,"A healing consumable can be used during battle");run.ConsumeItem(2);Check(run.ItemCountAt(2)==1,"Using the third-slot consumable removes one stack");
             var shard=AssetDatabase.LoadAssetAtPath<ItemData>("Assets/Data/Items/item_time_shard.asset");var invulnerableBattle=new BattleModel(database.dragons[0].Snapshot());invulnerableBattle.Tick(2f);
             Check(invulnerableBattle.UseItem(shard),"A timed combat consumable activates");invulnerableBattle.Tick(.5f);Check(invulnerableBattle.PlayerHP==database.dragons[0].maxHP,"Time shard blocks an enemy strike during its one-second window");
             Check(ContentValidation.Report()=="문제 없음","Content identifiers and required fields are valid");

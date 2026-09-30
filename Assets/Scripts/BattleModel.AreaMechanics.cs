@@ -164,7 +164,7 @@ namespace DragonTower
         }
         void ResolvePlayerSurvival()
         {
-            if(Dragon.passiveMechanic==DragonPassiveMechanic.Phoenix&&Dragon.passiveAvailable&&!PassiveConsumed&&PlayerHP<=Dragon.maxHP*.2f)
+            if(Dragon.passiveMechanic==DragonPassiveMechanic.Phoenix&&Dragon.passiveAvailable&&!PassiveConsumed&&PlayerHP<=Dragon.maxHP*Passive(.2f))
             {PlayerHP=Dragon.maxHP;PassiveConsumed=true;Feedback?.Invoke("불사조! 체력을 완전히 회복했습니다");}
             if(PlayerHP>0)return;
             var feather=ItemRule(ItemMechanic.PhoenixFeather);

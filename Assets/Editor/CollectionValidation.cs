@@ -80,9 +80,13 @@ namespace DragonTower.Editor
             var evolution=new TowerRun(100,0,50);
             for(int i=1;i<10;i++)evolution.RecordBattleVictory(100);
             Check(evolution.Level==10&&evolution.PendingEvolutionStage==1,"Level ten queues intermediate evolution");
+            var middle=evolution.BuildBattleStats(catalog[0].Snapshot(evolution.Level));
+            Check(evolution.MaxHP==120&&middle.attackDamage==(int)Math.Round(catalog[0].attackDamage*1.18f)&&middle.passiveStage==1,"Intermediate evolution raises HP, attack, and passive power");
             evolution.ConsumeEvolution();Check(evolution.PendingEvolutionStage==0,"Intermediate evolution is consumed once");
             for(int i=10;i<20;i++)evolution.RecordBattleVictory(100);
             Check(evolution.Level==20&&evolution.PendingEvolutionStage==2,"Level twenty queues final evolution");
+            var final=evolution.BuildBattleStats(catalog[0].Snapshot(evolution.Level));
+            Check(evolution.MaxHP==145&&final.attackDamage==(int)Math.Round(catalog[0].attackDamage*1.4f)&&final.passiveStage==2,"Final evolution raises HP, attack, and passive power again");
             evolution.ConsumeEvolution();Check(evolution.PendingEvolutionStage==0,"Final evolution is consumed once");
             growth.Heal(20);Check(growth.CurrentHP==62,"Healing changes run HP only when requested");
             growth.AddGold(50);Check(growth.SpendGold(30)&&growth.Gold==20,"Gold can pay shop cost");

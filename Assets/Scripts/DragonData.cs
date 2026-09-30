@@ -87,7 +87,7 @@ namespace DragonTower
             displayName=NameAtLevel(level), element=element, elementType=elementType, maxHP=maxHP, attackDamage=attackDamage, skillEffect=skillEffect,
             attackCooldown=.3f,dodgeCooldown=1.4f,dodgeDuration=.42f,
             skill=skill.Snapshot(),passiveName=passiveName,passiveDescription=passiveDescription,
-            passiveMechanic=passiveMechanic,alternateSkillElement=alternateSkillElement
+            passiveMechanic=passiveMechanic,alternateSkillElement=alternateSkillElement,passiveStage=EvolutionStage(level)
         };
         public bool CanLearnSkill(ElementType candidate) => candidate==elementType||candidate==alternateSkillElement&&alternateSkillElement!=ElementType.Neutral;
     }

@@ -127,6 +127,9 @@ namespace DragonTower.Editor
             b.Tick(.21f);Check(b.PlayerHP==100,"slow does not trigger original strike");b.Tick(.12f);Check(b.PlayerHP==90,"slowed strike hits exactly once");
             b=Make(21);int attacks=0,statusHits=0;b.Cue+=(cue,amount)=>{if(cue==CombatCue.EnemyHit)attacks++;if(cue==CombatCue.PlayerStatusHit)statusHits++;};b.Tick(5.2f);
             Check(attacks==1&&statusHits==4,"burn ticks do not animate enemy attacks");
+            b=Make(1,roll:0);b.Dragon.passiveMechanic=DragonPassiveMechanic.FlameBreath;b.Dragon.passiveStage=0;b.Attack();double babyBurn=b.EnemyBurnRemaining;
+            var evolved=Make(1,roll:0);evolved.Dragon.passiveMechanic=DragonPassiveMechanic.FlameBreath;evolved.Dragon.passiveStage=2;evolved.Attack();
+            Check(babyBurn>=2.99&&evolved.EnemyBurnRemaining>=4.49,"evolution strengthens the dragon passive");
             return checks;
         }
     }

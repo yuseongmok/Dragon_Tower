@@ -14,7 +14,7 @@ namespace DragonTower
             Application.targetFrameRate=60;
             Flow=gameObject.AddComponent<CollectionFlow>();
             view.Bind(()=>{if(battle!=null)battle.Attack();},()=>{if(battle!=null)battle.Skill();},()=>{if(battle!=null)battle.Dodge();},()=>Flow.ResolveBattleResult());
-            view.BindItems(()=>UseItem(0),()=>UseItem(1));
+            view.BindItems(()=>UseItem(0),()=>UseItem(1),()=>UseItem(2));
             Flow.Initialize(this,view,dragons);
         }
         public void EndBattle() { battle=null; }

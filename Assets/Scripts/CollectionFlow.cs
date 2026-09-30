@@ -400,11 +400,11 @@ namespace DragonTower
             for(int i=0;i<towerRun.ItemSlots.Count;i++)
             {
                 int slot=i;var owned=towerRun.ItemSlots[i];
-                ChoiceButtons[i]=Button((i+1)+"번 교체 · "+owned.DisplayName+(owned.Count>1?" ×"+owned.Count:"")+"\n"+ItemCardSummary(owned.Item)+"\n→ "+item.displayName,0,355+i*120,400,102,()=>{towerRun.AddItem(item,slot);complete();});
-                ChoiceButtons[i].GetComponentInChildren<Text>().fontSize=16;
+                ChoiceButtons[i]=Button((i+1)+"번 교체 · "+owned.DisplayName+(owned.Count>1?" ×"+owned.Count:"")+"\n"+ItemCardSummary(owned.Item)+"  →  "+item.displayName,0,330+i*92,400,78,()=>{towerRun.AddItem(item,slot);complete();});
+                ChoiceButtons[i].GetComponentInChildren<Text>().fontSize=15;
             }
             SecondRoomButton=Button("교체하지 않고 나간다",0,640,360,56,AdvanceFloor);
-            notice.text="아이템은 두 종류만 보유할 수 있습니다. 같은 아이템은 한 슬롯에 중첩됩니다.";
+            notice.text="아이템은 세 종류까지 보유할 수 있습니다. 같은 아이템은 한 슬롯에 중첩됩니다.";
         }
         string EffectSummary(System.Collections.Generic.IReadOnlyList<ContentEffect> effects)
         {
@@ -709,7 +709,10 @@ namespace DragonTower
                 aura.rectTransform.localScale=Vector3.one*(1.2f+t*.55f);yield return null;
             }
             art.rectTransform.localScale=Vector3.one;aura.color=new Color(dragon.color.r,dragon.color.g,dragon.color.b,.12f);
-            evolutionText.text=dragon.NameForStage(stage)+"(으)로 진화했습니다!";evolutionText.color=Gold;evolutionText.fontSize=24;
+            evolutionText.text=dragon.NameForStage(stage)+"(으)로 진화했습니다!\n"+
+                "최대 HP +"+Mathf.RoundToInt((TowerRun.HealthEvolutionMultiplier(stage)-1)*100)+"% · 공격력 +"+Mathf.RoundToInt((TowerRun.AttackEvolutionMultiplier(stage)-1)*100)+"%\n"+
+                dragon.passiveName+" 패시브 +"+Mathf.RoundToInt((TowerRun.PassiveEvolutionMultiplier(stage)-1)*100)+"%";
+            evolutionText.color=Gold;evolutionText.fontSize=20;
             ContinueButton=Button(towerRun.PendingLevelAugments>0?"증강 선택으로":"다음 층으로",0,710,360,66,FinishEvolution);
             notice.text=stage==1?"레벨 20에서 최종 진화합니다.":"최종 진화를 완료했습니다.";
         }

@@ -39,4 +39,8 @@ MonoBehaviour:
   barrierHP: 0
   barrierDuration: 4.5
   barrierFailureDamagePercent: 35
+  specialPatternInterval: 11
+  specialPatternDuration: 3
+  barrierHealPercent: 12
+  reflectionPercent: 20
   battleSprite: {fileID: 674079297678984013, guid: 670d26becb58fce458eb451cfe130833, type: 3}

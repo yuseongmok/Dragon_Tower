@@ -7,15 +7,15 @@ namespace DragonTower
     {
         public Font font;
         public RectTransform frame;
-        public Text playerName, playerHP, enemyHP, enemyName, enemyStatus, floorLabel, modeLabel, levelLabel, warning, message, skillLabel, attackLabel, dodgeLabel, itemLabel1, itemLabel2, resultTitle, resultDetail;
+        public Text playerName, playerHP, enemyHP, enemyName, enemyStatus, floorLabel, modeLabel, levelLabel, warning, message, skillLabel, attackLabel, dodgeLabel, itemLabel1, itemLabel2, itemLabel3, resultTitle, resultDetail;
         public Image playerFill, enemyFill, windupFill, experienceFill, playerElementIcon, enemyElementIcon;
         public DragonGraphic playerArt, enemyArt;
-        public Button attackButton, skillButton, dodgeButton, itemButton1, itemButton2, restartButton;
+        public Button attackButton, skillButton, dodgeButton, itemButton1, itemButton2, itemButton3, restartButton;
         public GameObject resultPanel;
         public Text dragonInfo;
         Text playerStatus;
         BattleStatusHud statusHud;
-        readonly bool[] usableItems=new bool[2];
+        readonly bool[] usableItems=new bool[3];
         BattleSkin skin;
         Image pixelPlayer, pixelEnemy,arenaImage;
         int lastPlayerHP = -1, lastEnemyHP = -1,lastShieldHP=-1,lastEnemyShieldHP=-1;
@@ -95,9 +95,10 @@ namespace DragonTower
             playerName=Label("",frame,-45,674,245,28,19,Color.white,TextAnchor.MiddleLeft);
             playerHP=Label("",frame,140,674,120,28,16,Muted,TextAnchor.MiddleRight);
             playerFill=Bar("Player HP",700,C(.36f,.83f,.69f));
-            itemButton1=MakeButton("아이템 1 · 빈 슬롯",frame,-108,727,204,38,C(.20f,.25f,.31f),out itemLabel1);
-            itemButton2=MakeButton("아이템 2 · 빈 슬롯",frame,108,727,204,38,C(.20f,.25f,.31f),out itemLabel2);
-            itemLabel1.fontSize=itemLabel2.fontSize=12;
+            itemButton1=MakeButton("아이템 1 · 빈 슬롯",frame,-145,727,138,38,C(.20f,.25f,.31f),out itemLabel1);
+            itemButton2=MakeButton("아이템 2 · 빈 슬롯",frame,0,727,138,38,C(.20f,.25f,.31f),out itemLabel2);
+            itemButton3=MakeButton("아이템 3 · 빈 슬롯",frame,145,727,138,38,C(.20f,.25f,.31f),out itemLabel3);
+            itemLabel1.fontSize=itemLabel2.fontSize=itemLabel3.fontSize=10;
             skillButton=MakeButton("스킬",frame,-154,790,132,60,C(.22f,.30f,.48f),out skillLabel);
             attackButton=MakeButton("공격",frame,0,790,148,68,C(.76f,.34f,.20f),out attackLabel);
             dodgeButton=MakeButton("회피",frame,154,790,132,60,C(.17f,.37f,.38f),out dodgeLabel);
@@ -146,10 +147,15 @@ namespace DragonTower
         }
         void EnsureItemControls()
         {
-            if(frame==null||itemButton1!=null)return;
-            itemButton1=MakeButton("아이템 1 · 빈 슬롯",frame,-108,727,204,38,C(.20f,.25f,.31f),out itemLabel1);
-            itemButton2=MakeButton("아이템 2 · 빈 슬롯",frame,108,727,204,38,C(.20f,.25f,.31f),out itemLabel2);
-            itemLabel1.fontSize=itemLabel2.fontSize=12;
+            if(frame==null)return;
+            if(itemButton1==null)itemButton1=MakeButton("아이템 1 · 빈 슬롯",frame,-145,727,138,38,C(.20f,.25f,.31f),out itemLabel1);
+            if(itemButton2==null)itemButton2=MakeButton("아이템 2 · 빈 슬롯",frame,0,727,138,38,C(.20f,.25f,.31f),out itemLabel2);
+            if(itemButton3==null)itemButton3=MakeButton("아이템 3 · 빈 슬롯",frame,145,727,138,38,C(.20f,.25f,.31f),out itemLabel3);
+            MoveControl(itemButton1,-145,727,138,38);MoveControl(itemButton2,0,727,138,38);MoveControl(itemButton3,145,727,138,38);
+            if(itemLabel1==null)itemLabel1=itemButton1.GetComponentInChildren<Text>();
+            if(itemLabel2==null)itemLabel2=itemButton2.GetComponentInChildren<Text>();
+            if(itemLabel3==null)itemLabel3=itemButton3.GetComponentInChildren<Text>();
+            itemLabel1.fontSize=itemLabel2.fontSize=itemLabel3.fontSize=10;
             MoveControl(skillButton,-154,790,132,60);MoveControl(attackButton,0,790,148,68);MoveControl(dodgeButton,154,790,132,60);
             if(dragonInfo!=null){dragonInfo.rectTransform.anchoredPosition=new Vector2(0,-835);dragonInfo.rectTransform.sizeDelta=new Vector2(440,20);dragonInfo.fontSize=11;}
         }
@@ -182,6 +188,7 @@ namespace DragonTower
             DecorateButton(dodgeButton,new Color(.45f,.78f,.70f));
             DecorateButton(itemButton1,new Color(.64f,.68f,.74f));
             DecorateButton(itemButton2,new Color(.64f,.68f,.74f));
+            DecorateButton(itemButton3,new Color(.64f,.68f,.74f));
             restartButton.GetComponentInChildren<Text>().text="다시 도전";
         }
         Image SpriteChild(Transform parent, Sprite sprite)
@@ -270,11 +277,11 @@ namespace DragonTower
         }
         public void Bind(UnityAction attack,UnityAction skill,UnityAction dodge,UnityAction restart)
         {attackButton.onClick.AddListener(attack);skillButton.onClick.AddListener(skill);dodgeButton.onClick.AddListener(dodge);restartButton.onClick.AddListener(restart);}
-        public void BindItems(UnityAction first,UnityAction second)
-        {itemButton1.onClick.AddListener(first);itemButton2.onClick.AddListener(second);}
+        public void BindItems(UnityAction first,UnityAction second,UnityAction third)
+        {itemButton1.onClick.AddListener(first);itemButton2.onClick.AddListener(second);itemButton3.onClick.AddListener(third);}
         public void SetItems(TowerRun run)
         {
-            SetItemButton(itemButton1,itemLabel1,run,0);SetItemButton(itemButton2,itemLabel2,run,1);
+            SetItemButton(itemButton1,itemLabel1,run,0);SetItemButton(itemButton2,itemLabel2,run,1);SetItemButton(itemButton3,itemLabel3,run,2);
         }
         void SetItemButton(Button button,Text label,TowerRun run,int index)
         {
@@ -354,6 +361,7 @@ namespace DragonTower
             }
             itemButton1.interactable=usableItems[0]&&!b.PlayerStunned&&b.Result==BattleResult.Fighting;
             itemButton2.interactable=usableItems[1]&&!b.PlayerStunned&&b.Result==BattleResult.Fighting;
+            itemButton3.interactable=usableItems[2]&&!b.PlayerStunned&&b.Result==BattleResult.Fighting;
             resultPanel.SetActive(b.Result!=BattleResult.Fighting && (motion==null || motion.ResultReady));
             if(b.Result!=BattleResult.Fighting)
             {
