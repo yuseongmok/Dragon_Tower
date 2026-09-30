@@ -18,8 +18,17 @@ namespace DragonTower.Editor
                 if(separated){evolution.spriteImportMode=SpriteImportMode.Single;evolution.spritePixelsPerUnit=100;}
                 evolution.filterMode=FilterMode.Point;evolution.wrapMode=TextureWrapMode.Clamp;
                 evolution.mipmapEnabled=false;evolution.isReadable=false;evolution.alphaIsTransparency=true;
-                evolution.npotScale=TextureImporterNPOTScale.None;evolution.maxTextureSize=2048;
-                evolution.textureCompression=TextureImporterCompression.Uncompressed;
+                evolution.npotScale=TextureImporterNPOTScale.None;evolution.maxTextureSize=separated?512:1024;
+                evolution.textureCompression=TextureImporterCompression.CompressedHQ;
+                return;
+            }
+            if(assetPath.StartsWith("Assets/Resources/UI/"))
+            {
+                var ui=(TextureImporter)assetImporter;
+                ui.textureType=TextureImporterType.Sprite;ui.spriteImportMode=SpriteImportMode.Single;
+                ui.filterMode=FilterMode.Bilinear;ui.wrapMode=TextureWrapMode.Clamp;
+                ui.mipmapEnabled=false;ui.isReadable=false;ui.alphaIsTransparency=true;
+                ui.maxTextureSize=1024;ui.textureCompression=TextureImporterCompression.CompressedHQ;
                 return;
             }
             if (!assetPath.StartsWith("Assets/Art/PixelBattle/")) return;
