@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.DragonData
   speciesId: okta
   displayName: "\uC625\uD0C0"
-  description: 
+  description: "\"\uCD09\uC218\uB97C \uBCF4\uACE0 \uC9D5\uADF8\uB7FD\uB2E4\uACE0
+    \uC0DD\uAC01\uD558\uB294 \uC774\uB97C \uAE4A\uC740 \uC2EC\uC5F0\uC18D\uC73C\uB85C
+    \uB04C\uACE0\uAC11\uB2C8\uB2E4.\""
   rarity: 1
   element: "\uBB3C"
   elementType: 1

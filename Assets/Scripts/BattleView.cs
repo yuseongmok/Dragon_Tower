@@ -13,6 +13,9 @@ namespace DragonTower
         public Button attackButton, skillButton, dodgeButton, itemButton1, itemButton2, restartButton;
         public GameObject resultPanel;
         public Text dragonInfo;
+        Text playerStatus;
+        BattleStatusHud statusHud;
+        readonly bool[] usableItems=new bool[2];
         BattleSkin skin;
         Image pixelPlayer, pixelEnemy,arenaImage;
         int lastPlayerHP = -1, lastEnemyHP = -1,lastShieldHP=-1,lastEnemyShieldHP=-1;
@@ -248,7 +251,7 @@ namespace DragonTower
             modeLabel.text="타워 "+floor+"층  /  "+(boss?"BOSS ROOM":"MONSTER ROOM");
             DragonTowerAudio.SetBattleMusic(floor,boss);
             var skin=Resources.Load<BattleSkin>("PixelBattleSkin");
-            if(arenaImage!=null&&skin!=null)arenaImage.sprite=floor>=21&&skin.forgeDepthsBackground!=null?skin.forgeDepthsBackground:floor>=11&&skin.floodedSewerBackground!=null?skin.floodedSewerBackground:skin.towerBackground;
+            if(arenaImage!=null&&skin!=null)arenaImage.sprite=skin.BackgroundForFloor(floor);
             if(pixelEnemy!=null&&enemySprite!=null)pixelEnemy.sprite=enemySprite;
             enemyArt.rectTransform.sizeDelta=boss?new Vector2(310,310):new Vector2(256,256);
         }
@@ -276,6 +279,7 @@ namespace DragonTower
         void SetItemButton(Button button,Text label,TowerRun run,int index)
         {
             var item=run==null?null:run.ItemAt(index);int count=run==null?0:run.ItemCountAt(index);
+            usableItems[index]=item!=null&&item.kind==ItemKind.Consumable;
             if(item==null){label.text="아이템 "+(index+1)+" · 빈 슬롯";button.interactable=false;return;}
             string countText=count>1?" ×"+count:"";
             string effect=ItemEffectSummary(item);if(effect.Length>22)effect=effect.Substring(0,22)+"…";
@@ -294,13 +298,21 @@ namespace DragonTower
         }
         public void Show(BattleModel b)
         {
+            if(statusHud==null){statusHud=gameObject.AddComponent<BattleStatusHud>();statusHud.Initialize(this);}
+            statusHud.Show(b);
             if(enemyStatus==null&&frame!=null)enemyStatus=Label("",frame,0,352,420,30,16,Color.white);
+            if(playerStatus==null&&frame!=null)
+            {
+                playerStatus=Label("",frame,0,653,440,19,13,C(1,.76f,.40f));
+                playerStatus.resizeTextForBestFit=true;playerStatus.resizeTextMinSize=10;playerStatus.resizeTextMaxSize=13;
+                playerStatus.transform.SetSiblingIndex(resultPanel.transform.GetSiblingIndex());
+            }
             if(lastDragon!=b.Dragon)
             {
                 lastDragon=b.Dragon;
                 playerName.text=b.Dragon.displayName+"  /  "+b.Dragon.element;
                 string hits=b.Dragon.skill.hitCount>1?" × "+b.Dragon.skill.hitCount:"";
-                dragonInfo.text="공격 0.3초  ·  "+b.Dragon.skill.displayName+" "+b.Dragon.skill.damage+hits+" 피해 / "+b.Dragon.skill.cooldown+"초";
+                dragonInfo.text=b.AreaHint;
             }
             if(lastPlayerHP!=b.PlayerHP||lastShieldHP!=b.ShieldHP)
             {
@@ -313,25 +325,35 @@ namespace DragonTower
                 enemyFill.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,400f*b.EnemyHP/b.CurrentEnemyMaxHP);
             }
             float until=(float)(b.NextEnemyStrike-b.Time);
-            float progress=1-Mathf.Clamp01(until/BattleModel.WindupDuration);
+            float progress=b.EnemyWindupProgress;
             windupFill.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,400*progress);
             bool refreshText=b.Time>=nextTextRefresh;
-            if(refreshText) { warning.text=until<=BattleModel.WindupDuration ? b.EnemyIntent+" 임박!  "+until.ToString("0.0")+"초  ·  회피 준비" : (b.EnemyIntent=="일반 공격"?"적의 움직임을 살피세요":b.EnemyIntent+"을 준비 중");nextTextRefresh=b.Time+.1; }
+            if(refreshText) { warning.text=b.EnemyStunned?"기절 · 공격 중단! "+b.EnemyStunRemaining.ToString("0.0")+"초 후 다시 준비":until<=b.CurrentEnemyWindupDuration ? b.EnemyIntent+" 임박!  "+until.ToString("0.0")+"초  ·  회피 준비" : (b.EnemyIntent=="일반 공격"?"적의 움직임을 살피세요":b.EnemyIntent+"을 준비 중");nextTextRefresh=b.Time+.1; }
+            if(refreshText)
+            {
+                playerStatus.text="";
+                warning.rectTransform.sizeDelta=new Vector2(440,46);warning.fontSize=16;
+                if(b.BossWarning.Length>0)warning.text=b.BossWarning+(!b.EnemyStunned&&until<=b.CurrentEnemyWindupDuration?"\n"+b.EnemyIntent+" · "+until.ToString("0.0")+"초 후 공격":"");
+            }
             warning.color=until<.42f ? new Color(1,.4f,.3f) : new Color(1,.75f,.43f);
             string status="";Color tint=Color.white;
-            if(b.EnemyBurning){status+="[화상] ";tint=new Color(1,.55f,.28f);}
-            if(b.EnemySlowed){status+="[둔화] ";tint=new Color(.55f,.9f,1);}
-            if(b.EnemyParalyzed){status+="[마비] ";tint=new Color(1,.92f,.38f);}
-            if(b.EnemyStunned){status+="[기절] ";tint=new Color(.8f,.6f,1);}
-            if(b.EnemyPoisoned){status+="[중독]";tint=new Color(.48f,1,.42f);}
-            if(b.EnemyShieldHP>0){status="[용광로 방벽 "+b.EnemyShieldHP+" / "+b.EnemyShieldMaxHP+" · "+b.EnemyShieldRemaining.ToString("0.0")+"초]";tint=new Color(1,.48f,.16f);}
-            enemyStatus.text=status;enemyStatus.color=tint;if(pixelEnemy!=null)pixelEnemy.color=status.Length==0?Color.white:Color.Lerp(Color.white,tint,.22f+.08f*Mathf.Sin((float)b.Time*9));
+            if(b.EnemyShieldHP>0){status="["+b.EnemyBarrierName+" "+b.EnemyShieldHP+" · "+b.EnemyShieldRemaining.ToString("0.0")+"초]";tint=new Color(.45f,.8f,1);}
+            if(b.EnemyReflecting){status="[피해 반사 "+b.Enemy.reflectionPercent.ToString("0")+"% · "+b.ReflectionRemaining.ToString("0.0")+"초]";tint=new Color(1,.7f,.25f);}
+            enemyStatus.text=status;enemyStatus.color=tint;
             SetButton(attackButton,attackLabel,"공격",b.AttackReady-b.Time,b,refreshText);
             if(b.Dragon.skillDisabled){skillButton.interactable=false;skillLabel.text="스킬\n봉인됨";}
             else if(b.Dragon.passiveMechanic==DragonPassiveMechanic.VoidAccelerator&&b.Result==BattleResult.Fighting){skillButton.interactable=true;skillLabel.text=b.Dragon.skill.displayName+"\n"+(b.SkillReady>b.Time?"HP 10%":"TAP");}
             else SetButton(skillButton,skillLabel,b.Dragon.skill.displayName,b.SkillReady-b.Time,b,refreshText);
             SetButton(dodgeButton,dodgeLabel,"회피",b.DodgeReady-b.Time,b,refreshText);
-            if(b.Result!=BattleResult.Fighting){itemButton1.interactable=false;itemButton2.interactable=false;}
+            if(b.PlayerSkillSealed){skillButton.interactable=false;skillLabel.text="스킬 봉인\n"+b.SkillSealRemaining.ToString("0.0")+"초";}
+            if(b.PlayerAttackSealed){attackButton.interactable=false;attackLabel.text="공격 봉인\n"+b.AttackSealRemaining.ToString("0.0")+"초";}
+            if(b.PlayerStunned)
+            {
+                attackButton.interactable=skillButton.interactable=dodgeButton.interactable=false;
+                attackLabel.text=skillLabel.text=dodgeLabel.text="기절\n"+b.StunRemaining.ToString("0.0")+"초";
+            }
+            itemButton1.interactable=usableItems[0]&&!b.PlayerStunned&&b.Result==BattleResult.Fighting;
+            itemButton2.interactable=usableItems[1]&&!b.PlayerStunned&&b.Result==BattleResult.Fighting;
             resultPanel.SetActive(b.Result!=BattleResult.Fighting && (motion==null || motion.ResultReady));
             if(b.Result!=BattleResult.Fighting)
             {

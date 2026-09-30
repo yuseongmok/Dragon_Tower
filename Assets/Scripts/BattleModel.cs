@@ -62,6 +62,8 @@ namespace DragonTower
     }
     public sealed class BattleEnemyStats
     {
+        public int floor=1;
+        public float specialPatternInterval=11,specialPatternDuration=3,barrierHealPercent=12,reflectionPercent=20;
         public string displayName;public ElementType elementType;public int maxHP,damage;public float interval;
         public float timingVariancePercent,quickAttackChancePercent,quickAttackIntervalMultiplier=.6f;
         public EnemyBossPattern bossPattern;public int patternEveryAttacks=4;public float patternIntervalMultiplier=1,patternDamageMultiplier=1;
@@ -86,9 +88,9 @@ namespace DragonTower
             bossPattern=EnemyBossPattern.EarthShatter,patternEveryAttacks=4,patternIntervalMultiplier=1.3f,patternDamageMultiplier=1.6f};
     }
     public enum BattleResult { Fighting, Victory, Defeat }
-    public enum CombatCue { Attack, Skill, SkillHit, Dodge, EnemyHit, EnemyMiss, BossSkill }
+    public enum CombatCue { Attack, Skill, SkillHit, Dodge, EnemyHit, EnemyMiss, BossSkill, PlayerStatusHit }
     // Pure combat rules: no scene dependencies; can be tested without rendering.
-    public sealed class BattleModel
+    public sealed partial class BattleModel
     {
         public const float AttackCooldown = .3f, DodgeCooldown = 1.4f, DodgeDuration = .42f;
         public const float EnemyInterval = 2.4f, WindupDuration = .85f;
@@ -104,7 +106,7 @@ namespace DragonTower
         public int EnemyShieldMaxHP { get; private set; }
         public double EnemyShieldRemaining => enemyShieldHP>0?Math.Max(0,enemyShieldUntil-Time):0;
         public bool PassiveConsumed { get; private set; }
-        public bool CanUseSkill => Result==BattleResult.Fighting&&!Dragon.skillDisabled&&(Time>=SkillReady||Dragon.passiveMechanic==DragonPassiveMechanic.VoidAccelerator);
+        public bool CanUseSkill => Result==BattleResult.Fighting&&!PlayerStunned&&!PlayerSkillSealed&&!Dragon.skillDisabled&&(Time>=SkillReady||Dragon.passiveMechanic==DragonPassiveMechanic.VoidAccelerator);
         public const int EnemyMaxHP = 240, EnemyDamage = 18;
         public int CurrentEnemyMaxHP => Enemy.maxHP;
         public BattleResult Result { get; private set; }
@@ -112,6 +114,14 @@ namespace DragonTower
         public double AttackReady, SkillReady, DodgeReady;
         public double DodgeUntil { get; private set; } = -1;
         public double NextEnemyStrike { get; private set; } = EnemyInterval;
+        double enemyWindupDuration=WindupDuration;
+        float strikeSlowMultiplier=1;
+        public double CurrentEnemyWindupDuration=>enemyWindupDuration;
+        public float EnemyWindupProgress=>EnemyStunned?0:(float)Math.Max(0,Math.Min(1,1-(NextEnemyStrike-Time)/enemyWindupDuration));
+        public double EnemyStunRemaining=>Math.Max(0,stunUntil-Time);
+        public double EnemySlowRemaining=>Math.Max(0,slowUntil-Time);
+        public double EnemyBurnRemaining=>Math.Max(0,burnUntil-Time);
+        public double EnemyParalyzeRemaining=>Math.Max(0,paralyzeUntil-Time);
         public string EnemyIntent { get; private set; } = "일반 공격";
         public BattleStats Dragon { get; }
         public BattleEnemyStats Enemy { get; }
@@ -135,14 +145,26 @@ namespace DragonTower
             random=randomSource??new Random().NextDouble;
             PlayerHP = Math.Max(0,Math.Min(dragon.maxHP,initialHP));
             EnemyHP=enemy.maxHP;NextEnemyStrike=enemy.interval;
+            InitializeAreaMechanics();
             if(Dragon.passiveMechanic==DragonPassiveMechanic.HydraVenom){poisonDamage=Math.Max(1,(int)Math.Round(Dragon.attackDamage*.18));passivePoisonNext=Time+1;}
         }
         public void Tick(float delta)
         {
+            if(float.IsNaN(delta)||float.IsInfinity(delta)||delta<=0)return;
+            double remaining=delta;
+            while(remaining>0.0000001&&Result==BattleResult.Fighting)
+            {double step=Math.Min(.05,remaining);TickStep(step);remaining-=step;}
+        }
+        void TickStep(double delta)
+        {
             if (Result != BattleResult.Fighting || delta <= 0) return;
+            SlowPlayerCooldowns(delta);
             Time += delta;
+            TickAreaMechanics();
+            if(Result!=BattleResult.Fighting)return;
             if(Time>=shieldUntil)shieldHP=0;
             if(enemyShieldHP>0&&Time>=enemyShieldUntil)ResolveForgeBarrierFailure();
+            if(Result!=BattleResult.Fighting)return;
             while(pendingSkillHits>0&&nextSkillHit<=Time&&Result==BattleResult.Fighting)
             {
                 PerformSkillHit(false);
@@ -152,10 +174,10 @@ namespace DragonTower
             while(burnNext>0&&burnNext<=Time&&burnNext<=burnUntil&&Result==BattleResult.Fighting)
             {
                 int burn=Math.Max(1,burnDamage);DamageEnemy(burn);Feedback?.Invoke("화상 피해  −"+burn);burnNext+=1;
-                if(EnemyHP==0)Result=BattleResult.Victory;
+                if(EnemyHP==0&&Result==BattleResult.Fighting)Result=BattleResult.Victory;
             }
             while(poisonDamage>0&&passivePoisonNext<=Time&&Result==BattleResult.Fighting)
-            {DamageEnemy(poisonDamage);Cue?.Invoke(CombatCue.SkillHit,poisonDamage);Feedback?.Invoke("중독 피해  −"+poisonDamage);passivePoisonNext+=2;if(EnemyHP==0)Result=BattleResult.Victory;}
+            {DamageEnemy(poisonDamage);Cue?.Invoke(CombatCue.SkillHit,poisonDamage);Feedback?.Invoke("중독 피해  −"+poisonDamage);passivePoisonNext+=2;if(EnemyHP==0&&Result==BattleResult.Fighting)Result=BattleResult.Victory;}
             var poison=ItemRule(ItemMechanic.PoisonFang);
             while(poison!=null&&poisonNext<=Time&&Result==BattleResult.Fighting)
             {
@@ -170,7 +192,7 @@ namespace DragonTower
             }
             while (NextEnemyStrike <= Time && Result == BattleResult.Fighting)
             {
-                if(Time<stunUntil){NextEnemyStrike=stunUntil;continue;}
+                if(Time<stunUntil){NextEnemyStrike=Math.Max(NextEnemyStrike,stunUntil+enemyWindupDuration);break;}
                 bool paralyzed=EnemyParalyzed&&Roll(20);
                 if (NextEnemyStrike < DodgeUntil||Time<invulnerableUntil||paralyzed)
                 {
@@ -199,6 +221,7 @@ namespace DragonTower
                     Feedback?.Invoke((ElementRules.HasAdvantage(Enemy.elementType,Dragon.elementType)?"상성 약점!  ":"")+"적의 공격  −"+damage+" HP"+(absorbed>0?" · 보호막 "+absorbed:"") );
                     if(Has(AugmentMechanic.IndomitableWill))SkillReady=Time;
                     TriggerFirstAid();
+                    if(damage>0&&Result==BattleResult.Fighting)ApplyAreaHitEffects();
                     var barrier=Rule(AugmentMechanic.FrostBarrier);
                     if(dodgeAttemptedForStrike&&barrier!=null&&Time>=frostBarrierReady&&Result==BattleResult.Fighting)
                     {shieldHP=Math.Max(shieldHP,Math.Max(1,(int)Math.Ceiling(Dragon.maxHP*barrier.primaryValue/100f)));shieldUntil=Time+barrier.duration;frostBarrierReady=Time+barrier.secondaryValue;Feedback?.Invoke("서리 장벽! 보호막 "+shieldHP);}
@@ -215,7 +238,8 @@ namespace DragonTower
             float interval=Math.Max(.45f,Enemy.interval*slow*jitter);
             nextEnemyDamageMultiplier=1;EnemyIntent="일반 공격";
             int every=Math.Max(2,Enemy.patternEveryAttacks);
-            if(Enemy.bossPattern!=EnemyBossPattern.None&&(enemyAttackCount+1)%every==0)
+            bool attackPattern=Enemy.bossPattern==EnemyBossPattern.EarthShatter||Enemy.bossPattern==EnemyBossPattern.AbyssalRush||Enemy.bossPattern==EnemyBossPattern.ForgeBarrier||Enemy.bossPattern==EnemyBossPattern.GarudaRend;
+            if(attackPattern&&(enemyAttackCount+1)%every==0)
             {
                 Cue?.Invoke(CombatCue.BossSkill,0);
                 interval=Math.Max(.45f,Enemy.interval*slow*Math.Max(.35f,Enemy.patternIntervalMultiplier));
@@ -224,23 +248,29 @@ namespace DragonTower
                 {EnemyIntent="대지 분쇄";Feedback?.Invoke("보스 패턴 · 대지 분쇄를 준비합니다!");}
                 else if(Enemy.bossPattern==EnemyBossPattern.AbyssalRush)
                 {EnemyIntent="심해 촉수 기습";Feedback?.Invoke("보스 패턴 · 촉수가 빠르게 덮쳐옵니다!");}
-                else
+                else if(Enemy.bossPattern==EnemyBossPattern.ForgeBarrier)
                 {EnemyIntent="용광로 과열";ActivateForgeBarrier();}
+                else if(Enemy.bossPattern==EnemyBossPattern.GarudaRend)
+                {EnemyIntent="칼날 돌풍";Feedback?.Invoke("칼날 돌풍 · 피격 시 찰과상 연속 피해!");}
             }
             else if(Enemy.quickAttackChancePercent>0&&Roll(Enemy.quickAttackChancePercent))
             {
                 interval=Math.Max(.5f,Enemy.interval*slow*Math.Max(.35f,Enemy.quickAttackIntervalMultiplier));
                 EnemyIntent="기습 공격";Feedback?.Invoke("적의 움직임이 갑자기 빨라집니다!");
             }
+            strikeSlowMultiplier=slow;
+            enemyWindupDuration=Math.Min(WindupDuration*slow,interval);
             NextEnemyStrike+=interval;
         }
         public bool Attack()
         {
-            if (Result != BattleResult.Fighting || Time < AttackReady) return false;
+            if (Result != BattleResult.Fighting || PlayerStunned || PlayerAttackSealed || Time < AttackReady) return false;
             AttackReady = Time + AttackCooldownNow();
+            if(PlayerActionMissed(false))return true;
             bool critical;int damage;
             if(Dragon.passiveMechanic==DragonPassiveMechanic.RuyiOrb){int first=Math.Max(1,Dragon.attackDamage/2),second=Math.Max(1,Dragon.attackDamage-first);damage=Hit(first,Dragon.elementType,false,out critical);bool secondCritical;damage+=Hit(second,Dragon.elementType,false,out secondCritical);critical|=secondCritical;}
             else damage=Hit(Dragon.attackDamage,Dragon.elementType,false,out critical);
+            if(Result==BattleResult.Defeat)return true;
             int total=damage;attackHits++;
             var glove=ItemRule(ItemMechanic.InfightingGlove);if(glove!=null)total+=RawExtra(damage,glove.primaryValue*Math.Max(1,glove.stacks));
             var slash=Rule(AugmentMechanic.ConsecutiveSlash);if(slash!=null&&Roll(slash.chancePercent))total+=RawExtra(damage,slash.primaryValue);
@@ -262,8 +292,10 @@ namespace DragonTower
             bool overcast=Time<SkillReady&&Dragon.passiveMechanic==DragonPassiveMechanic.VoidAccelerator;
             if(overcast){int overcastCost=Math.Max(1,(int)Math.Ceiling(Dragon.maxHP*.1));PlayerHP=Math.Max(1,PlayerHP-overcastCost);Feedback?.Invoke("공허 가속기 · HP "+overcastCost+" 소모");}
             SkillReady = Time+(Time<noSkillCooldownUntil?0:Math.Max(0,Dragon.skill.cooldown)*(Time<firstAidUntil?.5f:1f));
+            if(PlayerActionMissed(true))return true;
             int casts=Has(AugmentMechanic.DoubleCasting)?2:1;pendingSkillHits=Math.Max(1,Dragon.skill.hitCount)*casts-1;nextSkillHit=Time+Math.Max(.03f,Dragon.skill.hitInterval);
-            PerformSkillHit(true);if(Result==BattleResult.Fighting)ApplySkillStatus();
+            PerformSkillHit(true);if(Result==BattleResult.Defeat)return true;
+            if(Result==BattleResult.Fighting)ApplySkillStatus();
             TriggerAttackStatus();
             if(Dragon.passiveMechanic==DragonPassiveMechanic.JetStream){passiveRapidUntil=Time+1;AttackReady=Time+Math.Max(0,AttackReady-Time)*.5;Feedback?.Invoke("제트기류! 1초간 일반 공격 가속");}
             if(Dragon.passiveMechanic==DragonPassiveMechanic.IronArmor&&ShieldHP<=0){shieldHP=Math.Max(1,(int)Math.Ceiling(Dragon.maxHP*.05));shieldUntil=double.MaxValue;Feedback?.Invoke("철갑! 보호막 "+shieldHP);}
@@ -276,6 +308,7 @@ namespace DragonTower
                 int echoDamage=ElementalExtra(Dragon.skill.damage*Math.Max(1,Dragon.skill.hitCount),power,Dragon.skill.elementType);
                 Cue?.Invoke(CombatCue.SkillHit,echoDamage);Feedback?.Invoke("메아리 수정 추가 시전  −"+echoDamage);
             }
+            if(Result==BattleResult.Defeat)return true;
             float cost=0;var mana=Rule(AugmentMechanic.ManaRampage);if(mana!=null)cost+=mana.primaryValue;var vampire=Rule(AugmentMechanic.Vampire);if(vampire!=null)cost+=vampire.primaryValue;
             if(cost>0)PlayerHP=Math.Max(1,PlayerHP-Math.Max(1,(int)Math.Ceiling(Dragon.maxHP*cost/100f)));
             if(cost>0)Feedback?.Invoke(Dragon.skill.displayName+" · HP 소모");
@@ -302,8 +335,24 @@ namespace DragonTower
         }
         void ApplyBurn(float duration,int damage){burnUntil=Math.Max(burnUntil,Time+duration);burnNext=Time+1;burnDamage=Math.Max(burnDamage,damage);Feedback?.Invoke("화상! "+duration.ToString("0.#")+"초");}
         void ApplyParalyze(float duration){paralyzeUntil=Math.Max(paralyzeUntil,Time+Math.Max(1,duration));Feedback?.Invoke("마비! 공격이 20% 확률로 실패합니다");}
-        void ApplySlow(float duration,float percent){slowUntil=Math.Max(slowUntil,Time+duration);slowPercent=Math.Max(slowPercent,Math.Max(0,percent));NextEnemyStrike+=Math.Max(0,NextEnemyStrike-Time)*Math.Max(0,percent)/100f;Feedback?.Invoke("둔화! 적의 공격이 느려집니다");}
-        void ApplyStun(float duration){stunUntil=Math.Max(stunUntil,Time+Math.Max(.1,duration));NextEnemyStrike=Math.Max(NextEnemyStrike,stunUntil);Feedback?.Invoke("기절! 적이 행동할 수 없습니다");}
+        void ApplySlow(float duration,float percent)
+        {
+            slowPercent=EnemySlowed?Math.Max(slowPercent,Math.Max(0,percent)):Math.Max(0,percent);
+            slowUntil=Math.Max(slowUntil,Time+Math.Max(.1,duration));
+            float multiplier=Math.Max(strikeSlowMultiplier,1+slowPercent/100f);
+            double ratio=multiplier/strikeSlowMultiplier;
+            double resumeAt=Math.Max(Time,stunUntil);
+            NextEnemyStrike=resumeAt+Math.Max(0,NextEnemyStrike-resumeAt)*ratio;
+            enemyWindupDuration*=ratio;strikeSlowMultiplier=multiplier;
+            Feedback?.Invoke("둔화! 진행 중인 공격이 느려집니다");
+        }
+        void ApplyStun(float duration)
+        {
+            stunUntil=Math.Max(stunUntil,Time+Math.Max(.1,duration));
+            // Keep the queued attack/intent, but give a complete telegraph after recovery.
+            NextEnemyStrike=Math.Max(NextEnemyStrike,stunUntil+enemyWindupDuration);
+            Feedback?.Invoke("기절! 회복 후 공격을 다시 준비합니다");
+        }
         void ApplyPoison(int damage){poisonDamage=Math.Max(poisonDamage,damage);passivePoisonNext=Math.Min(passivePoisonNext<=0?Time+1:passivePoisonNext,Time+1);Feedback?.Invoke("중독! 지속 피해가 시작됩니다");}
         void TriggerAttackStatus()
         {
@@ -312,7 +361,7 @@ namespace DragonTower
         }
         public bool Dodge()
         {
-            if (Result != BattleResult.Fighting || Time < DodgeReady) return false;
+            if (Result != BattleResult.Fighting || PlayerStunned || Time < DodgeReady) return false;
             DodgeReady = Time + (Dragon.dodgeCooldown>0?Dragon.dodgeCooldown:DodgeCooldown);
             DodgeUntil = Time + (Dragon.dodgeDuration>0?Dragon.dodgeDuration:DodgeDuration);
             dodgeAttemptedForStrike=true;
@@ -322,7 +371,7 @@ namespace DragonTower
         }
         public bool UseItem(ItemData item)
         {
-            if(item==null||item.kind!=ItemKind.Consumable||Result!=BattleResult.Fighting)return false;
+            if(item==null||item.kind!=ItemKind.Consumable||Result!=BattleResult.Fighting||PlayerStunned)return false;
             float primary=item.primaryValue,secondary=item.secondaryValue,duration=Math.Max(0,item.duration);
             switch(item.mechanic)
             {
@@ -362,16 +411,20 @@ namespace DragonTower
             float chance=Dragon.criticalChance*100f+(Time<criticalBuffUntil?criticalBuffPercent:0);if(EnemyBurning&&Has(AugmentMechanic.Inferno))chance+=Value(AugmentMechanic.Inferno,50);
             critical=Roll(chance);if(critical)damage=Math.Max(1,(int)Math.Round(damage*Dragon.criticalDamage,MidpointRounding.AwayFromZero));
             damage=DamageEnemy(damage);
-            if (EnemyHP == 0) Result = BattleResult.Victory;
+            if (EnemyHP == 0 && Result==BattleResult.Fighting) Result = BattleResult.Victory;
             return damage;
         }
-        int RawExtra(int referenceDamage,float percent){int value=Math.Max(1,(int)Math.Round(referenceDamage*percent/100f,MidpointRounding.AwayFromZero));value=DamageEnemy(value);if(EnemyHP==0)Result=BattleResult.Victory;return value;}
-        int ElementalExtra(int baseDamage,float percent,ElementType element){int value=Math.Max(1,(int)Math.Round(baseDamage*percent/100f,MidpointRounding.AwayFromZero));value=ElementRules.Damage(value,element,Enemy.elementType);value=DamageEnemy(value);if(EnemyHP==0)Result=BattleResult.Victory;return value;}
+        int RawExtra(int referenceDamage,float percent){int value=Math.Max(1,(int)Math.Round(referenceDamage*percent/100f,MidpointRounding.AwayFromZero));value=DamageEnemy(value);if(EnemyHP==0&&Result==BattleResult.Fighting)Result=BattleResult.Victory;return value;}
+        int ElementalExtra(int baseDamage,float percent,ElementType element){int value=Math.Max(1,(int)Math.Round(baseDamage*percent/100f,MidpointRounding.AwayFromZero));value=ElementRules.Damage(value,element,Enemy.elementType);value=DamageEnemy(value);if(EnemyHP==0&&Result==BattleResult.Fighting)Result=BattleResult.Victory;return value;}
         int DamageEnemy(int value)
         {
-            value=Math.Max(0,value);if(enemyShieldHP<=0){EnemyHP=Math.Max(0,EnemyHP-value);return value;}
+            if(Result!=BattleResult.Fighting)return 0;
+            value=Math.Max(0,value);
+            int actual=Math.Min(value,EnemyHP+enemyShieldHP);
+            if(EnemyReflecting&&actual>0)ApplyReflection(actual);
+            if(enemyShieldHP<=0){EnemyHP=Math.Max(0,EnemyHP-value);return value;}
             int absorbed=Math.Min(enemyShieldHP,value);enemyShieldHP-=absorbed;int overflow=value-absorbed;if(overflow>0)EnemyHP=Math.Max(0,EnemyHP-overflow);
-            if(enemyShieldHP==0){enemyShieldUntil=0;Feedback?.Invoke("용광로 방벽 파괴! 폭발을 저지했습니다");}
+            if(enemyShieldHP==0){enemyShieldUntil=0;Feedback?.Invoke(Enemy.bossPattern==EnemyBossPattern.FrostRecovery?"빙결 방벽 파괴! 회복을 저지했습니다":"용광로 방벽 파괴! 폭발을 저지했습니다");}
             return value;
         }
         void ActivateForgeBarrier()
@@ -381,6 +434,12 @@ namespace DragonTower
         }
         void ResolveForgeBarrierFailure()
         {
+            if(Enemy.bossPattern==EnemyBossPattern.FrostRecovery)
+            {
+                enemyShieldHP=0;enemyShieldUntil=0;int before=EnemyHP;
+                EnemyHP=Math.Min(Enemy.maxHP,EnemyHP+Math.Max(1,(int)Math.Ceiling(Enemy.maxHP*Enemy.barrierHealPercent/100f)));
+                Cue?.Invoke(CombatCue.BossSkill,0);Feedback?.Invoke("빙결 방벽 유지! 냉룡왕 HP +"+(EnemyHP-before));return;
+            }
             enemyShieldHP=0;enemyShieldUntil=0;int damage=Math.Max(1,(int)Math.Ceiling(Dragon.maxHP*Enemy.barrierFailureDamagePercent/100f));PlayerHP=Math.Max(0,PlayerHP-damage);
             Cue?.Invoke(CombatCue.EnemyHit,damage);Feedback?.Invoke("방벽 과열 폭발! 가드 불가 피해  −"+damage+" HP");
             if(Dragon.passiveMechanic==DragonPassiveMechanic.Phoenix&&Dragon.passiveAvailable&&!PassiveConsumed&&PlayerHP<=Dragon.maxHP*.2f){PlayerHP=Dragon.maxHP;PassiveConsumed=true;Feedback?.Invoke("불사조! 체력을 완전히 회복했습니다");}

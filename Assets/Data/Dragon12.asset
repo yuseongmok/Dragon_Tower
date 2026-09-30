@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.DragonData
   speciesId: storm
   displayName: "\uC2A4\uD1B0"
-  description: 
+  description: "\"\uB0A0\uAC1C\uC9D3\uC744 \uD558\uBA74 \uD5C8\uB9AC\uCF00\uC778\uC774
+    \uC77C\uC5B4\uB0A9\uB2C8\uB2E4\""
   rarity: 2
   element: "\uBC88\uAC1C"
   elementType: 6
@@ -29,10 +30,9 @@ MonoBehaviour:
   finalName: "\uC0AC\uC774\uD074\uB860"
   skillEffect: 4
   skill: {fileID: 11400000, guid: 5e1219208f2f8c94c8a7e6d322485ec8, type: 2}
-  passiveName: "폭풍우"
-  passiveDescription: "번개 타입과 바람 타입 스킬을 모두 습득할 수 있습니다."
+  passiveName: "\uD3ED\uD48D\uC6B0"
+  passiveDescription: "\uBC88\uAC1C \uD0C0\uC785\uACFC \uBC14\uB78C \uD0C0\uC785
+    \uC2A4\uD0AC\uC744 \uBAA8\uB450 \uC2B5\uB4DD\uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4."
   passiveMechanic: 10
   alternateSkillElement: 4
   evolutionSheetIncludesBase: 1
-
-

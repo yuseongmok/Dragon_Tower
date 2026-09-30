@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: monster_volt_ray
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.MonsterData
   contentId: monster_volt_ray
-  displayName: 전기 가오리
-  description: 수면 위를 미끄러지며 매우 짧은 간격으로 방전을 일으키는 마수
+  displayName: "\uC804\uAE30 \uAC00\uC624\uB9AC"
+  description: "\uC218\uBA74 \uC704\uB97C \uBBF8\uB044\uB7EC\uC9C0\uBA70 \uB9E4\uC6B0
+    \uC9E7\uC740 \uAC04\uACA9\uC73C\uB85C \uBC29\uC804\uC744 \uC77C\uC73C\uD0A4\uB294
+    \uB9C8\uC218"
   rarity: 0
   icon: {fileID: 0}
   elementType: 6
@@ -22,9 +24,9 @@ MonoBehaviour:
   attackDamage: 23
   attackInterval: 1.8
   hpGrowthPerFloor: 8
-  attackGrowthPerFloor: .35
+  attackGrowthPerFloor: 0.35
   hpGrowthPerFloorPercent: 1.5
-  attackGrowthPerFloorPercent: .5
+  attackGrowthPerFloorPercent: 0.5
   minimumFloor: 11
   maximumFloor: 19
   spawnWeight: 10
@@ -36,4 +38,11 @@ MonoBehaviour:
   patternEveryAttacks: 4
   patternIntervalMultiplier: 1
   patternDamageMultiplier: 1
+  barrierHP: 0
+  barrierDuration: 4.5
+  barrierFailureDamagePercent: 35
+  specialPatternInterval: 11
+  specialPatternDuration: 3
+  barrierHealPercent: 12
+  reflectionPercent: 20
   battleSprite: {fileID: 21300000, guid: 4ce2bf04b61fa044d9c84b7048174a16, type: 3}

@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.DragonData
   speciesId: luna
   displayName: "\uB8E8\uB098"
-  description: 
+  description: "\"\uC218\uC0C1\uD560 \uC815\uB3C4\uB85C \uC560\uD638\uAC00\uB4E4\uC774
+    \uB9CE\uC740 \uB4DC\uB798\uACE4\uC785\uB2C8\uB2E4.\""
   rarity: 0
   element: "\uC5BC\uC74C"
   elementType: 3

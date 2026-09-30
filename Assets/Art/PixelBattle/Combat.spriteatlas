@@ -59,6 +59,16 @@ SpriteAtlas:
     - {fileID: 21300000, guid: 26821ea75ff14ca4a34abff433e60d27, type: 3}
     - {fileID: 21300000, guid: 65d9e1d5a8484a6a96f88780dd1a07d2, type: 3}
     - {fileID: 21300000, guid: 753f05e96c3443558af16eeb901e0595, type: 3}
+    - {fileID: 21300000, guid: f835e4e935e81954db91eb82871c7f2f, type: 3}
+    - {fileID: 21300000, guid: b9a1732ca70aa724aab31498393e3193, type: 3}
+    - {fileID: 21300000, guid: a3b9cbc8dec980d44beb36159903169d, type: 3}
+    - {fileID: 21300000, guid: 4ce2bf04b61fa044d9c84b7048174a16, type: 3}
+    - {fileID: 21300000, guid: 1911814178cd34745bf1c60e01a6766d, type: 3}
+    - {fileID: 21300000, guid: 46d29eb11b52444e9ca801e51a3a8a72, type: 3}
+    - {fileID: 21300000, guid: a8e9bff5707d48f3970a7ad26cf06b31, type: 3}
+    - {fileID: 21300000, guid: 3d0140a1f42e4f3b817ea7e9e8071b44, type: 3}
+    - {fileID: 21300000, guid: 740a36eebf2a40dda8ae2ee53882e706, type: 3}
+    - {fileID: 21300000, guid: df61b26a2dd849d3a43fd836677128c9, type: 3}
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
@@ -69,4 +79,3 @@ SpriteAtlas:
   m_RenderDataMap: {}
   m_Tag: Combat
   m_IsVariant: 0
-

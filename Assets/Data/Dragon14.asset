@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.DragonData
   speciesId: venom
   displayName: "\uBCA0\uB188"
-  description: 
+  description: "\"\uBCA0\uB188\uC740 \uB9F9\uB3C5\uC758 \uD654\uC2E0\uC73C\uB85C,
+    \uB04A\uC784\uC5C6\uC774 \uBA38\uB9AC\uB97C \uBD88\uB824 \uB098\uAC00\uBA70 \uC804\uC7A5\uC5D0
+    \uC8FD\uC74C\uC758 \uC548\uAC1C\uB97C \uD37C\uB728\uB9BD\uB2C8\uB2E4.\""
   rarity: 4
   element: "\uC554\uD751"
   elementType: 7
@@ -29,10 +31,9 @@ MonoBehaviour:
   finalName: "\uBC14\uC774\uD37C"
   skillEffect: 6
   skill: {fileID: 11400000, guid: 6144f79c8c63b2a438d7a7ff921114a1, type: 2}
-  passiveName: "히드라의 독니"
-  passiveDescription: "전투 내내 적에게 2초마다 지속 중독 피해를 줍니다."
+  passiveName: "\uD788\uB4DC\uB77C\uC758 \uB3C5\uB2C8"
+  passiveDescription: "\uC804\uD22C \uB0B4\uB0B4 \uC801\uC5D0\uAC8C 2\uCD08\uB9C8\uB2E4
+    \uC9C0\uC18D \uC911\uB3C5 \uD53C\uD574\uB97C \uC90D\uB2C8\uB2E4."
   passiveMechanic: 16
   alternateSkillElement: 0
   evolutionSheetIncludesBase: 1
-
-

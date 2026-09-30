@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.DragonData
   speciesId: sharkid
   displayName: "\uC0E4\uD0A4\uB4DC"
-  description: 
+  description: "\"\uCD5C\uADFC \uBD80\uC0B0\uC5D0 \uCD9C\uBAB0\uD588\uC2B5\uB2C8\uB2E4\""
   rarity: 1
   element: "\uBB3C"
   elementType: 1
@@ -29,10 +29,9 @@ MonoBehaviour:
   finalName: "\uC0E4\uD06C\uB85C\uB3C8"
   skillEffect: 5
   skill: {fileID: 11400000, guid: d5ab714f67d832543a42a291f5432720, type: 2}
-  passiveName: "얼어붙은 검"
-  passiveDescription: "물 타입과 얼음 타입 스킬을 모두 습득할 수 있습니다."
+  passiveName: "\uC5BC\uC5B4\uBD99\uC740 \uAC80"
+  passiveDescription: "\uBB3C \uD0C0\uC785\uACFC \uC5BC\uC74C \uD0C0\uC785 \uC2A4\uD0AC\uC744
+    \uBAA8\uB450 \uC2B5\uB4DD\uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4."
   passiveMechanic: 12
   alternateSkillElement: 3
   evolutionSheetIncludesBase: 1
-
-

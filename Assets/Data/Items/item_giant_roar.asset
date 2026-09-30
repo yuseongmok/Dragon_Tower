@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: item_giant_roar
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.ItemData
   contentId: item_giant_roar
-  displayName: "거인의 외침"
-  description: "사용 시 적의 행동을 3초간 봉쇄"
+  displayName: "\uAC70\uC778\uC758 \uC678\uCE68"
+  description: "\uC0AC\uC6A9 \uC2DC \uC801\uC758 \uD589\uB3D9\uC744 3\uCD08\uAC04
+    \uBD09\uC1C4"
   rarity: 2
   icon: {fileID: 0}
   grade: 1

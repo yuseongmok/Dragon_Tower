@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: augment_acceleration_circuit
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.AugmentData
   contentId: augment_acceleration_circuit
-  displayName: 가속 회로
-  description: 일반 공격 쿨타임 20% 감소
+  displayName: "\uAC00\uC18D \uD68C\uB85C"
+  description: "\uC77C\uBC18 \uACF5\uACA9 \uCFE8\uD0C0\uC784 20% \uAC10\uC18C"
   rarity: 0
   icon: {fileID: 0}
   grade: 1

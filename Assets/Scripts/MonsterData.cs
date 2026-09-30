@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 namespace DragonTower
 {
-    public enum EnemyBossPattern { None, EarthShatter, AbyssalRush, ForgeBarrier }
+    public enum EnemyBossPattern { None, EarthShatter, AbyssalRush, ForgeBarrier, GarudaRend, SentryParalysis, FrostRecovery, AzazelSeals, UrielReflection }
     [CreateAssetMenu(menuName="Dragon Tower/Monster")]
     public sealed class MonsterData : IdentifiedContent
     {
@@ -31,18 +31,25 @@ namespace DragonTower
         [Min(0)] public int barrierHP;
         [Min(.1f)] public float barrierDuration=4.5f;
         [Range(0,100)] public float barrierFailureDamagePercent=35;
+        [Header("Upper tower boss patterns")]
+        [Min(4)] public float specialPatternInterval=11;
+        [Min(1)] public float specialPatternDuration=3;
+        [Range(0,50)] public float barrierHealPercent=12;
+        [Range(0,100)] public float reflectionPercent=20;
         public Sprite battleSprite;
         public BattleEnemyStats CreateBattleStats(int floor)
         {
             int steps=Math.Max(0,floor-minimumFloor);
             float hpScale=1f+steps*hpGrowthPerFloorPercent/100f,attackScale=1f+steps*attackGrowthPerFloorPercent/100f;
-            return new BattleEnemyStats{displayName=displayName,elementType=elementType,maxHP=Math.Max(1,(int)Math.Round((baseHP+steps*hpGrowthPerFloor)*hpScale)),
+            return new BattleEnemyStats{floor=floor,displayName=displayName,elementType=elementType,maxHP=Math.Max(1,(int)Math.Round((baseHP+steps*hpGrowthPerFloor)*hpScale)),
                 damage=Math.Max(0,(int)Math.Round((attackDamage+steps*attackGrowthPerFloor)*attackScale)),interval=Math.Max(.1f,attackInterval),
                 timingVariancePercent=timingVariancePercent,quickAttackChancePercent=quickAttackChancePercent,
                 quickAttackIntervalMultiplier=Math.Max(.35f,quickAttackIntervalMultiplier),bossPattern=bossPattern,
                 patternEveryAttacks=Math.Max(2,patternEveryAttacks),patternIntervalMultiplier=Math.Max(.35f,patternIntervalMultiplier),
                 patternDamageMultiplier=Math.Max(.25f,patternDamageMultiplier),barrierHP=Math.Max(0,barrierHP),
-                barrierDuration=Math.Max(.1f,barrierDuration),barrierFailureDamagePercent=Math.Max(0,barrierFailureDamagePercent)};
+                barrierDuration=Math.Max(.1f,barrierDuration),barrierFailureDamagePercent=Math.Max(0,barrierFailureDamagePercent),
+                specialPatternInterval=Math.Max(4,specialPatternInterval),specialPatternDuration=Math.Max(1,specialPatternDuration),
+                barrierHealPercent=barrierHealPercent,reflectionPercent=reflectionPercent};
         }
     }
 }

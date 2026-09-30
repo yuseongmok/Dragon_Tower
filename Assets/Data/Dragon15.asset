@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.DragonData
   speciesId: chrono
   displayName: "\uD06C\uB85C\uB178"
-  description: 
+  description: "\"\uC874\uC57C\uC758 \uBAA8\uB798\uC2DC\uACC4\uB77C\uB294 \uAC83\uC744
+    \uB9CC\uB4E4\uC5C8\uC2B5\uB2C8\uB2E4.\""
   rarity: 4
   element: "\uBE5B"
   elementType: 8
@@ -29,10 +30,9 @@ MonoBehaviour:
   finalName: "\uD06C\uB85C\uB9C8\uD0A4\uB098"
   skillEffect: 7
   skill: {fileID: 11400000, guid: f7b679ceee739de4c9300f1688ecd937, type: 2}
-  passiveName: "시간 균열"
-  passiveDescription: "일반 공격과 스킬 공격 사용 시 20% 확률로 적을 1초간 기절시킵니다."
+  passiveName: "\uC2DC\uAC04 \uADE0\uC5F4"
+  passiveDescription: "\uC77C\uBC18 \uACF5\uACA9\uACFC \uC2A4\uD0AC \uACF5\uACA9
+    \uC0AC\uC6A9 \uC2DC 20% \uD655\uB960\uB85C \uC801\uC744 1\uCD08\uAC04 \uAE30\uC808\uC2DC\uD0B5\uB2C8\uB2E4."
   passiveMechanic: 14
   alternateSkillElement: 0
   evolutionSheetIncludesBase: 1
-
-

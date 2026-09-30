@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.DragonData
   speciesId: titan
   displayName: "\uD2F0\uD0C4"
-  description: 
+  description: "\"\uBC1C\uC744 \uAD6C\uB974\uBA74 \uC9C0\uC9C4\uC774 \uC77C\uC5B4\uB0A9\uB2C8\uB2E4\""
   rarity: 1
   element: "\uD759"
   elementType: 5
@@ -29,10 +29,9 @@ MonoBehaviour:
   finalName: "\uD0C0\uC774\uD0C0\uB178\uC2A4"
   skillEffect: 3
   skill: {fileID: 11400000, guid: 88ab7b92b77d88540a20b9cdb62e88f0, type: 2}
-  passiveName: "단단한 외피"
-  passiveDescription: "HP가 50% 미만일 때 받는 피해가 20% 감소합니다."
+  passiveName: "\uB2E8\uB2E8\uD55C \uC678\uD53C"
+  passiveDescription: "HP\uAC00 50% \uBBF8\uB9CC\uC77C \uB54C \uBC1B\uB294 \uD53C\uD574\uAC00
+    20% \uAC10\uC18C\uD569\uB2C8\uB2E4."
   passiveMechanic: 8
   alternateSkillElement: 0
   evolutionSheetIncludesBase: 1
-
-

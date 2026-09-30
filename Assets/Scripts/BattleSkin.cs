@@ -11,5 +11,19 @@ namespace DragonTower
         public Sprite towerBackground;
         public Sprite floodedSewerBackground;
         public Sprite forgeDepthsBackground;
+        public Sprite[] upperTowerBackgrounds;
+
+        public Sprite BackgroundForFloor(int floor)
+        {
+            if (floor >= 31 && floor <= 80)
+            {
+                int region = (floor - 31) / 10;
+                if (upperTowerBackgrounds != null && region < upperTowerBackgrounds.Length && upperTowerBackgrounds[region] != null)
+                    return upperTowerBackgrounds[region];
+            }
+            if (floor >= 21 && forgeDepthsBackground != null) return forgeDepthsBackground;
+            if (floor >= 11 && floodedSewerBackground != null) return floodedSewerBackground;
+            return towerBackground;
+        }
     }
 }

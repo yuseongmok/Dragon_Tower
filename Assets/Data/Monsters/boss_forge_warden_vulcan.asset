@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: boss_forge_warden_vulcan
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.MonsterData
   contentId: boss_forge_warden_vulcan
-  displayName: 용광로 수문장 불칸
-  description: 용광로 방벽을 제때 파괴하지 못하면 막을 수 없는 과열 폭발을 일으키는 30층 수문장
+  displayName: "\uC6A9\uAD11\uB85C \uC218\uBB38\uC7A5 \uBD88\uCE78"
+  description: "\uC6A9\uAD11\uB85C \uBC29\uBCBD\uC744 \uC81C\uB54C \uD30C\uAD34\uD558\uC9C0
+    \uBABB\uD558\uBA74 \uB9C9\uC744 \uC218 \uC5C6\uB294 \uACFC\uC5F4 \uD3ED\uBC1C\uC744
+    \uC77C\uC73C\uD0A4\uB294 30\uCE35 \uC218\uBB38\uC7A5"
   rarity: 0
   icon: {fileID: 0}
   elementType: 2
@@ -39,4 +41,8 @@ MonoBehaviour:
   barrierHP: 220
   barrierDuration: 4.5
   barrierFailureDamagePercent: 35
+  specialPatternInterval: 11
+  specialPatternDuration: 3
+  barrierHealPercent: 12
+  reflectionPercent: 20
   battleSprite: {fileID: 21300000, guid: df61b26a2dd849d3a43fd836677128c9, type: 3}

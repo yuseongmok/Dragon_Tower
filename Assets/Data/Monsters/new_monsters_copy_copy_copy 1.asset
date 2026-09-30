@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ab168aee88f48c0ac6e0dea2c3c85c4, type: 3}
+  m_Name: new_monsters_copy_copy_copy 1
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.MonsterData
+  contentId: monster_Frost_Moth_Spirit
+  displayName: "\uC11C\uB9AC\uB098\uBC29 \uC815\uB839"
+  description: 
+  rarity: 0
+  icon: {fileID: 0}
+  elementType: 3
+  baseHP: 1352
+  attackDamage: 44
+  attackInterval: 2.39
+  hpGrowthPerFloor: 12
+  attackGrowthPerFloor: 0.2
+  hpGrowthPerFloorPercent: 1.2
+  attackGrowthPerFloorPercent: 0.3
+  minimumFloor: 51
+  maximumFloor: 59
+  spawnWeight: 10
+  boss: 0
+  timingVariancePercent: 12
+  quickAttackChancePercent: 8
+  quickAttackIntervalMultiplier: 0.8
+  bossPattern: 0
+  patternEveryAttacks: 4
+  patternIntervalMultiplier: 1
+  patternDamageMultiplier: 1
+  barrierHP: 0
+  barrierDuration: 4.5
+  barrierFailureDamagePercent: 35
+  battleSprite: {fileID: 2776226582690167591, guid: b4fa04baf7a2bc24a8b7c9c323d92ba0, type: 3}

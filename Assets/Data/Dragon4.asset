@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.DragonData
   speciesId: volt
   displayName: "\uBCFC\uD2B8"
-  description: 
+  description: "\"\uBC18\uAC11\uB2E4\uACE0 \uBE44\uBE44\uC801\uAC70\uB9AC\uBA74 \uB2FF\uC740
+    \uC0DD\uBA85\uCC44\uB294 \uBAA8\uB450 \uC7BF\uAC00\uB8E8\uAC00 \uB429\uB2C8\uB2E4.\""
   rarity: 2
   element: "\uBC88\uAC1C"
   elementType: 6

@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.MonsterData
   contentId: boss_kraken_guardian
   displayName: "\uD06C\uB77C\uCF04 \uC218\uD638\uC790"
-  description: 침수된 탑의 심장을 지키며 촉수 기습을 사용하는 20층 수호자
+  description: "\uCE68\uC218\uB41C \uD0D1\uC758 \uC2EC\uC7A5\uC744 \uC9C0\uD0A4\uBA70
+    \uCD09\uC218 \uAE30\uC2B5\uC744 \uC0AC\uC6A9\uD558\uB294 20\uCE35 \uC218\uD638\uC790"
   rarity: 0
   icon: {fileID: 0}
   elementType: 1
@@ -39,4 +40,8 @@ MonoBehaviour:
   barrierHP: 0
   barrierDuration: 4.5
   barrierFailureDamagePercent: 35
+  specialPatternInterval: 11
+  specialPatternDuration: 3
+  barrierHealPercent: 12
+  reflectionPercent: 20
   battleSprite: {fileID: 21300000, guid: 1911814178cd34745bf1c60e01a6766d, type: 3}

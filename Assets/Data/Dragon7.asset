@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.DragonData
   speciesId: dante
   displayName: "\uB2E8\uD14C"
-  description: 
+  description: "\"\uAC70\uC9D3\uC744 \uB9D0\uD558\uB294 \uC790\uC758 \uB208\uC744
+    \uC12C\uAD11\uC73C\uB85C \uD0DC\uC6CC\uBC84\uB9BD\uB2C8\uB2E4\""
   rarity: 4
   element: "\uBE5B"
   elementType: 8

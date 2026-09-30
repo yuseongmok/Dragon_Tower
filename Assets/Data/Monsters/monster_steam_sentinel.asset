@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: monster_steam_sentinel
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.MonsterData
   contentId: monster_steam_sentinel
-  displayName: 증기 파수병
-  description: 두꺼운 장갑과 고압 증기로 전장을 압박하는 수호병
+  displayName: "\uC99D\uAE30 \uD30C\uC218\uBCD1"
+  description: "\uB450\uAEBC\uC6B4 \uC7A5\uAC11\uACFC \uACE0\uC555 \uC99D\uAE30\uB85C
+    \uC804\uC7A5\uC744 \uC555\uBC15\uD558\uB294 \uC218\uD638\uBCD1"
   rarity: 0
   icon: {fileID: 0}
   elementType: 1
@@ -39,4 +40,8 @@ MonoBehaviour:
   barrierHP: 0
   barrierDuration: 0
   barrierFailureDamagePercent: 0
+  specialPatternInterval: 11
+  specialPatternDuration: 3
+  barrierHealPercent: 12
+  reflectionPercent: 20
   battleSprite: {fileID: 21300000, guid: 3d0140a1f42e4f3b817ea7e9e8071b44, type: 3}

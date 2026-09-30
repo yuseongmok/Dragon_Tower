@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.DragonData
   speciesId: mir
   displayName: "\uBBF8\uB974"
-  description: 
+  description: "\"\uBBF8\uB974\uC5D0\uAC8C \uC18C\uC6D0\uC744 \uBE4C\uB7EC \uC628
+    \uC790\uB4E4\uC740 \uBAA8\uB450 \uBCBC\uB77D\uC744 \uB9DE\uC558\uC2B5\uB2C8\uB2E4\""
   rarity: 2
   element: "\uBC14\uB78C"
   elementType: 4
@@ -29,10 +30,9 @@ MonoBehaviour:
   finalName: "\uC624\uB974\uB3C4\uC2A4"
   skillEffect: 2
   skill: {fileID: 11400000, guid: d370770991892fe47869e1cad083b670, type: 2}
-  passiveName: "여의주"
-  passiveDescription: "일반 공격이 절반의 피해를 주는 2회의 연속 공격으로 바뀝니다."
+  passiveName: "\uC5EC\uC758\uC8FC"
+  passiveDescription: "\uC77C\uBC18 \uACF5\uACA9\uC774 \uC808\uBC18\uC758 \uD53C\uD574\uB97C
+    \uC8FC\uB294 2\uD68C\uC758 \uC5F0\uC18D \uACF5\uACA9\uC73C\uB85C \uBC14\uB01D\uB2C8\uB2E4."
   passiveMechanic: 6
   alternateSkillElement: 0
   evolutionSheetIncludesBase: 1
-
-

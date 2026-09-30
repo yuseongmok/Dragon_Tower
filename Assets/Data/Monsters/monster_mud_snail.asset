@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: monster_mud_snail
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.MonsterData
   contentId: monster_mud_snail
-  displayName: 진흙 달팽이
-  description: 두꺼운 진흙 껍질로 버티다가 묵직한 오물을 발사하는 늪지 생물
+  displayName: "\uC9C4\uD759 \uB2EC\uD33D\uC774"
+  description: "\uB450\uAEBC\uC6B4 \uC9C4\uD759 \uAECD\uC9C8\uB85C \uBC84\uD2F0\uB2E4\uAC00
+    \uBB35\uC9C1\uD55C \uC624\uBB3C\uC744 \uBC1C\uC0AC\uD558\uB294 \uB2AA\uC9C0 \uC0DD\uBB3C"
   rarity: 0
   icon: {fileID: 0}
   elementType: 1
@@ -22,9 +23,9 @@ MonoBehaviour:
   attackDamage: 26
   attackInterval: 2.9
   hpGrowthPerFloor: 8
-  attackGrowthPerFloor: .35
+  attackGrowthPerFloor: 0.35
   hpGrowthPerFloorPercent: 1.5
-  attackGrowthPerFloorPercent: .5
+  attackGrowthPerFloorPercent: 0.5
   minimumFloor: 11
   maximumFloor: 19
   spawnWeight: 10
@@ -36,4 +37,11 @@ MonoBehaviour:
   patternEveryAttacks: 4
   patternIntervalMultiplier: 1
   patternDamageMultiplier: 1
+  barrierHP: 0
+  barrierDuration: 4.5
+  barrierFailureDamagePercent: 35
+  specialPatternInterval: 11
+  specialPatternDuration: 3
+  barrierHealPercent: 12
+  reflectionPercent: 20
   battleSprite: {fileID: 21300000, guid: b9a1732ca70aa724aab31498393e3193, type: 3}

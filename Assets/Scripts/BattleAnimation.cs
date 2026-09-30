@@ -140,6 +140,11 @@ namespace DragonTower
                     Burst(playerHome,new Color(1,.42f,.35f),12,0,110);
                     Damage(playerHome,damage.ToString(),new Color(1,.48f,.40f),0);
                     break;
+                case CombatCue.PlayerStatusHit:
+                    playerHitAge=0;
+                    Burst(playerHome,new Color(1,.55f,.25f),5,0,45);
+                    Damage(playerHome,damage.ToString(),new Color(1,.65f,.35f),0);
+                    break;
                 case CombatCue.EnemyMiss:
                     enemyAttackAge=0;
                     Damage(playerHome,"회피!",new Color(.40f,1,.88f),0);
@@ -209,9 +214,10 @@ namespace DragonTower
             if(!fighting) resultAge+=delta;
             float breath=fighting?Mathf.Sin(clock*3.6f):0;
             float bounce=fighting?Mathf.Abs(Mathf.Sin(clock*3.3f)):0;
-            float windup=fighting?1-Mathf.Clamp01((float)(battle.NextEnemyStrike-battle.Time)/BattleModel.WindupDuration):0;
+            float windup=fighting?battle.EnemyWindupProgress:0;
             float attack=Pulse(attackAge,.24f),cast=Pulse(skillAge,.4f),dodge=Pulse(dodgeAge,BattleModel.DodgeDuration);
             float enemyAttack=Pulse(enemyAttackAge,.28f);
+            if(battle.EnemyStunned){enemyAttack=0;enemyAttackAge=10;bounce=0;}
             var playerOffset=new Vector2(28*attack-66*dodge-9*cast,4*breath+48*attack+12*dodge);
             var enemyOffset=new Vector2(-20*enemyAttack,9*bounce-46*enemyAttack-12*windup);
             if(playerHitAge>=0&&playerHitAge<.24f) playerOffset.x+=Mathf.Sin(playerHitAge*95)*10*(1-playerHitAge/.24f);
@@ -223,6 +229,12 @@ namespace DragonTower
             enemy.localRotation=Quaternion.Euler(0,0,windup*Mathf.Sin(clock*40)*3+10*enemyAttack);
             playerGraphic.color=HitColor(playerColor,playerHitAge);
             enemyGraphic.color=HitColor(enemyColor,enemyHitAge);
+            if(fighting)
+            {
+                float tint=.40f+.12f*Mathf.Sin((float)battle.Time*5);
+                if(BattleStatusHud.HasStatus(battle,true))playerGraphic.color=Color.Lerp(playerGraphic.color,BattleStatusHud.ActorTint(battle,true),tint);
+                if(BattleStatusHud.HasStatus(battle,false))enemyGraphic.color=Color.Lerp(enemyGraphic.color,BattleStatusHud.ActorTint(battle,false),tint);
+            }
             if(dodge>0){var c=playerGraphic.color;c.a=1-.45f*dodge;playerGraphic.color=c;}
             if(!fighting)
             {

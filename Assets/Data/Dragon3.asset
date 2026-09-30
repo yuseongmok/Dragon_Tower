@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.DragonData
   speciesId: brandy
   displayName: "\uBE14\uB79C\uB514"
-  description: 
+  description: "\"\uB9CC\uC9C0\uBA74 \uCCA0\uC778 \uC0BC\uC885 \uACBD\uAE30\uD558\uB294
+    \uC0BC\uCD0C\uB3C4 \uC678\uB9C8\uB514 \uBE44\uBA85\uB9CC \uB0A8\uAE30\uACE0 \uB545\uC18D\uC73C\uB85C
+    \uB04C\uB824\uAC11\uB2C8\uB2E4.\""
   rarity: 1
   element: "\uD759"
   elementType: 5

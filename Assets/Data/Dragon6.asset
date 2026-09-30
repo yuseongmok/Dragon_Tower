@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.DragonData
   speciesId: nova
   displayName: "\uB178\uBC14"
-  description: 
+  description: "\"\uAC00\uB054\uC529 \uBE14\uB799\uD640\uC744 \uB9CC\uB4DC\uB824\uACE0
+    \uC2DC\uB3C4\uD569\uB2C8\uB2E4\""
   rarity: 4
   element: "\uC554\uD751"
   elementType: 7

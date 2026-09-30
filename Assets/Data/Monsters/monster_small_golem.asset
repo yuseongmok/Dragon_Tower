@@ -29,4 +29,18 @@ MonoBehaviour:
   maximumFloor: 9
   spawnWeight: 10
   boss: 0
+  timingVariancePercent: 0
+  quickAttackChancePercent: 0
+  quickAttackIntervalMultiplier: 0.6
+  bossPattern: 0
+  patternEveryAttacks: 4
+  patternIntervalMultiplier: 1
+  patternDamageMultiplier: 1
+  barrierHP: 0
+  barrierDuration: 4.5
+  barrierFailureDamagePercent: 35
+  specialPatternInterval: 11
+  specialPatternDuration: 3
+  barrierHealPercent: 12
+  reflectionPercent: 20
   battleSprite: {fileID: 21300000, guid: 75f2d42c259eb794d93790a98fe61050, type: 3}

@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.DragonData
   speciesId: sol
   displayName: "\uC194"
-  description: 
+  description: "\"\uADFC\uCC98\uC5D0 \uC788\uC73C\uBA74 \uD56D\uC0C1 \uB9DB\uC788\uB294
+    \uB0C4\uC0C8\uAC00 \uB0A9\uB2C8\uB2E4\""
   rarity: 0
   element: "\uBD88\uAF43"
   elementType: 2
@@ -29,10 +30,9 @@ MonoBehaviour:
   finalName: "\uC194\uB77C\uB9AC\uC2A4"
   skillEffect: 0
   skill: {fileID: 11400000, guid: 6553022dbe790f6479a67fc88e6e42f5, type: 2}
-  passiveName: "불사조"
-  passiveDescription: "HP가 20% 이하가 되면 타워 도전당 1회 체력을 완전히 회복합니다."
+  passiveName: "\uBD88\uC0AC\uC870"
+  passiveDescription: "HP\uAC00 20% \uC774\uD558\uAC00 \uB418\uBA74 \uD0C0\uC6CC
+    \uB3C4\uC804\uB2F9 1\uD68C \uCCB4\uB825\uC744 \uC644\uC804\uD788 \uD68C\uBCF5\uD569\uB2C8\uB2E4."
   passiveMechanic: 2
   alternateSkillElement: 0
   evolutionSheetIncludesBase: 1
-
-

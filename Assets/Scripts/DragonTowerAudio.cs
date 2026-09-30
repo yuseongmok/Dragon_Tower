@@ -89,7 +89,7 @@ namespace DragonTower
                 case CombatCue.Skill:a.One(a.SkillClip(skillName),1,a.HasSkillClip(skillName)?1:ElementPitch(element));break;
                 case CombatCue.SkillHit:a.One(a.impact,.7f,UnityEngine.Random.Range(.9f,1.1f));break;
                 case CombatCue.Dodge:case CombatCue.EnemyMiss:a.One(a.dodge,.8f);break;
-                case CombatCue.EnemyHit:a.One(a.hurt,.9f,UnityEngine.Random.Range(.94f,1.04f));break;
+                case CombatCue.EnemyHit:case CombatCue.PlayerStatusHit:a.One(a.hurt,.9f,UnityEngine.Random.Range(.94f,1.04f));break;
                 case CombatCue.BossSkill:a.One(a.bossSkill,1);break;
             }
         }
