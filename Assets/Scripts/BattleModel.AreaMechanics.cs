@@ -109,9 +109,12 @@ namespace DragonTower
             }
             else if(Enemy.bossPattern==EnemyBossPattern.AzazelSeals)
             {
-                if(sealAttackNext)attackSealUntil=Time+Enemy.specialPatternDuration;
-                else {skillSealUntil=Time+Enemy.specialPatternDuration;pendingSkillHits=0;}
-                Feedback?.Invoke(SpecialName+"! 회피 불가 · "+Enemy.specialPatternDuration.ToString("0.#")+"초");
+                if(!ProtectedSkillActive)
+                {
+                    if(sealAttackNext)attackSealUntil=Time+Enemy.specialPatternDuration;
+                    else {skillSealUntil=Time+Enemy.specialPatternDuration;pendingSkillHits=0;}
+                    Feedback?.Invoke(SpecialName+"! 회피 불가 · "+Enemy.specialPatternDuration.ToString("0.#")+"초");
+                }
                 sealAttackNext=!sealAttackNext;
             }
             else
@@ -120,6 +123,7 @@ namespace DragonTower
         }
         void ApplyAreaHitEffects()
         {
+            if(ProtectedSkillActive)return;
             if((Enemy.floor>=21&&Enemy.floor<=30)||Enemy.bossPattern==EnemyBossPattern.UrielReflection)
             {
                 if(!PlayerBurning)playerBurnNext=Time+1;
@@ -153,7 +157,7 @@ namespace DragonTower
         }
         void DamagePlayer(int damage,string source)
         {
-            if(Result!=BattleResult.Fighting)return;
+            if(Result!=BattleResult.Fighting||ProtectedSkillActive)return;
             // Damage-over-time and reflection cannot be dodged, but mitigation and shields still work.
             damage=Math.Max(0,(int)Math.Round(damage*(1-Math.Min(80,Math.Max(0,Dragon.damageReductionPercent))/100f),MidpointRounding.AwayFromZero));
             int absorbed=Math.Min(ShieldHP,damage);shieldHP-=absorbed;damage-=absorbed;

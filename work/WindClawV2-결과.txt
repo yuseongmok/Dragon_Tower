@@ -1,0 +1,38 @@
+귀참 VFX 2차 리뉴얼
+적용 프로젝트: C:\Users\PC\Dragon_Tower
+
+보존
+귀참 Skill Data 및 2연격 피해/쿨타임/적용 시점은 변경하지 않았습니다.
+42 × 2회, 최초 타격 .18초, 타격 간격 .14초, 쿨타임 6.5초가 그대로 유지됩니다.
+질풍강타/바람칼날/질풍참 VFX, 기본 공격, HP/Damage 모델, HUD와 기존 아이콘 파일의 해시가 수정 전후 동일합니다.
+
+변경
+- 새 96×96 WindClawSharp Sprite. 두꺼운 시작부에서 날카로운 끝으로 급격히 가늘어지고 가운데 절단선이 가장 길고 강합니다.
+- 짙은 청록 외곽/청록/밝은 민트/백색 중심 4단계 팔레트. 세 절단선의 시작점·길이·굵기가 다릅니다.
+- 접근 시간 80ms 동안 Image Fill로 위에서 아래로 실제 절단선이 그어집니다. 움직이는 끝에 작은 Spark와 파편이 따라옵니다.
+- 첫 Claw 크기 250×290 기준, 두 번째는 12% 더 크게 표현. 두 실제 피해 이벤트에 접촉 효과를 연결합니다.
+- 두 번째 접촉 즉시 중앙의 큰 Pixel Spark, 민트 Burst, 확장하는 얇은 링, 실루엣 Flash를 함께 표시합니다.
+- 마무리 시각적 Hit Stop 50ms, 방향성 Recoil 약 3px. 기존 VFX 레이어의 4px/110ms 단발 흔들림 유지. 전역 시간과 HUD는 멈추거나 흔들리지 않습니다.
+- 최종 X자 흔적은 약 .23초 내 소멸하며, .08초부터 큰 파편 10개가 퍼져 .32초까지 회수됩니다.
+- 피해 숫자만 첫 타격 후 50ms, 두 번째 타격 후 83ms 늦게 표시합니다. 좌우 바깥쪽으로 이동하고 크기는 24/28로 절제했습니다. 실제 HP 감소는 지연시키지 않습니다.
+
+수정 파일
+Assets/Scripts/WindClawVfx.cs — Draw, 끝점 Spark, X 흔적, 최종 Burst, 큰 파편
+Assets/Scripts/WindHitFeedback.cs — 귀참 마무리 표시 정지/밀림 강도
+Assets/Scripts/BattleAnimation.cs — 귀참 피해 숫자의 표시 지연·위치·크기만 변경
+Assets/Editor/WindClawValidation.cs — Draw 및 10개 파편 검증 추가
+
+추가 파일
+Assets/Resources/VFX/WindClawSharp.png 및 meta
+Assets/Editor/WindClawSharpSetup.cs 및 meta
+기존 WindClaw.png와 스킬 아이콘은 보존합니다.
+
+검증
+실제 전투 컴포넌트/스킬 버튼 경로로 4회 반복 시전.
+기존 피해량·횟수·타격 시점·쿨타임 유지, 점진적으로 그려지는 Claw, 파편 10개, X 흔적, 고정 풀 재사용 확인.
+기존 사망/비활성화 정리와 위치 복원, HUD 이름/아이콘, 입력 및 기존 세 바람 스킬 회귀 검증 통과.
+Unity 전투 화면의 접근/접촉/마무리/소멸 캡처 확인.
+실제 모바일 기기의 프레임 시간·드로우콜·터치 체감은 미검증입니다.
+
+고정 Image 풀 30개 유지, 시전 중 오브젝트 생성/파괴 없음. 새 전체 화면 효과나 실시간 조명 없음.
+원본 백업: work/WindClawV2-backup

@@ -14,19 +14,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
   skillId: skill_gale_slash
   displayName: "\uC9C8\uD48D\uCC38"
-  description: "11 \uD53C\uD574\uB97C 5\uD68C \xB7 Slow 35%"
+  description: "\uAC70\uB300\uD55C \uBC14\uB78C \uD6A1\uBCA0\uAE30 \xB7 \uB2E8\uC77C
+    \uD0C0\uACA9 \xB7 Slow 35%"
   elementType: 4
   effectKind: 2
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 218d67f7263458f41948e7b7a0ecc631, type: 3}
+  rarity: 2
+  initialHitDelay: 0.24
   battleVfx: {fileID: 5132599651350533342, guid: 858546d21acc17f4296f95eab9e8c269, type: 3}
   vfxScale: 0.55
   vfxOffset: {x: 0, y: 0}
   vfxEuler: {x: 0, y: 0, z: 0}
   vfxDuration: 1.6
   vfxSystemLimit: 14
-  damage: 11
+  damage: 55
   cooldown: 5.5
-  hitCount: 5
+  hitCount: 1
   hitInterval: 0.09
   statusEffect: 3
   statusChancePercent: 35

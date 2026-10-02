@@ -1,0 +1,37 @@
+질풍참 명중 피드백 개선
+적용 경로: C:\Users\PC\Dragon_Tower
+
+보존: 질풍참 Skill Data(55 피해, 1회, 쿨타임 5.5초, 최초 피해 .24초), Large Arc Sprite와 이동/크기/회전 코드, 질풍강타, 바람칼날, 기본 공격, 전투 모델/입력, HUD/Theme.
+보존 대상 파일 해시와 Large Arc 코드 구간을 수정 전후 비교했습니다.
+
+변경 내용
+- 실제 피해 확정 이벤트와 동시에 전용 십자형 픽셀 절단 Spark. 표시 크기 기준은 적 이미지 폭의 65%.
+- 밝은 민트/백색 중심과 청록 외곽선. 강한 표시 50ms, 130ms까지 소멸.
+- 적 Sprite의 알파 형태를 따라 60ms 이내의 밝은 실루엣 Flash. 이후 기존 피격 표현으로 돌아옴.
+- 캐릭터 표시에 한정한 50ms Hit Stop. 전역 시간/실제 피해/쿨타임은 계속 진행. 회피·플레이어 피격 표시는 우선 처리.
+- 참격 방향으로 최대 5 기준 픽셀의 짧은 시각적 Recoil 후 원위치 복귀. 물리적 위치/AI에는 영향 없음.
+- VFX 레이어에만 최대 2 기준 픽셀, 80ms 단발성 Impulse. HUD/카메라는 흔들지 않음.
+- 작은 바람 파편 11개와 35~160ms 사이 빠르게 확대·소멸하는 얇은 픽셀 링.
+- 55! 피해 숫자는 피해 확정 후 67ms 늦게, 접촉부에서 왼쪽 위로 떨어져 표시. 실제 피해 적용 시점은 변경하지 않음.
+
+변경 파일
+Assets/Scripts/GaleSlashVfx.cs
+Assets/Scripts/BattleAnimation.cs
+Assets/Editor/GaleSlashValidation.cs
+
+추가 파일
+Assets/Scripts/GaleSlashFeedback.cs — 캐릭터 표시 정지/Flash/Recoil, 비활성화 복원
+Assets/Resources/VFX/GaleSlashImpact.png — 64×64 전용 절단 Spark
+Assets/Resources/VFX/GaleSlashShockwave.png — 64×64 얇은 링
+Assets/Resources/VFX/GaleImpactSilhouette.shader — Sprite 알파 실루엣 전용 경량 UI 셰이더
+Assets/Editor/GaleSlashImpactSetup.cs — 전용 명중 에셋 생성
+
+검증
+분리된 Unity 검증 프로젝트에서 실제 BattleController/버튼 경로로 4회 반복 시전.
+단일 피해량/타격 시점/쿨타임, 접촉 프레임 Flash+정지, 초반 피해 숫자 숨김과 지연 표시, 종료 후 Flash 제거 통과.
+밀림 진행 중 비활성화했을 때 위치 복원 통과. 전역 TimeScale/쿨타임 값 불변 확인.
+기존 질풍강타/바람칼날/제피르 애니메이션/전투 입력/속성 HUD 회귀 검증 통과.
+실기기 모바일 성능과 주관적인 터치 타격감은 아직 미검증.
+
+풀: 기존 질풍참 15 Images → 16 Images, 별도 실루엣 Image 1개와 Material 1개. 매 타격마다 생성/파괴하지 않음.
+원본 백업: work/GaleImpact-backup

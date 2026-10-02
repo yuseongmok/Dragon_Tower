@@ -1,0 +1,6 @@
+from pathlib import Path
+s=Path('Assets/Scripts/GaleSlashFeedback.cs').read_text();s=s.replace('GaleSlashFeedback','DantianFeedback').replace('Gale Slash silhouette flash','Dantian silhouette flash').replace('age<.16f','age<.23f').replace('age<.05f','age<.07f').replace('age<.06f','age<.10f').replace('age<.04f','age<.07f').replace('(age-.04f)/.02f','(age-.07f)/.03f').replace('(age-.05f)/.11f','(age-.07f)/.16f').replace('Vector2.right*(5*Mathf.Sin','new Vector2(4,8)*(Mathf.Sin').replace('a short 5px recoil','a short diagonal recoil');Path('Assets/Scripts/DantianFeedback.cs').write_text(s)
+s=Path('Assets/Resources/VFX/GaleImpactSilhouette.shader').read_text().replace('DragonTower/Pixel Silhouette','DragonTower/Dantian Background Split')
+s=s.replace('sampler2D _MainTex;float4 _ClipRect;','sampler2D _MainTex;float4 _ClipRect;float4 _Line;float _Split;float _Saturation;float2 _Impulse;')
+s=s.replace('fixed4 c=i.color;c.a*=tex2D(_MainTex,i.uv).a;','float side=dot(i.world.xy,_Line.xy)-_Line.z;\n    float2 shift=(_Line.xy*sign(side)*_Split+_Impulse)/float2(480,850);\n    fixed4 c=tex2D(_MainTex,saturate(i.uv-shift))*i.color;\n    float gray=dot(c.rgb,float3(.2126,.7152,.0722));c.rgb=lerp(gray.xxx,c.rgb,_Saturation);')
+Path('Assets/Resources/VFX/DantianSplit.shader').write_text(s)

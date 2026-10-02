@@ -32,9 +32,9 @@ namespace DragonTower.Editor
             var capture=new Texture2D(480,850,TextureFormat.RGB24,false);capture.ReadPixels(new Rect(0,0,480,850),0,0);capture.Apply();
             Directory.CreateDirectory("Validation");File.WriteAllBytes("Validation/pixel-battle.png",capture.EncodeToPNG());
             RenderTexture.active=old;camera.targetTexture=null;target.Release();UnityEngine.Object.DestroyImmediate(target);UnityEngine.Object.DestroyImmediate(capture);
-            view.attackButton.onClick.Invoke();if(battle.EnemyHP!=BattleModel.EnemyMaxHP-data.attackDamage)throw new Exception("Attack button wiring failed");
+            view.AttackFromArena();if(battle.EnemyHP!=BattleModel.EnemyMaxHP-data.attackDamage)throw new Exception("Attack button wiring failed");
             view.skillButton.onClick.Invoke();if(battle.EnemyHP!=BattleModel.EnemyMaxHP-data.attackDamage-data.skill.damage)throw new Exception("Skill button wiring failed");
-            view.dodgeButton.onClick.Invoke();if(battle.DodgeUntil<=0)throw new Exception("Dodge button wiring failed");
+            view.DodgeFromArena(-1);if(battle.DodgeUntil<=0)throw new Exception("Dodge button wiring failed");
             Debug.Log("PIXEL_UI_BINDINGS_OK");
             // Reload to discard test-only camera changes before building the saved scene.
             EditorSceneManager.OpenScene("Assets/Scenes/Battle.unity");
@@ -42,3 +42,4 @@ namespace DragonTower.Editor
         }
     }
 }
+

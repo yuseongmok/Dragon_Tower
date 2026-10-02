@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f2bcd92b58824d4583930abf14b0dd8, type: 3}
+  m_Name: ZephyrAttack
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.DragonIdleFrames
+  frames:
+  - {fileID: 6624480879619551180, guid: 6b5e611770884ca44999936a5a76dbff, type: 3}
+  - {fileID: 1044856759853439295, guid: 6b5e611770884ca44999936a5a76dbff, type: 3}
+  - {fileID: -6298708793922616225, guid: 6b5e611770884ca44999936a5a76dbff, type: 3}
+  - {fileID: -4421505060606355186, guid: 6b5e611770884ca44999936a5a76dbff, type: 3}
+  durations:
+  - 0.06
+  - 0.06
+  - 0.06
+  - 0.06
+  offsets:
+  - {x: 0.030215204, y: 0}
+  - {x: 0.10635108, y: 0.0063795894}
+  - {x: 0.019764125, y: -0.044657096}
+  - {x: 0.017679095, y: -0.038277507}

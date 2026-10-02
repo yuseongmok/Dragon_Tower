@@ -1,0 +1,47 @@
+바람 VFX 리마스터 — 질풍강타 / 바람칼날 / 질풍참
+적용 프로젝트: C:\Users\PC\Dragon_Tower
+
+변경 내용
+• 질풍강타: 앞쪽 Mint/Pale 띠와 뒤쪽 Deep Teal 띠를 분리하고 Cyan 중심부를 절제. 마지막 중심 Spark → 작은 Mint Burst → Deep Teal Shockwave. 0.6초 수명과 기존 피해 이벤트 유지.
+• 바람칼날: 기존 초승달 실루엣과 3개 궤적/리듬 유지. Deep Blue Trail, Cyan Body, Mint Edge, 얇은 Pale Core를 분리. 마지막 칼날에 짧은 절단 잔상. 기존 마지막 Impact/파편/피격 피드백 유지.
+• 질풍참: Main Arc 310×205 크기와 회전 경로 유지. 뒤따르는 Teal Arc와 약간 다른 위치·각도의 Mint Edge/Pale Core. 기존 Impact, Flash, 정지감, 피해 숫자 타이밍을 유지하며 Cyan Burst와 Teal Shockwave 보강.
+• 귀참: 코드·아틀라스·VFX·데이터 모두 미수정. 단천 미구현.
+
+재사용과 성능
+• WindVFXStyle.cs: 귀참에서 참조한 Deep/Cyan/Mint/Pale 팔레트. 귀참 자체는 이 파일로 변경하지 않음.
+• WindRemaster.png: 기존 실루엣에서 분리한 30개 레이어, 512×384 RGBA 아틀라스(기본 텍셀 약 0.75 MiB), Point 필터, mipmap 없음.
+• 기존 WindSkillRecipe의 Gather/Trail/Spark, GaleSlashImpact/Shockwave 재사용. 원본 텍스처/Recipe/Skill Data 보존.
+• 기본 Unity UI 알파 블렌딩 머티리얼 공유. 새 Additive/조명/블룸/왜곡/풀스크린 효과 없음.
+• 풀 크기: Common 16→18, Blade 17→23, Slash 16→19. 총 11개 Image를 초기화 때만 추가. 시전마다 생성/파괴하지 않음.
+• 기존 파편 개수 유지: Common 10, Blade 8, Slash 11. 새 파티클 시스템 없음.
+• 검증 시 최대 활성 Image: Common 12, Blade 11, Slash 18. 주요 레이어와 작은 파편을 합한 수치.
+• 워밍업 후 각 효과 100회/4,500 Step 호출에서 관리 힙 할당 0바이트 관측. Unity Editor의 렌더링 코드 호출 범위 측정이며 Canvas 재빌드/GPU/WebGL 브라우저 전체 비용을 포함하지 않음.
+• 실제 모바일 기기의 GPU 시간/드로우콜/프레임 시간은 미측정. 기기 성능을 보장하는 수치가 아님.
+
+검증
+• 스킬별 순차 Unity 전투 테스트 및 연속 시전/타깃 사망/비활성화 정리 확인.
+• 실제 기존 Skill 버튼 경로, 피해 횟수/량/타이밍, 쿨타임, HUD 이름/아이콘, 탭·스와이프, Theme 검증 통과.
+• 명중/쿨타임 계산 코드·모든 Skill Data·귀참·배경 등 보호 대상 파일은 작업 전 해시와 동일.
+• 480×850 Unity 전투 캡처로 비교. 영상은 캡처를 실제 테스트 간격으로 재구성했으며 실기기 녹화가 아님.
+
+변경 파일
+Assets/Scripts/GaleStrikeVfx.cs
+Assets/Scripts/WindBladeVfx.cs
+Assets/Scripts/GaleSlashVfx.cs
+
+신규 파일
+Assets/Scripts/WindVFXStyle.cs (+ .meta)
+Assets/Editor/WindRemasterSetup.cs (+ .meta)
+Assets/Editor/WindRemasterValidation.cs (+ .meta)
+Assets/Resources/VFX/WindRemaster.png (+ .meta)
+
+백업
+work/WindRemaster-backup/ : 수정 전 세 VFX 스크립트 및 보호 파일 해시 목록.
+이전 에셋은 삭제하지 않았음.
+
+확인 방법
+실제 Dragon_Tower 프로젝트에서 스크립트 가져오기가 끝난 뒤 Play 진입.
+기존 스킬 장착 방식으로 질풍강타/바람칼날/질풍참을 선택하고 반복 사용.
+추가적인 HUD 변경이나 다른 스킬 제작은 하지 않음.
+
+최종 WebGL 빌드: 성공 (HUD_WEBGL_BUILD_OK).

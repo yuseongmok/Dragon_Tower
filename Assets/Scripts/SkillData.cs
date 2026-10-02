@@ -11,6 +11,14 @@ namespace DragonTower
         public ElementType elementType;
         public SkillEffectKind effectKind;
         public Sprite icon;
+        public ContentRarity rarity=ContentRarity.Common;
+        [Header("Signature skill (optional)")]
+        public string exclusiveDragonId;
+        [Range(0,100)] public float rewardEligibilityPercent=100;
+        [Tooltip("Successful casts only: protects the full cinematic; zero preserves ordinary skills.")]
+        [Min(0)] public float protectedCastDuration;
+        public bool CanEquip(string dragonId)=>string.IsNullOrEmpty(exclusiveDragonId)||exclusiveDragonId==dragonId;
+        [Min(0)] public float initialHitDelay;
         [Header("Battle VFX")]
         [Tooltip("Use a prefab from Eric VFX Studio/Prefabs/Built-In for this project.")]
         public GameObject battleVfx;
@@ -32,6 +40,7 @@ namespace DragonTower
         [Min(0)] public float statusDuration;
         [Tooltip("Burn: damage per second. Slow: attack speed reduction percent.")][Min(0)] public float statusPower;
         public string StableId=>string.IsNullOrWhiteSpace(skillId)?name:skillId.Trim();
-        public SkillStats Snapshot()=>new SkillStats{displayName=displayName,elementType=elementType,damage=damage,cooldown=cooldown,hitCount=Mathf.Max(1,hitCount),hitInterval=Mathf.Max(.03f,hitInterval),statusEffect=statusEffect,statusChancePercent=statusChancePercent,statusDuration=statusDuration,statusPower=statusPower};
+        public SkillStats Snapshot()=>new SkillStats{exclusiveDragonId=exclusiveDragonId,protectedCastDuration=Mathf.Max(0,protectedCastDuration),displayName=displayName,elementType=elementType,damage=damage,cooldown=cooldown,initialHitDelay=Mathf.Max(0,initialHitDelay),hitCount=Mathf.Max(1,hitCount),hitInterval=Mathf.Max(.03f,hitInterval),statusEffect=statusEffect,statusChancePercent=statusChancePercent,statusDuration=statusDuration,statusPower=statusPower};
     }
 }
+

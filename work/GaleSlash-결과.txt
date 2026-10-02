@@ -1,0 +1,34 @@
+질풍참 구현 결과
+
+실제 적용 프로젝트: C:\Users\PC\Dragon_Tower
+기존 질풍참의 ID/GUID를 유지했습니다. 임시 수치: Rare / Wind / 55 피해 1회 / 5.5초 쿨타임 / 최초 타격 지연 0.24초. 기존 Slow 옵션은 유지합니다.
+
+연출: 0.12초 집결 → 큰 회전 횡베기 → 기존 피해 확정 이벤트에서 섬광 및 피해 숫자 1회 → 45ms 시각적 유지 → 짧은 잔상과 파편.
+전역 TimeScale이나 전투 타이머는 멈추지 않습니다. VFX 레이어만 최대 2px 흔들리고 적은 3px 시각 오프셋 후 복귀합니다.
+
+변경 파일(프로젝트 내부 경로)
+Assets/Data/Skills/skill_gale_slash.asset — 단일 타격 수치, Rare, 아이콘, 시전 지연
+Assets/Scripts/BattleAnimation.cs — 질풍참 전용 시전/피해 이벤트 연결, 큰 단일 피해 숫자
+Assets/Editor/ContentDataSetup.cs — 신규 데이터 기본값 55×1
+
+신규 파일
+Assets/Scripts/GaleSlashVfx.cs — 고정 15개 Image 풀, GaleSlashArc/Trail/Impact 및 집결/파편
+Assets/Resources/VFX/GaleSlashArc.png — 별도 96×64 픽셀 참격, Point 필터, 압축/밉맵 없음
+Assets/Editor/GaleSlashSetup.cs — 참격 생성 및 최초 기존 데이터 마이그레이션
+Assets/Editor/GaleSlashValidation.cs — 실제 BattleController/스킬 버튼 경로 반복 검증
+
+재사용
+WindSkillRecipe의 WindGather / WindHitSpark, 공용 바람 팔레트 및 기존 UI 기본 머티리얼.
+바람칼날 Sprite는 재사용하지 않았습니다. 기존 Skill Animation 및 initialHitDelay 흐름을 사용합니다.
+
+검증
+분리된 Unity 검증 프로젝트에서 실제 전투 컴포넌트와 버튼 입력으로 4회 시전.
+각 시전 피해 1회, 데이터와 일치하는 피해량, 최초 타격 시간 오차 11ms 미만, 쿨타임 중 중복 입력 차단 통과.
+고정 풀 재사용, 효과 종료, 타깃 사망 시 정리, 스킬 이름/아이콘 자동 연결 통과.
+기존 질풍강타/바람칼날/탭·스와이프 입력/속성 HUD 및 제피르 애니메이션 검증 통과.
+미리보기는 Unity 전투 화면을 20ms 간격으로 캡처한 영상입니다.
+실제 모바일 기기의 터치 체감 및 프레임 시간/드로우콜 측정은 수행하지 않았습니다.
+
+되돌리기용 원본: 프로젝트 work/GaleSlash-backup
+게임에서 질풍참을 장착해 테스트하세요. 기본 장착 질풍강타를 임의로 교체하지 않았습니다.
+귀참/단천 및 추가 HUD 변경은 하지 않았습니다.

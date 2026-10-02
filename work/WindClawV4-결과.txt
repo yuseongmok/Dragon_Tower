@@ -1,0 +1,44 @@
+귀참 VFX 최종 디테일 개선
+실제 적용 프로젝트: C:\Users\PC\Dragon_Tower
+
+이번 변경
+1. 3개 Main Claw의 절단 날을 별도 Pale Mint/White Core로 분리했습니다.
+   Deep Blue/Teal → Cyan → Mint Body는 유지하고, 과하게 벌어지던 보조 궤적은 어둡게 줄여 주된 발톱 3개를 가리지 않게 했습니다.
+   기존 금빛 보조선 대신 흰 Cutting Edge를 우선합니다. 중앙 발톱이 가장 길고 강하며 굵은 시작부에서 끝으로 좁아지는 프로파일입니다.
+2. Core가 먼저 그려지고 Body가 1 Sprite 단계, Blue Trail이 2단계 뒤따릅니다.
+   Core/Body/Trail의 크기·위치·회전을 조금씩 다르게 하되 추가 발톱처럼 따로 보일 정도로 벌어지지 않게 했습니다.
+3. 첫 타격은 작은 Spark와 기존 약한 Flash/Recoil. 두 번째는 기존보다 큰 12% 크기 차이를 유지하면서 더 강한 Core와 더 긴 Trail을 사용합니다.
+4. 두 번째 실제 피해 이벤트에서 White Core Spark/Pale Mint Burst/Cyan Burst/Deep Teal Shockwave를 동시에 시작하고, 서로 다른 확대·소멸 곡선을 적용했습니다.
+   White Core 65ms 이내, Mint 120ms 이내, Cyan 160ms 이내, 바깥 Shockwave 200ms 이내 소멸합니다.
+5. 교차한 여섯 흔적은 약 180ms 안에 White/Mint → Cyan → Deep Teal로 빛이 빠지며 사라집니다. 기존 큰 파편 10개로 마무리합니다.
+
+유지
+귀참 Skill Data, 피해량/2연격/타격 시점/0.14초 간격/쿨타임은 그대로입니다.
+기존 50ms 표시 전용 정지, 약 3px Recoil, VFX 레이어의 짧은 흔들림과 Enemy Flash를 재사용합니다.
+피해 숫자의 지연과 좌우 분산도 유지했습니다. 실제 피해나 HP 변경을 늦추지 않습니다.
+BattleAnimation, WindHitFeedback, 피해 모델, HUD, 기존 질풍강타/바람칼날/질풍참 코드는 수정하지 않았으며 보호 대상 해시를 비교했습니다.
+
+변경 파일
+Assets/Scripts/WindClawVfx.cs
+Assets/Editor/WindClawValidation.cs
+추가 파일
+Assets/Editor/WindClawHierarchySetup.cs
+Assets/Resources/VFX/WindClawHierarchy.png 및 meta
+Assets/Resources/VFX/WindClawHighlight.shader 및 meta
+
+모바일 예산
+기존 30 Image 풀에서 Final Impact용 2개만 추가해 32개 고정 풀을 사용합니다.
+768×256 공용 Sprite Texture(Body 8프레임 + Core 8프레임), Point 필터/밉맵 없음.
+Additive는 두 Claw의 얇은 Core와 짧은 중앙 Spark에만 사용하며 같은 Material 1개를 공유합니다.
+파편 최대 10개. 매 시전 오브젝트 생성/파괴, 전체 화면 효과, 실시간 조명/블룸 없음.
+
+검증
+Unity의 실제 전투 컴포넌트/버튼 경로에서 4회 반복 시전.
+두 번의 피해와 기존 타격 시점, 순차 Draw, 여섯 교차 흔적, 네 Final Impact 레이어의 동시 시작, 파편 10개, 고정 풀, 종료/사망/비활성화 정리 검증 통과.
+기존 스킬/애니메이션/탭·스와이프/속성 HUD 회귀 검증 통과.
+접근·1타·2타·소멸 화면 캡처 확인.
+모바일 실기기 프레임 시간/드로우콜/터치 체감은 미검증입니다.
+
+미리보기 MP4는 Unity 전투 화면을 20ms 간격으로 캡처하여 원래 속도로 3회 반복 재생하도록 인코딩한 영상입니다.
+백업: work/WindClawV4-backup
+귀참 외의 다른 스킬은 업그레이드하지 않았습니다.

@@ -29,6 +29,15 @@ namespace DragonTower
         public Color color = new Color(1f, .48f, .27f);
         [Tooltip("Battle artwork is independent of the displayed element name.")]
         public Sprite battleSprite;
+        [Tooltip("Optional base-form idle. Evolution art remains independent.")]
+        public DragonIdleFrames idleFrames;
+        [Tooltip("Optional base-form attack frames. Presentation only; combat timing is unchanged.")]
+        public DragonIdleFrames attackFrames;
+        [Tooltip("Optional base-form skill casting frames; does not change skill mechanics.")]
+        public DragonIdleFrames skillFrames;
+        public DragonIdleFrames dodgeFrames;
+        public DragonIdleFrames hitFrames;
+        public DragonIdleFrames deathFrames;
         [Header("Tower evolution")]
         [Tooltip("Separated artwork used from level 10.")]
         public Sprite intermediateEvolutionSprite;
@@ -84,6 +93,7 @@ namespace DragonTower
         public BattleStats Snapshot() => Snapshot(1);
         public BattleStats Snapshot(int level) => new BattleStats
         {
+            speciesId=StableId,
             displayName=NameAtLevel(level), element=element, elementType=elementType, maxHP=maxHP, attackDamage=attackDamage, skillEffect=skillEffect,
             attackCooldown=.3f,dodgeCooldown=1.4f,dodgeDuration=.42f,
             skill=skill.Snapshot(),passiveName=passiveName,passiveDescription=passiveDescription,

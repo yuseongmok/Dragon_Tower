@@ -58,7 +58,7 @@ namespace DragonTower.Editor
             for(int i=0;i<180;i++){view.PlayCue(CombatCue.Skill,38);view.StepAnimation(battle,.016f);}
             Check(motion.PoolObjectCount==pool,"Effect pool stays bounded during spam");
             var assetVfx=view.GetComponent<BattleAssetVfx>();int assetInstances=assetVfx.InstanceCount;
-            Check(view.frame.Find("Battle effects (pooled)").childCount==pool+1,"No extra UI effect objects created");
+            Check(view.frame.Find("Battle effects (pooled)").childCount==pool+2,"No extra UI effect objects created");
             Check(assetVfx.InstanceCount==assetInstances,"Asset VFX instance is reused during spam");
             Reset();Check(view.frame.Find("Battle effects (pooled)").GetComponentsInChildren<Graphic>().Length==1,"Restart clears active particles and numbers");
             Check(view.playerArt.rectTransform.localScale==Vector3.one,"Restart resets transforms");

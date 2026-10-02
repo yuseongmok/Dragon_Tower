@@ -45,12 +45,14 @@ namespace DragonTower
     }
     public sealed class SkillStats
     {
+        public string exclusiveDragonId;public float protectedCastDuration;
         public string displayName;public ElementType elementType;public int damage;public float cooldown;
-        public int hitCount=1;public float hitInterval=.14f;public CombatStatusEffect statusEffect;
+        public float initialHitDelay;public int hitCount=1;public float hitInterval=.14f;public CombatStatusEffect statusEffect;
         public float statusChancePercent,statusDuration,statusPower;
     }
     public sealed class BattleStats
     {
+        public string speciesId;
         public string displayName,element;public ElementType elementType;public int maxHP,attackDamage;public SkillEffectKind skillEffect;public SkillStats skill;
         public float attackCooldown=.3f,dodgeCooldown=1.4f,dodgeDuration=.42f;
         public float criticalChance=0,criticalDamage=1.5f,damageReductionPercent;
@@ -88,7 +90,7 @@ namespace DragonTower
             bossPattern=EnemyBossPattern.EarthShatter,patternEveryAttacks=4,patternIntervalMultiplier=1.3f,patternDamageMultiplier=1.6f};
     }
     public enum BattleResult { Fighting, Victory, Defeat }
-    public enum CombatCue { Attack, Skill, SkillHit, Dodge, EnemyHit, EnemyMiss, BossSkill, PlayerStatusHit }
+    public enum CombatCue { Attack, Skill, SkillHit, Dodge, EnemyHit, EnemyMiss, BossSkill, PlayerStatusHit, SkillCast }
     // Pure combat rules: no scene dependencies; can be tested without rendering.
     public sealed partial class BattleModel
     {
@@ -106,7 +108,11 @@ namespace DragonTower
         public int EnemyShieldMaxHP { get; private set; }
         public double EnemyShieldRemaining => enemyShieldHP>0?Math.Max(0,enemyShieldUntil-Time):0;
         public bool PassiveConsumed { get; private set; }
-        public bool CanUseSkill => Result==BattleResult.Fighting&&!PlayerStunned&&!PlayerSkillSealed&&!Dragon.skillDisabled&&(Time>=SkillReady||Dragon.passiveMechanic==DragonPassiveMechanic.VoidAccelerator);
+        public bool CanUseSkill => Result==BattleResult.Fighting&&!ProtectedSkillActive&&(string.IsNullOrEmpty(Dragon.skill.exclusiveDragonId)||Dragon.skill.exclusiveDragonId==Dragon.speciesId)&&!PlayerStunned&&!PlayerSkillSealed&&!Dragon.skillDisabled&&(Time>=SkillReady||Dragon.passiveMechanic==DragonPassiveMechanic.VoidAccelerator);
+        double protectedSkillUntil;
+        public bool ProtectedSkillActive=>Result==BattleResult.Fighting&&Time<protectedSkillUntil;
+        public double ProtectedSkillRemaining=>ProtectedSkillActive?protectedSkillUntil-Time:0;
+        public void CancelProtectedSkill(){if(ProtectedSkillActive){pendingSkillHits=0;pendingFirstSkillHit=false;}protectedSkillUntil=0;}
         public const int EnemyMaxHP = 240, EnemyDamage = 18;
         public int CurrentEnemyMaxHP => Enemy.maxHP;
         public BattleResult Result { get; private set; }
@@ -126,7 +132,7 @@ namespace DragonTower
         public BattleStats Dragon { get; }
         public BattleEnemyStats Enemy { get; }
         readonly Func<double> random;
-        int attackHits,enemyAttackCount;int shieldHP,enemyShieldHP;int burnDamage,poisonDamage;int pendingSkillHits;double nextSkillHit;
+        int attackHits,enemyAttackCount;int shieldHP,enemyShieldHP;int burnDamage,poisonDamage;int pendingSkillHits;bool pendingFirstSkillHit;double nextSkillHit;
         float nextEnemyDamageMultiplier=1;
         double shieldUntil,enemyShieldUntil,burnUntil,burnNext,slowUntil,paralyzeUntil,stunUntil,passiveRapidUntil,passivePoisonNext,rapidUntil,firstAidUntil,frostBarrierReady;
         double invulnerableUntil,noAttackCooldownUntil,noSkillCooldownUntil,skillDamageBuffUntil,criticalBuffUntil,attackDamageBuffUntil;
@@ -167,7 +173,7 @@ namespace DragonTower
             if(Result!=BattleResult.Fighting)return;
             while(pendingSkillHits>0&&nextSkillHit<=Time&&Result==BattleResult.Fighting)
             {
-                PerformSkillHit(false);
+                bool first=pendingFirstSkillHit;pendingFirstSkillHit=false;PerformSkillHit(first);
                 if(Result!=BattleResult.Fighting){pendingSkillHits=0;break;}
                 pendingSkillHits--;nextSkillHit+=Math.Max(.03f,Dragon.skill.hitInterval);
             }
@@ -194,7 +200,12 @@ namespace DragonTower
             {
                 if(Time<stunUntil){NextEnemyStrike=Math.Max(NextEnemyStrike,stunUntil+enemyWindupDuration);break;}
                 bool paralyzed=EnemyParalyzed&&Roll(20);
-                if (NextEnemyStrike < DodgeUntil||Time<invulnerableUntil||paralyzed)
+                if(ProtectedSkillActive)
+                {
+                    // Signature immunity is not a dodge: no dodge rewards or actor hit cue.
+                    Feedback?.Invoke("단천 · 무적");
+                }
+                else if (NextEnemyStrike < DodgeUntil||Time<invulnerableUntil||paralyzed)
                 {
                     Cue?.Invoke(CombatCue.EnemyMiss, 0);
                     Feedback?.Invoke(paralyzed?"마비! 적의 공격이 실패했습니다":"회피 성공! 피해를 피했습니다");
@@ -264,6 +275,7 @@ namespace DragonTower
         }
         public bool Attack()
         {
+            if(ProtectedSkillActive)return false;
             if (Result != BattleResult.Fighting || PlayerStunned || PlayerAttackSealed || Time < AttackReady) return false;
             AttackReady = Time + AttackCooldownNow();
             if(PlayerActionMissed(false))return true;
@@ -293,8 +305,11 @@ namespace DragonTower
             if(overcast){float costPercent=Math.Max(6,10-Dragon.passiveStage*2);int overcastCost=Math.Max(1,(int)Math.Ceiling(Dragon.maxHP*costPercent/100f));PlayerHP=Math.Max(1,PlayerHP-overcastCost);Feedback?.Invoke("공허 가속기 · HP "+overcastCost+" 소모");}
             SkillReady = Time+(Time<noSkillCooldownUntil?0:Math.Max(0,Dragon.skill.cooldown)*(Time<firstAidUntil?.5f:1f));
             if(PlayerActionMissed(true))return true;
+            protectedSkillUntil=Time+Math.Max(0,Dragon.skill.protectedCastDuration);
             int casts=Has(AugmentMechanic.DoubleCasting)?2:1;pendingSkillHits=Math.Max(1,Dragon.skill.hitCount)*casts-1;nextSkillHit=Time+Math.Max(.03f,Dragon.skill.hitInterval);
-            PerformSkillHit(true);if(Result==BattleResult.Defeat)return true;
+            pendingFirstSkillHit=Dragon.skill.initialHitDelay>0;
+            if(pendingFirstSkillHit){pendingSkillHits++;nextSkillHit=Time+Dragon.skill.initialHitDelay;Cue?.Invoke(CombatCue.SkillCast,0);}
+            else PerformSkillHit(true);if(Result==BattleResult.Defeat)return true;
             if(Result==BattleResult.Fighting)ApplySkillStatus();
             TriggerAttackStatus();
             if(Dragon.passiveMechanic==DragonPassiveMechanic.JetStream){passiveRapidUntil=Time+Passive(1);AttackReady=Time+Math.Max(0,AttackReady-Time)*(1-Passive(.5f));Feedback?.Invoke("제트기류! 일반 공격 가속");}
@@ -361,6 +376,7 @@ namespace DragonTower
         }
         public bool Dodge()
         {
+            if(ProtectedSkillActive)return false;
             if (Result != BattleResult.Fighting || PlayerStunned || Time < DodgeReady) return false;
             DodgeReady = Time + (Dragon.dodgeCooldown>0?Dragon.dodgeCooldown:DodgeCooldown);
             DodgeUntil = Time + (Dragon.dodgeDuration>0?Dragon.dodgeDuration:DodgeDuration);
@@ -440,7 +456,7 @@ namespace DragonTower
                 EnemyHP=Math.Min(Enemy.maxHP,EnemyHP+Math.Max(1,(int)Math.Ceiling(Enemy.maxHP*Enemy.barrierHealPercent/100f)));
                 Cue?.Invoke(CombatCue.BossSkill,0);Feedback?.Invoke("빙결 방벽 유지! 냉룡왕 HP +"+(EnemyHP-before));return;
             }
-            enemyShieldHP=0;enemyShieldUntil=0;int damage=Math.Max(1,(int)Math.Ceiling(Dragon.maxHP*Enemy.barrierFailureDamagePercent/100f));PlayerHP=Math.Max(0,PlayerHP-damage);
+            enemyShieldHP=0;enemyShieldUntil=0;if(ProtectedSkillActive)return;int damage=Math.Max(1,(int)Math.Ceiling(Dragon.maxHP*Enemy.barrierFailureDamagePercent/100f));PlayerHP=Math.Max(0,PlayerHP-damage);
             Cue?.Invoke(CombatCue.EnemyHit,damage);Feedback?.Invoke("방벽 과열 폭발! 가드 불가 피해  −"+damage+" HP");
             if(Dragon.passiveMechanic==DragonPassiveMechanic.Phoenix&&Dragon.passiveAvailable&&!PassiveConsumed&&PlayerHP<=Dragon.maxHP*Passive(.2f)){PlayerHP=Dragon.maxHP;PassiveConsumed=true;Feedback?.Invoke("불사조! 체력을 완전히 회복했습니다");}
             if(PlayerHP==0)Result=BattleResult.Defeat;
@@ -471,4 +487,5 @@ namespace DragonTower
         {foreach(var item in Dragon.items??Array.Empty<BattleItem>())if(item!=null&&item.mechanic==mechanic)return item;return null;}
     }
 }
+
 

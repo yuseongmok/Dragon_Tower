@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a37d10c4b83957e4c868b03176c6d57b, type: 3}
+  m_Name: skill_dantian
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
+  skillId: skill_dantian
+  displayName: "\uB2E8\uCC9C"
+  description: "\uC81C\uD53C\uB974 \uC804\uC6A9 \xB7 \uACF5\uAC04 \uC808\uB2E8 \uD6C4
+    \uD3ED\uBC1C \xB7 \uC5F0\uCD9C \uC911 \uBB34\uC801"
+  elementType: 4
+  effectKind: 2
+  icon: {fileID: 5372653320162380514, guid: dd5db9bf166cabe4d8384956b5154a10, type: 3}
+  rarity: 4
+  exclusiveDragonId: zephyr
+  rewardEligibilityPercent: 0.5
+  protectedCastDuration: 1.3
+  initialHitDelay: 0.45
+  battleVfx: {fileID: 0}
+  vfxScale: 0.65
+  vfxOffset: {x: 0, y: 0}
+  vfxEuler: {x: 0, y: 0, z: 0}
+  vfxDuration: 1.3
+  vfxSystemLimit: 14
+  damage: 180
+  cooldown: 12
+  hitCount: 1
+  hitInterval: 0.14
+  statusEffect: 0
+  statusChancePercent: 0
+  statusDuration: 0
+  statusPower: 0

@@ -22,6 +22,12 @@ MonoBehaviour:
   attackDamage: 9
   color: {r: 1, g: 0.49, b: 0.29, a: 1}
   battleSprite: {fileID: 21300000, guid: d368cf5cd28748198568e617f277b077, type: 3}
+  idleFrames: {fileID: 0}
+  attackFrames: {fileID: 0}
+  skillFrames: {fileID: 0}
+  dodgeFrames: {fileID: 0}
+  hitFrames: {fileID: 0}
+  deathFrames: {fileID: 0}
   intermediateEvolutionSprite: {fileID: 21300000, guid: d9a4af93277ff389f4ecf9e9abdcdf28, type: 3}
   finalEvolutionSprite: {fileID: 21300000, guid: 772eff1419d8ac749d3164c0a1e58463, type: 3}
   evolutionSheet: {fileID: 2800000, guid: 93fc83518511492ab08f1a835307844b, type: 3}

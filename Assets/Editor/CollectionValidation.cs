@@ -200,7 +200,8 @@ namespace DragonTower.Editor
                     Check(controller.CurrentBattle.Dragon.displayName==flow.Session.Selected.displayName,"Tower uses selected dragon");
                     var skin=Resources.Load<BattleSkin>("PixelBattleSkin");
                     Check(skin!=null&&skin.floorMonsters!=null&&Array.IndexOf(skin.floorMonsters,controller.view.CurrentEnemySprite)>=0,"Monster room uses the floor one to nine roster");
-                    controller.view.attackButton.onClick.Invoke();
+                    controller.SendMessage("OnApplicationFocus",true); // Simulate focused player input in batch mode.
+                    controller.RequestAttack();
                     int dealt=ElementRules.Damage(flow.Session.Selected.attackDamage,controller.CurrentBattle.Dragon.elementType,controller.CurrentBattle.Enemy.elementType);
                     Check(controller.CurrentBattle.EnemyHP==240-dealt,"Attack uses the selected combat elements");
                     controller.CurrentBattle.Tick(100);controller.view.StepAnimation(controller.CurrentBattle,.7f);controller.view.Show(controller.CurrentBattle);
@@ -238,3 +239,4 @@ namespace DragonTower.Editor
         }
     }
 }
+

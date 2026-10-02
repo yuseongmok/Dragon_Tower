@@ -98,7 +98,7 @@ namespace DragonTower.Editor
             var skin = AssetDatabase.LoadAssetAtPath<BattleSkin>(SkinPath);
             if (skin == null) { skin = ScriptableObject.CreateInstance<BattleSkin>(); AssetDatabase.CreateAsset(skin, SkinPath); }
             skin.babyDragon = AssetDatabase.LoadAssetAtPath<Sprite>(Root + files[0]);
-            skin.rockSlime = AssetDatabase.LoadAssetAtPath<Sprite>(Root + "rock-slime.png");
+            if(skin.rockSlime==null)skin.rockSlime = AssetDatabase.LoadAssetAtPath<Sprite>(Root + "rock-slime.png");
             skin.floorMonsters = new[] {
                 skin.rockSlime,
                 AssetDatabase.LoadAssetAtPath<Sprite>(Root + "small-golem.png"),
@@ -106,7 +106,7 @@ namespace DragonTower.Editor
                 AssetDatabase.LoadAssetAtPath<Sprite>(Root + "cave-bat.png"),
                 AssetDatabase.LoadAssetAtPath<Sprite>(Root + "armored-skeleton.png") };
             skin.ancientGolemBoss = AssetDatabase.LoadAssetAtPath<Sprite>(Root + "ancient-golem-boss.png");
-            skin.towerBackground = AssetDatabase.LoadAssetAtPath<Sprite>(Root + "tower-chamber.png");
+            if(skin.towerBackground==null)skin.towerBackground = AssetDatabase.LoadAssetAtPath<Sprite>(Root + "tower-chamber.png");
             skin.floodedSewerBackground = AssetDatabase.LoadAssetAtPath<Sprite>(Root + "flooded-sewer.png");
             skin.forgeDepthsBackground = AssetDatabase.LoadAssetAtPath<Sprite>(Root + "forge-depths.png");
             string[,] secondArea={

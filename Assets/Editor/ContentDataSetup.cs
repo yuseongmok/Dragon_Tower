@@ -67,7 +67,7 @@ namespace DragonTower.Editor
             data.name=id;data.contentId=id;data.displayName=name;data.elementType=element;data.baseHP=hp;data.attackDamage=damage;
             data.attackInterval=interval;data.minimumFloor=minFloor;data.maximumFloor=maxFloor;data.spawnWeight=weight;data.boss=boss;
             if(boss){data.hpGrowthPerFloor=6;data.attackGrowthPerFloor=.2f;data.timingVariancePercent=8;data.bossPattern=EnemyBossPattern.EarthShatter;data.patternEveryAttacks=4;data.patternIntervalMultiplier=1.3f;data.patternDamageMultiplier=1.6f;}
-            data.battleSprite=AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/PixelBattle/"+spriteFile);EditorUtility.SetDirty(data);
+            if(data.battleSprite==null)data.battleSprite=AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/PixelBattle/"+spriteFile);EditorUtility.SetDirty(data);
         }
         static void EnsureSecondAreaMonster(string id,string name,ElementType element,int hp,int damage,float interval,string spriteFile,float variance,float quickChance,float quickMultiplier,bool boss=false)
         {
@@ -79,7 +79,7 @@ namespace DragonTower.Editor
             data.hpGrowthPerFloorPercent=boss?0:1.5f;data.attackGrowthPerFloorPercent=boss?0:.5f;
             data.timingVariancePercent=variance;data.quickAttackChancePercent=quickChance;data.quickAttackIntervalMultiplier=quickMultiplier;
             if(boss){data.bossPattern=EnemyBossPattern.AbyssalRush;data.patternEveryAttacks=3;data.patternIntervalMultiplier=.42f;data.patternDamageMultiplier=.8f;}
-            data.battleSprite=AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/PixelBattle/"+spriteFile);EditorUtility.SetDirty(data);
+            if(data.battleSprite==null)data.battleSprite=AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/PixelBattle/"+spriteFile);EditorUtility.SetDirty(data);
         }
         static void EnsureThirdAreaMonster(string id,string name,ElementType element,int hp,int damage,float interval,string spriteFile,float variance,float quickChance,float quickMultiplier,bool boss=false)
         {
@@ -90,7 +90,7 @@ namespace DragonTower.Editor
             data.hpGrowthPerFloor=boss?0:10;data.attackGrowthPerFloor=boss?0:.5f;data.hpGrowthPerFloorPercent=boss?0:2;data.attackGrowthPerFloorPercent=boss?0:.7f;
             data.timingVariancePercent=variance;data.quickAttackChancePercent=quickChance;data.quickAttackIntervalMultiplier=quickMultiplier;
             if(boss){data.bossPattern=EnemyBossPattern.ForgeBarrier;data.patternEveryAttacks=3;data.patternIntervalMultiplier=1;data.patternDamageMultiplier=1;data.barrierHP=220;data.barrierDuration=4.5f;data.barrierFailureDamagePercent=35;}
-            data.battleSprite=AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/PixelBattle/"+spriteFile);EditorUtility.SetDirty(data);
+            if(data.battleSprite==null)data.battleSprite=AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/PixelBattle/"+spriteFile);EditorUtility.SetDirty(data);
         }
         static void EnsureItem(string id,string name,string description,ItemGrade grade,ItemKind kind,ItemMechanic mechanic,int price,int maximumStacks,float primary=0,float secondary=0,float duration=0,params ContentEffect[] effects)
         {
@@ -239,8 +239,8 @@ namespace DragonTower.Editor
             EnsureSkill("skill_ice_slash","얼음 베기",ElementType.Ice,SkillEffectKind.Frost,18,5.5f,3,.12f,CombatStatusEffect.Slow,30,3,20,"FX_BlueSlash_Combination",.55f,12);
             EnsureSkill("skill_ice_slam","얼음 강타",ElementType.Ice,SkillEffectKind.Frost,32,7,2,.22f,CombatStatusEffect.Slow,50,4,30,"FX_BlueSlash_Ground02",.55f,12);
             EnsureSkill("skill_moon_combo","달의 연격",ElementType.Ice,SkillEffectKind.Frost,15,10,6,.13f,CombatStatusEffect.Slow,75,4,40,"FX_Four Stab",.55f,14);
-            EnsureSkill("skill_falling_flower","낙화",ElementType.Wind,SkillEffectKind.Wind,12,3.5f,3,.10f,CombatStatusEffect.Slow,25,2.5f,15,"FX_3Rotation_Air",.55f,10);
-            EnsureSkill("skill_gale_slash","질풍참",ElementType.Wind,SkillEffectKind.Wind,11,5.5f,5,.09f,CombatStatusEffect.Slow,35,3,20,"FX_Whirlwind Slash",.55f,14);
+            EnsureSkill("skill_falling_flower","바람칼날",ElementType.Wind,SkillEffectKind.Wind,12,3.5f,3,.10f,CombatStatusEffect.Slow,25,2.5f,15,"FX_3Rotation_Air",.55f,10);
+            EnsureSkill("skill_gale_slash","질풍참",ElementType.Wind,SkillEffectKind.Wind,55,5.5f,1,.09f,CombatStatusEffect.Slow,35,3,20,"FX_Whirlwind Slash",.55f,14);
             EnsureSkill("skill_storm_slash","폭풍참",ElementType.Wind,SkillEffectKind.Wind,14,8.5f,6,.11f,CombatStatusEffect.Slow,55,4,30,"FX_Slash_Ground2",.55f,15);
             EnsureSkill("skill_dust_storm","모래폭풍",ElementType.Earth,SkillEffectKind.Earth,13,5,4,.18f,CombatStatusEffect.Slow,35,3,20,"FX_Whirlpool Explosion 1",.50f,13);
             EnsureSkill("skill_earthquake","어스퀘이크",ElementType.Earth,SkillEffectKind.Earth,32,9,3,.24f,CombatStatusEffect.Slow,60,4,35,"FX_Ground Shockwave",.50f,14);
@@ -326,3 +326,4 @@ namespace DragonTower.Editor
         }
     }
 }
+

@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 namespace DragonTower
 {
-    public class BattleView : MonoBehaviour
+    public partial class BattleView : MonoBehaviour
     {
         public Font font;
         public RectTransform frame;
@@ -100,8 +100,8 @@ namespace DragonTower
             itemButton3=MakeButton("아이템 3 · 빈 슬롯",frame,145,727,138,38,C(.20f,.25f,.31f),out itemLabel3);
             itemLabel1.fontSize=itemLabel2.fontSize=itemLabel3.fontSize=10;
             skillButton=MakeButton("스킬",frame,-154,790,132,60,C(.22f,.30f,.48f),out skillLabel);
-            attackButton=MakeButton("공격",frame,0,790,148,68,C(.76f,.34f,.20f),out attackLabel);
-            dodgeButton=MakeButton("회피",frame,154,790,132,60,C(.17f,.37f,.38f),out dodgeLabel);
+
+
             dragonInfo=Label("",frame,0,835,440,20,11,Muted);
             var modal=Panel("Result overlay",frame,0,425,480,850,new Color(.025f,.04f,.08f,.96f));modal.raycastTarget=true;resultPanel=modal.gameObject;
             var resultCard=Panel("Result card",modal.transform,0,420,420,390,new Color(.08f,.09f,.12f,.98f));DragonTowerTheme.Frame(resultCard,DragonTowerTheme.Gold);
@@ -110,11 +110,11 @@ namespace DragonTower
             resultDetail=Label("",modal.transform,0,409,390,90,19,Color.white);
             restartButton=MakeButton("다시 도전 · 랜덤 드래곤",modal.transform,0,525,360,64,C(.7f,.31f,.20f),out _);
             Label("이번 단계: 전투 연습\n알 부화와 성장·층 이동은 다음 단계입니다",modal.transform,0,614,400,66,15,Muted);
-            resultPanel.SetActive(false);
+            resultPanel.SetActive(false);EnsureFinalControls();
             Fit();
         }
         void LoadGameFont(){var gameFont=Resources.Load<Font>("Fonts/Jua-Regular");if(gameFont!=null)font=gameFont;else if(font==null)font=Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");}
-        void Awake() { LoadGameFont();EnsureItemControls();EnsureElementIcons();ApplyPixelSkin(); }
+        void Awake() { LoadGameFont();EnsureItemControls();EnsureElementIcons();ApplyPixelSkin();EnsureFinalControls(); }
         Image ElementIcon(Transform parent,float x,float y,float size)
         {
             var rect=Rect("Element symbol",parent,x,y,size,size);
@@ -126,8 +126,8 @@ namespace DragonTower
             if(frame==null)return;
             if(enemyElementIcon==null)enemyElementIcon=ElementIcon(frame,-198,111,28);
             if(playerElementIcon==null)playerElementIcon=ElementIcon(frame,-198,674,28);
-            if(enemyName!=null){enemyName.rectTransform.anchoredPosition=new Vector2(-45,-111);enemyName.rectTransform.sizeDelta=new Vector2(245,28);}
-            if(playerName!=null){playerName.rectTransform.anchoredPosition=new Vector2(-45,-674);playerName.rectTransform.sizeDelta=new Vector2(245,28);}
+            if(enemyName!=null){enemyName.rectTransform.anchoredPosition=new Vector2(-45,-72);enemyName.rectTransform.sizeDelta=new Vector2(245,28);}
+            if(playerName!=null){playerName.rectTransform.anchoredPosition=new Vector2(-45,-716);playerName.rectTransform.sizeDelta=new Vector2(245,28);}
         }
         void SetElementIcon(Image image,ElementType element)
         {
@@ -136,7 +136,7 @@ namespace DragonTower
         public void SetRunProgress(int level,int experience,int required)
         {
             if(frame==null)return;
-            if(modeLabel!=null){modeLabel.rectTransform.anchoredPosition=new Vector2(42,-66);modeLabel.rectTransform.sizeDelta=new Vector2(310,24);}
+            if(modeLabel!=null){modeLabel.rectTransform.anchoredPosition=new Vector2(32,-18);modeLabel.rectTransform.sizeDelta=new Vector2(300,30);}
             if(levelLabel==null)levelLabel=Label("",frame,-190,60,72,20,16,C(1,.76f,.42f),TextAnchor.MiddleLeft);
             if(experienceFill==null)
             {
@@ -201,7 +201,7 @@ namespace DragonTower
         }
         void DecorateButton(Button button,Color edge)
         {
-            DragonTowerTheme.StyleButton(button,edge);
+            if(button!=null)DragonTowerTheme.StyleButton(button,edge);
         }
         public void SetDragonArt(DragonData dragon,int level=1)
         {
@@ -229,12 +229,22 @@ namespace DragonTower
                 motion=gameObject.AddComponent<BattleAnimation>();
                 motion.Initialize(this);
             }
+            motion.SetIdle(DragonData.EvolutionStage(level)==0 ? dragon.idleFrames : null,activeSprite);
+            equippedSkillPresentation=dragon.skill;
+            motion.SetZephyrWind(dragon.StableId=="zephyr");
+            motion.SetAttack(DragonData.EvolutionStage(level)==0 ? dragon.attackFrames : null);
+            motion.SetSkillFrames(DragonData.EvolutionStage(level)==0 ? dragon.skillFrames : null);
+            motion.SetDodgeFrames(DragonData.EvolutionStage(level)==0 ? dragon.dodgeFrames : null);
+            motion.SetHitFrames(DragonData.EvolutionStage(level)==0 ? dragon.hitFrames : null);
+            motion.SetDeathFrames(DragonData.EvolutionStage(level)==0 ? dragon.deathFrames : null);
             if(dragon.skill!=null)motion.ResetBattle(dragon.skill);
             else motion.ResetBattle(dragon.skillEffect);
         }
+        SkillData equippedSkillPresentation;
         public void SetSkillPresentation(SkillData skill)
         {
             if(skill==null)return;
+            equippedSkillPresentation=skill;
             activeSkillEffect=skill.effectKind;activeSkillName=skill.displayName;
             if(motion==null){motion=gameObject.AddComponent<BattleAnimation>();motion.Initialize(this);}
             motion.ResetBattle(skill);
@@ -254,8 +264,8 @@ namespace DragonTower
             }
             if(enemyName==null||floorLabel==null||modeLabel==null)
                 throw new System.InvalidOperationException("Battle encounter labels are missing.");
-            enemyName.text=enemy.displayName+"  /  "+ElementRules.DisplayName(enemy.elementType);floorLabel.text=floor.ToString("00");
-            modeLabel.text="타워 "+floor+"층  /  "+(boss?"BOSS ROOM":"MONSTER ROOM");
+            enemyName.text=enemy.displayName+" · "+ElementRules.DisplayName(enemy.elementType);floorLabel.text=floor.ToString("00");
+            modeLabel.text=floor+"F · "+(boss?"BOSS ROOM":"MONSTER ROOM");
             DragonTowerAudio.SetBattleMusic(floor,boss);
             var skin=Resources.Load<BattleSkin>("PixelBattleSkin");
             if(arenaImage!=null&&skin!=null)arenaImage.sprite=skin.BackgroundForFloor(floor);
@@ -276,7 +286,7 @@ namespace DragonTower
             frame.anchoredPosition=safe.center-new Vector2(Screen.width,Screen.height)*.5f;
         }
         public void Bind(UnityAction attack,UnityAction skill,UnityAction dodge,UnityAction restart)
-        {attackButton.onClick.AddListener(attack);skillButton.onClick.AddListener(skill);dodgeButton.onClick.AddListener(dodge);restartButton.onClick.AddListener(restart);}
+        {BindCombat(attack,skill,_=>dodge(),restart,()=>true);}
         public void BindItems(UnityAction first,UnityAction second,UnityAction third)
         {itemButton1.onClick.AddListener(first);itemButton2.onClick.AddListener(second);itemButton3.onClick.AddListener(third);}
         public void SetItems(TowerRun run)
@@ -286,12 +296,12 @@ namespace DragonTower
         void SetItemButton(Button button,Text label,TowerRun run,int index)
         {
             var item=run==null?null:run.ItemAt(index);int count=run==null?0:run.ItemCountAt(index);
-            usableItems[index]=item!=null&&item.kind==ItemKind.Consumable;
+            SetEquipmentVisual(index,item);usableItems[index]=false;button.interactable=false;
             if(item==null){label.text="아이템 "+(index+1)+" · 빈 슬롯";button.interactable=false;return;}
             string countText=count>1?" ×"+count:"";
             string effect=ItemEffectSummary(item);if(effect.Length>22)effect=effect.Substring(0,22)+"…";
             label.text=(item.kind==ItemKind.Consumable?"사용 · ":"장착 · ")+item.displayName+countText+"\n"+effect;
-            button.interactable=item.kind==ItemKind.Consumable;
+            button.interactable=false;
         }
         static string ItemEffectSummary(ItemData item)
         {
@@ -347,18 +357,19 @@ namespace DragonTower
             if(b.EnemyShieldHP>0){status="["+b.EnemyBarrierName+" "+b.EnemyShieldHP+" · "+b.EnemyShieldRemaining.ToString("0.0")+"초]";tint=new Color(.45f,.8f,1);}
             if(b.EnemyReflecting){status="[피해 반사 "+b.Enemy.reflectionPercent.ToString("0")+"% · "+b.ReflectionRemaining.ToString("0.0")+"초]";tint=new Color(1,.7f,.25f);}
             enemyStatus.text=status;enemyStatus.color=tint;
-            SetButton(attackButton,attackLabel,"공격",b.AttackReady-b.Time,b,refreshText);
+            ShowGestureStatus(b);
             if(b.Dragon.skillDisabled){skillButton.interactable=false;skillLabel.text="스킬\n봉인됨";}
             else if(b.Dragon.passiveMechanic==DragonPassiveMechanic.VoidAccelerator&&b.Result==BattleResult.Fighting){skillButton.interactable=true;skillLabel.text=b.Dragon.skill.displayName+"\n"+(b.SkillReady>b.Time?"HP 10%":"TAP");}
             else SetButton(skillButton,skillLabel,b.Dragon.skill.displayName,b.SkillReady-b.Time,b,refreshText);
-            SetButton(dodgeButton,dodgeLabel,"회피",b.DodgeReady-b.Time,b,refreshText);
+
             if(b.PlayerSkillSealed){skillButton.interactable=false;skillLabel.text="스킬 봉인\n"+b.SkillSealRemaining.ToString("0.0")+"초";}
-            if(b.PlayerAttackSealed){attackButton.interactable=false;attackLabel.text="공격 봉인\n"+b.AttackSealRemaining.ToString("0.0")+"초";}
+
             if(b.PlayerStunned)
             {
-                attackButton.interactable=skillButton.interactable=dodgeButton.interactable=false;
-                attackLabel.text=skillLabel.text=dodgeLabel.text="기절\n"+b.StunRemaining.ToString("0.0")+"초";
+                skillButton.interactable=false;
+                skillLabel.text="기절\n"+b.StunRemaining.ToString("0.0")+"초";
             }
+            UpdateFantasyHud(b);
             itemButton1.interactable=usableItems[0]&&!b.PlayerStunned&&b.Result==BattleResult.Fighting;
             itemButton2.interactable=usableItems[1]&&!b.PlayerStunned&&b.Result==BattleResult.Fighting;
             itemButton3.interactable=usableItems[2]&&!b.PlayerStunned&&b.Result==BattleResult.Fighting;
@@ -380,4 +391,8 @@ namespace DragonTower
         }
     }
 }
+
+
+
+
 

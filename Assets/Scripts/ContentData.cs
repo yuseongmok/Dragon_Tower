@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace DragonTower
 {
-    public enum ContentRarity { Common, Uncommon, Rare, Epic, Legendary }
+    public enum ContentRarity { Common=0, Uncommon=1, Rare=2, Epic=3, Legendary=4, Unique=5 }
     public enum ContentEffectType
     {
         Heal, MaxHP, AttackDamage, SkillDamagePercent, SkillCooldownPercent,

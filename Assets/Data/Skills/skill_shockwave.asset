@@ -18,6 +18,8 @@ MonoBehaviour:
   elementType: 5
   effectKind: 3
   icon: {fileID: 0}
+  rarity: 0
+  initialHitDelay: 0
   battleVfx: {fileID: 2470284903044977092, guid: f0dc881e8af566c49b61e96aa3ea0ae7, type: 3}
   vfxScale: 0.55
   vfxOffset: {x: 0, y: 0}

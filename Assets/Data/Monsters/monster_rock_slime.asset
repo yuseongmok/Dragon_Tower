@@ -43,4 +43,4 @@ MonoBehaviour:
   specialPatternDuration: 3
   barrierHealPercent: 12
   reflectionPercent: 20
-  battleSprite: {fileID: 21300000, guid: 5354b3f78902d804ba639c839dc0b75c, type: 3}
+  battleSprite: {fileID: 21300000, guid: ed2d71e527e11d04cae02ae235755544, type: 3}

@@ -260,7 +260,7 @@ namespace DragonTower
         public void EnterTowerWithRoll(int firstRoll,int secondRoll)
         {
             if(Session.Selected==null||hatchTime>=0)return;
-            towerRun=new TowerRun(Session.Selected.maxHP,firstRoll,secondRoll,Session.Selected.elementType,Session.Selected.alternateSkillElement);
+            towerRun=new TowerRun(Session.Selected.maxHP,firstRoll,secondRoll,Session.Selected.elementType,Session.Selected.alternateSkillElement,Session.Selected.StableId);
             StartCoroutine(ShowFloorTransition(0,1,true));
         }
         string RoomName(TowerRoomKind room)
@@ -512,8 +512,11 @@ namespace DragonTower
         {
             if(database==null)return Array.Empty<RandomReward>();
             var augments=(database.augments??Array.Empty<AugmentData>()).Where(a=>a!=null&&towerRun.CanTakeAugment(a)).ToList();
-            var skills=(database.skills??Array.Empty<SkillData>()).Where(s=>s!=null&&Session.Selected.CanLearnSkill(s.elementType)&&s.StableId!=towerRun.CurrentSkillId(Session.Selected.skill)).ToList();
+            var skills=(database.skills??Array.Empty<SkillData>()).Where(s=>s!=null&&s.CanEquip(Session.Selected.StableId)&&Session.Selected.CanLearnSkill(s.elementType)&&s.StableId!=towerRun.CurrentSkillId(Session.Selected.skill)).ToList();
             var result=new System.Collections.Generic.List<RandomReward>();var random=new System.Random(seed);
+            // Separate eligibility roll: ordinary rewards retain their existing random stream.
+            var signatureRandom=new System.Random(seed^0x5A17);
+            skills.RemoveAll(s=>s.rewardEligibilityPercent<100&&signatureRandom.NextDouble()*100>=s.rewardEligibilityPercent);
             while(result.Count<count&&(augments.Count>0||skills.Count>0))
             {
                 // A skill is possible in every slot but never guaranteed. With both pools present,

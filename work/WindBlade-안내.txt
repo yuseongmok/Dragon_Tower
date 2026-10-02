@@ -1,0 +1,48 @@
+바람칼날 구현 및 확인 안내
+
+실제 프로젝트: C:\Users\PC\Dragon_Tower
+낙화의 에셋 GUID 및 저장 ID skill_falling_flower는 유지하고 표시 이름을 바람칼날로 변경했습니다.
+Assets/Data/Skills/skill_falling_flower.asset에서 조절합니다. 질풍강타 Skill2.asset은 별개이며 변경하지 않았습니다.
+
+현재 데이터
+Rare / Wind / damage 12 / hitCount 3 / hitInterval 0.10초 / cooldown 3.5초 / initialHitDelay 0.16초.
+기존 낙화의 Slow 25%, 지속2.5초, 강도15도 보존했습니다.
+수치는 SkillData Inspector에서 조정 가능합니다. Rare는 새 SkillData.rarity 필드로 저장됩니다.
+최초 지연은 모든 기존 스킬에서 기본 0이며, 바람칼날에만 0.16을 설정했습니다.
+
+구조
+SkillData.cs: rarity와 initialHitDelay 추가. Snapshot에 대기시간 전달.
+BattleModel.cs: 기존 pendingSkillHits를 사용해 선택적 첫 피해를 예약. SkillCast 이벤트는 별도 선행 시전용이며 피해를 만들지 않습니다.
+TowerRun.cs: 장착 스킬의 최초 대기시간을 기존 전투 스냅샷에 전달.
+BattleAnimation.cs: 바람칼날 전용 시전/3타 cue 연결, 숫자 위치 분산. 기존 스킬/공격은 종전 경로 유지.
+WindBladeVfx.cs: WindBladeProjectile, WindBladeTrail, WindSlashImpact, WindPixelDebris 풀17개. 새로운 물리 투사체/충돌 Damage 코드는 없음.
+Resources/VFX/WindBlade.png: 고유 64×64 초승달, Point 필터, Mipmap 없음. 타격은 기존 공용 WindModules 시트 재사용.
+BattleView.cs / BattleView.ReferenceHud.cs: 장착 SkillData.icon 읽기만 추가. 이름과 쿨타임은 기존 동적 연결 유지. HUD 배치/크기 불변.
+Editor/ContentDataSetup.cs: 신규 설치 시 표시 이름도 바람칼날로 일치.
+Editor/WindBladeSetup.cs: 스프라이트와 아이콘 설치 도구.
+Editor/WindBladeValidation.cs: 장착 교체/다단히트/회귀 검증.
+
+연출
+0–0.08초: 앞쪽 한 점으로 픽셀8개 집결. 기존 Skill 모션 재사용.
+0.08 / 0.18 / 0.28초: 위·중앙·아래로 조금 다른 궤적에서 발사.
+0.16 / 0.26 / 0.36초: 실제 피해와 Slash Impact.
+3타는 더 큰 민트·백색 스파크와 작은 픽셀8개. HUD나 화면 전체를 흔드는 효과는 사용하지 않음.
+최종 잔류 효과는 약0.58초 내 종료.
+
+장착/확인
+기존 레벨업 스킬 교체 경로에서 바람칼날을 선택하면 장착 데이터가 바뀌고 HUD의 이름/아이콘/쿨타임이 따라 바뀝니다.
+기존 낙화 데이터 참조도 동일 ID를 통해 바람칼날로 이어집니다.
+기본 장착 질풍강타를 강제로 바꾸지 않았습니다. 새 증강 시스템이나 다른 스킬은 만들지 않았습니다.
+빠른 검증은 분리된 테스트 프로젝트에서 기존 TowerRun.ReplaceSkill과 BattleController.BeginBattle(activeSkill)을 사용했습니다.
+
+검증
+장착 교체 후 실제 스킬 버튼 4회 사용. 각 시전당 실제 피해3회와 VFX3회, 데이터와 일치하는 도착 시간(10ms 오차 내), 총 피해량, 쿨타임 차단 확인.
+이름/아이콘 자동 변경, 타깃 사망 후 정리, 고정 풀 유지, 질풍강타 복귀 확인.
+기존 입력/제피르 모션/질풍강타/속성테마/전투 메커니즘 테스트 통과.
+모바일 실기기 프레임 시간과 브라우저 입력은 아직 별도 검증이 필요합니다.
+
+복원
+work/WindBlade-backup에 수정 전 파일을 보관했습니다. 런타임/에디터 파일과 Skill asset을 함께 복원해야 합니다.
+원래 저장ID와 에셋 GUID는 그대로입니다.
+
+WebGL 빌드: 성공. 분리된 테스트 프로젝트의 최종 코드/데이터로 생성했습니다. 실기기 성능 검증은 별도입니다.
