@@ -58,10 +58,11 @@ namespace DragonTower
         public IReadOnlyList<RunItemSlot> ItemSlots => itemSlots;
         public IReadOnlyList<string> Augments => augments;
 
-        public TowerRun(int maxHP,int firstRoll,int secondRoll,ElementType element=ElementType.Neutral,ElementType alternate=ElementType.Neutral,string speciesId=null)
+        readonly DragonData definition;
+        public TowerRun(int maxHP,int firstRoll,int secondRoll,ElementType element=ElementType.Neutral,ElementType alternate=ElementType.Neutral,string speciesId=null,DragonData definition=null)
         {
             if(maxHP<=0)throw new ArgumentOutOfRangeException(nameof(maxHP));
-            dragonId=speciesId;dragonElement=element;alternateSkillElement=alternate;BaseMaxHP=MaxHP=CurrentHP=maxHP;PrepareChoices(firstRoll,secondRoll);
+            this.definition=definition;dragonId=speciesId;dragonElement=element;alternateSkillElement=alternate;BaseMaxHP=MaxHP=CurrentHP=maxHP;PrepareChoices(firstRoll,secondRoll);
         }
         public SkillData CurrentSkill(SkillData fallback)=>replacedSkill??fallback;
         public string CurrentSkillId(SkillData fallback){var skill=CurrentSkill(fallback);return skill==null?string.Empty:skill.StableId;}
@@ -70,6 +71,7 @@ namespace DragonTower
             if(skill==null)throw new ArgumentNullException(nameof(skill));
             if(!skill.CanEquip(dragonId))throw new InvalidOperationException("이 드래곤의 전용 스킬이 아닙니다.");
             if(skill.elementType!=dragonElement&&skill.elementType!=alternateSkillElement)throw new InvalidOperationException("현재 드래곤이 사용할 수 있는 속성의 스킬만 배울 수 있습니다.");
+            if(definition!=null&&!definition.CanOfferSkill(skill))throw new InvalidOperationException("Skill is not in this dragon production pool.");
             replacedSkill=skill;if(levelReward&&PendingLevelAugments>0)PendingLevelAugments--;
         }
         public void ChooseRoom(int index)
@@ -114,7 +116,7 @@ namespace DragonTower
             int itemDodgeDuration=ItemEffect(ContentEffectType.DodgeDurationPercent),itemCrit=ItemEffect(ContentEffectType.CriticalChancePercent);
             int itemCritDamage=ItemEffect(ContentEffectType.CriticalDamagePercent),itemReduction=ItemEffect(ContentEffectType.DamageReductionPercent);
             int affinityPassiveBonus=(source.passiveMechanic==DragonPassiveMechanic.StormAffinity||source.passiveMechanic==DragonPassiveMechanic.FrozenBlade)?evolutionStage*10:0;
-            return new BattleStats{speciesId=source.speciesId,displayName=source.displayName,element=source.element,elementType=source.elementType,skillEffect=replacedSkill==null?source.skillEffect:replacedSkill.effectKind,maxHP=MaxHP,attackDamage=Math.Max(1,(int)Math.Round((source.attackDamage*AttackEvolutionMultiplier(evolutionStage)+AttackBonus+itemAttack)*(1+(AttackDamagePercent+itemAttackPercent)/100f))),
+            return new BattleStats{speciesId=source.speciesId,displayName=source.displayName,element=source.element,elementType=source.elementType,skillEffect=replacedSkill==null?source.skillEffect:replacedSkill.effectKind,maxHP=MaxHP,attackDamage=Math.Max(1,(int)Math.Round((source.attackDamage*(definition==null?AttackEvolutionMultiplier(evolutionStage):definition.AttackMultiplier(evolutionStage))+AttackBonus+itemAttack)*(1+(AttackDamagePercent+itemAttackPercent)/100f))),
                 attackCooldown=ScaleTime(source.attackCooldown,AttackCooldownPercent+itemAttackCooldown,.08f),dodgeCooldown=ScaleTime(source.dodgeCooldown,DodgeCooldownPercent+itemDodgeCooldown,.2f),
                 dodgeDuration=Math.Max(.05f,source.dodgeDuration*(1+(DodgeDurationPercent+itemDodgeDuration)/100f)),criticalChance=Math.Max(0,source.criticalChance+(CriticalChancePercent+itemCrit)/100f),criticalDamage=Math.Max(1,source.criticalDamage+(CriticalDamagePercent+itemCritDamage)/100f),damageReductionPercent=Math.Max(0,Math.Min(80,DamageReductionPercent+itemReduction)),skillDisabled=SkillDisabled,augments=augmentData.Select(x=>x.Snapshot()).ToArray(),items=itemSlots.Where(x=>x.Item!=null&&x.Item.kind==ItemKind.Equipment).Select(x=>x.Item.Snapshot(x.Count)).ToArray(),
                 passiveName=source.passiveName,passiveDescription=source.passiveDescription,passiveMechanic=source.passiveMechanic,alternateSkillElement=source.alternateSkillElement,passiveAvailable=PassiveAvailable,passiveStage=evolutionStage,
@@ -232,7 +234,7 @@ namespace DragonTower
         void RecalculateMaxHP()
         {
             int previous=MaxHP;int itemFlat=ItemEffect(ContentEffectType.MaxHP),itemPercent=ItemEffect(ContentEffectType.MaxHPPercent);
-            MaxHP=Math.Max(1,(int)Math.Round((BaseMaxHP*HealthEvolutionMultiplier(DragonData.EvolutionStage(Level))+FlatMaxHPBonus+itemFlat)*(1+(MaxHPPercent+itemPercent)/100f)));
+            MaxHP=Math.Max(1,(int)Math.Round((BaseMaxHP*(definition==null?HealthEvolutionMultiplier(DragonData.EvolutionStage(Level)):definition.HealthMultiplier(DragonData.EvolutionStage(Level)))+FlatMaxHPBonus+itemFlat)*(1+(MaxHPPercent+itemPercent)/100f)));
             if(MaxHP>previous)CurrentHP+=MaxHP-previous;else CurrentHP=Math.Min(CurrentHP,MaxHP);
         }
         public void AddAugment(string id,bool levelReward)

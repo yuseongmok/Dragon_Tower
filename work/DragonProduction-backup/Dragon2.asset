@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0efa5d3dd9dbc83419f66022a349c41f, type: 3}
+  m_Name: Dragon2
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.DragonData
+  speciesId: zephyr
+  displayName: "\uC81C\uD53C\uB974"
+  description: "\"\uC2A4\uCCD0 \uC9C0\uB098\uAC04 \uC790\uB9AC\uC5D0\uB294 \uBD80\uB4DC\uB7EC\uC6B4
+    \uC0B0\uB4E4\uBC14\uB78C\uB9CC \uB0A8\uC9C0\uB9CC, \uB4A4\uB97C \uB3CC\uC544\uBCF4\uBA74
+    \uC774\uBBF8 \uBAA8\uB4E0 \uAC83\uC774 \uBCA0\uC5EC \uC788\uC2B5\uB2C8\uB2E4.\""
+  rarity: 2
+  element: "\uBC14\uB78C"
+  elementType: 4
+  maxHP: 90
+  attackDamage: 9
+  color: {r: 0.44, g: 0.87, b: 0.66, a: 1}
+  battleSprite: {fileID: 21300000, guid: e76b48cab34f48a6bd1bf9834a0d737a, type: 3}
+  idleFrames: {fileID: 11400000, guid: 5a524564dab053c46aec66e027933a43, type: 2}
+  attackFrames: {fileID: 11400000, guid: 6b66b9065c7670b47b18be63d933d44e, type: 2}
+  skillFrames: {fileID: 11400000, guid: 7ebbeec0da052554985ba33dad777018, type: 2}
+  dodgeFrames: {fileID: 11400000, guid: e5cb699928318264c82ba0d904658bbb, type: 2}
+  hitFrames: {fileID: 11400000, guid: e39bbadfbb3b9f540a0cc4eb38accd3b, type: 2}
+  deathFrames: {fileID: 11400000, guid: a4cc27c7b2b763c45b4ef8794f55605a, type: 2}
+  intermediateEvolutionSprite: {fileID: 21300000, guid: 443f18b8ef487bf7f166dabb4d5ebd64, type: 3}
+  finalEvolutionSprite: {fileID: 21300000, guid: 17db08aef5d92da26b44316a9b868e81, type: 3}
+  evolutionSheet: {fileID: 2800000, guid: ff5629449d684c058e9d16dd74c1e98b, type: 3}
+  intermediateName: "\uC81C\uD53C\uB85C\uC2A4"
+  finalName: "\uC81C\uD53C\uB9AC\uC628"
+  skillEffect: 2
+  skill: {fileID: 11400000, guid: d370770991892fe47869e1cad083b670, type: 2}
+  passiveName: "\uC81C\uD2B8\uAE30\uB958"
+  passiveDescription: "\uC2A4\uD0AC \uC0AC\uC6A9 \uC2DC 1\uCD08\uAC04 \uC77C\uBC18
+    \uACF5\uACA9 \uCFE8\uD0C0\uC784\uC774 50% \uAC10\uC18C\uD569\uB2C8\uB2E4."
+  passiveMechanic: 5
+  alternateSkillElement: 0
+  evolutionSheetIncludesBase: 0

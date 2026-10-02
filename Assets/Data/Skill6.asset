@@ -19,6 +19,9 @@ MonoBehaviour:
   effectKind: 6
   icon: {fileID: 0}
   rarity: 0
+  exclusiveDragonId: 
+  rewardEligibilityPercent: 100
+  protectedCastDuration: 0
   initialHitDelay: 0
   battleVfx: {fileID: 5302672184604702235, guid: d85d754d6d0e61746b33683da8dc5049, type: 3}
   vfxScale: 0.6

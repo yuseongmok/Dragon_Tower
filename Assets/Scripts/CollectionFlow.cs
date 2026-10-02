@@ -260,7 +260,7 @@ namespace DragonTower
         public void EnterTowerWithRoll(int firstRoll,int secondRoll)
         {
             if(Session.Selected==null||hatchTime>=0)return;
-            towerRun=new TowerRun(Session.Selected.maxHP,firstRoll,secondRoll,Session.Selected.elementType,Session.Selected.alternateSkillElement,Session.Selected.StableId);
+            towerRun=new TowerRun(Session.Selected.maxHP,firstRoll,secondRoll,Session.Selected.elementType,Session.Selected.alternateSkillElement,Session.Selected.StableId,Session.Selected);
             StartCoroutine(ShowFloorTransition(0,1,true));
         }
         string RoomName(TowerRoomKind room)
@@ -349,7 +349,7 @@ namespace DragonTower
                 }
             }
             root.gameObject.SetActive(false);ScreenName=boss?"보스 전투":"몬스터 전투";
-            controller.BeginBattle(Session.Selected,towerRun.BuildBattleStats(Session.Selected.Snapshot(towerRun.Level)),enemy,towerRun.Floor,boss,towerRun.CurrentHP,enemySprite,towerRun.Level,towerRun.CurrentSkill(Session.Selected.skill));
+            controller.BeginBattle(Session.Selected,towerRun.BuildBattleStats(Session.Selected.Snapshot(towerRun.Level)),enemy,towerRun.Floor,boss,towerRun.CurrentHP,enemySprite,towerRun.Level,towerRun.CurrentSkill(Session.Selected.SkillAtLevel(towerRun.Level)));
         }
         IEnumerator AnimateRoomAction(Action done)
         {
@@ -512,7 +512,7 @@ namespace DragonTower
         {
             if(database==null)return Array.Empty<RandomReward>();
             var augments=(database.augments??Array.Empty<AugmentData>()).Where(a=>a!=null&&towerRun.CanTakeAugment(a)).ToList();
-            var skills=(database.skills??Array.Empty<SkillData>()).Where(s=>s!=null&&s.CanEquip(Session.Selected.StableId)&&Session.Selected.CanLearnSkill(s.elementType)&&s.StableId!=towerRun.CurrentSkillId(Session.Selected.skill)).ToList();
+            var skills=(database.skills??Array.Empty<SkillData>()).Where(s=>s!=null&&Session.Selected.CanOfferSkill(s)&&s.StableId!=towerRun.CurrentSkillId(Session.Selected.SkillAtLevel(towerRun.Level))).ToList();
             var result=new System.Collections.Generic.List<RandomReward>();var random=new System.Random(seed);
             // Separate eligibility roll: ordinary rewards retain their existing random stream.
             var signatureRandom=new System.Random(seed^0x5A17);
@@ -713,7 +713,7 @@ namespace DragonTower
             }
             art.rectTransform.localScale=Vector3.one;aura.color=new Color(dragon.color.r,dragon.color.g,dragon.color.b,.12f);
             evolutionText.text=dragon.NameForStage(stage)+"(으)로 진화했습니다!\n"+
-                "최대 HP +"+Mathf.RoundToInt((TowerRun.HealthEvolutionMultiplier(stage)-1)*100)+"% · 공격력 +"+Mathf.RoundToInt((TowerRun.AttackEvolutionMultiplier(stage)-1)*100)+"%\n"+
+                "최대 HP +"+Mathf.RoundToInt((dragon.HealthMultiplier(stage)-1)*100)+"% · 공격력 +"+Mathf.RoundToInt((dragon.AttackMultiplier(stage)-1)*100)+"%\n"+
                 dragon.passiveName+" 패시브 +"+Mathf.RoundToInt((TowerRun.PassiveEvolutionMultiplier(stage)-1)*100)+"%";
             evolutionText.color=Gold;evolutionText.fontSize=20;
             ContinueButton=Button(towerRun.PendingLevelAugments>0?"증강 선택으로":"다음 층으로",0,710,360,66,FinishEvolution);

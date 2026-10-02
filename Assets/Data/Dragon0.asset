@@ -28,6 +28,12 @@ MonoBehaviour:
   dodgeFrames: {fileID: 0}
   hitFrames: {fileID: 0}
   deathFrames: {fileID: 0}
+  animationSetPath: 
+  basicPresentation: 0
+  elementSkillPool: {fileID: 0}
+  additionalSkillPools: []
+  signatureSkill: {fileID: 0}
+  evolutionForms: []
   intermediateEvolutionSprite: {fileID: 21300000, guid: d9a4af93277ff389f4ecf9e9abdcdf28, type: 3}
   finalEvolutionSprite: {fileID: 21300000, guid: 772eff1419d8ac749d3164c0a1e58463, type: 3}
   evolutionSheet: {fileID: 2800000, guid: 93fc83518511492ab08f1a835307844b, type: 3}

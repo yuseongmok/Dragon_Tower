@@ -31,6 +31,7 @@ namespace DragonTower
         GaleStrikeVfx galeVfx; GaleSlashVfx slashVfx; GaleSlashFeedback slashFeedback; WindClawVfx clawVfx;WindHitFeedback clawFeedback;
         DantianVfx dantianVfx;DantianFeedback dantianFeedback;
         bool zephyrWind;
+        public void SetBasicPresentation(DragonBasicPresentation value){zephyrWind=value==DragonBasicPresentation.PixelWind;}
         public void SetZephyrWind(bool value){zephyrWind=value;}
         public bool UsesPixelWindSkill=>zephyrWind&&skillEffect==SkillEffectKind.Wind;
         DragonIdleFrames idleFrames;

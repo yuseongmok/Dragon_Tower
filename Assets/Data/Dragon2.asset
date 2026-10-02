@@ -30,6 +30,26 @@ MonoBehaviour:
   dodgeFrames: {fileID: 11400000, guid: e5cb699928318264c82ba0d904658bbb, type: 2}
   hitFrames: {fileID: 11400000, guid: e39bbadfbb3b9f540a0cc4eb38accd3b, type: 2}
   deathFrames: {fileID: 11400000, guid: a4cc27c7b2b763c45b4ef8794f55605a, type: 2}
+  animationSetPath: DragonAnimations/ZephyrBase
+  basicPresentation: 1
+  elementSkillPool: {fileID: 11400000, guid: f028d08f90678cf47b5434b0010b3766, type: 2}
+  additionalSkillPools: []
+  signatureSkill: {fileID: 11400000, guid: 8109bcf5681e1304dbb2a6b23e6338f3, type: 2}
+  evolutionForms:
+  - stage: 1
+    displayName: "\uC81C\uD53C\uB85C\uC2A4"
+    battleSprite: {fileID: -7783717505158982563, guid: 9c07df4af9a6a864b97d2a8498cf53b2, type: 3}
+    animationSetPath: DragonAnimations/ZephyrMiddle
+    defaultSkill: {fileID: 0}
+    healthMultiplier: 0
+    attackMultiplier: 0
+  - stage: 2
+    displayName: "\uC81C\uD53C\uB9AC\uC628"
+    battleSprite: {fileID: -2277440343809650217, guid: ebcadb86b4d5f974ca67c0eb23807168, type: 3}
+    animationSetPath: DragonAnimations/ZephyrFinal
+    defaultSkill: {fileID: 0}
+    healthMultiplier: 0
+    attackMultiplier: 0
   intermediateEvolutionSprite: {fileID: 21300000, guid: 443f18b8ef487bf7f166dabb4d5ebd64, type: 3}
   finalEvolutionSprite: {fileID: 21300000, guid: 17db08aef5d92da26b44316a9b868e81, type: 3}
   evolutionSheet: {fileID: 2800000, guid: ff5629449d684c058e9d16dd74c1e98b, type: 3}

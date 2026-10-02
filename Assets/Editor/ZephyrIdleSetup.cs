@@ -62,6 +62,11 @@ namespace DragonTower.Editor
             Environment.SetEnvironmentVariable("DRAGON_TOWER_TEST_SAVE","DragonTower.ZephyrIdle.Validation");
             SessionState.SetBool("ZephyrValidation",true);EditorApplication.isPlaying=true;
         }
+        static bool EvolutionUsesState(DragonData dragon,Image image,DragonAnimationState state)
+        {
+            var clip=dragon.LoadAnimationSet(1)?.Get(state);
+            return clip==null?image.sprite==dragon.BattleSpriteAtLevel(10):clip.frames.Contains(image.sprite)&&Mathf.Abs(image.rectTransform.localScale.x-clip.displayScale)<.001f;
+        }
         internal static Vector2 FootAnchor(Sprite sprite)
         {
             var r=sprite.rect;var pixels=sprite.texture.GetPixels((int)r.x,(int)r.y,(int)r.width,(int)r.height);
@@ -104,7 +109,7 @@ namespace DragonTower.Editor
             view.SetDragonArt(dragon,10);
             Check(player.sprite==dragon.BattleSpriteAtLevel(10),"Evolution art preserved");
             view.StepAnimation(battle,.7f);
-            Check(player.sprite==dragon.BattleSpriteAtLevel(10),"Evolution not overwritten by base idle");
+            Check(EvolutionUsesState(dragon,player,DragonAnimationState.Idle),"Evolution uses its own idle or fallback");
             var other=AssetDatabase.LoadAssetAtPath<DragonData>("Assets/Data/Dragon0.asset");view.SetDragonArt(other);
             view.StepAnimation(new BattleModel(other.Snapshot()),.7f);
             Check(player.sprite==other.BattleSpriteAtLevel(1),"Other dragons preserved");
@@ -148,7 +153,7 @@ namespace DragonTower.Editor
             Check(System.Array.IndexOf(clip.frames,player.sprite)<0,"Hit interrupts attack sprite");
             view.StepAnimation(b,.3f);Check(System.Array.IndexOf(clip.frames,player.sprite)<0,"Interrupted attack cannot resume later");
             view.SetDragonArt(dragon,10);view.PlayCue(CombatCue.Attack,9);view.StepAnimation(b,.07f);
-            Check(player.sprite==dragon.BattleSpriteAtLevel(10),"Evolved attack keeps evolution art");
+            Check(EvolutionUsesState(dragon,player,DragonAnimationState.Attack),"Evolution uses its own attack or fallback");
             var other=AssetDatabase.LoadAssetAtPath<DragonData>("Assets/Data/Dragon0.asset");view.SetDragonArt(other);view.PlayCue(CombatCue.Attack,9);view.StepAnimation(b,.07f);
             Check(player.sprite==other.battleSprite,"Other dragon attack unchanged");
             var fastStats=dragon.Snapshot();fastStats.attackCooldown=.15f;
@@ -192,7 +197,7 @@ namespace DragonTower.Editor
                 view.StepAnimation(b,.45f);Check(System.Array.IndexOf(clip.frames,player.sprite)<0,"Interrupted skill cannot resume");
             }
             view.SetDragonArt(dragon,10);view.PlayCue(CombatCue.Skill,20);view.StepAnimation(b,.19f);
-            Check(player.sprite==dragon.BattleSpriteAtLevel(10)&&player.rectTransform.localScale==Vector3.one,"Evolution art and scale preserved");
+            Check(EvolutionUsesState(dragon,player,DragonAnimationState.Skill),"Evolution skill frames and scale preserved");
             var other=AssetDatabase.LoadAssetAtPath<DragonData>("Assets/Data/Dragon0.asset");view.SetDragonArt(other);view.PlayCue(CombatCue.Skill,20);view.StepAnimation(b,.19f);
             Check(player.sprite==other.battleSprite,"Other dragon skill preserved");
             view.SetDragonArt(dragon);view.PlayCue(CombatCue.Skill,20);view.StepAnimation(b,.19f);view.SetSkillPresentation(dragon.skill);
@@ -239,7 +244,7 @@ namespace DragonTower.Editor
             Check(System.Array.IndexOf(clip.frames,player.sprite)<0,"Damage interrupts dodge presentation");
             view.StepAnimation(b2,.5f);Check(System.Array.IndexOf(clip.frames,player.sprite)<0,"Interrupted dodge cannot resume");
             view.SetDragonArt(dragon,10);view.PlayCue(CombatCue.Dodge,0);view.StepAnimation(b2,.08f);
-            Check(player.sprite==dragon.BattleSpriteAtLevel(10),"Evolved dodge art unchanged");
+            Check(EvolutionUsesState(dragon,player,DragonAnimationState.Dodge),"Evolution uses its own dodge or fallback");
             var other=AssetDatabase.LoadAssetAtPath<DragonData>("Assets/Data/Dragon0.asset");view.SetDragonArt(other);view.PlayCue(CombatCue.Dodge,0);view.StepAnimation(b2,.08f);
             Check(player.sprite==other.battleSprite,"Other dragon dodge art unchanged");
             view.SetDragonArt(dragon);var longStats=dragon.Snapshot();longStats.dodgeDuration=.84f;var longer=new BattleModel(longStats);longer.Cue+=view.PlayCue;longer.Dodge();view.StepAnimation(longer,.43f);
@@ -276,7 +281,7 @@ namespace DragonTower.Editor
             view.SetDragonArt(dragon);var avoided=new BattleModel(dragon.Snapshot(),enemy);avoided.Cue+=view.PlayCue;avoided.Dodge();avoided.Tick(.201f);view.StepAnimation(avoided,.1f);
             Check(avoided.PlayerHP==dragon.maxHP&&System.Array.IndexOf(clip.frames,player.sprite)<0,"Successful dodge does not show Hit");
             view.SetDragonArt(dragon,10);view.PlayCue(CombatCue.EnemyHit,10);view.StepAnimation(b,.05f);
-            Check(player.sprite==dragon.BattleSpriteAtLevel(10),"Evolution hit art preserved");
+            Check(EvolutionUsesState(dragon,player,DragonAnimationState.Hit),"Evolution uses its own hit or fallback");
             var other=AssetDatabase.LoadAssetAtPath<DragonData>("Assets/Data/Dragon0.asset");view.SetDragonArt(other);view.PlayCue(CombatCue.EnemyHit,10);view.StepAnimation(b,.05f);
             Check(player.sprite==other.battleSprite,"Other dragon hit art preserved");
             view.SetDragonArt(dragon);view.PlayCue(CombatCue.EnemyHit,10);view.StepAnimation(b,.05f);view.SetSkillPresentation(dragon.skill);
@@ -314,7 +319,7 @@ namespace DragonTower.Editor
             var lethal=dragon.Snapshot();lethal.attackDamage=10000;var won=new BattleModel(lethal);won.Cue+=view.PlayCue;won.Attack();view.StepAnimation(won,.3f);
             Check(System.Array.IndexOf(clip.frames,player.sprite)<0,"Victory never plays player Death");
             view.SetDragonArt(dragon,10);view.StepAnimation(b,.3f);
-            Check(player.sprite==dragon.BattleSpriteAtLevel(10),"Evolution death keeps evolution art");
+            Check(EvolutionUsesState(dragon,player,DragonAnimationState.Death),"Evolution uses its own death or fallback");
             var other=AssetDatabase.LoadAssetAtPath<DragonData>("Assets/Data/Dragon0.asset");view.SetDragonArt(other);view.StepAnimation(b,.3f);
             Check(player.sprite==other.battleSprite&&player.color.a<1,"Other dragon keeps previous defeat fade");
             Debug.Log("ZEPHYR_DEATH_VALIDATION_OK");

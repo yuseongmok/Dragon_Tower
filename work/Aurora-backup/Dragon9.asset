@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0efa5d3dd9dbc83419f66022a349c41f, type: 3}
+  m_Name: Dragon9
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.DragonData
+  speciesId: aurora
+  displayName: "\uC624\uB85C\uB77C"
+  description: "\"\uC2E0\uAE30\uB8E8\uC5D0\uC11C \uB098\uD0C0\uB098 \uD658\uC0C1\uC744
+    \uBCF4\uC5EC\uC8FC\uBA70 \uBB34\uC5C7\uC774\uB4E0 \uB9E4\uD639\uD574\uBC84\uB9BD\uB2C8\uB2E4.\" "
+  rarity: 0
+  element: "\uC5BC\uC74C"
+  elementType: 3
+  maxHP: 115
+  attackDamage: 9
+  color: {r: 0.6127626, g: 0.84742796, b: 0.9622642, a: 1}
+  battleSprite: {fileID: 21300000, guid: e76c2f2324acea41569c1c4dcbfcce57, type: 3}
+  intermediateEvolutionSprite: {fileID: 21300000, guid: c4cdc8e72a46bb722dd7358c9d870a1d, type: 3}
+  finalEvolutionSprite: {fileID: 21300000, guid: 393067cc6b2df8d734de09090b411a47, type: 3}
+  evolutionSheet: {fileID: 2800000, guid: 1159b36a415942059ff0e4eb21cd6173, type: 3}
+  intermediateName: "\uC624\uB85C\uB77C\uC5D8"
+  finalName: "\uB77C\uB2C8\uC548"
+  skillEffect: 1
+  skill: {fileID: 11400000, guid: a37ad0e35c725d146955656de300dc3d, type: 2}
+  passiveName: "\uC2E0\uAE30\uB8E8"
+  passiveDescription: "\uD53C\uACA9 \uC2DC 20% \uD655\uB960\uB85C \uD53C\uD574\uB97C
+    \uC644\uC804\uD788 \uBB34\uC2DC\uD569\uB2C8\uB2E4."
+  passiveMechanic: 4
+  alternateSkillElement: 0
+  evolutionSheetIncludesBase: 1

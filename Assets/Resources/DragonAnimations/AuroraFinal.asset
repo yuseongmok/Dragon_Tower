@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b28f6030f920494e94e52a53d4d9ec3, type: 3}
+  m_Name: AuroraFinal
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.DragonAnimationSet
+  archetype: 1
+  anchors:
+    attackOrigin: {x: 79, y: 41}
+    skillOrigin: {x: 87, y: 52}
+    characterCenter: {x: 7, y: -30}
+    hitPosition: {x: 36, y: -22}
+    groundPosition: {x: 27.207779, y: -109.2185}
+  idle: {fileID: 11400000, guid: 8744f5a18a6075648a920dd853ac8ad1, type: 2}
+  attack: {fileID: 11400000, guid: 002e161a4429cbb41bf215ae202a221e, type: 2}
+  skill: {fileID: 11400000, guid: 093b497d63203544daca71a26ad0096a, type: 2}
+  dodge: {fileID: 11400000, guid: c987a082ef147e841ab0f2b5832f0f96, type: 2}
+  hit: {fileID: 11400000, guid: 2afb642d81752c844adab49a26a72ae9, type: 2}
+  death: {fileID: 11400000, guid: d13dd73f0724b0e44829062404e309a2, type: 2}

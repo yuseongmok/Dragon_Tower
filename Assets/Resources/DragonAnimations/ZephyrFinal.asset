@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b28f6030f920494e94e52a53d4d9ec3, type: 3}
+  m_Name: ZephyrFinal
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.DragonAnimationSet
+  archetype: 1
+  idle: {fileID: 11400000, guid: 68090b3bae8552647986fc035c2791f0, type: 2}
+  attack: {fileID: 11400000, guid: e9ce16d66adfa0a44a8763177407abeb, type: 2}
+  skill: {fileID: 11400000, guid: 1c0b4385ac474ea4a84a8c3230d73fb1, type: 2}
+  dodge: {fileID: 11400000, guid: 50f60f5291592cc46b7f453960fa4bc6, type: 2}
+  hit: {fileID: 11400000, guid: 5a7fd099354be014095cfe15de49aa67, type: 2}
+  death: {fileID: 11400000, guid: 70a89f20535aea94482cbbb3bdc1323a, type: 2}

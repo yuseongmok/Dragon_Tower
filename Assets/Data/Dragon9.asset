@@ -22,7 +22,23 @@ MonoBehaviour:
   maxHP: 115
   attackDamage: 9
   color: {r: 0.6127626, g: 0.84742796, b: 0.9622642, a: 1}
-  battleSprite: {fileID: 21300000, guid: e76c2f2324acea41569c1c4dcbfcce57, type: 3}
+  battleSprite: {fileID: -3703746081991851214, guid: e72732c7342ae0046a45786d98c0aa22, type: 3}
+  animationSetPath: DragonAnimations/AuroraBase
+  evolutionForms:
+  - stage: 1
+    displayName: "\uC624\uB85C\uB77C\uC5D8"
+    battleSprite: {fileID: -6893302315491331702, guid: fad044078a272a64cada91365233e94e, type: 3}
+    animationSetPath: DragonAnimations/AuroraMiddle
+    defaultSkill: {fileID: 0}
+    healthMultiplier: 0
+    attackMultiplier: 0
+  - stage: 2
+    displayName: "\uB77C\uB2C8\uC548"
+    battleSprite: {fileID: 5187662003879083105, guid: 1f3d277ae58ef7f4c9def2b855fbbf53, type: 3}
+    animationSetPath: DragonAnimations/AuroraFinal
+    defaultSkill: {fileID: 0}
+    healthMultiplier: 0
+    attackMultiplier: 0
   intermediateEvolutionSprite: {fileID: 21300000, guid: c4cdc8e72a46bb722dd7358c9d870a1d, type: 3}
   finalEvolutionSprite: {fileID: 21300000, guid: 393067cc6b2df8d734de09090b411a47, type: 3}
   evolutionSheet: {fileID: 2800000, guid: 1159b36a415942059ff0e4eb21cd6173, type: 3}

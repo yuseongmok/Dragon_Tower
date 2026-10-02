@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f2bcd92b58824d4583930abf14b0dd8, type: 3}
+  m_Name: Attack
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.DragonIdleFrames
+  frames:
+  - {fileID: 7211273251375701324, guid: 600ded9262fabfa4482572648a1d4ace, type: 3}
+  - {fileID: -4621094681276341009, guid: 600ded9262fabfa4482572648a1d4ace, type: 3}
+  - {fileID: -8303784492604095892, guid: 600ded9262fabfa4482572648a1d4ace, type: 3}
+  - {fileID: -2110135217911036856, guid: 600ded9262fabfa4482572648a1d4ace, type: 3}
+  durations:
+  - 0.06
+  - 0.06
+  - 0.06
+  - 0.06
+  offsets:
+  - {x: 0.05445161, y: -0.05444166}
+  - {x: -0.1513322, y: -0.04349479}
+  - {x: 0.026175715, y: -0.04349479}
+  - {x: -0.14652458, y: -0.048968226}
+  displayScale: 1.4011976

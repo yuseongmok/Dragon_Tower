@@ -1,0 +1,101 @@
+제피르 중간 진화체 — 적용 및 제작 기록
+프로젝트: C:\Users\PC\Dragon_Tower
+작업일: 2026-10-02
+
+1. 적용 결과 / 확인 방법
+기존 zephyr ID의 evolutionForms stage=1에 새 외형과 Animation Set을 연결했다.
+레벨 10~19에 중간 진화체가 표시된다. 기존 데이터의 이름 '제피로스'를 유지했다.
+새 드래곤 ID, Controller, HUD Prefab은 만들지 않았다.
+레벨 1 기본형과 레벨 20 최종형의 기존 에셋/연결은 그대로다.
+Unity에서 Assets/Data/Dragon2.asset을 선택하고 Evolution Forms의 Stage 1을 확인한다.
+평소처럼 제피르로 시작해 레벨 10 진화 후 전투하면 적용된다.
+스킬 교체/쿨타임/무적 등은 기존 방식으로 동작한다.
+
+2. 새 에셋
+Assets/Art/ZephyrMiddle/
+  Idle.png / Attack.png / Skill.png / Dodge.png / Hit.png / Death.png
+  각 시트 2x2, 총 24개의 별도 중간 진화체 Sprite.
+  Idle.asset / Attack.asset / Skill.asset / Dodge.asset / Hit.asset / Death.asset
+  각 상태의 DragonIdleFrames와 발 위치 Offset/여백 정규화 배율.
+Assets/Resources/DragonAnimations/ZephyrMiddle.asset
+  중간형의 표준 6상태 Animation Set.
+Assets/Editor/ZephyrMiddleSetup.cs
+  이번 콘텐츠의 재수입/분할/정렬/진화 연결 도구.
+Assets/Editor/ZephyrMiddleValidation.cs
+  중간형 Play Mode 회귀 검사와 전투 화면 캡처.
+
+원화 기준: 사용자 첨부 '제피르 진화체.png'의 오른쪽 위 중간형.
+팔레트/픽셀 표현 기준: 승인된 기본 제피르 Idle 시트.
+긴 목/다리/몸통, 커진 날개와 작은 머리 장식, 잎 꼬리로 성장감을 표현했다.
+큰 귀, 황금빛 눈, 민트/청록 몸색, 남색/보라 그림자와 밝은 날개막을 유지했다.
+기본형 Sprite를 확대하거나 덮어쓰지 않았다.
+생성 도구: 내장 image_gen. 최종 프롬프트와 보정 프롬프트는 ZephyrMiddlePrompts.txt.
+
+3. 재사용한 시스템 / 자동 연결
+DragonData의 기존 진화 단계 선택 -> 해당 Animation Set 로드 -> 기존 BattleAnimation 재생.
+Idle 1.20초, Attack 0.24초, Skill 0.40초, Dodge 0.42초, Hit 0.24초, Death 0.60초.
+각각 기존과 같은 4프레임 및 프레임별 시간을 복사했다.
+진화 수치 배율은 새로 지정하지 않고 기존 단계별 HP/공격력 배율을 사용한다.
+기본 스킬 교체 없음. 이미 장착한 스킬도 그대로 유지한다.
+Wind Theme, 속성 아이콘, 이름/HP/스킬 이름/쿨타임 HUD는 기존 연결을 사용한다.
+탭 공격, 좌우 스와이프, 회피 거리/무적/쿨타임, 피해/HP/사망 로직은 그대로다.
+기본 공격 및 질풍강타/바람칼날/질풍참/귀참/단천 VFX를 모두 재사용한다.
+단천의 화면 연출, 피해 시점, 보호 시간, 취소 처리는 수정하지 않았다.
+
+4. 수동 제작이 필요했던 부분
+중간형 디자인과 24개 Key Pose의 제작/검토는 아트 작업으로 남는다.
+생성 시트에서 공격/스킬/회피/사망 포즈의 경계 여백을 추가 보정했다.
+시트별 빈 여백의 차이를 수입 도구의 displayScale로 정규화하고,
+각 포즈의 발 위치를 기본형과 같은 기준점에 맞췄다.
+이 배율은 시트 여백 보정용이며, 몸 비율의 성장감을 Transform 확대로 대신한 것이 아니다.
+기존 256x256 캐릭터 배치 사각형과 전투 화면 위치는 그대로다.
+
+5. 발견한 Pipeline 문제와 최소 수정
+런타임 Pipeline에는 새로운 캐릭터별 조건문이나 Controller/Skill/HUD 복사가 필요 없었다.
+기존 Editor 검사 두 곳이 '진화체는 정적 이미지이며 Animation Set이 없다'고 가정했다.
+ZephyrIdleSetup.cs와 DragonProductionValidation.cs의 검사만,
+설정된 진화 Animation Set이 있으면 해당 상태의 Sprite를 검증하도록 보완했다.
+중간형 자체의 검사 후 기존 입력 검사에 넘길 때는 터치 후 합성 마우스 방지 상태를 복원한다.
+이는 테스트 격리 조치이며, 실제 입력 코드의 중복 입력 방지 기능은 수정하지 않았다.
+VFX Spawn Point/Attack Origin은 기존 좌표로 실제 전투 캡처를 확인했다.
+새 몸통/목 크기에서도 전달 궤적이 캐릭터에서 적으로 읽히고 HUD를 침범하지 않아
+새로운 Evolution별 Anchor 필드를 추가하지 않았다.
+
+6. 최종 진화체에서 재사용 가능한 것
+동일 zephyr ID, evolutionForms stage=2, 동일 6상태 Animation Set 구조를 사용하면 된다.
+이번 수입/분할/발 정렬 절차, 공용 전투/입력/HUD/Theme/Skill/VFX와 검사 방식을 재사용한다.
+최종형의 아트/포즈 제작과 그 체형에 맞는 정렬/화면 검수는 별도로 필요하다.
+이번에는 최종형이나 다른 드래곤을 새로 제작하지 않았다.
+
+7. 모바일 WebGL 설정
+원본 생성 PNG는 보존하고, 게임용 수입 크기는 시트당 최대 512픽셀로 제한했다.
+Point 필터, PPU 100, Mipmap 없음, 읽기/쓰기 해제(수입 계산 후 CPU 픽셀 사본 제거).
+6장의 RGBA 텍스처는 512x512 기준 약 6MiB이며, 이는 텍스처 픽셀 데이터의 추산이다.
+전체 게임 메모리/브라우저 오버헤드/기기 성능을 보장하는 수치는 아니다.
+새 Material/동시 실행 Animator/캐릭터 Renderer는 추가하지 않았다.
+기존 표시 오브젝트 하나에서 현재 상태의 Sprite를 교체한다.
+중간형 Animation Set은 기존 Resources 경로 선택 구조로 로드한다.
+기본형의 기존 직접 참조 메모리 정책은 이번 작업에서 변경하지 않았다.
+
+8. 검사 결과
+Unity 6000.3.10f1의 분리된 검증 프로젝트에서 Play Mode 자동 검사 수행.
+6상태의 별도 프레임/타이밍/죽음 마지막 포즈 유지 확인.
+레벨 10 중간형에서 마우스와 터치 탭 공격, 양방향 Swipe Dodge 확인.
+기존 5개 바람 스킬을 각각 3회 사용: 피해 횟수/총 피해, 쿨타임, 스킬 이름,
+HUD/캐릭터 위치 복원, 오브젝트 풀 증가 없음 확인.
+단천의 보호 시작과 취소 정리 확인.
+기본형 애니메이션과 다섯 스킬, 입력, Theme, 전투 기초 검사도 모두 통과.
+실제 렌더링 캡처로 Idle/공격/Skill/회피/피격/사망 및 스킬 전달/명중 위치 검토.
+검증용 고HP 적 숫자는 반복 테스트를 위한 값이며 실제 게임의 몬스터 데이터는 변경하지 않았다.
+로그: work/ZephyrMiddle-final-validation.log
+완료 표시: ZEPHYR_MIDDLE_VALIDATION_OK / ZEPHYR_IDLE_VALIDATION_OK.
+WebGL 빌드 성공: work/ZephyrMiddle-webgl.log, HUD_WEBGL_BUILD_OK, 종료 코드 0.
+실제 휴대전화 브라우저에서 FPS/메모리를 측정하는 검사는 수행하지 않았다.
+
+9. 원본 보호 / 변경 범위
+백업: work/ZephyrMiddle-backup.
+기존 Assets 3,138개(Dragon2.asset 제외)를 대조했다.
+달라진 기존 파일은 위에 설명한 Editor 검사 2개뿐이다.
+Dragon2.asset은 stage=1 Evolution Data만 추가했다.
+기존 기본형/최종형 아트와 모든 런타임 전투 코드, HUD, 스킬 데이터, VFX는 해시가 동일하다.
+신규 중간형 에셋과 수입/검사 도구 외에는 콘텐츠를 추가하지 않았다.

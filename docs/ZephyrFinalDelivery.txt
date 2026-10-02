@@ -1,0 +1,99 @@
+제피르 최종 진화체 — 적용 및 검수 기록
+프로젝트: C:\Users\PC\Dragon_Tower
+작업일: 2026-10-02
+
+1. 적용 결과와 확인 방법
+기존 zephyr ID의 Evolution Forms stage=2에 최종형 제피리온을 연결했다.
+기존 레벨 규칙 그대로 Base 1~9 / Middle 10~19 / Final 20 이상이다.
+Unity에서 프로젝트 갱신 후 Assets/Data/Dragon2.asset의 Evolution Forms Stage 2를 확인한다.
+제피르로 플레이해 레벨 20에 도달하면 같은 전투 시스템에서 최종형이 재생된다.
+기존 finalName을 사용하며 새 드래곤 ID나 새 전투 Controller는 없다.
+기존 정적 최종형 이미지도 삭제하지 않고 보존했다.
+
+2. 새 에셋과 데이터
+Assets/Art/ZephyrFinal/
+  Idle, Attack, Skill, Dodge, Hit, Death.png: 각각 2x2 시트, 총 24개 Sprite.
+  동일 이름의 .asset 6개: 기존 DragonIdleFrames 형식, 프레임 시간/발 정렬/여백 보정.
+Assets/Resources/DragonAnimations/ZephyrFinal.asset
+  LargeQuadruped 표준 6상태 Animation Set.
+Assets/Data/Dragon2.asset
+  stage=2 Visual 및 Animation Set 참조만 추가. 기존 나머지 데이터는 동일.
+Assets/Editor/EvolutionSpriteSetup.cs
+  중간형의 수입·분할·프레임 시간 복사·발 정렬·단계 연결 코드를 공용화.
+Assets/Editor/ZephyrFinalSetup.cs
+  공용 수입 도구를 호출하는 최종형 설정. 메뉴 Dragon Tower/Production/Install Zephyr Final Evolution.
+Assets/Editor/ZephyrMiddleSetup.cs
+  기존 동작과 설정을 유지하는 공용 도구 호출로 정리. 중간형 에셋은 재생성하지 않았다.
+Assets/Editor/ZephyrMiddleValidation.cs
+  기존 검사에 stage 인자를 추가해 중간형과 최종형을 동일 항목으로 검사.
+
+3. 디자인과 애니메이션
+첨부 제피르 진화 컨셉의 오른쪽 아래 성체를 기준으로 내장 image_gen을 사용했다.
+긴 몸과 다리, 성숙한 작은 얼굴, 크게 뻗은 날개, 가슴 깃털, 긴 갈래 꼬리를 표현했다.
+민트/청록 몸색, Deep Teal/남색/보라 그림자, 밝은 날개막, 황금 눈과 귀 계보를 유지했다.
+기본형 또는 중간형을 확대하지 않고 최종형 전용 포즈를 생성했다.
+시트 경계를 넘는 포즈는 이미지 생성 도구로 여백을 보정했다.
+Unity 수입은 기존과 동일하게 Point, PPU 100, 최대 512, Mipmap 없음, 압축 없음이다.
+각 상태 4프레임. Idle 1.20초 / Attack 0.24초 / Skill 0.40초 / Dodge 0.42초 /
+Hit 0.24초 / Death 0.60초 및 각 프레임별 시간은 기본형에서 그대로 복사했다.
+별도의 Animator Controller, Character Controller, Animation Event 체계를 만들지 않았다.
+실제 프로젝트는 공용 Sprite 프레임 재생기를 사용하므로 여기에 새 Animation Set만 연결했다.
+전체 생성/보정 프롬프트: ZephyrFinalPrompts.txt.
+
+4. 재사용한 시스템과 Anchor 검수
+DragonData 단계 선택 -> Animation Set 로드 -> 기존 BattleAnimation 재생 경로를 그대로 사용한다.
+현재 Pipeline에는 진화별 개별 VFX Anchor 필드가 없다.
+기존 playerHome/enemyHome 및 공격·스킬 호출 기준점은 변경하지 않았다.
+최종형 24포즈의 발 위치를 기존 지면 기준점에 맞추는 offsets만 새 데이터에 저장했다.
+displayScale은 생성 시트별 빈 여백 차이를 보정하는 값이며 성장 비율을 대신하는 확대가 아니다.
+Idle displayScale=1, 기존 256x256 캐릭터 배치 사각형과 부모 위치를 유지했다.
+기본 공격, 스킬 집결/전달, 투사체, 피격, 지면 기준을 Play Mode 캡처에서 확인했다.
+최종형의 날개·꼬리가 적이나 HP/아이템/스킬 버튼을 지속적으로 가리지 않는다.
+새 Anchor 필드나 VFX Prefab 변경 없이 연결 가능했다. 기본/중간형 Anchor와 Scale은 그대로다.
+HP/공격력 배율은 0(기존 단계 배율 사용), 기본 스킬 override 없음. 밸런스 변경 없음.
+질풍강타, 바람칼날, 질풍참, 귀참, 단천을 동일 데이터와 동일 VFX로 재사용한다.
+단천의 화면 연출, 피해 시점, 무적, 취소 처리도 그대로다.
+
+5. Pipeline 두 번째 검증 결과
+런타임 Controller/Skill Script/HUD 복사: 0개. 캐릭터 전용 런타임 조건문 추가: 0개.
+중간형에서 검증한 수입 절차를 공용화해 이번에는 단계·폴더·이름·체형만 지정했다.
+회귀 검사도 같은 코드를 stage 1/2에 재사용했다.
+수동 작업으로 남은 부분은 디자인, 24포즈 아트 검토, 칸 여백 보정, 전투 화면 시각 검수다.
+새로운 복잡한 로딩 체계는 추가하지 않았다. 실제 전투는 선택된 한 Sprite 표시기를 사용한다.
+비활성 진화체 Animator/Renderer를 동시에 만들거나 실행하지 않는다.
+최종형 텍스처는 6장, 512x512 RGBA32 기준 약 6MiB. CPU 읽기 복사와 Mipmap은 없다.
+Resources 참조가 즉시 언로드됨을 보장하는 스트리밍 구조는 아니며 그런 시스템을 추가하지 않았다.
+
+6. 검사 결과
+별도 검사용 Unity 6000.3.10f1 프로젝트의 Play Mode에서 실제 BattleController/View를 실행했다.
+기본형의 기존 전체 회귀 검사 통과.
+중간형/최종형 각각 Idle/Attack/Skill/Dodge/Hit/Death 4프레임 및 원래 시간 검사 통과.
+마우스 및 터치 이벤트의 탭 공격, 좌/우 스와이프 통과.
+중간형/최종형 각각 5개 스킬을 3회씩 사용해 피해량/타격 횟수/쿨타임 재입력 차단 검사 통과.
+스킬 버튼 이름/쿨타임, HUD 복원, 오브젝트 풀 증가 없음 검사 통과.
+단천 시전 보호 및 종료 시 효과 정리 통과. HP 0 패배/Death 마지막 포즈 유지 통과.
+기본형으로 되돌아갈 때 승인된 기본 Sprite 복원 확인.
+기존 입력/Element HUD Theme/Production 검증 통과.
+모바일 세로 비율 480x850 전투 캡처에서 최종형과 5개 스킬을 확인했다.
+WebGL 최종 빌드 성공: HUD_WEBGL_BUILD_OK.
+실물 모바일 기기에서의 FPS/메모리/브라우저 입력 실측은 이번 검사에 포함되지 않았다.
+검사 로그: work/ZephyrFinal-validation.log, work/ZephyrFinal-webgl-final.log.
+
+7. 보호 검증과 복구
+작업 전 해시와 비교해 기존 Assets 변경은 Editor 도구 두 파일뿐이다.
+Dragon2.asset은 최종형 stage 2 블록을 제외하면 작업 전과 동일하다.
+기본형/중간형 Sprite, Animation, Scale/offset, 모든 런타임 C#, 스킬 데이터,
+VFX, HUD, 배경의 기존 파일은 해시가 동일하다.
+백업: work/ZephyrFinal-backup/. 기존 파일을 삭제하지 않았다.
+기존 Dragon2.asset을 복원하면 이전 최종형 참조로 되돌아간다. 새 Final 에셋은 보존 가능하다.
+
+8. 다음 드래곤/진화체 제작 절차
+기본 Animation Set의 6상태/4프레임 규격으로 투명 시트를 준비한다.
+새 폴더에 보관하고 EvolutionSpriteSetup에 DragonData, 단계, 아트 폴더,
+Animation Set 경로, 이름, 체형을 지정한다.
+자동 분할/시간 복사/발 정렬 후 Evolution Forms의 참조를 확인한다.
+기존 전투 프레임 재생기와 Skill/HUD를 그대로 사용해 전투 캡처를 검수한다.
+새 체형에서 공통 Origin이 맞지 않을 때만 진화별 Anchor 확장을 검토한다.
+기존 형태 해시/전투 회귀 검사 및 WebGL 빌드 확인 후 적용한다.
+
+최종형 외 다른 드래곤/스킬/VFX/HUD 작업은 진행하지 않았다.

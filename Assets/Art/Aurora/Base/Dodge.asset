@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f2bcd92b58824d4583930abf14b0dd8, type: 3}
+  m_Name: Dodge
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.DragonIdleFrames
+  frames:
+  - {fileID: 4248413737061502711, guid: 0538de600b1b6c3429102e200c4af40c, type: 3}
+  - {fileID: 5821838198890354476, guid: 0538de600b1b6c3429102e200c4af40c, type: 3}
+  - {fileID: -3376933893806394236, guid: 0538de600b1b6c3429102e200c4af40c, type: 3}
+  - {fileID: -5091334611260128525, guid: 0538de600b1b6c3429102e200c4af40c, type: 3}
+  durations:
+  - 0.07
+  - 0.14
+  - 0.11
+  - 0.1
+  offsets:
+  - {x: -0.017070368, y: 0.030992359}
+  - {x: 0.01755447, y: 0.035229653}
+  - {x: 0.08136453, y: -0.083414406}
+  - {x: 0.022755325, y: -0.083414406}
+  displayScale: 1.0847458

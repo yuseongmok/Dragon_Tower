@@ -1,0 +1,164 @@
+Dragon Production Guide — 2026-10-02
+프로젝트: C:\Users\PC\Dragon_Tower
+
+이번 구조의 목적
+새 드래곤의 데이터와 그림을 기존 전투에 연결한다. 승인된 제피르의 그림,
+6상태 애니메이션, HUD, 기본 공격 및 다섯 스킬 VFX는 재제작하지 않았다.
+현재 전투는 Unity Animator Controller/Animation Clip 방식이 아니다.
+DragonIdleFrames의 Sprite/시간/Offset을 BattleAnimation이 재생한다.
+이름에 Idle이 있어도 Attack/Skill/Dodge/Hit/Death 모두 같은 프레임 형식을 쓴다.
+
+1. 구조와 책임
+A 공용: BattleController, BattleModel, TowerRun, BattleView, BattleAnimation.
+  탭/스와이프/스킬 입력, 피해/HP/쿨타임, 6상태 재생과 HUD를 공유한다.
+B 드래곤별: DragonData. ID, 이름, 속성, 수치, 외형, Animation Set 경로,
+  Basic Presentation, 진화 형태, 기본 스킬과 전용 Signature 참조를 가진다.
+  도감/초상은 기존 Battle Sprite/진화 외형 경로를 재사용하며 중복 필드를 만들지 않는다.
+C 속성별: ElementSkillPool, 기존 ElementHudTheme, WindVFXStyle/공용 Wind 자료.
+D 전용: Signature SkillData의 exclusiveDragonId와 전용 연출.
+  단천은 Zephyr의 Signature이며 다른 Wind 드래곤의 공용 Pool에 포함하지 않는다.
+
+DragonData -> 현재 레벨의 형태 -> DragonAnimationSet -> 6개 DragonIdleFrames
+DragonData.elementType -> Resources/HudThemes -> 동일 HUD의 색과 속성 아이콘
+DragonData.elementSkillPool / additionalSkillPools -> 공용 스킬 후보
+DragonData.signatureSkill -> 전용 Legendary 후보
+현재 장착 SkillData -> 기존 전투 계산 + HUD 아이콘/이름/쿨타임 + 기존 VFX 경로
+
+2. 새 드래곤 추가 순서
+① Unity 상단 Dragon Tower > Production > Create Dragon Template.
+  생성한 .asset은 Assets/Data에 저장한다. speciesId는 고유하고 변하지 않는 ID.
+  displayName, elementType, 표시용 element, maxHP, attackDamage, 기본 skill을 지정한다.
+② Battle Sprite와 필요한 도감 소개/패시브를 지정한다.
+③ Project 우클릭 Create > Dragon Tower > Idle Frames로 각 상태의 프레임 데이터를 만든다.
+  frames, durations, offsets, displayScale을 설정한다. 프레임 수와 시간 배열 수를 맞춘다.
+  새 아트의 캔버스/발 위치/pivot/픽셀 밀도를 상태 사이에서 통일한다.
+  제피르 기준은 Point 필터, PPU 100, Mipmap 없음. 원본 승인 에셋 설정을 참고한다.
+④ Create > Dragon Tower > Production > Animation Set.
+  Assets/Resources/DragonAnimations/<DragonID>/Base.asset처럼 Resources 하위에 저장한다.
+  Idle/Attack/Skill/Dodge/Hit/Death를 지정한다. Archetype은 체형 분류 정보이며,
+  체형을 고른다고 아직 없는 애니메이션이나 리깅이 생성되지는 않는다.
+⑤ DragonData Inspector 하단 Production Tools의 기본 Animation Set에 드래그한다.
+  문자열 경로가 자동 저장된다. 예: DragonAnimations/ZephyrBase (확장자 제외).
+  새 드래곤에서는 위쪽의 legacy idleFrames 등 6개 필드를 비워둔다.
+  기본 바람 공격/회피/피격 스타일을 재사용하려면 Basic Presentation=PixelWind.
+  다른 속성은 Standard로 시작한다. 이 값은 캐릭터 ID 조건문을 대신한다.
+⑥ Element Skill Pool과 Signature Skill을 지정한다. 주 속성 Pool은 같은 속성이어야 한다.
+  추가 속성이 허용된 패시브만 alternateSkillElement + additionalSkillPools를 지정한다.
+⑦ 설정 검사를 누른다. 미지정 Sprite/6상태/속성/Pool/Signature/Theme, 중복 ID,
+  잘못된 Signature 소유자, 진화 단계 및 프레임 시간 오류가 Inspector에 표시된다.
+⑧ 검사 후 게임 목록에 등록 / 업데이트를 누른다.
+  기존 Resources/ContentDatabase의 dragons/skills 끝에 필요한 항목만 추가한다.
+  기존 순서를 유지하고 중복 참조는 추가하지 않는다. Undo 가능.
+  Signature가 아직 없으면 미완성 경고가 남으며 자동 등록은 보류된다.
+⑨ 기존 시작 화면에서 해당 드래곤을 선택해 전투한다. Controller/HUD Prefab을 복제하지 않는다.
+  SkillData를 교체해도 스킬 이름이나 아이콘을 HUD 코드에 하드코딩할 필요가 없다.
+
+3. 진화 형태 추가
+기존 레벨 기준은 유지: 기본=1~9, 중간=10~19, 최종=20 이상.
+DragonData.evolutionForms에 stage=1 또는 2를 추가한다(중복 금지).
+각 형태의 displayName, battleSprite, animationSetPath를 지정한다.
+Inspector 하단 진화 Animation Set 선택기도 경로를 자동 입력한다.
+defaultSkill은 선택 사항. 지정하면 해당 형태의 기본 스킬이 바뀐다.
+플레이 중 이미 획득한 교체 스킬은 진화 기본 스킬보다 우선한다.
+healthMultiplier/attackMultiplier=0이면 기존 공용 배율을 사용한다:
+  HP 1 / 1.20 / 1.45, 공격력 1 / 1.18 / 1.40.
+양수를 지정하면 해당 단계의 배율만 대체한다. 기존 아이템/증강 계산은 재사용한다.
+이번 제피르는 evolutionForms를 비워 기존 진화 이미지/이름/배율을 그대로 사용한다.
+진화용 Animation Set이 없으면 기존처럼 정적 진화 외형을 사용한다.
+기본 형태의 어린 드래곤 애니메이션을 진화형에 자동으로 덮어씌우지 않는다.
+
+4. 속성 추가
+Wind/Fire/Ice/Dark 등 기존 ElementType은 데이터 선택만으로 사용 가능하다.
+Create > Dragon Tower > UI > Element HUD Theme로 Theme 데이터를 만들고
+Assets/Resources/HudThemes에 저장한다. Element, Primary/Secondary/Glow Color,
+Element Icon을 지정한다. 같은 속성의 Theme를 중복 생성하지 않는다.
+HP 색은 정보 표시용 기존 색을 유지한다. HUD Prefab은 복제하지 않는다.
+완전히 새로운 속성 이름을 시스템에 추가하는 경우만 개발 작업이 필요하다:
+BattleModel.cs의 ElementType enum 끝에 추가(기존 순서/숫자 변경 금지),
+ElementRules의 표시명/상성 정책, 필요한 SkillEffectKind 표현과 기본 아이콘을 정의한다.
+그 후 Theme와 Pool 데이터를 추가한다. 데이터만으로 enum 자체가 늘어나는 구조는 아니다.
+
+5. 속성 공용 스킬 추가
+Create > Dragon Tower > Skill로 고유 SkillData를 만든다.
+Common~Unique, elementType, effectKind, icon, damage, cooldown,
+initialHitDelay, hitCount/hitInterval 등을 기존 형식으로 지정한다.
+공용 스킬의 exclusiveDragonId는 비운다. 해당 ElementSkillPool.skills에 추가한다.
+동일 속성 드래곤들은 같은 Pool 전체 또는 별도 부분 Pool을 참조할 수 있다.
+드래곤 Inspector의 등록 / 업데이트로 ContentDatabase.skills에도 연결한다.
+기존 안정 ID를 변경하거나 다른 승인 스킬의 데이터를 덮어쓰지 않는다.
+제피르 WindShared는 기존 보상 후보를 보존하기 위해 예전 폭풍참 데이터도 유지한다.
+이번 작업에서 이를 새로 제작하거나 보상에서 임의로 제거하지 않았다.
+
+6. 드래곤 전용 Legendary 추가
+별도 SkillData에 rarity=Legendary, exclusiveDragonId=소유 드래곤의 speciesId.
+DragonData.signatureSkill에 연결한다. Element Skill Pool에는 넣지 않는다.
+rewardEligibilityPercent로 기존 보상 후보 등장 게이트를 설정한다.
+시네마틱 보호가 필요하면 protectedCastDuration을 실제 전체 시전 시간에 맞춘다.
+실제 피해 시점은 initialHitDelay, 피해/횟수/간격은 기존 SkillData가 담당한다.
+Signature 소유자 검증과 시전 보호/취소는 기존 전투 시스템을 재사용한다.
+새 시네마틱의 취소/사망/비활성화/장면 종료에서 오프셋·Overlay를 반드시 복구한다.
+현재 단천 데이터와 연출/무적 기능은 그대로 유지했다.
+
+7. VFX 재사용 지도 (현재 에셋을 수정하지 않고 참조)
+공용 팔레트: Assets/Scripts/WindVFXStyle.cs
+  Deep / Teal / Cyan / Mint / Pale. 기존 기본 UI 알파 블렌딩 사용.
+  무조건 Additive/새 Material을 만들지 않는다.
+공용 아틀라스: Assets/Resources/VFX/WindRemaster.png
+  BladeBody/Edge/Core, ArcBody/Edge/Core 및 회오리 앞/뒤 레이어.
+공용 프레임/레시피: Assets/Resources/VFX/GaleStrike.asset (WindSkillRecipe)
+  WindGather, WindTrail, WindSlash, TornadoCore/Outer, WindHitSpark,
+  WindShockwave, WindPixelParticles, WindAfterimage.
+공용 피격: VFX/GaleSlashImpact, VFX/GaleSlashShockwave.
+전용 발톱: VFX/WindClawLayered. 전용 단천: VFX/Dantian 및 DantianSplit Shader.
+현재 승인 연출: GaleStrikeVfx / WindBladeVfx / GaleSlashVfx / WindClawVfx / DantianVfx.
+피격 연출은 대응 Feedback 컴포넌트를 재사용한다. 기본 바람은 ZephyrWindVfx.
+이 기존 이름은 호환성을 위해 남겼으며 Basic Presentation 선택으로 다른 드래곤도 사용한다.
+기존 5개 연출의 안정 Skill ID 라우팅은 BattleAnimation에서 유지한다.
+일반 Prefab VFX는 SkillData.battleVfx + BattleAssetVfx 경로가 이미 있다.
+단, PixelWind 기본 경로는 기존 바람 표현을 우선한다. 새 고유 픽셀/시네마틱 스킬의
+특수 연출은 Skill별 라우팅/렌더러 연결이 필요할 수 있다. 데이터만으로 새 연출이 생성되지는 않는다.
+Dragon ID 분기를 추가하지 말고 스킬 연출 경로를 한 번 연결한다.
+피해 확정 이벤트와 연출을 맞추고, Sprite 재생으로 피해를 임의 지연하지 않는다.
+
+등급별 제작 예산 (강제 숫자/게임 밸런스가 아닌 제작 지침)
+Common: 주요 2~3 레이어, 짧은 수명/작은 Impact/최소 파편.
+Rare: 주요 3~4 레이어, Bright Core + 짧은 Trail, 선명한 마무리.
+Unique: 현재 귀참 수준의 다층 명암/강한 Final Impact/잔상/절제된 피격 정지.
+Legendary: 드래곤 전용. 필요한 경우 단천 같은 시네마틱/암전/화면 절단 허용.
+Core와 잔상의 시간 차이로 깊이를 만들고 파티클 개수로 화려함을 해결하지 않는다.
+레이어/파편 예산은 대상 모바일 브라우저에서 프레임 시간/드로우콜/할당을 측정해 조정한다.
+
+8. 로딩과 모바일 메모리
+새 Animation Set은 DragonData에 강한 Object 참조 대신 Resources 경로만 저장한다.
+BattleView.SetDragonArt가 선택 드래곤의 현재 단계 세트 한 개만 해석한다.
+전체 드래곤/진화 Animation Set을 LoadAll하거나 영구 캐시하지 않는다.
+프레임마다 Resources.Load를 하지 않는다. Inspector의 세트 로드는 편집기 전용이다.
+기존 제피르의 legacy 프레임 참조는 호환/복구를 위해 남겼다.
+기존 ContentDatabase의 외형/스킬 아이콘 직접 참조와 기존 5개 VFX 풀 초기화는 유지했다.
+따라서 기존 모든 에셋이 완전히 지연 로딩되었다고 해석하면 안 된다.
+새 드래곤 제작 시 legacy 6프레임 필드를 비워야 신규 시트의 불필요한 선로딩을 피한다.
+Battle Sprite도 거대한 애니메이션 시트의 일부를 참조하기보다 별도의 작은 정적 이미지로
+만든다. Sprite가 참조하는 전체 Texture가 로드되므로 이것도 메모리 사용에 영향을 준다.
+Resources에 든 파일은 빌드에는 포함된다. 실제 메모리 해제는 Unity의 자산 수명 정책에 따른다.
+현재는 복잡한 Addressables나 전투 중 강제 UnloadUnusedAssets를 도입하지 않았다.
+향후 드래곤/스킬 수가 증가하면 도감 썸네일과 전투 아트 분리, 장면 전환 시 정리,
+사용 스킬별 풀 지연 생성을 실기기 측정 결과에 따라 별도 진행한다.
+이번에 새 VFX 풀/Material/Texture는 추가하지 않았다.
+
+9. 검증과 복구
+기존 파일 백업: work/DragonProduction-backup.
+검증 코드: Assets/Editor/DragonProductionValidation.cs.
+Inspector 설정 검사는 실제 게임 목록을 변경하지 않는다.
+Connect Zephyr Reference 메뉴는 기존 프레임을 연결하는 1회 마이그레이션 도구이며,
+이미 연결된 제작 데이터는 다시 실행해도 사용자 설정을 초기화하지 않는다.
+회귀 검사는 실행 중인 원본 Editor 대신 분리된 DragonTower-Idle 복사본에서 수행했다.
+최종 세부 결과는 DragonProductionTestResults.txt 참고.
+
+변경 범위
+확장: DragonData, BattleView의 외형/세트 선택, BattleAnimation의 데이터 선택 API,
+BattleController의 기본 스킬 선택, CollectionFlow의 스킬 후보/진화 정보,
+TowerRun의 선택적 형태 배율/Pool 검증.
+추가: DragonAnimationSet, ElementSkillPool, 제작 Inspector/연결/검증 도구,
+ZephyrBase Animation Set, WindShared Pool.
+BattleModel, 기존 SkillData/스킬 에셋, HUD 디자인/Theme, 입력 처리,
+Sprite/Texture/Shader/기존 VFX 구현은 수정하지 않았다.

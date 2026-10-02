@@ -1,0 +1,5 @@
+C:\Users\PC\Dragon_Tower\Assets\Data\Dragon1.asset
+C:\Users\PC\Dragon_Tower\Assets\Editor\DragonCharacterValidation.cs
+C:\Users\PC\Dragon_Tower\Assets\Scripts\BattleView.cs
+C:\Users\PC\Dragon_Tower\Assets\Scripts\DragonAnimationSet.cs
+Missing GUIDs: []

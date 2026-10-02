@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f2bcd92b58824d4583930abf14b0dd8, type: 3}
+  m_Name: Skill
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.DragonIdleFrames
+  frames:
+  - {fileID: -1229764231897015001, guid: fb99d47499fe81843a1a751347843095, type: 3}
+  - {fileID: 1205999271857927395, guid: fb99d47499fe81843a1a751347843095, type: 3}
+  - {fileID: 2310169980427706760, guid: fb99d47499fe81843a1a751347843095, type: 3}
+  - {fileID: 5963238959996154309, guid: fb99d47499fe81843a1a751347843095, type: 3}
+  durations:
+  - 0.08
+  - 0.1
+  - 0.1
+  - 0.12
+  offsets:
+  - {x: -0.086258486, y: 0.06584939}
+  - {x: -0.12062842, y: 0.11331776}
+  - {x: -0.18441367, y: -0.023153752}
+  - {x: -0.09509896, y: -0.035020858}
+  displayScale: 1.5189873

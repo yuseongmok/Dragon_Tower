@@ -203,10 +203,44 @@ namespace DragonTower
         {
             if(button!=null)DragonTowerTheme.StyleButton(button,edge);
         }
+        DragonVisualAnchors activeVisualAnchors;
+        // Presentation API only. Actor transforms carry recoil/dodge automatically; no world-position cache.
+        public bool TryGetCharacterAnchor(DragonVisualAnchor kind,RectTransform relativeTo,out Vector2 point)
+        {
+            point=default;
+            if(activeAttachments!=null&&pixelPlayer!=null)
+                foreach(var attachment in activeAttachments)
+                    if(attachment!=null&&attachment.sprite==pixelPlayer.sprite&&
+                        ((kind==DragonVisualAnchor.AttackOrigin&&attachment.useAsAttackOrigin)||
+                         (kind==DragonVisualAnchor.SkillOrigin&&attachment.useAsSkillOrigin)))
+                        return ResolveAttachment(attachment,relativeTo,out point);
+            if(activeVisualAnchors==null||relativeTo==null||playerArt==null)return false;
+            var offset=Vector2.Scale(activeVisualAnchors.Get(kind),playerArt.rectTransform.rect.size/256f);
+            point=relativeTo.InverseTransformPoint(playerArt.rectTransform.TransformPoint(offset));
+            return true;
+        }
+        DragonSpriteAttachment[] activeAttachments;
+        public bool TryGetCharacterAttachment(string name,RectTransform relativeTo,out Vector2 point)
+        {
+            point=default;
+            if(activeAttachments==null||pixelPlayer==null)return false;
+            foreach(var attachment in activeAttachments)
+                if(attachment!=null&&attachment.name==name&&attachment.sprite==pixelPlayer.sprite)
+                    return ResolveAttachment(attachment,relativeTo,out point);
+            return false;
+        }
+        bool ResolveAttachment(DragonSpriteAttachment attachment,RectTransform relativeTo,out Vector2 point)
+        {
+            point=default;if(relativeTo==null||pixelPlayer==null||!pixelPlayer.gameObject.activeInHierarchy)return false;
+            var rect=pixelPlayer.rectTransform;
+            point=relativeTo.InverseTransformPoint(rect.TransformPoint(Vector2.Scale(attachment.normalizedPosition-rect.pivot,rect.rect.size)));
+            return true;
+        }
         public void SetDragonArt(DragonData dragon,int level=1)
         {
             EnsureElementIcons();SetElementIcon(playerElementIcon,dragon.elementType);
-            activeSkillEffect=dragon.skillEffect;activeSkillName=dragon.skill==null?null:dragon.skill.displayName;lastAudioResult=BattleResult.Fighting;
+            var selectedSkill=dragon.SkillAtLevel(level);
+            activeSkillEffect=selectedSkill==null?dragon.skillEffect:selectedSkill.effectKind;activeSkillName=selectedSkill==null?null:selectedSkill.displayName;lastAudioResult=BattleResult.Fighting;
             ApplyPixelSkin();
             var activeSprite=dragon.BattleSpriteAtLevel(level);
             if(pixelPlayer==null && activeSprite!=null)
@@ -229,15 +263,20 @@ namespace DragonTower
                 motion=gameObject.AddComponent<BattleAnimation>();
                 motion.Initialize(this);
             }
-            motion.SetIdle(DragonData.EvolutionStage(level)==0 ? dragon.idleFrames : null,activeSprite);
-            equippedSkillPresentation=dragon.skill;
-            motion.SetZephyrWind(dragon.StableId=="zephyr");
-            motion.SetAttack(DragonData.EvolutionStage(level)==0 ? dragon.attackFrames : null);
-            motion.SetSkillFrames(DragonData.EvolutionStage(level)==0 ? dragon.skillFrames : null);
-            motion.SetDodgeFrames(DragonData.EvolutionStage(level)==0 ? dragon.dodgeFrames : null);
-            motion.SetHitFrames(DragonData.EvolutionStage(level)==0 ? dragon.hitFrames : null);
-            motion.SetDeathFrames(DragonData.EvolutionStage(level)==0 ? dragon.deathFrames : null);
-            if(dragon.skill!=null)motion.ResetBattle(dragon.skill);
+            int stage=DragonData.EvolutionStage(level);
+            var animations=dragon.LoadAnimationSet(stage);
+            activeVisualAnchors=animations?.anchors;
+            activeAttachments=animations?.attachments;
+            DragonIdleFrames Frames(DragonAnimationState state)=>animations!=null?animations.Get(state):dragon.LegacyAnimation(state,stage);
+            motion.SetIdle(Frames(DragonAnimationState.Idle),activeSprite);
+            equippedSkillPresentation=selectedSkill;
+            motion.SetBasicPresentation(dragon.basicPresentation);
+            motion.SetAttack(Frames(DragonAnimationState.Attack));
+            motion.SetSkillFrames(Frames(DragonAnimationState.Skill));
+            motion.SetDodgeFrames(Frames(DragonAnimationState.Dodge));
+            motion.SetHitFrames(Frames(DragonAnimationState.Hit));
+            motion.SetDeathFrames(Frames(DragonAnimationState.Death));
+            if(selectedSkill!=null)motion.ResetBattle(selectedSkill);
             else motion.ResetBattle(dragon.skillEffect);
         }
         SkillData equippedSkillPresentation;

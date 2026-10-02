@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f2bcd92b58824d4583930abf14b0dd8, type: 3}
+  m_Name: Death
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.DragonIdleFrames
+  frames:
+  - {fileID: 1641146957952063601, guid: 45b3273d39e10a44cb301615b1768b20, type: 3}
+  - {fileID: 3787865403326059352, guid: 45b3273d39e10a44cb301615b1768b20, type: 3}
+  - {fileID: -7339644071647407107, guid: 45b3273d39e10a44cb301615b1768b20, type: 3}
+  - {fileID: 7805103666072574384, guid: 45b3273d39e10a44cb301615b1768b20, type: 3}
+  durations:
+  - 0.1
+  - 0.14
+  - 0.16
+  - 0.2
+  offsets:
+  - {x: 0.01199992, y: 0.058419585}
+  - {x: 0.12487346, y: 0.058419585}
+  - {x: 0.11549733, y: -0.08016738}
+  - {x: 0.32491165, y: -0.06386301}
+  displayScale: 1.0434783

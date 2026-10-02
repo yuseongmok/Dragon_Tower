@@ -45,7 +45,7 @@ namespace DragonTower
             view.CancelGesture();
             battle=new BattleModel(stats,enemy,initialHP);
             view.SetDragonArt(dragon,dragonLevel);
-            view.SetSkillPresentation(activeSkill??dragon.skill);
+            view.SetSkillPresentation(activeSkill??dragon.SkillAtLevel(dragonLevel));
             view.SetEncounter(enemy,floor,boss,enemySprite);
             var run=Flow==null?null:Flow.CurrentRun;
             view.SetRunProgress(run==null?dragonLevel:run.Level,run==null?0:run.Experience,run==null?100:run.ExperienceToNext);

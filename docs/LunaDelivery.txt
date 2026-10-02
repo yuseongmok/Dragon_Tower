@@ -1,0 +1,89 @@
+루나 캐릭터 제작 및 검수 기록 — 2026-10-02
+적용 프로젝트: C:\Users\PC\Dragon_Tower
+
+1. 새로 만든 에셋
+Assets/Art/Luna/Base, Middle, Final: 각 6개 투명 PNG, 각 시트 4프레임.
+총 18개 시트 / 72 Sprite / 18개 DragonIdleFrames 모션 데이터.
+Assets/Resources/DragonAnimations/LunaBase.asset, LunaMiddle.asset, LunaFinal.asset.
+Assets/Editor/LunaSetup.cs: 재실행 가능한 콘텐츠 등록 레시피.
+Assets/Data/Dragon1.asset: 기존 Luna ID에 Base Sprite, Animation Set 경로, Evolution Forms만 연결.
+기존 이름 루나 → 루나리스 → 루나리아, 기존 진화 레벨 1 / 10 / 20 유지.
+기존 스탯, 패시브, 고드름침 Skill Data, Legacy VFX, 쿨타임 그대로 유지.
+Luna Legendary Signature Skill = NEEDS DESIGN. Ice VFX는 제작/수정하지 않음.
+
+2. 레퍼런스와 디자인
+얼음색/연보라 몸, 푸른 눈과 속눈썹, 초승달/수정 왕관, 흰 목장식, 달무늬 막날개를 유지.
+Base: 작은 사족형, 초승달 꼬리. Middle: 길어진 목과 다리, 눈꽃을 감싼 초승달 꼬리와 큰 날개.
+Base/Middle에는 지팡이 없음. Final: 사용자 요청대로 두 발로 서는 Biped, 달 원반/수정 왕관, 긴 수정 꼬리, 달 구슬 지팡이.
+Base Idle 전투 검증 → Base 6상태 검증 → Middle → Final 순서로 제작.
+최종형의 지팡이와 손은 Sprite 안에 함께 그려져 별도 Renderer/Controller가 필요하지 않음.
+이미지 생성 과정에서 발생한 중복 팔, 잘린 프레임, 셀 경계 침범은 재생성하여 수정.
+모든 최종 시트의 중앙 셀 경계에서 불투명 픽셀 침범이 없음을 확인.
+
+3. 재사용한 Pipeline
+DragonData → Evolution Form → Resources Animation Set → 공용 6상태 재생기.
+기존 SmallQuadruped / LargeQuadruped / Biped Archetype 사용. 새 Animator/Character/Skill Controller 없음.
+Ice Element Theme, HUD, 마우스/터치 입력, Tap Attack, Swipe Dodge, HP/Damage, 기본 스킬 사용 그대로 재사용.
+모든 프레임 시간은 제피르 검증값:
+Idle .60/.20/.12/.28, Attack .06×4, Skill .08/.10/.10/.12,
+Dodge .07/.14/.11/.10, Hit .04/.07/.07/.06, Death .10/.14/.16/.20초.
+공용 256px actor 영역 및 기존 배치 유지. Idle 실루엣 목표 폭 192 / 226 / 246 기준 px.
+Point filter, PPU 100, 최대 512px 시트, Mipmap off, CPU Read/Write off, 기존 공용 UI Material.
+현재 Evolution 하나의 Image/애니메이션만 재생. 별도 상시 Update/무기 Controller/Material 없음.
+
+4. Biped/Staff 때문에 일반화한 요소
+기존 Archetype만으로 직립형 상태 재생 가능. 체형 전용 전투 분기는 불필요했음.
+기존 정적 Anchor만으로 움직이는 지팡이 끝을 정확하게 지정할 수 없었던 부분을 최소 확장.
+DragonAnimationSet.attachments: 이름, 대상 Sprite, 정규화 좌표, Attack/Skill 원점 사용 여부.
+BattleView.TryGetCharacterAttachment: 현재 Sprite의 Optional Socket을 조회.
+TryGetCharacterAnchor: 해당 프레임에 지정한 Optional Socket이 있으면 사용, 없으면 기존 정적 Anchor 사용.
+Final에 StaffTip 24개를 지정. 지팡이의 달 구슬 중심을 시전 원점으로 사용.
+Sprite 교체/Scale/Offset/회피 이동을 따라가며 다른 형태로 돌아가면 이전 StaffTip이 남지 않음.
+기존 VFX Prefab/호출 지점은 수정하지 않았음. 향후 Ice VFX가 이 API를 사용해 연결 가능.
+캐릭터 이름 분기는 런타임에 추가하지 않음. Luna ID 검사는 에디터 등록 레시피에만 있음.
+
+5. 형태별 Anchor (공통 actor 단위)
+                    Base       Middle      Final 정적 fallback
+Attack Origin       (88,-18)   (98,20)     (105,68)
+Skill Origin        (83,-10)   (92,27)     (105,68)
+Character Center    (20,-62)   (6,-39)     (27,-15)
+Hit Position        (36,-52)   (39,-32)    (43,-8)
+Ground Position     (27.208,-109.219), 공통 발 기준
+Final Attack/Skill Origin은 현재 Sprite의 StaffTip 데이터가 우선.
+Final 사망 마지막 두 프레임은 긴 지팡이가 발 정렬을 치우치게 하지 않도록 좌우 위치만 보정.
+Base/Middle 입 Anchor는 정적 기준점이며 향후 Ice 시전 VFX를 붙일 때 최종 포즈 정렬 검수 필요.
+
+6. 수동 작업/병목
+레퍼런스 해석, 진화별 포즈 디자인, 해부학/지팡이 일관성 검수는 수동 작업.
+생성 시트의 여백/셀 경계 보정과 실제 전투에서 크기 및 Anchor 측정 필요.
+지팡이 같은 길고 움직이는 소품은 프레임별 Socket 저작이 필요. 이번에는 24개를 명시적으로 작성.
+프레임별 손/지팡이의 미세한 그림 차이는 남을 수 있어 향후 아트 폴리싱 시 비교 페이지로 검수 가능.
+공용 전투/HUD 코드를 복사하지 않고 데이터와 에셋 등록만으로 새 캐릭터를 연결함.
+
+7. 테스트 결과
+격리된 동일 Unity 프로젝트의 Play Mode 실제 BattleController/BattleView로 자동 전투 실행 및 480×850 캡처.
+Base/Middle/Final: Idle/Attack/Skill/Dodge/Hit/Death 4프레임, 마우스와 터치 ID의 Tap/좌우 Swipe 통과.
+기존 고드름침 각 형태 3회 시전: 기존 52 단일 피해, 히트 횟수, 5.5초 쿨타임/중복 입력 거부 통과.
+HP/사망 및 마지막 Death 프레임 유지, Ice Theme, 스킬 이름, 단일 캐릭터 Image 유지 통과.
+5 Anchor와 캐릭터 이동 추적, 24 StaffTip 조회 및 Skill Origin 연결 통과.
+Final → Base 전환 시 Optional Socket 제거 확인.
+Zephyr 기본/중간/최종, 질풍강타/바람칼날/질풍참/귀참/단천 및 기존 입력/Element HUD 회귀 검사 통과.
+Aurora Base/Middle/Final 회귀 검사 통과.
+검수 캡처에서 Final 날개/지팡이/사망 자세의 화면 경계와 HUD 가독성 확인.
+이는 Unity 자동 전투/캡처 검사이며 물리 모바일 기기의 실제 터치/프레임 시간 측정은 수행하지 않음.
+WebGL 빌드 결과는 아래 완료 기록 참조.
+
+8. 보호 및 되돌리기
+work/Luna-backup에 기존 코드/Dragon1 데이터 및 전체 기존 Assets SHA256 목록 보존.
+기존 Assets의 변경은 Dragon1.asset, DragonAnimationSet.cs, BattleView.cs, DragonCharacterValidation.cs 4개뿐.
+제피르/오로라 에셋, 기존 스킬 데이터, 모든 VFX, HUD/전투 계산 코드는 해시 비교로 변경 없음 확인.
+Luna 참조 데이터 22개에서 누락된 GUID 없음.
+기존 Luna 레퍼런스와 Sprite는 삭제하지 않음.
+
+9. 확인 방법 / 다음 캐릭터에 재사용
+Unity에서 C:\Users\PC\Dragon_Tower를 열고 루나를 선택. 기존 진행의 LV1/10/20에서 각 형태 확인.
+LunaReview.html에서 세 형태의 실제 전투 캡처와 4프레임 모션을 나란히 확인 가능.
+다음 캐릭터도 레퍼런스 → Base Idle → 6상태 → Middle/Final → Animation Set/Anchor → 기존 Data 연결 순서 재사용.
+무기 사용자만 Optional Socket 데이터를 추가. Ice VFX 및 Signature는 별도 기획 단계로 남김.
+
+WebGL 완료 기록: Luna-webgl.log의 HUD_WEBGL_BUILD_OK 확인. Unity WebGL 빌드 성공.

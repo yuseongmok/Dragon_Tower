@@ -1,0 +1,5 @@
+Images: 287
+Full identical: 45
+Combat + top/player HP region (y < 730) identical: 287
+Different: []
+Bottom UI uses Time.unscaledTime glow; source unchanged.

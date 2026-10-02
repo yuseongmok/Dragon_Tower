@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b28f6030f920494e94e52a53d4d9ec3, type: 3}
+  m_Name: LunaBase
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.DragonAnimationSet
+  archetype: 0
+  anchors:
+    attackOrigin: {x: 88, y: -18}
+    skillOrigin: {x: 83, y: -10}
+    characterCenter: {x: 20, y: -62}
+    hitPosition: {x: 36, y: -52}
+    groundPosition: {x: 27.207779, y: -109.2185}
+  attachments: []
+  idle: {fileID: 11400000, guid: 562cb5ea7546a69428e253d6878fd505, type: 2}
+  attack: {fileID: 11400000, guid: f3b914c3581866e458a20b9d1ff3095f, type: 2}
+  skill: {fileID: 11400000, guid: 8b8680b0baa170e4aac63bdaf934b2c6, type: 2}
+  dodge: {fileID: 11400000, guid: 87113e7d8833da840bef0304f5472446, type: 2}
+  hit: {fileID: 11400000, guid: ec71ce2b53cffe649bc533dc7b54f220, type: 2}
+  death: {fileID: 11400000, guid: 96dacade3d491964c916dda86770799e, type: 2}

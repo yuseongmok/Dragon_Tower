@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b28f6030f920494e94e52a53d4d9ec3, type: 3}
+  m_Name: AuroraMiddle
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.DragonAnimationSet
+  archetype: 1
+  anchors:
+    attackOrigin: {x: 85, y: 30}
+    skillOrigin: {x: 80, y: 39}
+    characterCenter: {x: 6, y: -37}
+    hitPosition: {x: 26, y: -24}
+    groundPosition: {x: 27.207779, y: -109.2185}
+  idle: {fileID: 11400000, guid: 1b150b94e00522047b5d26c42ddda6b3, type: 2}
+  attack: {fileID: 11400000, guid: fd0840f62d089ea4e93862e11e713195, type: 2}
+  skill: {fileID: 11400000, guid: 38d46044363f2c744b489149a4080485, type: 2}
+  dodge: {fileID: 11400000, guid: bcc36fc135cfc3640857b43462e639aa, type: 2}
+  hit: {fileID: 11400000, guid: 2ed30b869ee135b4b80d9994b07ccd29, type: 2}
+  death: {fileID: 11400000, guid: 15793e5a3ad28454d91ffcf4e83a4626, type: 2}

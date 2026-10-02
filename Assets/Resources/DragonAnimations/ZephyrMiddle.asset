@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b28f6030f920494e94e52a53d4d9ec3, type: 3}
+  m_Name: ZephyrMiddle
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.DragonAnimationSet
+  archetype: 0
+  idle: {fileID: 11400000, guid: 1f0c528387e5fe1429d11baba70d4ff2, type: 2}
+  attack: {fileID: 11400000, guid: 0a38dc88b667147488485afe74f868d9, type: 2}
+  skill: {fileID: 11400000, guid: 20a831c8f2c50784a93586fc604f2f5f, type: 2}
+  dodge: {fileID: 11400000, guid: d3fe31adcc6813241baa94f29cfa56c7, type: 2}
+  hit: {fileID: 11400000, guid: 5cede62413aabdc44be101ad07ea56b7, type: 2}
+  death: {fileID: 11400000, guid: 5576a833ddc095147a6a38448643bffb, type: 2}

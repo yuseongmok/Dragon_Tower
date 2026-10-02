@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0efa5d3dd9dbc83419f66022a349c41f, type: 3}
+  m_Name: Dragon1
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.DragonData
+  speciesId: luna
+  displayName: "\uB8E8\uB098"
+  description: "\"\uC218\uC0C1\uD560 \uC815\uB3C4\uB85C \uC560\uD638\uAC00\uB4E4\uC774
+    \uB9CE\uC740 \uB4DC\uB798\uACE4\uC785\uB2C8\uB2E4.\""
+  rarity: 0
+  element: "\uC5BC\uC74C"
+  elementType: 3
+  maxHP: 115
+  attackDamage: 9
+  color: {r: 0.4, g: 0.77, b: 0.95, a: 1}
+  battleSprite: {fileID: 21300000, guid: be1f62c381d1487bb2b5f2747338ca2a, type: 3}
+  idleFrames: {fileID: 0}
+  attackFrames: {fileID: 0}
+  skillFrames: {fileID: 0}
+  dodgeFrames: {fileID: 0}
+  hitFrames: {fileID: 0}
+  deathFrames: {fileID: 0}
+  animationSetPath: 
+  basicPresentation: 0
+  elementSkillPool: {fileID: 0}
+  additionalSkillPools: []
+  signatureSkill: {fileID: 0}
+  evolutionForms: []
+  intermediateEvolutionSprite: {fileID: 21300000, guid: 706f83c76550b883379c54b3bcf6a773, type: 3}
+  finalEvolutionSprite: {fileID: 21300000, guid: 5037860e34452a38552bed5c00ec6c02, type: 3}
+  evolutionSheet: {fileID: 2800000, guid: 4ab9fdb551384163aad5c4bc761e3e65, type: 3}
+  intermediateName: "\uB8E8\uB098\uB9AC\uC2A4"
+  finalName: "\uB8E8\uB098\uB9AC\uC544"
+  skillEffect: 1
+  skill: {fileID: 11400000, guid: a37ad0e35c725d146955656de300dc3d, type: 2}
+  passiveName: "\uC5BC\uC5B4\uBD99\uB294 \uC2DC\uC120"
+  passiveDescription: "\uC77C\uBC18 \uACF5\uACA9\uACFC \uC2A4\uD0AC \uACF5\uACA9
+    \uC0AC\uC6A9 \uC2DC 20% \uD655\uB960\uB85C \uC801\uC744 3\uCD08\uAC04 \uB454\uD654\uC2DC\uD0B5\uB2C8\uB2E4."
+  passiveMechanic: 3
+  alternateSkillElement: 0
+  evolutionSheetIncludesBase: 0
