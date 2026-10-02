@@ -1,0 +1,36 @@
+Ice Ball Depth Sample — 2026-10-02
+Scope: Ice Ball presentation only. No other Ice skill remaster in this pass.
+
+Presentation
+- 48 small animation frames in one 768 x 576 point-filtered, no-mipmap atlas.
+- Rotating faceted sphere, near/far orbit crystals, curved flight and collision compression.
+- Surface cracks feed the existing second hit into a layered shatter burst.
+- Rear crown/shockwave behind the monster; perspective-scaled front and rear fragments.
+- Existing 64-image pool; observed peak 26 including Slow status (previous Ball peak 19).
+- Existing Ice prototype shards/frost reused. One highlight material uses the existing unchanged WindClawHighlight UI shader.
+
+Files
+Assets/Scripts/IceSkillVfx.cs: presentation dispatch, pool layering/material selection, rear-layer cleanup; old Ball retained as asset-missing fallback.
+Assets/Scripts/IceSkillVfx.BallDepth.cs: new Ball presentation.
+Assets/Resources/IceSkills/BallDepth: new atlas and highlight material.
+Assets/Editor/IceBallDepthSetup.cs: reproducible atlas authoring.
+Assets/Editor/IceBallDepthValidation.cs: isolated validation entry, reuses existing suite without rewriting SkillData.
+
+Preserved
+SkillData, 2 real damage hits, first delay 0.28 s, hit interval 0.24 s, cooldown 5.5 s, Slow 60 / 3 s, HP, input, HUD, character animation and all other skill data/assets.
+No global time changes, camera shake, fullscreen effect or combat code changes.
+
+Checks
+Isolated Unity project: Aurora/Luna, Base/Middle/Final, all four Ice skills; hit cues and visual impacts same frame; damage/count/timing/cooldown/Slow/HUD assertions pass; three repeat casts per case, target death and battle exit cleanup pass.
+Existing Wind skill regression suite passes.
+Warm cast/step/clear microbenchmark: 0 managed bytes in 100 cycles. This is NOT a full-frame/mobile performance benchmark. Peak Image count is NOT a draw-call measurement.
+30 fps game-frame captures inspected for sphere/impact/shatter and HUD visibility.
+Actual mobile hardware frame time, GPU overdraw and draw calls remain unmeasured.
+
+Review
+C:/Users/PC/Documents/Codex/IceBallDepth-20261002/IceBall-Depth-Comparison.mp4
+Left Aurora Final / right Luna Final. Fixed 30 fps Unity simulation capture, not a phone recording.
+Backup of previous runtime file: C:/Users/PC/Documents/Codex/IceBallDepth-20261002/IceSkillVfx-before.cs.txt
+Existing Assets hashes compared to before.csv: only IceSkillVfx.cs changed; added assets separate.
+Stop after this Ice Ball quality sample; do not propagate automatically to other skills.
+WebGL build passed; local browser preview rendered correctly at desktop and 390 x 844 viewport, no captured error/warning logs. This does not certify phone performance.

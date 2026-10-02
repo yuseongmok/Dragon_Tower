@@ -1,0 +1,82 @@
+Ice VFX Art Direction / Prototype v1 — 2026-10-02
+
+범위
+Ice의 공용 시각 언어를 검증하는 3개 작은 샘플이다. 완성 스킬이 아니다.
+기존 Ice Legacy와 Wind 그림은 입력으로 사용하지 않았다. 기존 에셋, 전투 로직, HUD 및 스킬 데이터는 변경하지 않았다.
+
+팔레트
+Deep Navy #14264D / Deep Ice Blue #244C86 / Ice Blue #397BCC
+Cyan #59CDEE / Pale Ice #B7E7FA / White #EFFBFF
+Lavender #919DDA는 내부의 좁은 면에만 사용한다.
+
+결정과 레이어
+Dark Interior → 서로 다른 다각형 Facet Body → 밝은 Edge → 좁은 White Light Sweep.
+같은 그림을 단순히 색만 바꿔 겹치지 않는다. 실루엣과 내부 면, 모서리는 각각 별도 픽셀 모듈이다.
+화이트는 좁은 모서리/반사점/접촉 중심에 제한한다. 전체가 하얗게 타거나 파란 안개처럼 되지 않게 한다.
+투명감은 어두운 내부 면과 반투명 면의 대비로 표현한다. 실제 배경 굴절은 없다.
+64px 모듈의 Point 필터, 2 기준 픽셀 이동 스냅을 사용한다.
+
+샘플 타임라인 (실제 피해 시점과 무관한 독립 미리보기 시간)
+0–0.12s 작은 냉기 점.
+0.10–0.36s 아래에서 위로 결정 성장, 본체와 Edge가 차례로 나타남.
+0.37–0.58s 좁은 Light Sweep.
+0.68s 작은 White/Pale/Cyan 접촉점.
+0.72–0.82s 3단계 가지형 균열 (100ms).
+0.82–1.32s 파쇄: 큰 판형 3 / 중간 바늘형 4 / 작은 삼각형 3 = 기본 10개.
+크기, 방향, 속도와 회전이 다르며 어두운 면과 밝은 날을 유지한다. 8–15개로 조절 가능.
+1.12–2.8s 몬스터 발밑의 작은 Frost Ring, 서리 3개, 작은 결정 하나. 2.8s 전부 회수.
+Frost는 단단한 결정과 구분되는 작은 불연속 픽셀 띠이며 큰 반투명 안개판은 사용하지 않는다.
+
+Slow 확장
+Visual Intensity 1–5는 Ring 밝기와 작은 결정 크기만 바꾸는 시각 파라미터다.
+공격속도/실제 Slow/중첩/증강은 구현하지 않았다. 향후 상태 시스템이 이 값만 전달하도록 연결 가능하다.
+
+등급별 제작 기준 (다음 단계의 상대 예산이며 성능 보장 아님)
+Common: 작은 결정, 주요 면 2–3층, 짧은 Crack, 적은 파편.
+Rare: 선명한 Edge와 짧은 Sweep, 3–4개 주요 역할, 더 읽히는 파쇄.
+Unique: 여러 결정의 순차 성장과 구조적 파괴, 강한 최종 타격. 크기만 키우지 않는다.
+Legendary: 드래곤 정체성을 별도로 설계. 공용 Ice에 달/유령을 섞지 않는다.
+
+향후 스킬 호환 방향 (구현하지 않음 / 사용자 제공 콘셉트)
+아이스샷 Common — 고드름, 3 Hit, 20% Slow: 작은 Crystal/Edge/Crack 재사용 가능.
+아이스볼 Rare — 에너지 덩어리, 2 Hit, 60% Slow: Facet/Impact/Shatter를 별도 구형 실루엣으로 확장.
+서리숨결 Rare — Breath, 5 Hit, 30% Slow: 작은 Frost 모듈과 상태 표현을 재사용. 결정 투사체로 대체하지 않는다.
+아이시클 Unique — 사용자부터 적까지 지면 가시벽, 3 Hit, 60% Slow: Bottom-up Growth/Crack 구조 재사용.
+오로라 위습 — 환영/유령 돌진·폭발. 루나 초월 — 암전·초승달·냉기 폭발. 이번에는 둘 다 미구현.
+수치들은 앞으로의 기획 메모이며 이번 작업에서 Skill Data에 적용하지 않았다.
+
+Material / Shader / 성능
+256×256 RGBA 아틀라스 1개, 16개 모듈, Point / mipmap 없음 / CPU readable 해제.
+기존 Graphic.defaultGraphicMaterial(UI/Default) 공유. 새 Material, Additive, 조명, Bloom, Blur, 화면 굴절 없음.
+RectMask2D로 HUD 밖의 테스트 영역 제한. 모든 VFX Image는 raycastTarget=false.
+28개 Image 사전 풀; 프레임 중 생성/파괴 없음. 관측 최대 활성 15개.
+Editor 1,000회 Play/Step/Clear 측정: 107.4888ms, 스레드 managed allocation 0 bytes.
+이는 모바일 프레임 시간/GPU/드로우콜 성능 측정이 아니다. 기기별 프로파일링은 후속 필요.
+
+확인 방법
+Unity에서 Assets/Scenes/Prototypes/IceStylePreview.unity를 열고 Play.
+Ice style preview only 오브젝트 Inspector: Dragon Index 0=오로라, 1=루나.
+Evolution 0=Base, 1=Middle, 2=Final. 다음 루프에 선택 적용. Visual Intensity 1–5.
+기존 Battle 씬 대신 이 독립 씬에서만 재생된다. 기본 게임의 스킬 버튼으로 발동하는 효과가 아니다.
+Preview는 전투 진행을 멈추고 배경/HUD/캐릭터를 보여주는 시각 검수용이다.
+Casting 검수는 기존 Skill 키포즈와 Skill Origin을 사용하며 실제 Legacy 스킬은 호출하지 않는다.
+루나 Staff Tip 연결 역시 기존 Optional Anchor를 사용한다.
+
+구성 파일
+Assets/Scripts/IceVfxStyle.cs — 팔레트, 모듈, 샘플 파라미터.
+Assets/Scripts/IceStylePrototype.cs — 풀과 시각 타임라인.
+Assets/Scripts/IceStylePreview.cs — 독립 검수 씬 드라이버.
+Assets/Editor/IceStyleSetup.cs — 코드 기반 픽셀 아틀라스 및 독립 씬 설치.
+Assets/Editor/IceStyleValidation.cs — 자동 검수와 독립 WebGL 빌드.
+Assets/Art/IceStylePrototype — 아틀라스와 Style 데이터.
+Assets/Prefabs/Prototypes/IceStylePrototype.prefab — 재사용 샘플.
+
+검증
+오로라/루나 Base·Middle·Final 총 6형태에서 재생, Casting Anchor, 기존 위치 유지 확인.
+HP, 전투 시간, SkillReady 불변. 종료·반복 20회·취소·비활성화 시 회수 확인.
+장면 종료 순서에 따른 파괴된 Image 접근을 방어한 뒤 최종 검증에서 예외 없음.
+기존 Assets 3,371개 해시 불변 확인. 실제 전투 Damage/Slow 통합 테스트는 범위 밖.
+확인용 30fps Unity 프레임 플레이어: C:/Users/PC/Documents/Codex/IceStyle-20261002/IceStyleReview.html
+
+WebGL 독립 Preview 씬 빌드 성공 (ICE_STYLE_WEBGL_OK). 모바일 브라우저 실기기 실행 검증은 미실시.
+원본 프로젝트로 전달 시 새 스크립트 GUID를 로컬 .meta에 맞춰 연결했으며, 모든 참조를 Assets 및 Unity UI 패키지에서 확인했다.

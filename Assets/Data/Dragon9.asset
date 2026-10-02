@@ -52,3 +52,4 @@ MonoBehaviour:
   passiveMechanic: 4
   alternateSkillElement: 0
   evolutionSheetIncludesBase: 1
+  signatureSkill: {fileID: 11400000, guid: 4d09d67a04845ba40a511685e396c255, type: 2}

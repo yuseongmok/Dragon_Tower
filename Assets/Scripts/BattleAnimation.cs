@@ -26,6 +26,7 @@ namespace DragonTower
         Color playerColor,enemyColor,skillColor;
         SkillEffectKind skillEffect;
         BattleAssetVfx assetVfx;
+        IceSkillVfx iceVfx;WispVfx wispVfx;LunarVfx lunarVfx;
         ZephyrWindVfx windVfx;
         WindBladeVfx bladeVfx;Vector2 bladeEnemyPose;
         GaleStrikeVfx galeVfx; GaleSlashVfx slashVfx; GaleSlashFeedback slashFeedback; WindClawVfx clawVfx;WindHitFeedback clawFeedback;
@@ -71,6 +72,9 @@ namespace DragonTower
             layer.SetSiblingIndex(view.enemyArt.transform.GetSiblingIndex()+1);
             assetVfx=gameObject.AddComponent<BattleAssetVfx>();
             assetVfx.Initialize(layer);
+            iceVfx=gameObject.AddComponent<IceSkillVfx>();iceVfx.Initialize(view,layer);
+            wispVfx=gameObject.AddComponent<WispVfx>();wispVfx.Initialize(view,layer);
+            lunarVfx=gameObject.AddComponent<LunarVfx>();lunarVfx.Initialize(view,layer);
             windVfx=gameObject.AddComponent<ZephyrWindVfx>();windVfx.Initialize(layer,player);
             galeVfx=gameObject.AddComponent<GaleStrikeVfx>();galeVfx.Initialize(layer);
             bladeVfx=gameObject.AddComponent<WindBladeVfx>();bladeVfx.Initialize(layer);slashVfx=gameObject.AddComponent<GaleSlashVfx>();slashVfx.Initialize(layer);slashFeedback=gameObject.AddComponent<GaleSlashFeedback>();slashFeedback.Initialize();clawVfx=gameObject.AddComponent<WindClawVfx>();clawVfx.Initialize(layer);clawFeedback=gameObject.AddComponent<WindHitFeedback>();clawFeedback.Initialize();dantianVfx=gameObject.AddComponent<DantianVfx>();dantianVfx.Initialize(view);dantianFeedback=gameObject.AddComponent<DantianFeedback>();dantianFeedback.Initialize();
@@ -119,7 +123,8 @@ namespace DragonTower
             if(enemyGraphic is Image) enemyColor=Color.white;
             skillEffect=effect;
             skillColor=EffectColor(effect);
-            assetVfx.Configure(UsesPixelWindSkill||(skill!=null&&(skill.StableId=="skill_falling_flower"||skill.StableId=="skill_gale_slash"||skill.StableId=="skill_wind_claw"||skill.StableId=="skill_dantian"))?null:skill);
+            iceVfx.Configure(skill);wispVfx.Configure(skill,enemyGraphic);lunarVfx.Configure(skill,enemyGraphic);
+            assetVfx.Configure(lunarVfx.Configured||wispVfx.Configured||iceVfx.Configured||UsesPixelWindSkill||(skill!=null&&(skill.StableId=="skill_falling_flower"||skill.StableId=="skill_gale_slash"||skill.StableId=="skill_wind_claw"||skill.StableId=="skill_dantian"))?null:skill);
             windVfx.Clear();galeVfx.Configure(zephyrWind,skill);bladeVfx.Configure(skill);slashVfx.Configure(skill);slashFeedback.Bind(player,enemy,playerGraphic,enemyGraphic);slashVfx.SetTargetWidth(enemyGraphic.rectTransform.rect.width);bladeEnemyPose=enemyHome;clawVfx.Configure(skill);clawFeedback.Bind(player,enemy,playerGraphic,enemyGraphic);dantianVfx.Configure(skill,playerGraphic);dantianFeedback.Bind(player,enemy,playerGraphic,enemyGraphic);
             foreach(var p in particles){p.active=false;p.image.gameObject.SetActive(false);}
             foreach(var n in numbers){n.active=false;n.text.gameObject.SetActive(false);}
@@ -139,11 +144,17 @@ namespace DragonTower
                     Damage(enemyHome,damage.ToString(),zephyrWind?new Color(.7f,1,.8f):new Color(1,.91f,.62f),.06f);
                     break;
                 case CombatCue.SkillCast:
+                    if(lunarVfx.Configured){attackAge=10;skillAge=0;lunarVfx.Cast(enemyHome);break;}
+                    if(wispVfx.Configured){attackAge=10;skillAge=0;wispVfx.Cast(enemyHome);break;}
+                    if(iceVfx.Configured){attackAge=10;skillAge=0;iceVfx.Cast(enemyHome);break;}
                     if(dantianVfx.Configured){attackAge=dodgeAge=playerHitAge=10;skillAge=0;dantianVfx.Cast(playerHome,enemyHome);break;}
                     if(clawVfx.Configured){attackAge=10;skillAge=0;clawVfx.Cast(playerHome,enemyHome);break;}
                     if(slashVfx.Configured){attackAge=10;skillAge=0;slashVfx.Cast(playerHome,enemyHome);break;}
                     if(bladeVfx.Configured){attackAge=10;skillAge=0;bladeVfx.Cast(playerHome,enemyHome);}break;
                 case CombatCue.Skill:
+                    if(lunarVfx.Configured){LunarHit(damage,false);break;}
+                    if(wispVfx.Configured){WispHit(damage);break;}
+                    if(iceVfx.Configured){if(!iceVfx.Active){skillAge=0;iceVfx.Cast(enemyHome);}enemyHitAge=0;iceVfx.Hit();Damage(enemyHome,damage.ToString(),new Color(.72f,.91f,1),.033f,iceVfx.HitsShown);break;}
                     if(dantianVfx.Configured){if(dantianVfx.Active){enemyHitAge=10;dantianVfx.Hit();dantianFeedback.Hit();Damage(enemyHome,damage.ToString(),WindVFXStyle.Pale,0,0,false,0,true);}break;}
                     if(clawVfx.Configured){if(!clawVfx.Active){clawVfx.Cast(playerHome,enemyHome);skillAge=0;}enemyHitAge=0;clawVfx.Hit();bool final=clawVfx.HitsShown%2==0;clawFeedback.Hit(final);Damage(enemyHome,damage.ToString(),skillColor,final?.083f:.050f,0,false,clawVfx.HitsShown);break;}
                     if(slashVfx.Configured){if(!slashVfx.Active){slashVfx.Cast(playerHome,enemyHome);skillAge=0;}enemyHitAge=0;slashVfx.Hit();slashFeedback.Hit();Damage(enemyHome,damage.ToString()+"!",skillColor,.067f,0,true);break;}
@@ -168,7 +179,13 @@ namespace DragonTower
                     }
                     Damage(enemyHome,damage.ToString()+"!",skillColor,.18f);
                     break;
+                case CombatCue.SkillBonusHit:
+                    if(lunarVfx.Configured)LunarHit(damage,true);break;
                 case CombatCue.SkillHit:
+                    if(lunarVfx.Configured){if(lunarVfx.DamageFromSkill)LunarHit(damage,false);else Damage(enemyHome,damage.ToString(),skillColor,0);break;}
+                    if(wispVfx.Configured){if(wispVfx.DamageFromSkill)WispHit(damage);else Damage(enemyHome,damage.ToString(),skillColor,0);break;}
+                    if(iceVfx.Configured&&!iceVfx.DamageFromSkill){Damage(enemyHome,damage.ToString(),skillColor,0);break;}
+                    if(iceVfx.Configured){if(!iceVfx.Active){skillAge=0;iceVfx.Cast(enemyHome);}enemyHitAge=0;iceVfx.Hit();Damage(enemyHome,damage.ToString(),new Color(.72f,.91f,1),.033f,iceVfx.HitsShown);break;}
                     if(dantianVfx.Configured){Damage(enemyHome,damage.ToString(),WindVFXStyle.Mint,0);break;}
                     if(clawVfx.Configured){if(!clawVfx.Active){clawVfx.Cast(playerHome,enemyHome);skillAge=0;}enemyHitAge=0;clawVfx.Hit();bool finalClaw=clawVfx.HitsShown%2==0;clawFeedback.Hit(finalClaw);Damage(enemyHome,damage.ToString(),skillColor,finalClaw?.083f:.050f,0,false,clawVfx.HitsShown);break;}
                     if(slashVfx.Configured){enemyHitAge=0;slashVfx.Hit();slashFeedback.Hit();Damage(enemyHome,damage.ToString()+"!",skillColor,.067f,0,true);break;}
@@ -254,6 +271,14 @@ namespace DragonTower
             var p=particles[particleIndex++%particles.Length];p.active=true;p.start=at;p.velocity=velocity;p.size=size;p.color=color;
             p.age=-delay;p.life=life;p.gravity=gravity;p.spin=spin;p.image.gameObject.SetActive(false);
         }
+        void LunarHit(int damage,bool bonus)
+        {
+            enemyHitAge=0;lunarVfx.Hit(bonus);Damage(enemyHome,damage.ToString(),new Color(.91f,.93f,1),.033f,0,true);var n=numbers[(numberIndex-1)%numbers.Length];n.text.fontSize=bonus?30:38;n.start=enemyHome+new Vector2(bonus?80:-70,80);
+        }
+        void WispHit(int damage)
+        {
+            enemyHitAge=0;wispVfx.Hit();bool final=wispVfx.HitsShown>=wispVfx.HitCount;Damage(enemyHome,damage.ToString(),new Color(.82f,.9f,1),.033f,wispVfx.HitsShown,final);numbers[(numberIndex-1)%numbers.Length].text.fontSize=final?36:21;
+        }
         void Damage(Vector2 at,string text,Color color,float delay,int bladeHit=0,bool heavy=false,int clawHit=0,bool legendary=false)
         {
             var n=numbers[numberIndex++%numbers.Length];n.text.transform.SetParent(legendary?dantianVfx.Overlay:layer,false);n.active=true;n.start=at+new Vector2((numberIndex%3-1)*22,65);
@@ -284,6 +309,7 @@ namespace DragonTower
             bool spriteHit=fighting && hasHit && playerHitAge<hitFrames.Length;
             float dodgeLength=battle.Dragon.dodgeDuration>0?battle.Dragon.dodgeDuration:BattleModel.DodgeDuration;
             bool spriteDodge=fighting && hasDodge && dodgeAge<dodgeLength && playerHitAge>=.24f;
+            if((iceVfx.HoldCasting||lunarVfx.HoldCasting)&&hasSkill)skillAge=Mathf.Min(skillAge,skillFrames.Length*.55f);
             bool skillActive=skillAge<(hasSkill?skillFrames.Length:.4f);
             bool defensiveAction=dodgeAge<dodgeLength || playerHitAge<.24f;
             bool spriteSkill=fighting && hasSkill && skillActive && !defensiveAction;
@@ -349,6 +375,7 @@ namespace DragonTower
             }
             if(fighting&&bladeVfx.FinalFreeze)enemy.anchoredPosition=bladeEnemyPose;
             bladeEnemyPose=enemy.anchoredPosition;
+            iceVfx.Step(battle,delta);wispVfx.Step(battle,delta);lunarVfx.Step(battle,delta);
             slashFeedback.Step(delta,fighting,!defensiveAction);clawFeedback.Step(delta,fighting,!defensiveAction);dantianFeedback.Step(delta,fighting,!defensiveAction);
             if(dodge>0){var c=playerGraphic.color;c.a=1-.45f*dodge;playerGraphic.color=c;}
             if(!fighting)

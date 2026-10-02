@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using UnityEditor;
@@ -224,6 +224,7 @@ namespace DragonTower.Editor
             for(int i=0;i<8;i++)
             {
                 var skill=AssetDatabase.LoadAssetAtPath<SkillData>(Root+"/Skill"+i+".asset");if(skill==null)continue;
+                if(skill.icePresentation)continue; // Preserve authored Ice batch data on legacy setup reruns.
                 if(string.IsNullOrWhiteSpace(skill.skillId))skill.skillId=ids[i];skill.displayName=names[i];skill.elementType=elements[i];skill.effectKind=(SkillEffectKind)i;EditorUtility.SetDirty(skill);
                 if(skill.battleVfx==null)
                 {

@@ -1,0 +1,72 @@
+위습(Wisp) — 오로라 Legendary Signature / 2026-10-02
+
+구현
+- 오로라 signatureSkill 슬롯과 ContentDatabase에 등록. Ice 공용 풀에 추가하지 않음.
+- 기존 CanEquip / CanOfferSkill / TowerRun 장착 검사를 그대로 사용. 루나 장착 및 모델 발동 거부 확인.
+- 기존 HUD가 SkillData의 아이콘/이름/쿨타임을 사용. HUD 코드/배치 변경 없음.
+- 기존 Aurora Base/Middle/Final Skill 및 Dodge 모션 사용. 캐릭터 에셋 변경 없음.
+
+기본 연출 시간표 (밸런스용 확정 수치가 아님)
+0.00–0.23초: Cyan/Lavender 소환, 서로 다른 화면 위치에 영혼 등장.
+0.38–1.81초: 6개 주요 위습이 두 차례 곡선 진입/관통. 보조 영혼과 깊이가 다른 꼬리 동반.
+1.84–1.94초: 중심으로 집중/압축.
+1.94초: 마지막 실제 피해와 Spirit Explosion, 적 White/Cyan 실루엣, 전투 배경/적의 짧은 흔들림.
+폭발 첫 50ms: VFX 형태만 유지하는 정지감. Time.timeScale/회피 입력/전투 타이머/Animator를 정지시키지 않음.
+2.50초: 공격 연출 종료. 남은 회피 해방 3.00초.
+5.50초: 회피 해방 종료. 상태 위습은 마지막 0.5초 동안 희미해짐.
+
+임시 SkillData
+Assets/Data/Skills/skill_aurora_wisp.asset
+- 12회 관통 x 12 + 마지막 60 = 기본 204 (속성/치명타 등 기존 계산 전).
+- hitCount 13 / initialHitDelay 0.38 / hitInterval 0.13 / finalHitDamageMultiplier 5.
+- cooldown 14 / dodgeFreeCastDuration 2.5 / dodgeFreeAfterDuration 3.
+- 상태이상 None, 시전 전체 무적 없음. 기존 회피 무적만 유지.
+- Legendary 희귀도 보상 경로 사용. 별도의 추가 획득 확률 제한은 적용하지 않음(rewardEligibilityPercent 100).
+- 기존 DoubleCasting은 26 Hit/408 기본 피해, 연출 4.19초 + 종료 후 3초로 연장 검증. 새 증강은 구현하지 않음.
+
+회피 해방
+BattleModel의 선택적 데이터 기반 상태로 추가. 캐릭터 이름 if문 없음.
+Dodge의 쿨타임 거부 조건만 해당 상태 동안 우회. DodgeUntil, 거리, 방향, Swipe 판정, 회피 성공 이벤트는 기존 코드 유지.
+해방 중에도 각 회피의 원래 DodgeReady는 기록하므로, 종료 시 마지막 회피에서 계산된 원래 쿨타임으로 복귀.
+몬스터 사망/패배는 상태 조회가 즉시 false. EndBattle, 컴포넌트 비활성화/파괴는 상태·VFX·오프셋 취소.
+
+재사용 / 신규
+- 기존 Animation/API/Skill Hit/HP/보상/아이콘 표시 시스템 재사용.
+- 기존 Ice Shard 및 IceBall Highlight Material, 공용 실루엣 Shader 재사용 (원본 변경 없음).
+- 신규 Wisp 40프레임 + 아이콘 1개, 768x576 Point atlas / no mipmap.
+- 192 Image 예약 풀, 일반 시전 관측 최대 84. 실행 중 반복 Instantiate/Destroy 없음.
+- 전투 영역 앞뒤 레이어에 렌더링하며 HUD를 덮는 상시 오버레이 없음.
+
+주요 신규 파일
+Assets/Scripts/WispVfx.cs
+Assets/Scripts/BattleModel.DodgeRelease.cs
+Assets/Resources/VFX/Wisp/Frames.png / Silhouette.mat
+Assets/Data/Skills/skill_aurora_wisp.asset
+Assets/Editor/WispSetup.cs / WispValidation.cs / WispBuild.cs
+Assets/Scripts/WispPreview.cs (독립 검수 씬 전용)
+
+기존 파일 변경
+BattleModel.cs: 선택적 회피 해방 시작/쿨타임 우회, 마지막 타격 배율(기존 기본값 1).
+SkillData.cs / TowerRun.cs: 선택적 데이터 전달.
+BattleAnimation.cs / BattleController.cs: 위습에만 해당하는 호출/표시/취소 연결.
+Dragon9.asset: signatureSkill 참조 1개 추가.
+ContentDatabase.asset: 위습 항목 1개 추가.
+원본 해시 대조에서 그 외 기존 Assets 변경 없음. Ice 공용 4스킬, Wind/단천, 캐릭터, HUD, Slow 코드는 그대로 유지.
+
+테스트
+- 오로라 Base/Middle/Final: 13 Hit, 마지막 60, 총 204, 실제 cue와 VFX 접촉 같은 프레임.
+- 정상 쿨타임에서 발동, 기존 회피 쿨타임 중 해방, 해방 중 연속 회피, 기존 0.42초 무적 유지.
+- 연출 종료 시 잔여 3초, 종료 10ms 전 회피 가능, 만료 후 원래 쿨타임 거부/재개 확인.
+- 3회 반복 실행, 대상 즉사, 전투 종료, 연출 컴포넌트 비활성화 시 정리 확인.
+- 기존 더블캐스팅 및 전용기 장착 데이터 전달 확인.
+- 오로라/루나 3형태 x Ice 4스킬 + 기존 Wind/단천 회귀 테스트 통과.
+- Editor VFX 전용 1,500 step 마이크로벤치 약 962ms, 관리 메모리 추가 할당 0 관측. 모델/렌더링 전체 프레임 비용 아님.
+- 실제 휴대폰 GPU 프레임 시간, 드로우콜, 발열은 측정하지 못함. 모바일 성능 보장 수치로 해석하지 말 것.
+
+검수 영상
+C:/Users/PC/Documents/Codex/Wisp-20261002/Aurora-Wisp.mp4
+고정 30fps Unity 전투 시뮬레이션 캡처. 폭발 후 연속 좌우 회피와 상태 종료까지 포함.
+백업/로그: C:/Users/PC/Documents/Codex/Wisp-20261002
+위습만 제작. 루나 초월 및 다른 콘텐츠 작업은 시작하지 않음.
+WebGL 최종 확인: 빌드 성공, 브라우저 390x844 세로 화면에서 위습 이후 연속 회피/상태 표시 확인. 캡처된 오류/경고 로그 없음. 실제 모바일 하드웨어 벤치마크는 미실시.
+Unity 확인: Assets/Scenes/Prototypes/WispPreview.unity를 열고 Play하면 전용 검수 루프가 자동 재생됨. 실제 Battle 씬 및 기본 장착 스킬은 그대로.

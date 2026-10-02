@@ -13,16 +13,20 @@ MonoBehaviour:
   m_Name: Skill1
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
   skillId: skill_frost_Icicle
-  displayName: "\uACE0\uB4DC\uB984\uCE68"
-  description: 
+  displayName: "\uC544\uC774\uC2A4\uC0F7"
+  description: "\uC544\uC774\uC2A4\uC0F7 \xB7 3 Hit \xB7 \uACF5\uACA9 \uAC04\uACA9
+    \uB454\uD654 20%"
   elementType: 3
   effectKind: 1
-  icon: {fileID: 0}
+  icon: {fileID: -8020479650170454105, guid: 32a6384435f7dd84485fb3b924ed18f3, type: 3}
   rarity: 0
   exclusiveDragonId: 
   rewardEligibilityPercent: 100
   protectedCastDuration: 0
-  initialHitDelay: 0
+  initialHitDelay: 0.2
+  icePresentation: 1
+  iceKind: 0
+  statusOnHit: 1
   battleVfx: {fileID: 4156968546351773348, guid: 9c70804fce2cbbf4f81c45b9a5130b8d, type: 3}
   vfxScale: 0.55
   vfxOffset: {x: 0, y: 0}
@@ -31,9 +35,9 @@ MonoBehaviour:
   vfxSystemLimit: 10
   damage: 52
   cooldown: 5.5
-  hitCount: 1
-  hitInterval: 0.14
-  statusEffect: 0
-  statusChancePercent: 0
-  statusDuration: 0
-  statusPower: 0
+  hitCount: 3
+  hitInterval: 0.11
+  statusEffect: 3
+  statusChancePercent: 100
+  statusDuration: 3
+  statusPower: 20

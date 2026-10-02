@@ -46,8 +46,10 @@ namespace DragonTower
     public sealed class SkillStats
     {
         public string exclusiveDragonId;public float protectedCastDuration;
+        public float dodgeFreeCastDuration,dodgeFreeAfterDuration,finalHitDamageMultiplier=1;
+        public float slowBonusDamagePercent,slowBonusDelay=.16f;
         public string displayName;public ElementType elementType;public int damage;public float cooldown;
-        public float initialHitDelay;public int hitCount=1;public float hitInterval=.14f;public CombatStatusEffect statusEffect;
+        public bool statusOnHit;public float initialHitDelay;public int hitCount=1;public float hitInterval=.14f;public CombatStatusEffect statusEffect;
         public float statusChancePercent,statusDuration,statusPower;
     }
     public sealed class BattleStats
@@ -90,7 +92,7 @@ namespace DragonTower
             bossPattern=EnemyBossPattern.EarthShatter,patternEveryAttacks=4,patternIntervalMultiplier=1.3f,patternDamageMultiplier=1.6f};
     }
     public enum BattleResult { Fighting, Victory, Defeat }
-    public enum CombatCue { Attack, Skill, SkillHit, Dodge, EnemyHit, EnemyMiss, BossSkill, PlayerStatusHit, SkillCast }
+    public enum CombatCue { Attack, Skill, SkillHit, Dodge, EnemyHit, EnemyMiss, BossSkill, PlayerStatusHit, SkillCast, SkillBonusHit }
     // Pure combat rules: no scene dependencies; can be tested without rendering.
     public sealed partial class BattleModel
     {
@@ -101,6 +103,8 @@ namespace DragonTower
         public int ShieldHP => Time<shieldUntil?shieldHP:0;
         public bool EnemyBurning => Time<burnUntil;
         public bool EnemySlowed => Time<slowUntil;
+        public bool ResolvingSkillHit {get;private set;}
+        public float EnemySlowPower=>EnemySlowed?slowPercent:0;
         public bool EnemyParalyzed => Time<paralyzeUntil;
         public bool EnemyStunned => Time<stunUntil;
         public bool EnemyPoisoned => poisonDamage>0;
@@ -177,6 +181,7 @@ namespace DragonTower
                 if(Result!=BattleResult.Fighting){pendingSkillHits=0;break;}
                 pendingSkillHits--;nextSkillHit+=Math.Max(.03f,Dragon.skill.hitInterval);
             }
+            TickSlowSignature();
             while(burnNext>0&&burnNext<=Time&&burnNext<=burnUntil&&Result==BattleResult.Fighting)
             {
                 int burn=Math.Max(1,burnDamage);DamageEnemy(burn);Feedback?.Invoke("화상 피해  −"+burn);burnNext+=1;
@@ -305,12 +310,13 @@ namespace DragonTower
             if(overcast){float costPercent=Math.Max(6,10-Dragon.passiveStage*2);int overcastCost=Math.Max(1,(int)Math.Ceiling(Dragon.maxHP*costPercent/100f));PlayerHP=Math.Max(1,PlayerHP-overcastCost);Feedback?.Invoke("공허 가속기 · HP "+overcastCost+" 소모");}
             SkillReady = Time+(Time<noSkillCooldownUntil?0:Math.Max(0,Dragon.skill.cooldown)*(Time<firstAidUntil?.5f:1f));
             if(PlayerActionMissed(true))return true;
+            BeginSlowSignature();
             protectedSkillUntil=Time+Math.Max(0,Dragon.skill.protectedCastDuration);
-            int casts=Has(AugmentMechanic.DoubleCasting)?2:1;pendingSkillHits=Math.Max(1,Dragon.skill.hitCount)*casts-1;nextSkillHit=Time+Math.Max(.03f,Dragon.skill.hitInterval);
+            int casts=Has(AugmentMechanic.DoubleCasting)?2:1;ScheduledSkillHits=Math.Max(1,Dragon.skill.hitCount)*casts;BeginDodgeRelease();pendingSkillHits=Math.Max(1,Dragon.skill.hitCount)*casts-1;nextSkillHit=Time+Math.Max(.03f,Dragon.skill.hitInterval);
             pendingFirstSkillHit=Dragon.skill.initialHitDelay>0;
             if(pendingFirstSkillHit){pendingSkillHits++;nextSkillHit=Time+Dragon.skill.initialHitDelay;Cue?.Invoke(CombatCue.SkillCast,0);}
             else PerformSkillHit(true);if(Result==BattleResult.Defeat)return true;
-            if(Result==BattleResult.Fighting)ApplySkillStatus();
+            if(Result==BattleResult.Fighting&&!Dragon.skill.statusOnHit)ApplySkillStatus();
             TriggerAttackStatus();
             if(Dragon.passiveMechanic==DragonPassiveMechanic.JetStream){passiveRapidUntil=Time+Passive(1);AttackReady=Time+Math.Max(0,AttackReady-Time)*(1-Passive(.5f));Feedback?.Invoke("제트기류! 일반 공격 가속");}
             if(Dragon.passiveMechanic==DragonPassiveMechanic.IronArmor&&ShieldHP<=0){shieldHP=Math.Max(1,(int)Math.Ceiling(Dragon.maxHP*Passive(.05f)));shieldUntil=double.MaxValue;Feedback?.Invoke("철갑! 보호막 "+shieldHP);}
@@ -331,8 +337,13 @@ namespace DragonTower
         }
         void PerformSkillHit(bool first)
         {
-            bool critical;int damage=Hit(Dragon.skill.damage,Dragon.skill.elementType,true,out critical);
-            Cue?.Invoke(first?CombatCue.Skill:CombatCue.SkillHit,damage);
+            bool critical;int baseDamage=Dragon.skill.damage;
+            if(pendingSkillHits<=1||(pendingFirstSkillHit==false&&Dragon.skill.initialHitDelay>0&&(pendingSkillHits-1)%Math.Max(1,Dragon.skill.hitCount)==0))baseDamage=Math.Max(1,(int)Math.Round(baseDamage*Math.Max(1,Dragon.skill.finalHitDamageMultiplier)));
+            int damage=Hit(baseDamage,Dragon.skill.elementType,true,out critical);
+            QueueSlowSignatureBonus(baseDamage);
+            if(Dragon.skill.statusOnHit&&Result==BattleResult.Fighting)ApplySkillStatus();
+            ResolvingSkillHit=true;
+            try{Cue?.Invoke(first?CombatCue.Skill:CombatCue.SkillHit,damage);}finally{ResolvingSkillHit=false;}
             Feedback?.Invoke((ElementRules.HasAdvantage(Dragon.skill.elementType,Enemy.elementType)?"상성 우위!  ":"")+(critical?"치명타!  ":"")+Dragon.skill.displayName+"!  −"+damage);
             if(Result!=BattleResult.Fighting)pendingSkillHits=0;
         }
@@ -377,7 +388,7 @@ namespace DragonTower
         public bool Dodge()
         {
             if(ProtectedSkillActive)return false;
-            if (Result != BattleResult.Fighting || PlayerStunned || Time < DodgeReady) return false;
+            if (Result != BattleResult.Fighting || PlayerStunned || (!DodgeCooldownReleased && Time < DodgeReady)) return false;
             DodgeReady = Time + (Dragon.dodgeCooldown>0?Dragon.dodgeCooldown:DodgeCooldown);
             DodgeUntil = Time + (Dragon.dodgeDuration>0?Dragon.dodgeDuration:DodgeDuration);
             dodgeAttemptedForStrike=true;

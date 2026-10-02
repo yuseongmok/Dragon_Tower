@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f44eb3b5c79ddd3469d5d94bf448de6a, type: 3}
+  m_Name: IceStyle
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.IceVfxStyle
+  deepNavy: {r: 0.078431375, g: 0.14901961, b: 0.3019608, a: 1}
+  deepBlue: {r: 0.14117648, g: 0.29803923, b: 0.5254902, a: 1}
+  iceBlue: {r: 0.22352941, g: 0.48235294, b: 0.8, a: 1}
+  cyan: {r: 0.34901962, g: 0.8039216, b: 0.93333334, a: 1}
+  pale: {r: 0.7176471, g: 0.90588236, b: 0.98039216, a: 1}
+  white: {r: 0.9372549, g: 0.9843137, b: 1, a: 1}
+  lavender: {r: 0.5686275, g: 0.6156863, b: 0.85490197, a: 1}
+  modules:
+  - {fileID: -5821772461209681359, guid: cdd7f2771b618a34c81162bfd244eaf9, type: 3}
+  - {fileID: -5673618120071735642, guid: cdd7f2771b618a34c81162bfd244eaf9, type: 3}
+  - {fileID: 7226438491469164799, guid: cdd7f2771b618a34c81162bfd244eaf9, type: 3}
+  - {fileID: 4675946122492920207, guid: cdd7f2771b618a34c81162bfd244eaf9, type: 3}
+  - {fileID: -1078386271294640313, guid: cdd7f2771b618a34c81162bfd244eaf9, type: 3}
+  - {fileID: -8972076204641711864, guid: cdd7f2771b618a34c81162bfd244eaf9, type: 3}
+  - {fileID: 8192786067450501164, guid: cdd7f2771b618a34c81162bfd244eaf9, type: 3}
+  - {fileID: 7696239111445448110, guid: cdd7f2771b618a34c81162bfd244eaf9, type: 3}
+  - {fileID: -5635558003388992878, guid: cdd7f2771b618a34c81162bfd244eaf9, type: 3}
+  - {fileID: 8151821914350886441, guid: cdd7f2771b618a34c81162bfd244eaf9, type: 3}
+  - {fileID: -6835151394713873322, guid: cdd7f2771b618a34c81162bfd244eaf9, type: 3}
+  - {fileID: 5071582554610450708, guid: cdd7f2771b618a34c81162bfd244eaf9, type: 3}
+  - {fileID: 4201837555787227093, guid: cdd7f2771b618a34c81162bfd244eaf9, type: 3}
+  - {fileID: 6469399279798229340, guid: cdd7f2771b618a34c81162bfd244eaf9, type: 3}
+  - {fileID: 5777149209686008427, guid: cdd7f2771b618a34c81162bfd244eaf9, type: 3}
+  - {fileID: -4122770678914522492, guid: cdd7f2771b618a34c81162bfd244eaf9, type: 3}
+  shardCount: 10
+  growthDuration: 0.26
+  crackDuration: 0.1
+  shatterDuration: 0.5

@@ -1,0 +1,52 @@
+Ice VFX Depth Batch — 2026-10-02
+
+대상: 아이스샷, 서리숨결, 아이시클의 시각 연출만 개선.
+아이스볼은 승인된 모습 그대로 유지. Legendary 제작 없음.
+
+아이스샷
+- 8프레임 결정면 반사광을 가진 고드름, 짧은 잔상 두 겹, 밝은 선두 하이라이트.
+- 서로 다른 출발점과 곡선 경로를 통해 같은 적에게 수렴하는 3연사.
+- 실제 각 타격 이벤트에서 파쇄 Impact. 3타는 더 큰 중심광과 파편.
+
+서리숨결
+- 캐릭터 Skill Origin부터 적까지 넓어지는 흐름. 8프레임 난류 단면과 움직이는 냉기 덩어리.
+- 앞뒤로 회전하며 이동하는 소수의 결정 파편, 밝기가 다른 내부 레이어.
+- 실제 5 Hit에 맞춘 짧은 접촉 맥동, 마지막 Hit에서 더 큰 파쇄.
+
+아이시클
+- 기존 지면 균열과 3 Hit 시간 유지. 고정된 바닥에서 5개의 결정이 성장.
+- 적 뒤의 어두운 결정과 앞의 밝은 결정을 분리. 결정면 반사광 변화.
+- 마지막 실제 타격에 중심 Impact, 이어서 결정 파쇄, 원근 크기 변화가 있는 큰 파편, 타원 충격파.
+
+재사용
+- 기존 64 Image 풀, 전투 안전 영역 마스크, 적 앞/뒤 레이어.
+- 아이스볼의 폭발/충격파/중심광 프레임과 Highlight Material.
+- 기존 Ice Style 팔레트, Shard/Frost/Crack 모듈.
+- 신규 Material/Shader 없음. 새 아틀라스 768x288 / 24프레임 / Point / no mipmap / PPU 100.
+
+파일
+Assets/Scripts/IceSkillVfx.cs: 새 렌더러 초기화. 이전 세 렌더러는 Legacy 이름으로 보존하여 리소스 부재 시 fallback.
+Assets/Scripts/IceSkillVfx.ElementDepth.cs: 세 스킬 연출과 공용 DepthImpact.
+Assets/Editor/IceElementDepthSetup.cs: 프로젝트의 코드 기반 픽셀 에셋 제작 규칙으로 아틀라스 생성 및 검증 진입점.
+Assets/Resources/IceSkills/ElementDepth/Frames.png 및 meta: 신규 프레임.
+
+보호 확인
+작업 전 Assets 전체 해시와 대조: 기존 파일 중 IceSkillVfx.cs만 변경.
+아이스볼 전용 코드/텍스처, SkillData, Damage/Slow/쿨타임, HUD, Dragon/Animation, 기존 Wind VFX 변경 없음.
+시간 정지, 카메라 흔들림, 추가 피해, 새로운 상태이상 없음.
+
+검증
+격리 Unity 프로젝트에서 Aurora/Luna x Base/Middle/Final x 4스킬 검증 통과.
+기존 피해 이벤트와 Impact 같은 프레임, 실제 피해 횟수/시간/총 피해, Slow, HUD 아이콘/이름, 쿨타임 검증.
+각 조건 3회 재시전, 적 사망/전투 종료 효과 회수 검증. 기존 Wind 회귀 테스트 통과.
+30fps 전투 프레임으로 시각 검수 및 영상 제작. 영상은 고정 30fps 시뮬레이션 캡처이며 휴대폰 녹화가 아님.
+최대 활성 Image: 아이스샷 24 / 아이스볼 26 / 서리숨결 41 / 아이시클 44 (Slow 포함, 풀 한도 64).
+Warm cast/step/clear 100회 검사에서 관리 메모리 추가 할당 0. 전체 프레임/GPU 성능 수치가 아님.
+실제 모바일 기기 프레임 시간, 드로우콜, 발열, GPU overdraw는 미측정.
+
+결과 영상
+C:/Users/PC/Documents/Codex/IceDepthBatch-20261002/IceBatch-Comparison.mp4
+순서: 아이스샷 → 아이스볼 → 서리숨결 → 아이시클. 왼쪽 오로라 / 오른쪽 루나.
+백업: C:/Users/PC/Documents/Codex/IceDepthBatch-20261002/IceSkillVfx-before.cs.txt
+로그: 같은 폴더 final-validation.log / webgl.log
+WebGL: 빌드 성공. 브라우저 390x844 세로 화면 렌더링 확인, 오류 로그 없음. Unity 저장소 수동 동기화 deprecated 경고 1건 관측(저장 시스템은 이번 범위 밖이므로 변경하지 않음). 실제 모바일 성능은 미측정.

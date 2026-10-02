@@ -24,6 +24,9 @@ MonoBehaviour:
   rewardEligibilityPercent: 100
   protectedCastDuration: 0
   initialHitDelay: 0.24
+  icePresentation: 0
+  iceKind: 0
+  statusOnHit: 0
   battleVfx: {fileID: 5132599651350533342, guid: 858546d21acc17f4296f95eab9e8c269, type: 3}
   vfxScale: 0.55
   vfxOffset: {x: 0, y: 0}

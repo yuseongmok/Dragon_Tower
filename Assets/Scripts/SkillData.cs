@@ -14,11 +14,23 @@ namespace DragonTower
         public ContentRarity rarity=ContentRarity.Common;
         [Header("Signature skill (optional)")]
         public string exclusiveDragonId;
+        [Header("Optional signature presentation / dodge release")]
+        public bool wispPresentation;
+        public bool lunarPresentation;
+        [Min(0)] public float slowBonusDamagePercent;
+        [Min(.03f)] public float slowBonusDelay=.16f;
+        [Min(0)] public float dodgeFreeCastDuration;
+        [Min(0)] public float dodgeFreeAfterDuration;
+        [Min(1)] public float finalHitDamageMultiplier=1;
         [Range(0,100)] public float rewardEligibilityPercent=100;
         [Tooltip("Successful casts only: protects the full cinematic; zero preserves ordinary skills.")]
         [Min(0)] public float protectedCastDuration;
         public bool CanEquip(string dragonId)=>string.IsNullOrEmpty(exclusiveDragonId)||exclusiveDragonId==dragonId;
         [Min(0)] public float initialHitDelay;
+        [Header("Ice presentation (optional)")]
+        public bool icePresentation;
+        public IceSkillKind iceKind;
+        public bool statusOnHit;
         [Header("Battle VFX")]
         [Tooltip("Use a prefab from Eric VFX Studio/Prefabs/Built-In for this project.")]
         public GameObject battleVfx;
@@ -40,7 +52,7 @@ namespace DragonTower
         [Min(0)] public float statusDuration;
         [Tooltip("Burn: damage per second. Slow: attack speed reduction percent.")][Min(0)] public float statusPower;
         public string StableId=>string.IsNullOrWhiteSpace(skillId)?name:skillId.Trim();
-        public SkillStats Snapshot()=>new SkillStats{exclusiveDragonId=exclusiveDragonId,protectedCastDuration=Mathf.Max(0,protectedCastDuration),displayName=displayName,elementType=elementType,damage=damage,cooldown=cooldown,initialHitDelay=Mathf.Max(0,initialHitDelay),hitCount=Mathf.Max(1,hitCount),hitInterval=Mathf.Max(.03f,hitInterval),statusEffect=statusEffect,statusChancePercent=statusChancePercent,statusDuration=statusDuration,statusPower=statusPower};
+        public SkillStats Snapshot()=>new SkillStats{exclusiveDragonId=exclusiveDragonId,slowBonusDamagePercent=slowBonusDamagePercent,slowBonusDelay=slowBonusDelay,dodgeFreeCastDuration=dodgeFreeCastDuration,dodgeFreeAfterDuration=dodgeFreeAfterDuration,finalHitDamageMultiplier=Mathf.Max(1,finalHitDamageMultiplier),protectedCastDuration=Mathf.Max(0,protectedCastDuration),displayName=displayName,elementType=elementType,damage=damage,cooldown=cooldown,initialHitDelay=Mathf.Max(0,initialHitDelay),hitCount=Mathf.Max(1,hitCount),hitInterval=Mathf.Max(.03f,hitInterval),statusOnHit=statusOnHit,statusEffect=statusEffect,statusChancePercent=statusChancePercent,statusDuration=statusDuration,statusPower=statusPower};
     }
 }
 

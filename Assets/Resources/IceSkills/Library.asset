@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ebd6a291f209c54f81875972fb11447, type: 3}
+  m_Name: Library
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.IceSkillLibrary
+  style: {fileID: 11400000, guid: d9b4c98d3c6157243a8906abe5e2d7bf, type: 2}
+  sprites:
+  - {fileID: -4620458217426332814, guid: 32a6384435f7dd84485fb3b924ed18f3, type: 3}
+  - {fileID: -8020479650170454105, guid: 32a6384435f7dd84485fb3b924ed18f3, type: 3}
+  - {fileID: -2921958786601428321, guid: 32a6384435f7dd84485fb3b924ed18f3, type: 3}
+  - {fileID: -3943548472260599387, guid: 32a6384435f7dd84485fb3b924ed18f3, type: 3}
+  - {fileID: 4023591752518084011, guid: 32a6384435f7dd84485fb3b924ed18f3, type: 3}
+  - {fileID: 3700516825060288753, guid: 32a6384435f7dd84485fb3b924ed18f3, type: 3}
+  - {fileID: -4752505720140500566, guid: 32a6384435f7dd84485fb3b924ed18f3, type: 3}
+  - {fileID: 3939091942703877791, guid: 32a6384435f7dd84485fb3b924ed18f3, type: 3}
+  - {fileID: 171352894382808180, guid: 32a6384435f7dd84485fb3b924ed18f3, type: 3}
+  - {fileID: 5776730163395883879, guid: 32a6384435f7dd84485fb3b924ed18f3, type: 3}
+  - {fileID: 4265086435008347864, guid: 32a6384435f7dd84485fb3b924ed18f3, type: 3}
+  - {fileID: 497940902686403224, guid: 32a6384435f7dd84485fb3b924ed18f3, type: 3}
+  - {fileID: -7187382483917548780, guid: 32a6384435f7dd84485fb3b924ed18f3, type: 3}
+  - {fileID: -2678174585943093718, guid: 32a6384435f7dd84485fb3b924ed18f3, type: 3}
+  - {fileID: -1186215759696623413, guid: 32a6384435f7dd84485fb3b924ed18f3, type: 3}
+  - {fileID: 466724807853768741, guid: 32a6384435f7dd84485fb3b924ed18f3, type: 3}

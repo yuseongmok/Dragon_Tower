@@ -1,0 +1,102 @@
+Ice Shared Skill Batch — 2026-10-02
+
+완료 범위
+아이스샷 / 아이스볼 / 서리숨결 / 아이시클. 위습·초월과 Slow Stack은 미구현.
+기존 4개 SkillData의 파일/GUID/StableId를 유지하고 이름과 지정된 기획 값만 변경했다.
+고드름침 → 아이스샷 (Assets/Data/Skill1.asset)
+얼음 베기 → 아이스볼 (Assets/Data/Skills/skill_ice_slash.asset)
+얼음 강타 → 서리숨결 (Assets/Data/Skills/skill_ice_slam.asset)
+달의 연격 → 아이시클 (Assets/Data/Skills/skill_moon_combo.asset)
+저장·획득·진화 기본 스킬 참조가 같은 에셋을 계속 가리킨다. 기존 Element 후보 선택 방식 재사용.
+
+1. 아이스샷 / Common
+단단한 고드름 3개를 0.11초 간격으로 발사. 첫 명중 0.20초.
+Dark Face / Ice Body / Cyan Edge / White Ridge, 작은 Frost 꼬리.
+실제 Hit마다 4개 이하 작은 파편과 짧은 균열. 과한 발광 없음.
+
+2. 아이스볼 / Rare
+약 0.10초 동안 현재 Casting Origin에서 작은 구체가 응축된 뒤 발사.
+구체 내부의 회전 결정과 반사광, 첫 직접 충돌 후 표면 균열.
+0.24초 뒤 두 번째 Hit에서 냉기 확장·결정 생성·10개 파편.
+고드름과 다른 둥근 실루엣.
+
+3. 서리숨결 / Rare
+매 프레임 기존 Skill Origin을 읽는 6개 작은 냉기 구간과 소수의 Frost/Ice Dust.
+0.16초 간격 5 Hit. 마지막 Impact만 조금 강화.
+기존 Skill 키포즈를 표시하는 시간을 연출 중 유지하고 종료 후 기존 Idle로 복귀.
+Animation 에셋/State/API는 그대로다. 루나 Staff의 기존 프레임별 Optional Anchor 사용.
+
+4. 아이시클 / Unique
+Ground Position에서 적 발밑까지 빠르게 진행하는 균열과 Frost.
+형태가 다른 3개 결정(기울어진 가시 / 갈라진 결정 / 여러 면의 군집)이 차례로 성장.
+0.18초 간격 3 Hit. 마지막에 White Refraction, 전체 Crack, 12개 큰 구조 파편과 작은 Impact 파편.
+마지막 효과만 약 50ms 같은 시각을 유지한다. Time.timeScale, 피해 타이머, 쿨타임은 멈추지 않는다.
+HUD 흔들림, 암전, Fullscreen 연출, 새로운 카메라 효과 없음.
+
+5. Damage / Slow
+BattleModel의 기존 hitCount/initialHitDelay/hitInterval 예약과 실제 Skill/SkillHit Cue 사용.
+해당 Cue에서 Impact를 즉시 표시. 피해 숫자는 33ms 뒤 서로 다른 위치에서 위로 이동.
+새 선택 값 statusOnHit=true인 Ice 스킬만 명중 시 Slow 적용/갱신. 다른 스킬 기본값 false로 기존 시전 시 적용 유지.
+statusChancePercent=100, statusPower=20/60/30/60.
+지속시간은 기존 값 또는 기본 3초: 아이스샷3 / 아이스볼3 / 서리숨결4 / 아이시클4초.
+기존 Slow 공식: 공격 간격 × (1 + power/100). 예: 60은 간격 1.6배이며 공격속도 자체 60% 감소 공식은 아니다. 기존 밸런스를 바꾸지 않았다.
+기존 더 강한 패시브/아이템 Slow가 있으면 기존 max 규칙이 우선한다. 강도 합산/Stack은 없다.
+EnemySlowed, EnemySlowPower, EnemySlowRemaining을 읽어 이후 시스템에 연결 가능.
+피해 Cue 출처를 구분해 독·운석 등의 추가 피해가 Ice 스킬 Impact 횟수로 잘못 계산되지 않도록 했다.
+데미지 계산식은 그대로다. 현재 1 Hit 피해 / 쿨타임은 52/5.5s, 18/5.5s, 32/7s, 15/10s로 기존 값을 유지한다. 최종 등급 밸런스가 아니다.
+
+6. 공용 Library
+Assets/Resources/IceSkills/Library.asset: 기존 IceStyle + 새 256×256 아틀라스.
+새 고유 실루엣: 고드름 / Faceted Orb / Frost Flow / 서로 다른 Crystal Spike 3종.
+4개 구분 가능한 픽셀 아이콘을 기존 SkillData.icon에 연결.
+재사용: IceImpact, 3단계 Crack, 3종 Shard, Refraction, FrostA/B, FrostRing, StatusCrystal.
+Growth는 Image Fill, Shatter는 제한된 풀 이미지의 위치·회전으로 처리한다.
+위습/초월에서도 Palette, Crystal/Refraction, Crack/Shatter, Frost 상태 표시를 재사용할 수 있다. 달·유령 고유 연출은 이번에 만들지 않았다.
+
+7. 보호와 복구
+기존 캐릭터 Sprite/Animation/Anchor, HUD/Theme, 기본 공격, Wind VFX, 단천, Legacy Ice VFX는 수정하지 않았다.
+Legacy battleVfx 참조도 각 SkillData에 보존되며 새 icePresentation 선택이 렌더링을 분기한다.
+ContentDataSetup의 기본 스킬 초기화가 작성된 Ice 데이터를 옛 이름으로 되돌리지 않도록 작은 보호 조건을 추가했다.
+작업 전 파일 백업: C:/Users/PC/Documents/Codex/IceBatch-20261002/backup
+변경 기존 파일 목록: 같은 폴더 changed-existing.csv
+
+8. 테스트
+아이스샷 → 아이스볼 → 서리숨결 → 아이시클 순서로 각 단계마다 앞 단계 회귀 포함 검증.
+오로라/루나 Base·Middle·Final × 4스킬 = 24 조합.
+각 조합: 첫 시전 + 반복 3회, 실제 피해 Cue 수/간격/합산 HP, Slow 강도/공격 간격 연장/만료, HUD 이름·아이콘, 쿨타임 재입력 차단, 고정 풀, 적 사망·전투 종료 회수 확인.
+명중 Cue와 Impact는 같은 호출에서 확인. 30fps 캡처에서도 확인.
+정확한 비교를 위해 검수 시 치명타/캐릭터 패시브는 비활성, 적 HP9999. 실제 게임 데이터는 변경하지 않음.
+기존 WindBlade/GaleSlash/WindClaw/Dantian/WindRemaster 검증 모두 통과.
+
+9. 성능
+64개 UI Image 고정 풀, 추가 실시간 Particle/Material/Shader 없음.
+기존 Prototype 256×256 + 새 256×256 아틀라스, 공용 UI/Default, Point, mipmap 없음, CPU Readable 해제.
+관측 최대 활성 Image: 아이스샷16 / 아이스볼18 / 서리숨결27 / 아이시클48 (서리 상태 포함).
+Final Luna에서 준비된 풀 100회 Cast/Step/Clear의 Editor CPU 시간: 약5.0 /10.0 /12.2 /15.2ms. 추가 managed allocation 각0 bytes.
+이는 전체 게임 프레임 시간이나 모바일 GPU/드로우콜 수치를 보장하지 않는다. 실제 모바일 기기 프로파일링은 별도 필요.
+
+10. 확인 방법
+일반 게임은 기존 장착 스킬/진화/획득 구조를 사용한다. 이름·아이콘·쿨타임은 기존 HUD가 자동으로 읽는다.
+독립 비교 씬: Assets/Scenes/Prototypes/IceBatchPreview.unity
+Play하면 오로라 Final 4스킬 → 루나 Final 4스킬을 기존 Battle API로 자동 시전한다.
+테스트 드라이버는 이 씬에만 있고 기존 Battle 씬에 추가하지 않았다.
+비교 영상: C:/Users/PC/Documents/Codex/IceBatch-20261002/IceBatch-Comparison.mp4
+왼쪽 오로라 / 오른쪽 루나, 각 스킬 3초씩 총12초. 통제된 새 전투를 스킬별로 연결한 Unity 캡처 영상이다.
+
+WebGL: 독립 비교 씬 빌드 성공. 내장 Chromium 브라우저에서 실행 확인, 수집된 Error/Warning 없음. 390×844 viewport에서 canvas 390×690.6으로 세로 비율 유지. 실제 모바일 하드웨어 FPS/드로우콜 프로파일링은 미실시.
+
+2차 시각 강화 — 사용자 피드백 반영 (최종)
+변경 파일: Assets/Scripts/IceSkillVfx.cs만 추가 수정.
+아이스샷: 고드름34×76 → 52×112, 명중48 → 78, 좁은 Refraction 추가.
+아이스볼: 구체88 → 120, 2차 Impact118 → 170, 주변 결정/냉기 확장 강화.
+서리숨결: 말단 폭89 → 139, Ice Dust/명중 Frost 확대, 마지막 Impact86 → 126.
+아이시클: 결정 폭90/114/138 → 126/158/190, 높이136/158/180으로 HUD 아래에 제한, 마지막 Impact150 → 205.
+모든 Shatter 파편 크기 증가. 파편 개수는 동일. 강한 타격에는 얇은 Frost 확장층 추가.
+Slow 상태 표시는 확대하지 않아 스킬 연출과 계속 구분한다.
+피해/Hit 간격/Slow/쿨타임 및 SkillData는 1차 완료본과 동일한 해시로 확인.
+24 조합 및 Wind/단천 회귀 검사 재통과.
+최종 최대 활성 Image 16/19/28/49 (64개 고정 풀 유지).
+Luna Final 100회 준비된 Cast/Step/Clear: 6.7/9.9/9.6/14.4ms, 각 managed 할당0 bytes. 전체 프레임 비용을 의미하지 않음.
+비교 영상은 확대 버전으로 갱신. 이전 영상은 IceBatch-Comparison-v1.mp4로 보존.
+
+확대 버전 WebGL 빌드도 ICE_BATCH_WEBGL_OK로 완료.

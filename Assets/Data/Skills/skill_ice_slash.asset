@@ -13,16 +13,20 @@ MonoBehaviour:
   m_Name: skill_ice_slash
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
   skillId: skill_ice_slash
-  displayName: "\uC5BC\uC74C \uBCA0\uAE30"
-  description: "18 \uD53C\uD574\uB97C 3\uD68C \xB7 Slow 30%"
+  displayName: "\uC544\uC774\uC2A4\uBCFC"
+  description: "\uC544\uC774\uC2A4\uBCFC \xB7 2 Hit \xB7 \uACF5\uACA9 \uAC04\uACA9
+    \uB454\uD654 60%"
   elementType: 3
   effectKind: 1
-  icon: {fileID: 0}
-  rarity: 0
+  icon: {fileID: -3943548472260599387, guid: 32a6384435f7dd84485fb3b924ed18f3, type: 3}
+  rarity: 2
   exclusiveDragonId: 
   rewardEligibilityPercent: 100
   protectedCastDuration: 0
-  initialHitDelay: 0
+  initialHitDelay: 0.28
+  icePresentation: 1
+  iceKind: 1
+  statusOnHit: 1
   battleVfx: {fileID: 8029381855827238619, guid: 9f7101eca7269e94fa5f4ea62d25a6f2, type: 3}
   vfxScale: 0.55
   vfxOffset: {x: 0, y: 0}
@@ -31,9 +35,9 @@ MonoBehaviour:
   vfxSystemLimit: 12
   damage: 18
   cooldown: 5.5
-  hitCount: 3
-  hitInterval: 0.12
+  hitCount: 2
+  hitInterval: 0.24
   statusEffect: 3
-  statusChancePercent: 30
+  statusChancePercent: 100
   statusDuration: 3
-  statusPower: 20
+  statusPower: 60

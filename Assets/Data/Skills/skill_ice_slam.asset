@@ -13,16 +13,20 @@ MonoBehaviour:
   m_Name: skill_ice_slam
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
   skillId: skill_ice_slam
-  displayName: "\uC5BC\uC74C \uAC15\uD0C0"
-  description: "32 \uD53C\uD574\uB97C 2\uD68C \xB7 Slow 50%"
+  displayName: "\uC11C\uB9AC\uC228\uACB0"
+  description: "\uC11C\uB9AC\uC228\uACB0 \xB7 5 Hit \xB7 \uACF5\uACA9 \uAC04\uACA9
+    \uB454\uD654 30%"
   elementType: 3
   effectKind: 1
-  icon: {fileID: 0}
-  rarity: 0
+  icon: {fileID: 3700516825060288753, guid: 32a6384435f7dd84485fb3b924ed18f3, type: 3}
+  rarity: 2
   exclusiveDragonId: 
   rewardEligibilityPercent: 100
   protectedCastDuration: 0
-  initialHitDelay: 0
+  initialHitDelay: 0.18
+  icePresentation: 1
+  iceKind: 2
+  statusOnHit: 1
   battleVfx: {fileID: 7601337638830464383, guid: c5e81b2f1d33f7347adfb6aaf4c5a4d6, type: 3}
   vfxScale: 0.55
   vfxOffset: {x: 0, y: 0}
@@ -31,9 +35,9 @@ MonoBehaviour:
   vfxSystemLimit: 12
   damage: 32
   cooldown: 7
-  hitCount: 2
-  hitInterval: 0.22
+  hitCount: 5
+  hitInterval: 0.16
   statusEffect: 3
-  statusChancePercent: 50
+  statusChancePercent: 100
   statusDuration: 4
   statusPower: 30
