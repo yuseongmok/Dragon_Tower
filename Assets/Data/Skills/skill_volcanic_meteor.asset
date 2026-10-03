@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a37d10c4b83957e4c868b03176c6d57b, type: 3}
+  m_Name: skill_volcanic_meteor
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
+  skillId: skill_volcanic_meteor
+  displayName: "\uC720\uC131 \uD654\uC0B0"
+  description: "\uC5E0\uBC84 \uC804\uC6A9 \xB7 \uC720\uC131 \uD3ED\uACA9\uACFC \uD654\uC0B0
+    \uBD84\uD654. \uCD5C\uC885 \uC801\uC911 \uD6C4 5\uCD08 \uD655\uC815 \uD654\uC0C1,
+    \uD604\uC7AC \uC801\uC5D0\uAC8C \uCE58\uBA85\uD0C0 \uD655\uB960 +50%p."
+  elementType: 2
+  effectKind: 0
+  icon: {fileID: -8557489305587580150, guid: d7f5e1bbe695ebb4ca88bb66dbf422ca, type: 3}
+  rarity: 4
+  exclusiveDragonId: ember
+  wispPresentation: 0
+  lunarPresentation: 0
+  solarPresentation: 0
+  volcanicPresentation: 1
+  statusOnFinalHit: 1
+  targetCriticalBonus: 50
+  targetCriticalDuration: 5
+  hitTimeOffsets:
+  - 0.43
+  - 0.66
+  - 0.98
+  - 1.18
+  - 1.47
+  - 2.05
+  completionHealPercent: 0
+  completionHealDelay: 0.22
+  slowBonusDamagePercent: 0
+  slowBonusDelay: 0.16
+  dodgeFreeCastDuration: 0
+  dodgeFreeAfterDuration: 0
+  finalHitDamageMultiplier: 8
+  rewardEligibilityPercent: 100
+  protectedCastDuration: 0
+  initialHitDelay: 0.43
+  icePresentation: 0
+  iceKind: 0
+  statusOnHit: 0
+  battleVfx: {fileID: 0}
+  vfxScale: 0.65
+  vfxOffset: {x: 0, y: 0}
+  vfxEuler: {x: 0, y: 0, z: 0}
+  vfxDuration: 3.55
+  vfxSystemLimit: 14
+  damage: 21
+  cooldown: 17
+  hitCount: 6
+  hitInterval: 0.3
+  statusEffect: 1
+  statusChancePercent: 100
+  statusDuration: 5
+  statusPower: 9

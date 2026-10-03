@@ -1,0 +1,86 @@
+Fire Shared Skill VFX Batch / 2026-10-03
+
+Installed in C:/Users/PC/Dragon_Tower.
+Normal battle automatically chooses new Fire art by exact SkillData reference in
+Assets/Resources/FireSkills/Library.asset. No dragon-specific copy or controller.
+Independent comparison scene: Assets/Scenes/Prototypes/FireBatchPreview.unity.
+
+Gameplay preserved
+Skill                 Damage/hits   Cooldown  Hit interval  Burn chance/duration/power
+화염 폭발               38 x 1         4s        .14s          none
+화염샷                  16 x 3         5s        .13s          25% / 3s / 5
+메테오                  28 x 3         8s        .22s          40% / 4s / 7
+연옥                    18 x 6        11s        .16s          70% / 5s / 8
+All initialHitDelay values are 0. Damage remains immediate; visuals do not postpone it.
+A full trajectory/contact appears with first damage. Subsequent projectiles can travel
+between existing hit events. A future data-approved cast lead-in can be visualized
+without changing this renderer, but no such balance/timing edit was made here.
+Meteor remains ONE rock, with initial collision and two subsequent combustion impacts.
+Current serialized rarity is Common for all four. Preserved as instructed; visual
+hierarchy follows Common / Rare / Rare / Unique. No rarity/balance correction made.
+Only SkillData icon references changed. Legacy battleVfx references/files preserved.
+
+Art
+Burst: compact white-hot fireball/contact trail -> layered explosion -> short afterburn.
+Shot: nine narrow pellets in three visual groups; fan paths converge on the real target;
+three damage-synchronized impacts, brighter last burst. Pellets add no damage.
+Meteor: distinct dark rock with hot cracks, descending fire/smoke trail, heavy impact
+and two aftershock flashes matching existing hits. No meteor barrage.
+Purgatory: irregular horizontal burning gate, animated downward flame layers,
+six actual-hit flashes, final white/gold burst, embers/smoke/afterburn.
+Final VFX holds 50ms locally; global timeScale/Animator/damage clocks are untouched.
+Small enemy-only visual impulse; no HUD/camera shake or physical knockback.
+Fire damage numbers use existing number pool, offset to the left/right of the fire.
+Burn reads existing EnemyBurning; no added status chances, ticks or durations.
+
+Shared modules/materials
+Existing approved Fire atlas/style/Flame/Ember/Smoke/Heat/Core/Burst/Shockwave/Tongue.
+Shared alpha UI material and existing FireHighlight additive material.
+New 64px Meteor sprite and 32px skill icons. No real-time light/fullscreen postprocess.
+FireStylePrototype now exposes a shared drawing API used by FireSkillVfx.
+Fixed pooled groups; expanded capacity after measured overflow in Shot testing,
+so flame layers are not silently omitted. Maximum observed active images 252.
+No per-frame Instantiate/Destroy. Character anchors come from existing SkillOrigin.
+
+Verification
+Sequential Burst -> Shot -> Meteor -> Purgatory Unity battle tests, then final batch.
+Sol Final and Ember Final tested for every skill; actual controller RequestSkill API.
+Damage cues and impact calls match in the same frame; existing counts/intervals pass.
+Mirrored BattleModel with deterministic random source matches HP and Burn on every tick.
+Cooldown rejection, repeated cast, HUD name/icon, Burn expiry, pool stability,
+no pool overflow, death and battle exit cleanup pass. No BattleModel edits.
+Tests isolate passives/critical for comparison without modifying DragonData.
+Comparison video: C:/Users/PC/Documents/Codex/FireBatch-20261003/Fire-Skills-Comparison.mp4
+Left Sol / Right Ember, 30fps; Burst -> Shot -> Meteor -> Purgatory.
+Actual mobile hardware performance remains unmeasured; desktop WebGL results appended below.
+
+Changed existing source: BattleAnimation.cs / BattleController.cs presentation routing;
+FireStylePrototype.cs shared drawing API/pool. Backups are outside Assets:
+C:/Users/PC/Documents/Codex/FireBatch-20261003/backup.
+No Wind/Ice/Signature, character sprites/animations, HUD layout or pipeline changes.
+Solar Pierce and Meteor Volcano were not started.
+
+Final WebGL verification
+Desktop in-app browser, 390x844 viewport. Sol and Ember, all four skills repeated.
+Observed active mean frame times ~5.3–6.8ms, maximum scene draw calls 35,
+zero dropped layers. Browser error log empty in the final build run.
+This is not physical mobile profiling; no mobile thermal/GPU guarantee is implied.
+Meteor importer now explicitly uses Single Sprite and asserts a non-null reference.
+Foreground rock and crack detail was visually verified after import correction.
+SkillData comparison confirms ONLY icon references changed; numerical/gameplay fields
+remain byte-for-byte identical after removing the icon line.
+Dragon0's battleSprite differed from an older task snapshot before this batch began;
+its current user-owned value is preserved, verified against this batch's starting hash.
+
+Purgatory revision — 2026-10-03
+User requested the thick fire-column silhouette of the existing 3D effect.
+Reference inspected: FX_God's punishment.prefab (existing SkillData battleVfx).
+Replaced stacked short flame lobes with a continuous outer/body/core column,
+three independent 8-frame strips (768x384 Point atlas). Main body spans roughly
+200 reference pixels, top-to-ground continuous volume, downward animated streaks.
+Reduced horizontal gate to small aperture; wide floor flare/smoke reinforces impact.
+Existing final burst, 6 damage cues, Burn, cooldown, HUD and other skills preserved.
+Sol/Ember Final validation passed, peak 168 active images, no pool overflow.
+All Skill/Dragon data hashes identical before and after this revision.
+Video: C:/Users/PC/Documents/Codex/InfernoColumn-20261003/Inferno-Thick-Column.mp4
+Column WebGL follow-up: Sol/Ember purgatory active mean 5.62/5.49ms, scene peak draws 35/33, zero dropped layers, browser errors empty. Desktop 390x844 only; physical mobile unmeasured.

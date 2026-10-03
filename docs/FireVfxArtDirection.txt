@@ -1,0 +1,81 @@
+Fire VFX Art Direction / Prototype — 2026-10-03
+
+Scope
+Independent Fire style samples only. No Common/Rare/Unique skill implementation,
+Solar Pierce, Meteor Volcano, balance, character, HUD or production pipeline edits.
+Legacy Fire assets remain. New art does not derive from Legacy Fire textures.
+
+Preview
+Open Assets/Scenes/Prototypes/FireStylePreview.unity and press Play.
+The review scene cycles Sol Final and Ember Final every 8 seconds:
+0–1.5s Living Flame; 1.42s ignition; 1.67s impact; afterburn ends by 3.52s;
+3.6–6.6s existing Burn status test; then clean interval.
+This is an isolated visual review, not a newly equipped Fire skill.
+Review-only enemy HP/passive settings do not modify Dragon or Skill Data.
+Comparison video: C:/Users/PC/Documents/Codex/FireStyle-20261002/Fire-Prototype-Comparison.mp4
+Left Sol / right Ember. Captured Unity battle frames at 30fps, 480x850 each.
+
+Palette (cold exterior -> hot interior)
+Deep Crimson #3E0D1B; Crimson #971925; Red Orange #E03518;
+Orange #FF7119; Golden Yellow #FFBE36; Pale Yellow #FFE79A;
+White-hot #FFFDE2. Smoke #35232A with warm brown/crimson folds.
+FireStyle.asset is the shared style configuration. Setup regenerates the atlas
+from its palette; palette edits require regeneration for baked sprite colors.
+
+Living Flame
+Distinct dark silhouette, orange body, gold interior, white core, secondary tongue.
+Their animated shapes, proportions, phase, sway and speed differ; not recolored copies.
+Sharp curved tips, asymmetrical lobes, white lower core and rising embers.
+14fps sprite frames with continuous layer motion. Point filtering; no mipmaps.
+
+Explosion
+Compressed ignition -> short white-hot flash -> expanding irregular orange mass
+and crimson exterior -> outward-curving flame tongues -> flying embers -> rear smoke
+-> small flames, ground heat and residual embers. Different expansion rates.
+Nearby embers grow and brighten; rear embers remain smaller/darker.
+Heat is a faint animated broken pixel layer, not a screen distortion pass.
+Smoke is short-lived irregular pixel geometry behind the main fire and enemy.
+
+Burn status
+Reads existing BattleModel.EnemyBurning. Small side flames, 8 rising embers,
+weak ground glow. Face/torso remain readable. Clears with status, death or exit.
+The review driver invokes the existing ApplyBurn method for a 3-second sample;
+this is test-only and does not create a new Burn system. Existing tick behavior intact.
+
+Rendering / reuse
+One 768x960 RGBA atlas, 80 frames (10 modules x 8 frames), CPU copy disabled.
+DarkFlame / Body / Inner / Core / Burst / Smoke / Heat / Ember / Shockwave / Tongue.
+Alpha body/smoke: Unity UI/Default.
+Highlight: FireHighlight.mat reuses generic DragonTower/Wind Claw Highlight shader
+(SrcAlpha One additive, UI clip support); no Wind art or timing borrowed.
+Four pooled rear/front alpha/additive groups; 384 reserved Images, measured peak 138.
+No per-frame Instantiate/Destroy, no new realtime lights/bloom/fullscreen pass.
+Prototype clip region protects top/bottom HUD; all images ignore pointer raycasts.
+Pool size is current capacity, not a rule limiting future Fire art quality.
+
+Validation
+Sol Final and Ember Final: 240 captured frames each at 30fps.
+No A/B damage; only existing Burn tick (3 x 1 review damage), unchanged player HP,
+skill cooldown, timeScale, actor/HUD positions, stable object count.
+Expiry/disable/battle exit/death clears all prototype images.
+Warm visual-update benchmark: 2400 steps / 140.9824ms total / 0 managed bytes.
+This measures editor update CPU only, not GPU, total frame time or mobile performance.
+WebGL results are recorded after browser verification; real mobile device pending.
+
+Future expansion
+Reuse atlas/style/pool for Fire skill concepts defined later. Solar/Phoenix and
+Magma/Volcano remain separate future Signature extensions, not this common style.
+If hardware profiling identifies cost, reduce secondary embers/smoke/lifetime first,
+while preserving the main flame, white core, impact and essential trails.
+
+WebGL review — desktop in-app browser, 390x844 viewport (not a physical phone)
+Build succeeded. Sol/Ember samples repeat without prototype exceptions.
+Four warmed cycles: active mean 5.51–5.57ms, idle mean 4.89–5.10ms;
+peak total scene draw calls 27; reported frame managed GC 0; peak pooled images 138.
+These timings are this desktop/browser run only; mobile GPU/thermal profiling pending.
+Existing imported Eric materials emit missing _FlowSpeed property errors at startup.
+The new Fire prototype does not use those materials; they were left unchanged per scope.
+Protected existing Assets hash comparison: no existing character, battle, HUD, SkillData
+or VFX files changed. Only new Fire prototype files added/edited in this task.
+
+Fire skill batch follow-up: shared pool expanded to 768 reserved Images after measured concurrent-layer overflow; visual active count remains demand-driven. See FireSkillBatchDelivery.txt.

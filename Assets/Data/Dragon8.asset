@@ -22,7 +22,23 @@ MonoBehaviour:
   maxHP: 100
   attackDamage: 9
   color: {r: 0.9339623, g: 0.29796636, b: 0.048460312, a: 1}
-  battleSprite: {fileID: 21300000, guid: 9830c5687be37f1e366aeabacbf643cf, type: 3}
+  battleSprite: {fileID: 6788171137231864173, guid: 430f070ea6f1fec45b99ecd5181dc5da, type: 3}
+  animationSetPath: DragonAnimations/SolBase
+  evolutionForms:
+  - stage: 1
+    displayName: "\uC194\uB9AC\uC5D8"
+    battleSprite: {fileID: -6039943251273944345, guid: 42306c5cf96c8934da77318ed91b3141, type: 3}
+    animationSetPath: DragonAnimations/SolMiddle
+    defaultSkill: {fileID: 0}
+    healthMultiplier: 0
+    attackMultiplier: 0
+  - stage: 2
+    displayName: "\uC194\uB77C\uB9AC\uC2A4"
+    battleSprite: {fileID: -1221985508502867911, guid: 995092dcca37c8d4e903af5c7af5449c, type: 3}
+    animationSetPath: DragonAnimations/SolFinal
+    defaultSkill: {fileID: 0}
+    healthMultiplier: 0
+    attackMultiplier: 0
   intermediateEvolutionSprite: {fileID: 21300000, guid: 1eb22a0d9ae9c578e73cc51b6b196ba0, type: 3}
   finalEvolutionSprite: {fileID: 21300000, guid: b9c7500165daea152108e79b130e6f9d, type: 3}
   evolutionSheet: {fileID: 2800000, guid: 192ad081d9db421b835f336d7a6dae9f, type: 3}
@@ -36,3 +52,5 @@ MonoBehaviour:
   passiveMechanic: 2
   alternateSkillElement: 0
   evolutionSheetIncludesBase: 1
+
+  signatureSkill: {fileID: 11400000, guid: d4db826fcba7e874b8c386267da01a03, type: 2}

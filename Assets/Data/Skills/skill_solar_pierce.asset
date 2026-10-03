@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a37d10c4b83957e4c868b03176c6d57b, type: 3}
+  m_Name: skill_solar_pierce
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
+  skillId: skill_solar_pierce
+  displayName: "\uC194\uB77C \uD53C\uC5B4\uC2A4"
+  description: "\uC194 \uC804\uC6A9 \xB7 \uD0DC\uC591\uC758 \uC9C0\uC18D \uD0C0\uACA9\uACFC
+    \uBD88\uC0AC\uC870 \uCDA9\uB3CC \uD6C4 \uCD5C\uB300 HP 20% \uC7AC\uC0DD"
+  elementType: 2
+  effectKind: 0
+  icon: {fileID: 1588677172683377391, guid: 29f9afbf8a6cf594fafd90d58ec91771, type: 3}
+  rarity: 4
+  exclusiveDragonId: sol
+  wispPresentation: 0
+  lunarPresentation: 0
+  solarPresentation: 1
+  completionHealPercent: 20
+  completionHealDelay: 0.24
+  slowBonusDamagePercent: 0
+  slowBonusDelay: 0.16
+  dodgeFreeCastDuration: 0
+  dodgeFreeAfterDuration: 0
+  finalHitDamageMultiplier: 8
+  rewardEligibilityPercent: 100
+  protectedCastDuration: 0
+  initialHitDelay: 0.32
+  icePresentation: 0
+  iceKind: 0
+  statusOnHit: 0
+  battleVfx: {fileID: 0}
+  vfxScale: 0.65
+  vfxOffset: {x: 0, y: 0}
+  vfxEuler: {x: 0, y: 0, z: 0}
+  vfxDuration: 3.1
+  vfxSystemLimit: 14
+  damage: 18
+  cooldown: 16
+  hitCount: 6
+  hitInterval: 0.3
+  statusEffect: 0
+  statusChancePercent: 0
+  statusDuration: 0
+  statusPower: 0

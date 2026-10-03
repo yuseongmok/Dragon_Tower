@@ -7,6 +7,7 @@ namespace DragonTower
     public sealed class WispVfx : MonoBehaviour
     {
         const int Capacity=192;
+        BattleVfxHudVisibility hudVisibility;
         BattleView view;RectTransform layer,front,rear;Image[] pool;readonly Sprite[] frames=new Sprite[40];
         IceVfxStyle iceStyle;Material glow,silhouette;Image flash,enemyImage,arena;RectTransform enemy;SkillData skill;BattleModel battle;
         Vector2 target,source,enemyNormal,arenaNormal;bool offsetApplied;float age=99,finalAge=-1,flashAge=99;int used;
@@ -21,15 +22,15 @@ namespace DragonTower
         public void BindBattle(BattleModel model){battle=model;}
         void EnsurePool()
         {
-            if(pool!=null)return;
+            if(pool!=null)return;hudVisibility=new BattleVfxHudVisibility();
             var sprites=Resources.LoadAll<Sprite>("VFX/Wisp/Frames");for(int row=0;row<5;row++)for(int f=0;f<8;f++)foreach(var s in sprites)if(s.name=="Wisp"+row+"_"+f){frames[row*8+f]=s;break;}
             iceStyle=Resources.Load<IceSkillLibrary>("IceSkills/Library").style;glow=Resources.Load<Material>("IceSkills/BallDepth/Highlight");silhouette=Resources.Load<Material>("VFX/Wisp/Silhouette");
             front=Root("Wisp foreground",layer);rear=Root("Wisp background",view.frame);rear.SetSiblingIndex(view.enemyArt.transform.GetSiblingIndex());
             pool=new Image[Capacity];for(int i=0;i<Capacity;i++){var go=new GameObject("Wisp pooled "+i,typeof(RectTransform),typeof(Image));var im=go.GetComponent<Image>();im.rectTransform.SetParent(front,false);im.raycastTarget=false;go.SetActive(false);pool[i]=im;}
             var fg=new GameObject("Wisp spirit silhouette",typeof(RectTransform),typeof(Image));flash=fg.GetComponent<Image>();flash.material=silhouette;flash.raycastTarget=false;fg.SetActive(false);
-            arena=view.frame.Find("Arena").GetComponent<Image>();
+            arena=view.frame.Find("Arena").GetComponent<Image>();BattleVfxHudVisibility.BringHudForward(view);
         }
-        RectTransform Root(string name,RectTransform parent){var go=new GameObject(name,typeof(RectTransform),typeof(RectMask2D));var r=go.GetComponent<RectTransform>();r.SetParent(parent,false);r.anchorMin=r.anchorMax=new Vector2(.5f,1);r.pivot=new Vector2(.5f,1);r.anchoredPosition=new Vector2(0,-140);r.sizeDelta=new Vector2(476,515);return r;}
+        RectTransform Root(string name,RectTransform parent){var go=new GameObject(name,typeof(RectTransform),typeof(RectMask2D));var r=go.GetComponent<RectTransform>();r.SetParent(parent,false);r.anchorMin=r.anchorMax=new Vector2(.5f,1);r.pivot=new Vector2(.5f,1);r.anchoredPosition=Vector2.zero;r.sizeDelta=new Vector2(476,655);return r;}
         public void Configure(SkillData data,Graphic enemyGraphic)
         {
             Cancel();skill=data;if(!Configured)return;EnsurePool();enemy=view.enemyArt.rectTransform;enemyImage=enemyGraphic as Image;
@@ -41,7 +42,7 @@ namespace DragonTower
         Sprite Frame(int row,float phase,bool loop=false)=>frames[row*8+Mathf.Clamp((int)((loop?Mathf.Repeat(phase,1):Mathf.Clamp01(phase))*8),0,7)];
         void Show(Sprite sprite,Vector2 p,Vector2 size,Color c,float angle=0,bool back=false,bool additive=false)
         {
-            if(c.a<=0||used>=Capacity)return;var im=pool[used++];im.sprite=sprite;im.material=additive?glow:null;im.color=c;var r=im.rectTransform;var parent=back?rear:front;if(r.parent!=parent)r.SetParent(parent,false);r.SetAsLastSibling();r.anchorMin=r.anchorMax=new Vector2(.5f,1);r.pivot=Vector2.one*.5f;r.anchoredPosition=new Vector2(Mathf.Round(p.x/2)*2,Mathf.Round((p.y+140)/2)*2);r.sizeDelta=size;r.localRotation=Quaternion.Euler(0,0,angle);im.gameObject.SetActive(true);
+            if(c.a<=0||used>=Capacity)return;var im=pool[used++];im.sprite=sprite;im.material=additive?hudVisibility.additive:hudVisibility.alpha;im.color=c;var r=im.rectTransform;var parent=back?rear:front;if(r.parent!=parent)r.SetParent(parent,false);r.SetAsLastSibling();r.anchorMin=r.anchorMax=new Vector2(.5f,1);r.pivot=Vector2.one*.5f;r.anchoredPosition=new Vector2(Mathf.Round(p.x/2)*2,Mathf.Round(p.y/2)*2);r.sizeDelta=size;r.localRotation=Quaternion.Euler(0,0,angle);im.gameObject.SetActive(true);
         }
         static Color Tint(float a,float hue=0)=>new Color(1-hue*.12f,1-hue*.26f,1,a);
         Vector2 Spawn(int i){switch(i%6){case 0:return new Vector2(-202,-220);case 1:return new Vector2(205,-365);case 2:return new Vector2(-150,-570);case 3:return new Vector2(130,-155);case 4:return source+new Vector2(-90,-20);default:return new Vector2(210,-540);}}
@@ -66,11 +67,11 @@ namespace DragonTower
         }
         void Render()
         {
-            if(pool==null)return;foreach(var im in pool)im.gameObject.SetActive(false);used=0;if(!Configured)return;
+            if(pool==null)return;hudVisibility.Update(view);foreach(var im in pool)im.gameObject.SetActive(false);used=0;if(!Configured)return;
             float due=skill.initialHitDelay+(HitCount-1)*skill.hitInterval;
             if(Active){
                 float dim=.28f*Mathf.Clamp01(age/.12f)*Mathf.Clamp01((Duration-age)/.35f);
-                Show(null,new Vector2(0,-398),new Vector2(476,515),new Color(.03f,.025f,.14f,dim),0,true);
+                Show(null,new Vector2(0,-327.5f),new Vector2(476,655),new Color(.03f,.025f,.14f,dim),0,true);
                 if(finalAge<0){int count=Mathf.Max(1,HitCount/2);for(int i=0;i<count;i++){
                     float alpha=Mathf.Clamp01((age-i*.023f)/.12f);float size;bool back;var p=Path(i,age,out size,out back);float ignore;bool b;var prev=Path(i,age-.022f,out ignore,out b);var dir=p-prev;if(dir.sqrMagnitude<.1f)dir=target-p;
                     for(int k=6;k>=1;k--){var old=Path(i,age-k*.024f,out ignore,out b);var next=Path(i,age-(k-1)*.024f,out ignore,out b);var tangent=next-old;if(tangent.sqrMagnitude<4)continue;Show(Frame(1,age*2+i*.2f,true),(old+next)*.5f,new Vector2(size*(.7f-k*.065f),tangent.magnitude+75),Tint(alpha*(.90f-k*.09f),.8f),Mathf.Atan2(tangent.y,tangent.x)*Mathf.Rad2Deg-90,back); }
@@ -106,6 +107,6 @@ namespace DragonTower
         void ClearVisual(){if(offsetApplied){if(enemy!=null)enemy.anchoredPosition=enemyNormal;if(arena!=null)arena.rectTransform.anchoredPosition=arenaNormal;}offsetApplied=false;age=99;finalAge=-1;flashAge=99;used=0;if(pool!=null)foreach(var im in pool)if(im!=null)im.gameObject.SetActive(false);if(flash!=null)flash.gameObject.SetActive(false);}
         public void Cancel(){ClearVisual();battle?.CancelDodgeRelease();}
         void OnDisable()=>Cancel();
-        void OnDestroy(){Cancel();if(front!=null)Destroy(front.gameObject);if(rear!=null)Destroy(rear.gameObject);if(flash!=null)Destroy(flash.gameObject);}
+        void OnDestroy(){Cancel();hudVisibility?.Dispose();if(front!=null)Destroy(front.gameObject);if(rear!=null)Destroy(rear.gameObject);if(flash!=null)Destroy(flash.gameObject);}
     }
 }

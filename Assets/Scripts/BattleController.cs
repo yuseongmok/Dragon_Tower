@@ -22,6 +22,9 @@ namespace DragonTower
         void HandleCue(CombatCue cue,int damage)
         {
             if(cue==CombatCue.Dodge)view.SetDodgeDirection(requestedDodgeDirection);
+            var volcanic=view.GetComponent<VolcanicMeteorVfx>();if(volcanic!=null){volcanic.DamageFromSkill=battle.ResolvingSkillHit;volcanic.ScheduledHits=battle.ScheduledSkillHits;}
+            var solar=view.GetComponent<SolarPierceVfx>();if(solar!=null){solar.DamageFromSkill=battle.ResolvingSkillHit;solar.ScheduledHits=battle.ScheduledSkillHits;}
+            var fire=view.GetComponent<FireSkillVfx>();if(fire!=null){fire.DamageFromSkill=battle.ResolvingSkillHit;fire.ScheduledHits=battle.ScheduledSkillHits;}
             var ice=view.GetComponent<IceSkillVfx>();if(ice!=null)ice.DamageFromSkill=battle.ResolvingSkillHit;
             var wisp=view.GetComponent<WispVfx>();if(wisp!=null)wisp.DamageFromSkill=battle.ResolvingSkillHit;
             var lunar=view.GetComponent<LunarVfx>();if(lunar!=null)lunar.DamageFromSkill=battle.ResolvingSkillHit;
@@ -36,7 +39,7 @@ namespace DragonTower
             Flow.Initialize(this,view,dragons);
         }
         public void EndBattle() { CancelSignature();view.CancelGesture();battle=null; }
-        void CancelSignature(){battle?.CancelSlowSignature();view.GetComponent<LunarVfx>()?.Cancel();battle?.CancelDodgeRelease();view.GetComponent<WispVfx>()?.Cancel();view.GetComponent<IceSkillVfx>()?.Clear();battle?.CancelProtectedSkill();view.GetComponent<DantianVfx>()?.Cancel();view.GetComponent<DantianFeedback>()?.Clear();}
+        void CancelSignature(){battle?.CancelTargetModifier();view.GetComponent<VolcanicMeteorVfx>()?.Cancel();battle?.CancelCompletionHeal();view.GetComponent<SolarPierceVfx>()?.Cancel();view.GetComponent<FireSkillVfx>()?.Clear();battle?.CancelSlowSignature();view.GetComponent<LunarVfx>()?.Cancel();battle?.CancelDodgeRelease();view.GetComponent<WispVfx>()?.Cancel();view.GetComponent<IceSkillVfx>()?.Clear();battle?.CancelProtectedSkill();view.GetComponent<DantianVfx>()?.Cancel();view.GetComponent<DantianFeedback>()?.Clear();}
         void OnDisable(){if(view!=null)CancelSignature();}
         public void BeginBattle(DragonData dragon) { BeginBattle(dragon,BattleEnemyStats.Normal(),1,false); }
         public void BeginBattle(DragonData dragon,BattleEnemyStats enemy,int floor,bool boss)
@@ -50,7 +53,7 @@ namespace DragonTower
             view.SetDragonArt(dragon,dragonLevel);
             view.SetSkillPresentation(activeSkill??dragon.SkillAtLevel(dragonLevel));
             view.SetEncounter(enemy,floor,boss,enemySprite);
-            view.GetComponent<WispVfx>()?.BindBattle(battle);view.GetComponent<LunarVfx>()?.BindBattle(battle);
+            view.GetComponent<VolcanicMeteorVfx>()?.BindBattle(battle);view.GetComponent<SolarPierceVfx>()?.BindBattle(battle);view.GetComponent<WispVfx>()?.BindBattle(battle);view.GetComponent<LunarVfx>()?.BindBattle(battle);
             var run=Flow==null?null:Flow.CurrentRun;
             view.SetRunProgress(run==null?dragonLevel:run.Level,run==null?0:run.Experience,run==null?100:run.ExperienceToNext);
             var signature=view.GetComponent<DantianVfx>();if(signature!=null)signature.Cancelled=()=>{battle?.CancelProtectedSkill();if(view!=null)view.GetComponent<DantianFeedback>()?.Clear();};
@@ -80,4 +83,6 @@ namespace DragonTower
         void OnApplicationPause(bool paused) { focused=!paused;if(paused)view.CancelGesture(); }
     }
 }
+
+
 

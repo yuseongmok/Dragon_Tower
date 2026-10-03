@@ -1,0 +1,7 @@
+엠버 / 엠베르 / 엠베리온 — 2026-10-02
+Assets/Art/Ember: Base/Middle/Final, 각 6종 4프레임, 총 72프레임. Source는 built-in image_gen 원본이며 프롬프트는 EmberPrompts.txt.
+Assets/Resources/DragonAnimations/EmberBase, EmberMiddle, EmberFinal: 기존 타이밍/재생기/5개 Anchor 및 프레임별 CastingOrigin 연결.
+기존 파일 변경은 Dragon0.asset의 Battle Sprite/Animation Set/Evolution Visual 참조만. 스탯, 패시브, 스킬, 기존 캐릭터/VFX/HUD/Pipeline 보존.
+분리 Unity 실제 전투 검사: 세 형태 각각 6모션, 마우스/터치 탭, 좌우 회피, Fire Theme 및 Casting Origin 통과. 전투 화면 크기/시전/사망 모습 확인.
+막는 문제 없음. 성장형 Idle의 눈감은 프레임은 처음부터 짧은 깜빡임 구간에 배치. 격자보다 넓은 날개/발톱은 개별 실루엣 기준으로 추출해 잘림 방지.
+Fire VFX, 유성 화산, Burn/Critical 시스템은 제작하지 않음. 실제 모바일 기기 성능 측정은 이번 최소 검수에 포함하지 않음.

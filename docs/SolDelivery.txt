@@ -1,0 +1,12 @@
+솔 캐릭터 제작 — 2026-10-02
+적용 위치: C:/Users/PC/Dragon_Tower
+이름은 기존 Unity 데이터 그대로 솔 / 솔리엘 / 솔라리스.
+Assets/Art/Sol/Base, Middle, Final: 각 6개 시트와 6개 모션 데이터, 총 72 프레임.
+Assets/Art/Sol/Source: built-in image_gen으로 제작한 원본 24포즈 atlas 3개. 프롬프트는 docs/SolPrompts.txt.
+Assets/Resources/DragonAnimations/SolBase, SolMiddle, SolFinal: 기존 타이밍, 공용 재생기, 5개 Anchor 및 프레임별 CastingOrigin 사용.
+기존 파일 변경은 Dragon8.asset의 캐릭터 시각 참조만. 기존 스탯/패시브/스킬 데이터는 보존. 별도 부활/회복 기능은 추가하지 않음.
+분리 Unity 전투 검사: 세 형태 각각 Idle/Attack/Skill/Dodge/Hit/Death, 마우스/터치 탭과 좌우 회피, Fire Theme, Casting Anchor 통과.
+검수에서 발견한 Middle/Final의 긴 눈감음은 Idle 프레임 순서 변경으로 짧은 깜빡임에 배치. 날개가 atlas 격자를 넘는 부분은 개별 연결 실루엣 추출로 잘림 없이 포장.
+Point 필터, 512px 모션 시트, mipmap/CPU ReadWrite off. 새 Material/Controller/Animator 없음.
+Fire VFX, 솔라 피어스 및 미래 빌드는 제작하지 않음. 기존 캐릭터/VFX/HUD/Pipeline 변경 없음.
+실제 모바일 WebGL 기기 성능은 이번 최소 캐릭터 검수에서 측정하지 않음.

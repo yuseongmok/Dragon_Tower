@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99a317d23db83af43afd633d5064d032, type: 3}
+  m_Name: Library
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.FireSkillLibrary
+  infernoColumn:
+  - {fileID: 2320862804794394160, guid: cd1829f6ba2dbe940be831e089aa5532, type: 3}
+  - {fileID: 402732842387978245, guid: cd1829f6ba2dbe940be831e089aa5532, type: 3}
+  - {fileID: 7508794770357819737, guid: cd1829f6ba2dbe940be831e089aa5532, type: 3}
+  - {fileID: -7480855922451578359, guid: cd1829f6ba2dbe940be831e089aa5532, type: 3}
+  - {fileID: -4192252619382439005, guid: cd1829f6ba2dbe940be831e089aa5532, type: 3}
+  - {fileID: -9210381548960133248, guid: cd1829f6ba2dbe940be831e089aa5532, type: 3}
+  - {fileID: 4932818205565904793, guid: cd1829f6ba2dbe940be831e089aa5532, type: 3}
+  - {fileID: -1442890625414503152, guid: cd1829f6ba2dbe940be831e089aa5532, type: 3}
+  - {fileID: -1520143458016768581, guid: cd1829f6ba2dbe940be831e089aa5532, type: 3}
+  - {fileID: -1056458384052561931, guid: cd1829f6ba2dbe940be831e089aa5532, type: 3}
+  - {fileID: -6912084526580125875, guid: cd1829f6ba2dbe940be831e089aa5532, type: 3}
+  - {fileID: -3685116439735488342, guid: cd1829f6ba2dbe940be831e089aa5532, type: 3}
+  - {fileID: 8118357803318374203, guid: cd1829f6ba2dbe940be831e089aa5532, type: 3}
+  - {fileID: 6085559880422864045, guid: cd1829f6ba2dbe940be831e089aa5532, type: 3}
+  - {fileID: -6062969900068121954, guid: cd1829f6ba2dbe940be831e089aa5532, type: 3}
+  - {fileID: 9142264080782215739, guid: cd1829f6ba2dbe940be831e089aa5532, type: 3}
+  - {fileID: 6582805614155292638, guid: cd1829f6ba2dbe940be831e089aa5532, type: 3}
+  - {fileID: -8271968531782701534, guid: cd1829f6ba2dbe940be831e089aa5532, type: 3}
+  - {fileID: -8014386934785290430, guid: cd1829f6ba2dbe940be831e089aa5532, type: 3}
+  - {fileID: 6241619510584447249, guid: cd1829f6ba2dbe940be831e089aa5532, type: 3}
+  - {fileID: -2201218171276986333, guid: cd1829f6ba2dbe940be831e089aa5532, type: 3}
+  - {fileID: 3617317369656321984, guid: cd1829f6ba2dbe940be831e089aa5532, type: 3}
+  - {fileID: -2503875246449941803, guid: cd1829f6ba2dbe940be831e089aa5532, type: 3}
+  - {fileID: -214508476139500043, guid: cd1829f6ba2dbe940be831e089aa5532, type: 3}
+  meteor: {fileID: 21300000, guid: 942530c9a67caa14e945413522a22dd5, type: 3}
+  style: {fileID: 11400000, guid: 82fdbd5abc2ef944d9cd736daf701795, type: 2}
+  entries:
+  - skill: {fileID: 11400000, guid: 6553022dbe790f6479a67fc88e6e42f5, type: 2}
+    kind: 0
+  - skill: {fileID: 11400000, guid: b878176b3488c1f47beec0a53dbf2b24, type: 2}
+    kind: 1
+  - skill: {fileID: 11400000, guid: 297db8d72a013c74ea999e9476dae672, type: 2}
+    kind: 2
+  - skill: {fileID: 11400000, guid: 2ee207d05228e154db500932e674816e, type: 2}
+    kind: 3

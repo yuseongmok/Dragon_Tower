@@ -17,6 +17,15 @@ namespace DragonTower
         [Header("Optional signature presentation / dodge release")]
         public bool wispPresentation;
         public bool lunarPresentation;
+        public bool solarPresentation;
+        public bool volcanicPresentation;
+        [Header("Optional final-impact status and target modifier")]
+        public bool statusOnFinalHit;
+        [Range(0,100)] public float targetCriticalBonus;
+        [Min(0)] public float targetCriticalDuration;
+        [Tooltip("Optional sorted seconds from cast; empty preserves uniform timing.")] public float[] hitTimeOffsets;
+        [Range(0,100)] public float completionHealPercent;
+        [Min(0)] public float completionHealDelay=.22f;
         [Min(0)] public float slowBonusDamagePercent;
         [Min(.03f)] public float slowBonusDelay=.16f;
         [Min(0)] public float dodgeFreeCastDuration;
@@ -52,7 +61,7 @@ namespace DragonTower
         [Min(0)] public float statusDuration;
         [Tooltip("Burn: damage per second. Slow: attack speed reduction percent.")][Min(0)] public float statusPower;
         public string StableId=>string.IsNullOrWhiteSpace(skillId)?name:skillId.Trim();
-        public SkillStats Snapshot()=>new SkillStats{exclusiveDragonId=exclusiveDragonId,slowBonusDamagePercent=slowBonusDamagePercent,slowBonusDelay=slowBonusDelay,dodgeFreeCastDuration=dodgeFreeCastDuration,dodgeFreeAfterDuration=dodgeFreeAfterDuration,finalHitDamageMultiplier=Mathf.Max(1,finalHitDamageMultiplier),protectedCastDuration=Mathf.Max(0,protectedCastDuration),displayName=displayName,elementType=elementType,damage=damage,cooldown=cooldown,initialHitDelay=Mathf.Max(0,initialHitDelay),hitCount=Mathf.Max(1,hitCount),hitInterval=Mathf.Max(.03f,hitInterval),statusOnHit=statusOnHit,statusEffect=statusEffect,statusChancePercent=statusChancePercent,statusDuration=statusDuration,statusPower=statusPower};
+        public SkillStats Snapshot()=>new SkillStats{statusOnFinalHit=statusOnFinalHit,targetCriticalBonus=targetCriticalBonus,targetCriticalDuration=targetCriticalDuration,hitTimeOffsets=hitTimeOffsets==null?null:(float[])hitTimeOffsets.Clone(),completionHealPercent=completionHealPercent,completionHealDelay=completionHealDelay,exclusiveDragonId=exclusiveDragonId,slowBonusDamagePercent=slowBonusDamagePercent,slowBonusDelay=slowBonusDelay,dodgeFreeCastDuration=dodgeFreeCastDuration,dodgeFreeAfterDuration=dodgeFreeAfterDuration,finalHitDamageMultiplier=Mathf.Max(1,finalHitDamageMultiplier),protectedCastDuration=Mathf.Max(0,protectedCastDuration),displayName=displayName,elementType=elementType,damage=damage,cooldown=cooldown,initialHitDelay=Mathf.Max(0,initialHitDelay),hitCount=Mathf.Max(1,hitCount),hitInterval=Mathf.Max(.03f,hitInterval),statusOnHit=statusOnHit,statusEffect=statusEffect,statusChancePercent=statusChancePercent,statusDuration=statusDuration,statusPower=statusPower};
     }
 }
 

@@ -1,0 +1,12 @@
+using System.Linq;
+using System;using System.IO;using UnityEditor;using UnityEditor.SceneManagement;using UnityEngine;
+namespace DragonTower.Editor {
+ public static class FireBatchSetup {
+  public static readonly string[] Paths={"Assets/Data/Skill0.asset","Assets/Data/Skills/skill_fire_shot.asset","Assets/Data/Skills/skill_meteor.asset","Assets/Data/Skills/skill_purgatory.asset"};
+  public static void Install(int through){Directory.CreateDirectory("Assets/Resources/FireSkills");AssetDatabase.Refresh();const string path="Assets/Resources/FireSkills/Library.asset";var lib=AssetDatabase.LoadAssetAtPath<FireSkillLibrary>(path);if(lib==null){lib=ScriptableObject.CreateInstance<FireSkillLibrary>();AssetDatabase.CreateAsset(lib,path);}lib.style=AssetDatabase.LoadAssetAtPath<FireVfxStyle>(FireStyleSetup.StylePath);lib.entries=new FireSkillLibrary.Entry[through+1];for(int i=0;i<=through;i++)lib.entries[i]=new FireSkillLibrary.Entry{skill=AssetDatabase.LoadAssetAtPath<SkillData>(Paths[i]),kind=(FireSkillKind)i};if(through>=2)MakeMeteor(lib);if(through==3){FireSkillIcons.Install(lib.style);InfernoColumnSetup.Generate(lib);}EditorUtility.SetDirty(lib);AssetDatabase.SaveAssets();}
+  static void MakeMeteor(FireSkillLibrary lib){const string path="Assets/Resources/FireSkills/Meteor.png";var texture=new Texture2D(64,64,TextureFormat.RGBA32,false);var pixels=new Color[4096];for(int y=0;y<64;y++)for(int x=0;x<64;x++){float px=(x-31.5f)/29,py=(y-31.5f)/29,r=Mathf.Sqrt(px*px+py*py),a=Mathf.Atan2(py,px);float edge=.88f+.07f*Mathf.Sin(a*7)+.045f*Mathf.Sin(a*13);if(r>edge)continue;float crack=Mathf.Abs(px+.20f*Mathf.Sin(py*10))+Mathf.Abs(py)*.018f;float cross=Mathf.Abs(py-.24f*Mathf.Sin(px*8)-.1f);Color c=r>edge-.08f?new Color32(28,16,22,255):px+py>.2f?new Color32(82,36,36,255):new Color32(42,24,31,255);if(crack<.10f||cross<.075f)c=lib.style.redOrange;if(crack<.052f||cross<.035f)c=lib.style.gold;if(crack<.018f)c=lib.style.whiteHot;pixels[y*64+x]=c;}texture.SetPixels(pixels);texture.Apply();File.WriteAllBytes(path,texture.EncodeToPNG());UnityEngine.Object.DestroyImmediate(texture);AssetDatabase.Refresh();var im=(TextureImporter)AssetImporter.GetAtPath(path);im.textureType=TextureImporterType.Sprite;im.spriteImportMode=SpriteImportMode.Single;im.filterMode=FilterMode.Point;im.mipmapEnabled=false;im.textureCompression=TextureImporterCompression.Uncompressed;im.SaveAndReimport();lib.meteor=AssetDatabase.LoadAllAssetsAtPath(path).OfType<Sprite>().FirstOrDefault();if(lib.meteor==null)throw new Exception("Meteor sprite import failed");} }
+}
+
+
+
+

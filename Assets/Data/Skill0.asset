@@ -17,9 +17,24 @@ MonoBehaviour:
   description: 
   elementType: 2
   effectKind: 0
-  icon: {fileID: 0}
+  icon: {fileID: -8931649982321883935, guid: 29afedede0ef9ab419e767a99db54f8c, type: 3}
   rarity: 0
   exclusiveDragonId: 
+  wispPresentation: 0
+  lunarPresentation: 0
+  solarPresentation: 0
+  volcanicPresentation: 0
+  statusOnFinalHit: 0
+  targetCriticalBonus: 0
+  targetCriticalDuration: 0
+  hitTimeOffsets: []
+  completionHealPercent: 0
+  completionHealDelay: 0.22
+  slowBonusDamagePercent: 0
+  slowBonusDelay: 0.16
+  dodgeFreeCastDuration: 0
+  dodgeFreeAfterDuration: 0
+  finalHitDamageMultiplier: 1
   rewardEligibilityPercent: 100
   protectedCastDuration: 0
   initialHitDelay: 0
