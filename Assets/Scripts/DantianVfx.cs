@@ -47,6 +47,7 @@ namespace DragonTower
         public void Cancel(){bool wasActive=Active;ClearVisual();if(wasActive)Cancelled?.Invoke();}
         void ClearVisual()
         {
+            LegendaryScreenDimming.Set(this,Color.clear);
             age=10;impact=-1;if(pool!=null)foreach(var im in pool)if(im!=null)im.gameObject.SetActive(false);
             if(materialApplied&&arena!=null)arena.material=originalMaterial;materialApplied=false;
             if(root!=null)root.gameObject.SetActive(false);
@@ -63,7 +64,7 @@ namespace DragonTower
             float duration=skill.protectedCastDuration,recovery=Mathf.Clamp01((age-(duration-.30f))/.30f);
             float dark=.68f*Mathf.Clamp01(age/.10f)*(1-recovery),h=impact<0?-1:age-impact;
             if(h>=0)dark*=Mathf.Lerp(1,.60f,Mathf.Clamp01(h/.08f));
-            Show(0,null,new Vector2(0,-425),new Vector2(480,850),new Color(.003f,.012f,.028f,dark));
+            LegendaryScreenDimming.Set(this,new Color(.003f,.012f,.028f,dark));
             split.SetVector("_Line",new Vector4(normal.x,normal.y,Vector2.Dot(normal,target+new Vector2(0,425)),0));
             split.SetFloat("_Split",h<0?0:Mathf.Round(4*Mathf.Sin(Mathf.PI*Mathf.Clamp01(h/.30f))));split.SetFloat("_Saturation",1-dark*.65f);
             split.SetVector("_Impulse",h>=0&&h<.12f?new Vector4(Mathf.Round(Mathf.Sin(h*110)*5*(1-h/.12f)),Mathf.Round(2*(1-h/.12f)),0,0):Vector4.zero);

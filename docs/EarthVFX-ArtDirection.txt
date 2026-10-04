@@ -1,0 +1,63 @@
+EARTH VFX ART DIRECTION — PROTOTYPE v1 — 2026-10-04
+
+핵심: MASS / WEIGHT / IMPACT / SEISMIC FORCE.
+보이는 원인: 압축 -> 지면 반응 -> 균열 -> 충돌/융기 -> 파편/먼지 -> 낙하/붕괴.
+Wind의 속도선, Ice의 결정/굴절, Fire의 불꽃/백열 폭발을 색만 바꿔 사용하지 않는다.
+Legacy Earth 아트와 Skill Data는 이번 제작 입력으로 사용하지 않았다.
+
+PALETTE
+Near Black #231B1D / Dark Brown #483026 / Earth Brown #795031
+Warm Rock #AA7641 / Sand #D4AF70 / Light Stone #F4E0AD / Amber #CF993C.
+압력의 밝은 색은 충격 첫 순간과 균열 가장자리에만 사용한다.
+몸체는 불투명한 암석 면; 불꽃, 지속적인 Additive Glow, 용암 흐름은 사용하지 않는다.
+
+FORM / DEPTH
+Rock: 불규칙한 입체 다면체를 8방향으로 투영한 Sprite. 상좌 광원 고정, 회전 시 면의 명암 변화.
+Crack: 굵은 어두운 중심 -> 주 균열 -> 가는 곁가지. 짧은 Sand/Amber 단차.
+Dust: 각진 픽셀 구름의 명암 덩어리. Puff / Cloud / 지면 Wave를 크기와 속도로 구분.
+Shockwave: 낮은 타원 지면 궤적을 따라 먼지와 돌이 이동. 밝은 원형 Ring은 보조.
+Depth: 적 뒤의 먼지/균열 -> 적과 플레이어 사이 암석 -> 앞쪽 큰 파편.
+HUD는 효과 위로 유지. 하단 조작 영역은 효과 마스크 바깥. 이미지 Raycast 비활성.
+
+FOUR PROTOTYPES
+A Ground Impact: 180ms 압축, 접촉, 균열 확장, 낮은 먼지 충격파, 세 크기의 파편, 늦은 낙하.
+B Ground Rise: 바닥 판이 부풀고 균열 발생, 큰 암석을 바닥부터 노출, 파편과 먼지가 발치에서 퍼짐.
+C Seismic Wave: 캐릭터 Ground Anchor -> 적 발밑의 여섯 지점, 100ms 간격 균열/먼지/작은 융기.
+D Heavy Final Impact: Unique급 기준. 큰 균열, 3개 암석 융기, 크기/깊이가 다른 Debris, 짧은 강한 Impulse.
+공격 판정/피해/상태이상을 발생시키지 않는 독립 아트 샘플이다.
+
+FEEDBACK
+A/B는 작은 1회 Impulse, C는 마지막 도착점에 집중, D는 짧은 9 기준픽셀 감쇠 Impulse.
+정지감은 VFX의 진행만 33~55ms 유지한다. Time.timeScale/전투 타이머/캐릭터 Animator를 정지시키지 않는다.
+Arena 배경과 VFX 레이어만 움직이며 Clear / OnDisable / 전투 종료 때 위치를 복원한다.
+카메라 Zoom, 전체화면 암전, Beam, 지하 잠입 등 Legendary 연출은 아직 없다.
+
+REUSABLE LIBRARY
+EarthVfxStyle: Palette, 80 frame atlas, 회전 FPS, 주요 Debris 개수.
+Rock / GroundSlab / Crack / DustPuff / DustCloud / DustWave / Impact / Pressure / Grain / Shadow.
+EarthStylePrototype: 공개 Rock / Crack / Dust / Shockwave / Rise / Impact 조합 함수.
+2304개 Image 슬롯 재사용, 3 Depth; 공유 HUD-safe Alpha Material 1종 사용.
+Atlas: 1024x1280, 128px tile, Point / PPU100 / no mipmap / no runtime CPU texture copy.
+새로운 실시간 조명, 화면 굴절 셰이더, 별도 파티클 물리 시스템은 도입하지 않는다.
+
+FUTURE BUDGET
+Common: 한 지면 사건과 명확한 주요 균열.
+Rare: 진행 방향/융기/지연 낙하 등 추가 구조.
+Unique: D 수준의 다층 암석/전경 파편과 Final Impact.
+Legendary: 이후 별도 설계. 천지개벽의 산맥과 티탄의 Beam은 미구현.
+실제 기기 문제가 확인되면 작은 Secondary Debris -> Background Dust -> 먼 Foreground Fragment
+-> Dust Lifetime -> Secondary Crack 순으로 줄인다. Main Rock/Crack/Impact/Feedback은 보존한다.
+
+REVIEW
+Assets/Scenes/Prototypes/EarthStylePreview.unity를 열고 Play.
+A -> B -> C -> D가 자동 순환하고 이후 블랜디/티탄이 교대한다.
+EarthStylePreview Inspector에서 sample / dragonIndex를 지정하고
+autoplay를 켠 상태에서 컴포넌트 메뉴 Replay selected Earth sample로 선택한 샘플을 재생한다.
+Production Battle scene, Dragon Data, Skill Data와 연결하지 않았다.
+
+검수 결과 (2026-10-04)
+블랜디 Final / 티탄 Final 각각 A/B/C/D 재생 및 정리 검사 통과.
+데스크톱 WebGL 390x844: 활성 평균 프레임 간격 5.7~7.1ms, 씬 최대 Draw 23~24.
+실제 모바일 기기 성능은 아직 미측정. 초기화 제외 VFX 렌더 반복의 관리 메모리 할당 0 확인.
+기존 외부 Eric VFX 머티리얼 _FlowSpeed 속성 오류는 시작 시 관측됨; 기존 콘텐츠 보존 원칙에 따라 미수정.
+기존 Assets 3,939개 해시 비교: 변경/삭제 0.

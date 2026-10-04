@@ -160,7 +160,8 @@ namespace DragonTower
             if(Result!=BattleResult.Fighting||ProtectedSkillActive)return;
             // Damage-over-time and reflection cannot be dodged, but mitigation and shields still work.
             damage=Math.Max(0,(int)Math.Round(damage*(1-Math.Min(80,Math.Max(0,Dragon.damageReductionPercent))/100f),MidpointRounding.AwayFromZero));
-            int absorbed=Math.Min(ShieldHP,damage);shieldHP-=absorbed;damage-=absorbed;
+            int absorbed=Math.Min(ShieldHP,damage);shieldHP-=absorbed;damage-=absorbed;damage=ApplyCompletionDefense(damage);
+            NotifyChargedBeamDamage(Math.Min(PlayerHP,damage));
             PlayerHP=Math.Max(0,PlayerHP-damage);
             ResolvePlayerSurvival();
             Cue?.Invoke(CombatCue.PlayerStatusHit,damage);Feedback?.Invoke(source+" −"+damage+" HP");

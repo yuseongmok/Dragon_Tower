@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a37d10c4b83957e4c868b03176c6d57b, type: 3}
+  m_Name: skill_crushing_beam
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
+  skillId: skill_crushing_beam
+  displayName: "\uBD84\uC1C4\uAD11\uC120"
+  description: "\uD2F0\uD0C4 \uC804\uC6A9 \xB7 \uACF5\uACA9\uACFC \uD68C\uD53C\uB97C
+    \uC720\uC9C0\uD558\uBA70 5\uCD08\uAC04 \uBB34\uD53C\uACA9 \uCDA9\uC804. \uC2E4\uC81C
+    \uD53C\uD574\uB97C \uBC1B\uC73C\uBA74 \uC2E4\uD328\uD558\uBA70 \uCFE8\uD0C0\uC784\uC740
+    \uD658\uBD88\uB418\uC9C0 \uC54A\uC2B5\uB2C8\uB2E4. \uC131\uACF5 \uC2DC 5\uCD08
+    \uB3D9\uC548 \uBB34\uC801 \uAD11\uC120\uC744 \uBC1C\uC0AC\uD558\uACE0 \uB300\uD3ED\uBC1C\uB85C
+    \uB9C8\uBB34\uB9AC\uD569\uB2C8\uB2E4."
+  elementType: 5
+  effectKind: 3
+  icon: {fileID: -2046163835631259418, guid: e8ecca9005eb3684ca52fd70a14c16ea, type: 3}
+  rarity: 4
+  exclusiveDragonId: titan
+  wispPresentation: 0
+  lunarPresentation: 0
+  solarPresentation: 0
+  volcanicPresentation: 0
+  genesisPresentation: 0
+  chargedBeam: 1
+  chargeDuration: 5
+  beamIgnitionDelay: 0.18
+  beamDuration: 5
+  protectedCastDelay: 0
+  completionDefenseDuration: 0
+  completionDefensePercent: 0
+  statusOnFinalHit: 0
+  targetCriticalBonus: 0
+  targetCriticalDuration: 0
+  hitTimeOffsets: []
+  completionHealPercent: 0
+  completionHealDelay: 0.22
+  slowBonusDamagePercent: 0
+  slowBonusDelay: 0.16
+  dodgeFreeCastDuration: 0
+  dodgeFreeAfterDuration: 0
+  finalHitDamageMultiplier: 10
+  rewardEligibilityPercent: 100
+  protectedCastDuration: 0
+  initialHitDelay: 0
+  icePresentation: 0
+  iceKind: 0
+  statusOnHit: 0
+  battleVfx: {fileID: 0}
+  vfxScale: 0.65
+  vfxOffset: {x: 0, y: 0}
+  vfxEuler: {x: 0, y: 0, z: 0}
+  vfxDuration: 11.8
+  vfxSystemLimit: 14
+  damage: 80
+  cooldown: 24
+  hitCount: 21
+  hitInterval: 0.25
+  statusEffect: 0
+  statusChancePercent: 0
+  statusDuration: 0
+  statusPower: 0

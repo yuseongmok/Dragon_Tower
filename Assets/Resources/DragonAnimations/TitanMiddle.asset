@@ -1,0 +1,148 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b28f6030f920494e94e52a53d4d9ec3, type: 3}
+  m_Name: TitanMiddle
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.DragonAnimationSet
+  archetype: 2
+  anchors:
+    attackOrigin: {x: 102.11277, y: 5.538437}
+    skillOrigin: {x: 93.232765, y: 22.75197}
+    characterCenter: {x: 28.85276, y: -26.976032}
+    hitPosition: {x: 37.732765, y: -25.063416}
+    groundPosition: {x: 27.207779, y: -109.2185}
+  attachments:
+  - name: MouthOrigin
+    sprite: {fileID: -4153857406211594063, guid: dda367629c1d90b46a82c29f8c34d077, type: 3}
+    normalizedPosition: {x: 0.85525, y: 0.5165625}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: MouthOrigin
+    sprite: {fileID: 5214886546160856834, guid: dda367629c1d90b46a82c29f8c34d077, type: 3}
+    normalizedPosition: {x: 0.8435, y: 0.521125}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: MouthOrigin
+    sprite: {fileID: -4039206308055925582, guid: dda367629c1d90b46a82c29f8c34d077, type: 3}
+    normalizedPosition: {x: 0.8405625, y: 0.512}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: MouthOrigin
+    sprite: {fileID: 3384005629257602900, guid: dda367629c1d90b46a82c29f8c34d077, type: 3}
+    normalizedPosition: {x: 0.8465313, y: 0.5165625}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: MouthOrigin
+    sprite: {fileID: 2745770942522254815, guid: 70706ca4187053f4aa28e409d303066c, type: 3}
+    normalizedPosition: {x: 0.8570312, y: 0.5770625}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: MouthOrigin
+    sprite: {fileID: -8211962093484913135, guid: 70706ca4187053f4aa28e409d303066c, type: 3}
+    normalizedPosition: {x: 0.9229375, y: 0.49456248}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: MouthOrigin
+    sprite: {fileID: 2996414835328435149, guid: 70706ca4187053f4aa28e409d303066c, type: 3}
+    normalizedPosition: {x: 0.868875, y: 0.50100005}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: MouthOrigin
+    sprite: {fileID: -173928909960126557, guid: 70706ca4187053f4aa28e409d303066c, type: 3}
+    normalizedPosition: {x: 0.82303125, y: 0.5142813}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: MouthOrigin
+    sprite: {fileID: -5815236416974837678, guid: a4f034e61d39ef54f9fefe08065b5891, type: 3}
+    normalizedPosition: {x: 0.7757813, y: 0.6457813}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: MouthOrigin
+    sprite: {fileID: -454449195856150546, guid: a4f034e61d39ef54f9fefe08065b5891, type: 3}
+    normalizedPosition: {x: 0.7714844, y: 0.7171875}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: MouthOrigin
+    sprite: {fileID: 1164029886410236347, guid: a4f034e61d39ef54f9fefe08065b5891, type: 3}
+    normalizedPosition: {x: 0.7564688, y: 0.67814064}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: MouthOrigin
+    sprite: {fileID: 7358311053640531438, guid: a4f034e61d39ef54f9fefe08065b5891, type: 3}
+    normalizedPosition: {x: 0.85828125, y: 0.5348125}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: MouthOrigin
+    sprite: {fileID: 5419005428133488492, guid: 7a3909be91b892247ace3bddb0885e12, type: 3}
+    normalizedPosition: {x: 0.85240626, y: 0.44071874}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: MouthOrigin
+    sprite: {fileID: 7509881429003438488, guid: 7a3909be91b892247ace3bddb0885e12, type: 3}
+    normalizedPosition: {x: 0.8523125, y: 0.29168752}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: MouthOrigin
+    sprite: {fileID: 1628343752527763925, guid: 7a3909be91b892247ace3bddb0885e12, type: 3}
+    normalizedPosition: {x: 0.8435, y: 0.3804375}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: MouthOrigin
+    sprite: {fileID: 4644075789173827616, guid: 7a3909be91b892247ace3bddb0885e12, type: 3}
+    normalizedPosition: {x: 0.8406563, y: 0.5142813}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: MouthOrigin
+    sprite: {fileID: -3958609133070180095, guid: 4aaa5fe43123710458db281ca9e640a8, type: 3}
+    normalizedPosition: {x: 0.797875, y: 0.67875}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: MouthOrigin
+    sprite: {fileID: -5702892608215378725, guid: 4aaa5fe43123710458db281ca9e640a8, type: 3}
+    normalizedPosition: {x: 0.829875, y: 0.41731247}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: MouthOrigin
+    sprite: {fileID: 6551718111552584427, guid: 4aaa5fe43123710458db281ca9e640a8, type: 3}
+    normalizedPosition: {x: 0.82303125, y: 0.43556252}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: MouthOrigin
+    sprite: {fileID: -6461783171186659509, guid: 4aaa5fe43123710458db281ca9e640a8, type: 3}
+    normalizedPosition: {x: 0.8435, y: 0.5256875}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: MouthOrigin
+    sprite: {fileID: -8070732900935782300, guid: c8ecb2c805bd74340be043ca3df48732, type: 3}
+    normalizedPosition: {x: 0.841875, y: 0.410625}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: MouthOrigin
+    sprite: {fileID: -447641673710431443, guid: c8ecb2c805bd74340be043ca3df48732, type: 3}
+    normalizedPosition: {x: 0.8689375, y: 0.201125}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: MouthOrigin
+    sprite: {fileID: -3363013192516667220, guid: c8ecb2c805bd74340be043ca3df48732, type: 3}
+    normalizedPosition: {x: 0.856875, y: 0.116875}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: MouthOrigin
+    sprite: {fileID: -8339083962886974885, guid: c8ecb2c805bd74340be043ca3df48732, type: 3}
+    normalizedPosition: {x: 0.8689375, y: 0.09825}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  idle: {fileID: 11400000, guid: ec14588630bfa294c9bc40a5fc40aaf9, type: 2}
+  attack: {fileID: 11400000, guid: a18cff74099ee804fb01a08ff5dee934, type: 2}
+  skill: {fileID: 11400000, guid: b0e6a93b1254e8d43a2d14eda087cb60, type: 2}
+  dodge: {fileID: 11400000, guid: c7804b49419581944b79e1948f293c95, type: 2}
+  hit: {fileID: 11400000, guid: 3ecf47d0c2855b4468eaa60c1486039a, type: 2}
+  death: {fileID: 11400000, guid: 6286d983f75ffd149a5832e904e4f877, type: 2}

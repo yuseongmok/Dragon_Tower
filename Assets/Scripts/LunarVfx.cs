@@ -47,8 +47,9 @@ namespace DragonTower
         void Beam(Vector2 from,Vector2 to,float width,float alpha){var delta=to-from;Show(M(1,age*1.5f,true),(from+to)*.5f,new Vector2(width,delta.magnitude+18),Tint(alpha),Mathf.Atan2(delta.y,delta.x)*Mathf.Rad2Deg-90,false,true);}
         void Render()
         {
+            LegendaryScreenDimming.Set(this,Color.clear);
             if(pool==null)return;foreach(var im in pool)im.gameObject.SetActive(false);used=0;if(!Active)return;
-            float recovery=Mathf.Clamp01((Duration-age)/.5f);domain.SetFloat("_Darkness",Mathf.Clamp01(age/.18f)*recovery*.82f);
+            float recovery=Mathf.Clamp01((Duration-age)/.5f);domain.SetFloat("_Darkness",0);LegendaryScreenDimming.Set(this,new Color(.03f,.025f,.14f,Mathf.Clamp01(age/.18f)*recovery*.82f));
             var moonPoint=new Vector2(-25,-302);float emerge=Mathf.Clamp01((age-.12f)/.30f);float moonSize=Mathf.Lerp(310,368,emerge);float moonAlpha=emerge*recovery;
             Show(M(0,age*.8f,true),moonPoint,Vector2.one*(moonSize*1.13f),new Color(.25f,.31f,.68f,moonAlpha*.65f),-18,true);
             Show(M(0,age*.8f+.2f,true),moonPoint+new Vector2(4,1),Vector2.one*(moonSize*1.06f),Tint(moonAlpha*.65f,.9f),-18,true,true);
@@ -100,6 +101,7 @@ namespace DragonTower
         }
         void ClearVisual()
         {
+            LegendaryScreenDimming.Set(this,Color.clear);
             if(offsetApplied){if(enemy!=null)enemy.anchoredPosition=enemyNormal;if(arena!=null)arena.rectTransform.anchoredPosition=arenaNormal;}offsetApplied=false;
             if(night&&arena!=null)arena.material=originalArena;night=false;age=99;impact=bonus=-1;flashAge=99;used=0;if(pool!=null)foreach(var im in pool)if(im!=null)im.gameObject.SetActive(false);if(flash!=null)flash.gameObject.SetActive(false);
         }

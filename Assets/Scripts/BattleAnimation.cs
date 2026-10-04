@@ -27,6 +27,7 @@ namespace DragonTower
         SkillEffectKind skillEffect;
         BattleAssetVfx assetVfx;
         VolcanicMeteorVfx volcanicVfx;SolarPierceVfx solarVfx;FireSkillVfx fireVfx; IceSkillVfx iceVfx;WispVfx wispVfx;LunarVfx lunarVfx;
+        EarthSkillVfx earthVfx;GenesisVfx genesisVfx;CrushingBeamVfx crushingVfx;
         ZephyrWindVfx windVfx;
         WindBladeVfx bladeVfx;Vector2 bladeEnemyPose;
         GaleStrikeVfx galeVfx; GaleSlashVfx slashVfx; GaleSlashFeedback slashFeedback; WindClawVfx clawVfx;WindHitFeedback clawFeedback;
@@ -72,6 +73,9 @@ namespace DragonTower
             layer.SetSiblingIndex(view.enemyArt.transform.GetSiblingIndex()+1);
             assetVfx=gameObject.AddComponent<BattleAssetVfx>();
             assetVfx.Initialize(layer);
+            crushingVfx=gameObject.AddComponent<CrushingBeamVfx>();crushingVfx.Initialize(view);
+            genesisVfx=gameObject.AddComponent<GenesisVfx>();genesisVfx.Initialize(view);
+            earthVfx=gameObject.AddComponent<EarthSkillVfx>();earthVfx.Initialize(view);
             fireVfx=gameObject.AddComponent<FireSkillVfx>();fireVfx.Initialize(view);
             iceVfx=gameObject.AddComponent<IceSkillVfx>();iceVfx.Initialize(view,layer);
             volcanicVfx=gameObject.AddComponent<VolcanicMeteorVfx>();volcanicVfx.Initialize(view);
@@ -126,8 +130,9 @@ namespace DragonTower
             if(enemyGraphic is Image) enemyColor=Color.white;
             skillEffect=effect;
             skillColor=EffectColor(effect);
+            earthVfx.Configure(skill);genesisVfx.Configure(skill,playerGraphic,enemyGraphic);crushingVfx.Configure(skill,playerGraphic,enemyGraphic);
             volcanicVfx.Configure(skill,enemyGraphic);solarVfx.Configure(skill,enemyGraphic);fireVfx.Configure(skill);iceVfx.Configure(skill);wispVfx.Configure(skill,enemyGraphic);lunarVfx.Configure(skill,enemyGraphic);
-            assetVfx.Configure(volcanicVfx.Configured||solarVfx.Configured||fireVfx.Configured||lunarVfx.Configured||wispVfx.Configured||iceVfx.Configured||UsesPixelWindSkill||(skill!=null&&(skill.StableId=="skill_falling_flower"||skill.StableId=="skill_gale_slash"||skill.StableId=="skill_wind_claw"||skill.StableId=="skill_dantian"))?null:skill);
+            assetVfx.Configure(crushingVfx.Configured||genesisVfx.Configured||earthVfx.Configured||volcanicVfx.Configured||solarVfx.Configured||fireVfx.Configured||lunarVfx.Configured||wispVfx.Configured||iceVfx.Configured||UsesPixelWindSkill||(skill!=null&&(skill.StableId=="skill_falling_flower"||skill.StableId=="skill_gale_slash"||skill.StableId=="skill_wind_claw"||skill.StableId=="skill_dantian"))?null:skill);
             windVfx.Clear();galeVfx.Configure(zephyrWind,skill);bladeVfx.Configure(skill);slashVfx.Configure(skill);slashFeedback.Bind(player,enemy,playerGraphic,enemyGraphic);slashVfx.SetTargetWidth(enemyGraphic.rectTransform.rect.width);bladeEnemyPose=enemyHome;clawVfx.Configure(skill);clawFeedback.Bind(player,enemy,playerGraphic,enemyGraphic);dantianVfx.Configure(skill,playerGraphic);dantianFeedback.Bind(player,enemy,playerGraphic,enemyGraphic);
             foreach(var p in particles){p.active=false;p.image.gameObject.SetActive(false);}
             foreach(var n in numbers){n.active=false;n.text.gameObject.SetActive(false);}
@@ -148,7 +153,16 @@ namespace DragonTower
                     break;
                 case CombatCue.SkillHeal:
                     if(solarVfx.Configured){solarVfx.Heal();if(damage>0)Damage(playerHome+new Vector2(-65,85),"+"+damage,new Color(1,.94f,.63f),0);}break;
+                case CombatCue.ChargeFailed:
+                    if(crushingVfx.Configured){crushingVfx.Fail();Damage(playerHome+new Vector2(-65,50),"충전 실패",new Color(1,.67f,.32f),0);}break;
+                case CombatCue.BeamPrimed:break;
+                case CombatCue.BeamStarted:
+                    if(crushingVfx.Configured){attackAge=dodgeAge=playerHitAge=10;skillAge=0;crushingVfx.StartBeam();}break;
+                case CombatCue.BeamEnded:break;
                 case CombatCue.SkillCast:
+                    if(crushingVfx.Configured){crushingVfx.Charge();break;}
+                    if(genesisVfx.Configured){attackAge=10;skillAge=0;genesisVfx.Cast();break;}
+                    if(earthVfx.Configured){attackAge=10;skillAge=0;earthVfx.Cast();break;}
                     if(volcanicVfx.Configured){attackAge=10;skillAge=0;volcanicVfx.Cast();break;}
                     if(solarVfx.Configured){attackAge=10;skillAge=0;solarVfx.Cast();break;}
                     if(fireVfx.Configured){attackAge=10;skillAge=0;fireVfx.Cast();break;}
@@ -160,6 +174,9 @@ namespace DragonTower
                     if(slashVfx.Configured){attackAge=10;skillAge=0;slashVfx.Cast(playerHome,enemyHome);break;}
                     if(bladeVfx.Configured){attackAge=10;skillAge=0;bladeVfx.Cast(playerHome,enemyHome);}break;
                 case CombatCue.Skill:
+                    if(crushingVfx.Configured){if(crushingVfx.DamageFromSkill)CrushingHit(damage);break;}
+                    if(genesisVfx.Configured){if(genesisVfx.DamageFromSkill)GenesisHit(damage);break;}
+                    if(earthVfx.Configured){attackAge=10;skillAge=0;enemyHitAge=0;earthVfx.Hit(true);EarthDamageNumber(damage);break;}
                     if(volcanicVfx.Configured){VolcanicHit(damage);break;}
                     if(solarVfx.Configured){SolarHit(damage);break;}
                     if(fireVfx.Configured){attackAge=10;skillAge=0;enemyHitAge=0;fireVfx.Hit(true);FireDamageNumber(damage);break;}
@@ -193,6 +210,9 @@ namespace DragonTower
                 case CombatCue.SkillBonusHit:
                     if(lunarVfx.Configured)LunarHit(damage,true);break;
                 case CombatCue.SkillHit:
+                    if(crushingVfx.Configured){if(crushingVfx.DamageFromSkill)CrushingHit(damage);else Damage(enemyHome,damage.ToString(),skillColor,0);break;}
+                    if(genesisVfx.Configured){if(genesisVfx.DamageFromSkill)GenesisHit(damage);else Damage(enemyHome,damage.ToString(),skillColor,0);break;}
+                    if(earthVfx.Configured){if(earthVfx.DamageFromSkill){enemyHitAge=0;earthVfx.Hit(false);}EarthDamageNumber(damage);break;}
                     if(volcanicVfx.Configured){if(volcanicVfx.DamageFromSkill)VolcanicHit(damage);else Damage(enemyHome,damage.ToString(),skillColor,0);break;}
                     if(solarVfx.Configured){if(solarVfx.DamageFromSkill)SolarHit(damage);else Damage(enemyHome,damage.ToString(),skillColor,0);break;}
                     if(fireVfx.Configured){if(fireVfx.DamageFromSkill){enemyHitAge=0;fireVfx.Hit(false);}FireDamageNumber(damage);break;}
@@ -216,6 +236,7 @@ namespace DragonTower
                     else for(int i=0;i<6;i++) Emit(playerHome+new Vector2(-20*dodgeDirection,i*8-20),new Vector2(-120*dodgeDirection,15),new Vector2(24,3),new Color(.45f,.95f,1),.28f,i*.025f);
                     break;
                 case CombatCue.EnemyHit:
+                    genesisVfx.ArmorHit();
                     if(dodgeFrames!=null)dodgeAge=10;
                     if(skillFrames!=null)skillAge=10;
                     if(attackFrames!=null)attackAge=10;
@@ -224,6 +245,7 @@ namespace DragonTower
                     Damage(playerHome,damage.ToString(),new Color(1,.48f,.40f),0);
                     break;
                 case CombatCue.PlayerStatusHit:
+                    genesisVfx.ArmorHit();
                     if(dodgeFrames!=null)dodgeAge=10;
                     if(skillFrames!=null)skillAge=10;
                     if(attackFrames!=null)attackAge=10;
@@ -289,7 +311,10 @@ namespace DragonTower
         {
             enemyHitAge=0;lunarVfx.Hit(bonus);Damage(enemyHome,damage.ToString(),new Color(.91f,.93f,1),.033f,0,true);var n=numbers[(numberIndex-1)%numbers.Length];n.text.fontSize=bonus?30:38;n.start=enemyHome+new Vector2(bonus?80:-70,80);
         }
+        void EarthDamageNumber(int damage){Damage(enemyHome,damage.ToString(),new Color(.96f,.87f,.66f),.033f);var n=numbers[(numberIndex-1)%numbers.Length];float side=earthVfx.HitsShown%2==1?-143:143;n.start=enemyHome+new Vector2(side,42);n.drift=new Vector2(side*.025f,50);n.text.fontSize=26;}
         void FireDamageNumber(int damage){Damage(enemyHome,damage.ToString(),new Color(1,.85f,.5f),.033f);var n=numbers[(numberIndex-1)%numbers.Length];float side=fireVfx.HitsShown%2==1?-145:140;n.start=enemyHome+new Vector2(side,20+(fireVfx.HitsShown%3)*18);n.drift=new Vector2(side*.045f,55);n.text.fontSize=24;}
+        void CrushingHit(int damage){enemyHitAge=0;crushingVfx.Hit();bool final=crushingVfx.HitsShown>=crushingVfx.HitCount;float side=crushingVfx.HitsShown%2==0?-150:150;Damage(enemyHome+new Vector2(side,25),damage.ToString(),new Color(1,.94f,.69f),final?.033f:0);var n=numbers[(numberIndex-1)%numbers.Length];n.text.transform.SetParent(crushingVfx.Numbers,false);n.text.fontSize=final?48:25;n.drift=new Vector2(side*.025f,46);}
+        void GenesisHit(int damage){enemyHitAge=0;genesisVfx.Hit();Damage(enemyHome+new Vector2(-140,25),damage.ToString(),new Color(1,.87f,.59f),.033f);var n=numbers[(numberIndex-1)%numbers.Length];n.text.transform.SetParent(genesisVfx.Numbers,false);n.text.fontSize=44;n.drift=new Vector2(-6,52);}
         void VolcanicHit(int damage){enemyHitAge=0;volcanicVfx.Hit();bool final=volcanicVfx.HitsShown>=volcanicVfx.HitCount;Damage(enemyHome,damage.ToString(),new Color(1,.68f,.30f),.033f);var n=numbers[(numberIndex-1)%numbers.Length];n.text.fontSize=final?44:25;float side=volcanicVfx.HitsShown%2==0?-145:145;n.start=enemyHome+new Vector2(side,12);n.drift=new Vector2(side*.04f,45);}
         void SolarHit(int damage){enemyHitAge=0;solarVfx.Hit();bool final=solarVfx.HitsShown>=solarVfx.HitCount;Damage(enemyHome+new Vector2(final?-110:95,65),damage.ToString(),new Color(1,.91f,.52f),.033f);var n=numbers[(numberIndex-1)%numbers.Length];n.text.fontSize=final?42:23;n.start=enemyHome+new Vector2(final?-145:145,10);n.drift=new Vector2(final?-5:5,45);}
         void WispHit(int damage)
@@ -308,6 +333,7 @@ namespace DragonTower
         public void Step(BattleModel battle,float delta)
         {
             if(delta<=0 || player==null) return;
+            genesisVfx.PrepareFrame();crushingVfx.PrepareFrame();
             clock+=delta;attackAge+=delta;skillAge+=delta;dodgeAge+=delta;enemyAttackAge+=delta;playerHitAge+=delta;enemyHitAge+=delta;
             assetVfx.Step(delta);
             windVfx.Step(delta);if(battle.Result!=BattleResult.Fighting)galeVfx.Clear();else galeVfx.Step(delta);
@@ -326,7 +352,7 @@ namespace DragonTower
             bool spriteHit=fighting && hasHit && playerHitAge<hitFrames.Length;
             float dodgeLength=battle.Dragon.dodgeDuration>0?battle.Dragon.dodgeDuration:BattleModel.DodgeDuration;
             bool spriteDodge=fighting && hasDodge && dodgeAge<dodgeLength && playerHitAge>=.24f;
-            if((iceVfx.HoldCasting||lunarVfx.HoldCasting)&&hasSkill)skillAge=Mathf.Min(skillAge,skillFrames.Length*.55f);
+            if((iceVfx.HoldCasting||lunarVfx.HoldCasting||crushingVfx.Channeling)&&hasSkill)skillAge=Mathf.Min(skillAge,skillFrames.Length*.55f);
             bool skillActive=skillAge<(hasSkill?skillFrames.Length:.4f);
             bool defensiveAction=dodgeAge<dodgeLength || playerHitAge<.24f;
             bool spriteSkill=fighting && hasSkill && skillActive && !defensiveAction;
@@ -392,6 +418,7 @@ namespace DragonTower
             }
             if(fighting&&bladeVfx.FinalFreeze)enemy.anchoredPosition=bladeEnemyPose;
             bladeEnemyPose=enemy.anchoredPosition;
+            earthVfx.Step(battle,delta);
             volcanicVfx.Step(battle,delta);solarVfx.Step(battle,delta);fireVfx.Step(battle,delta);iceVfx.Step(battle,delta);wispVfx.Step(battle,delta);lunarVfx.Step(battle,delta);
             slashFeedback.Step(delta,fighting,!defensiveAction);clawFeedback.Step(delta,fighting,!defensiveAction);dantianFeedback.Step(delta,fighting,!defensiveAction);
             if(dodge>0){var c=playerGraphic.color;c.a=1-.45f*dodge;playerGraphic.color=c;}
@@ -412,6 +439,7 @@ namespace DragonTower
                     var c=graphic.color;c.a=1-t;graphic.color=c;
                 }
             }
+            genesisVfx.Step(battle,delta);crushingVfx.Step(battle,delta);
             foreach(var p in particles)
             {
                 if(!p.active)continue;p.age+=delta;

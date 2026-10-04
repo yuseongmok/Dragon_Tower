@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: skill_dust_storm
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
   skillId: skill_dust_storm
-  displayName: "\uBAA8\uB798\uD3ED\uD48D"
+  displayName: "강철 클로"
   description: "13 \uD53C\uD574\uB97C 4\uD68C \xB7 Slow 35%"
   elementType: 5
   effectKind: 3

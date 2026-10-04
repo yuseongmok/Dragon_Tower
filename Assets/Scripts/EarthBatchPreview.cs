@@ -1,0 +1,10 @@
+using UnityEngine;using Unity.Profiling;
+namespace DragonTower {
+ public sealed class EarthBatchPreview:MonoBehaviour {
+  public DragonData[] dragons;public SkillData[] skills;BattleController controller;int index;float age;ProfilerRecorder draws;long peakDraw;double activeMs,idleMs;int activeFrames,idleFrames;
+  void Start(){controller=FindFirstObjectByType<BattleController>();controller.enabled=false;var screens=controller.view.frame.Find("Collection screens");if(screens!=null)screens.gameObject.SetActive(false);draws=ProfilerRecorder.StartNew(ProfilerCategory.Render,"Draw Calls Count",1);Begin();}
+  void Begin(){var dragon=dragons[index/4%dragons.Length];var skill=skills[index%4];var stats=dragon.Snapshot(20);stats.skill=skill.Snapshot();stats.criticalChance=0;stats.passiveMechanic=DragonPassiveMechanic.None;var enemy=BattleEnemyStats.Normal();enemy.maxHP=99999;enemy.interval=100;controller.BeginBattle(dragon,stats,enemy,1,false,stats.maxHP,null,20,skill);controller.SendMessage("OnApplicationFocus",true);age=0;}
+  void Update(){if(controller==null)return;float dt=Mathf.Min(Time.unscaledDeltaTime,.05f);float before=age;age+=dt;if(before<.5f&&age>=.5f)controller.RequestSkill();var battle=controller.CurrentBattle;if(battle!=null){battle.Tick(dt);controller.view.StepAnimation(battle,dt);controller.view.Show(battle);}var fx=controller.view.GetComponent<EarthSkillVfx>();if(age>.15f){if(fx.Active){activeMs+=Time.unscaledDeltaTime*1000;activeFrames++;}else{idleMs+=Time.unscaledDeltaTime*1000;idleFrames++;}if(draws.Valid)peakDraw=System.Math.Max(peakDraw,draws.LastValue);}if(age>4){Debug.Log("EARTH_BATCH_WEB skill="+skills[index%4].StableId+" dragon="+dragons[index/4%dragons.Length].name+" activeMs="+activeMs/System.Math.Max(1,activeFrames)+" idleMs="+idleMs/System.Math.Max(1,idleFrames)+" peakDraw="+peakDraw+" peakImages="+fx.PeakImages+" dropped="+fx.DroppedLayers);activeMs=idleMs=0;activeFrames=idleFrames=0;peakDraw=0;index++;Begin();}}
+  void OnDisable(){if(controller!=null&&controller.view!=null)controller.EndBattle();}void OnDestroy(){draws.Dispose();}
+ }
+}

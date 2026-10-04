@@ -1,0 +1,10 @@
+using UnityEngine;using Unity.Profiling;
+namespace DragonTower {
+ public sealed class GenesisPreview:MonoBehaviour {
+  public DragonData dragon;public SkillData skill;BattleController controller;float age;int cycle;ProfilerRecorder draws;long peakDraw;double activeMs,idleMs;int activeFrames,idleFrames;
+  void Start(){controller=FindFirstObjectByType<BattleController>();controller.enabled=false;var screens=controller.view.frame.Find("Collection screens");if(screens!=null)screens.gameObject.SetActive(false);draws=ProfilerRecorder.StartNew(ProfilerCategory.Render,"Draw Calls Count",1);Begin();}
+  void Begin(){int level=cycle%3==0?1:cycle%3*10;var stats=dragon.Snapshot(level);stats.skill=skill.Snapshot();stats.maxHP=10000;stats.criticalChance=0;stats.passiveMechanic=DragonPassiveMechanic.None;var enemy=BattleEnemyStats.Normal();enemy.maxHP=99999;enemy.damage=100;enemy.interval=.65f;controller.BeginBattle(dragon,stats,enemy,1,false,10000,null,level,skill);controller.SendMessage("OnApplicationFocus",true);age=0;}
+  void Update(){if(controller==null)return;float dt=Mathf.Min(Time.unscaledDeltaTime,.05f),before=age;age+=dt;if(before<.65f&&age>=.65f)controller.RequestSkill();var b=controller.CurrentBattle;if(b!=null){b.Tick(dt);controller.view.StepAnimation(b,dt);controller.view.Show(b);}var fx=controller.view.GetComponent<GenesisVfx>();if(age>.2f){if(!fx.Clean){activeMs+=Time.unscaledDeltaTime*1000;activeFrames++;}else{idleMs+=Time.unscaledDeltaTime*1000;idleFrames++;}if(draws.Valid)peakDraw=System.Math.Max(peakDraw,draws.LastValue);}if(age>10){Debug.Log("GENESIS_WEB stage="+cycle%3+" activeMs="+activeMs/System.Math.Max(1,activeFrames)+" idleMs="+idleMs/System.Math.Max(1,idleFrames)+" peakDraw="+peakDraw+" peakImages="+fx.PeakImages+" dropped="+fx.DroppedLayers+" clean="+fx.Clean+" armor="+fx.ArmorRemaining);activeMs=idleMs=0;activeFrames=idleFrames=0;peakDraw=0;cycle++;Begin();}}
+  void OnDisable(){if(controller!=null&&controller.view!=null)controller.EndBattle();}void OnDestroy(){draws.Dispose();}
+ }
+}

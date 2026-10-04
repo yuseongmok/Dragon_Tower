@@ -67,11 +67,12 @@ namespace DragonTower
         }
         void Render()
         {
+            LegendaryScreenDimming.Set(this,Color.clear);
             if(pool==null)return;hudVisibility.Update(view);foreach(var im in pool)im.gameObject.SetActive(false);used=0;if(!Configured)return;
             float due=skill.initialHitDelay+(HitCount-1)*skill.hitInterval;
             if(Active){
                 float dim=.28f*Mathf.Clamp01(age/.12f)*Mathf.Clamp01((Duration-age)/.35f);
-                Show(null,new Vector2(0,-327.5f),new Vector2(476,655),new Color(.03f,.025f,.14f,dim),0,true);
+                LegendaryScreenDimming.Set(this,new Color(.03f,.025f,.14f,dim));
                 if(finalAge<0){int count=Mathf.Max(1,HitCount/2);for(int i=0;i<count;i++){
                     float alpha=Mathf.Clamp01((age-i*.023f)/.12f);float size;bool back;var p=Path(i,age,out size,out back);float ignore;bool b;var prev=Path(i,age-.022f,out ignore,out b);var dir=p-prev;if(dir.sqrMagnitude<.1f)dir=target-p;
                     for(int k=6;k>=1;k--){var old=Path(i,age-k*.024f,out ignore,out b);var next=Path(i,age-(k-1)*.024f,out ignore,out b);var tangent=next-old;if(tangent.sqrMagnitude<4)continue;Show(Frame(1,age*2+i*.2f,true),(old+next)*.5f,new Vector2(size*(.7f-k*.065f),tangent.magnitude+75),Tint(alpha*(.90f-k*.09f),.8f),Mathf.Atan2(tangent.y,tangent.x)*Mathf.Rad2Deg-90,back); }
@@ -104,7 +105,7 @@ namespace DragonTower
             if(flash!=null){bool on=flashAge<(finalAge>=0?.12f:.045f);flash.gameObject.SetActive(on);if(on){flash.sprite=enemyImage!=null?enemyImage.sprite:null;flash.color=new Color(.82f,.96f,1,finalAge>=0?.95f:.7f);}}
             if(finalAge>=0&&finalAge<.19f){enemyNormal=enemy.anchoredPosition;arenaNormal=arena.rectTransform.anchoredPosition;float decay=1-finalAge/.19f;var shift=new Vector2(Mathf.Round(Mathf.Sin(finalAge*140)*7*decay),Mathf.Round(Mathf.Cos(finalAge*113)*4*decay));enemy.anchoredPosition+=shift;arena.rectTransform.anchoredPosition+=shift;offsetApplied=true;}
         }
-        void ClearVisual(){if(offsetApplied){if(enemy!=null)enemy.anchoredPosition=enemyNormal;if(arena!=null)arena.rectTransform.anchoredPosition=arenaNormal;}offsetApplied=false;age=99;finalAge=-1;flashAge=99;used=0;if(pool!=null)foreach(var im in pool)if(im!=null)im.gameObject.SetActive(false);if(flash!=null)flash.gameObject.SetActive(false);}
+        void ClearVisual(){LegendaryScreenDimming.Set(this,Color.clear);if(offsetApplied){if(enemy!=null)enemy.anchoredPosition=enemyNormal;if(arena!=null)arena.rectTransform.anchoredPosition=arenaNormal;}offsetApplied=false;age=99;finalAge=-1;flashAge=99;used=0;if(pool!=null)foreach(var im in pool)if(im!=null)im.gameObject.SetActive(false);if(flash!=null)flash.gameObject.SetActive(false);}
         public void Cancel(){ClearVisual();battle?.CancelDodgeRelease();}
         void OnDisable()=>Cancel();
         void OnDestroy(){Cancel();hudVisibility?.Dispose();if(front!=null)Destroy(front.gameObject);if(rear!=null)Destroy(rear.gameObject);if(flash!=null)Destroy(flash.gameObject);}

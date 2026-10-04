@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Skill3
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
   skillId: skill_sandstorm
-  displayName: "\uC9F1\uB3CC \uC2A4\uB9E4\uC26C"
+  displayName: "대지 강타"
   description: 
   elementType: 5
   effectKind: 3

@@ -1,0 +1,20 @@
+using System;using System.IO;using System.Linq;using UnityEditor;using UnityEngine;
+namespace DragonTower.Editor {
+ public static class CrushingBeamSetup {
+  public const string Folder="Assets/Resources/VFX/CrushingBeam",SkillPath="Assets/Data/Skills/skill_crushing_beam.asset";
+  public static void Install(){GenerateArt();var s=AssetDatabase.LoadAssetAtPath<SkillData>(SkillPath);if(s==null){s=ScriptableObject.CreateInstance<SkillData>();AssetDatabase.CreateAsset(s,SkillPath);}var d=AssetDatabase.LoadAssetAtPath<DragonData>("Assets/Data/Dragon11.asset");s.skillId="skill_crushing_beam";s.displayName="분쇄광선";s.description="티탄 전용 · 공격과 회피를 유지하며 5초간 무피격 충전. 실제 피해를 받으면 실패하며 쿨타임은 환불되지 않습니다. 성공 시 5초 동안 무적 광선을 발사하고 대폭발로 마무리합니다.";s.exclusiveDragonId=d.StableId;s.rarity=ContentRarity.Legendary;s.elementType=ElementType.Earth;s.effectKind=SkillEffectKind.Earth;s.chargedBeam=true;s.chargeDuration=5;s.beamIgnitionDelay=.18f;s.beamDuration=5;s.damage=80;s.cooldown=24;s.hitCount=21;s.hitInterval=.25f;s.initialHitDelay=0;s.finalHitDamageMultiplier=10;s.vfxDuration=11.8f;s.icon=AssetDatabase.LoadAllAssetsAtPath(Folder+"/BeamAtlas.png").OfType<Sprite>().First(x=>x.name=="Beam4_0");d.signatureSkill=s;EditorUtility.SetDirty(d);EditorUtility.SetDirty(s);var db=AssetDatabase.LoadAssetAtPath<ContentDatabase>("Assets/Resources/ContentDatabase.asset");if(!db.skills.Contains(s)){db.skills=db.skills.Concat(new[]{s}).ToArray();EditorUtility.SetDirty(db);}AssetDatabase.SaveAssets();Debug.Log("CRUSHING_BEAM_INSTALLED");}
+  static Color Pixel(int row,int f,float x,float y){float t=f*Mathf.PI/4,r=Mathf.Sqrt(x*x+y*y),a=Mathf.Atan2(y,x);
+   if(row==0){float u=(x+1)*.5f;float edge=.90f+.018f*Mathf.Sin(x*23-t*2)+.012f*Mathf.Sin(x*43+t);float q=Mathf.Abs(y)/edge;if(q>1||u<.008f||u>.992f)return Color.clear;float curve=Mathf.Sqrt(Mathf.Max(0,1-q*q));float band=(.42f+.58f*curve)*(.92f+.08f*Mathf.Sin(x*24-y*8-t*2));return new Color(band,band,band,q>.93f?(1-q)/.07f:1);}
+   if(row==1){float e=.80f+.07f*Mathf.Sin(a*7+t);if(r>e||r<e-.10f||Mathf.Sin(a*5+t)<-.8f)return Color.clear;return Color.white;}
+   if(row==2){float edge=.86f+.04f*Mathf.Sin(a*9+t);if(r>edge)return Color.clear;float q=r/edge;return q<.33f?new Color(1,1,.98f):q<.49f?new Color(1,.96f,.68f):q<.66f?new Color(1,.68f,.14f):q<.81f?new Color(.95f,.28f,.035f):new Color(.17f,.105f,.09f);}
+   if(row==3){float edge=.63f+.24f*Mathf.Pow(Mathf.Abs(Mathf.Sin(a*7+t*.2f)),7)+.10f*Mathf.Sin(a*13+t);if(r>edge)return Color.clear;float q=r/edge;return q<.28f?new Color(1,1,1):q<.47f?new Color(1,.96f,.72f):q<.70f?new Color(1,.64f,.12f):new Color(.62f,.21f,.045f);}
+   if(r>.97f)return Color.clear;if(r>.87f)return new Color(.96f,.76f,.35f);float line=Mathf.Abs(y-x*.75f);if(line<.16f&&x>-.6f)return line<.06f?Color.white:new Color(1,.68f,.15f);if(x<-.2f&&y<.30f&&y>-.7f)return new Color(.25f,.18f,.13f);return new Color(.045f,.032f,.03f);
+  }
+  public static void GenerateArt(){Directory.CreateDirectory(Folder);AssetDatabase.Refresh();const int n=128,w=1024,h=640;var tex=new Texture2D(w,h,TextureFormat.RGBA32,false);var pixels=new Color[w*h];for(int row=0;row<5;row++)for(int f=0;f<8;f++)for(int y=0;y<n;y++)for(int x=0;x<n;x++)pixels[(row*n+y)*w+f*n+x]=Pixel(row,f,(x-63.5f)/64,(y-63.5f)/64);tex.SetPixels(pixels);tex.Apply();string path=Folder+"/BeamAtlas.png";File.WriteAllBytes(path,tex.EncodeToPNG());UnityEngine.Object.DestroyImmediate(tex);AssetDatabase.Refresh();var im=(TextureImporter)AssetImporter.GetAtPath(path);im.textureType=TextureImporterType.Sprite;im.spriteImportMode=SpriteImportMode.Multiple;im.filterMode=FilterMode.Point;im.mipmapEnabled=false;im.alphaIsTransparency=true;im.textureCompression=TextureImporterCompression.Uncompressed;im.npotScale=TextureImporterNPOTScale.None;im.spritePixelsPerUnit=100;im.maxTextureSize=1024;var slices=new SpriteMetaData[40];for(int row=0;row<5;row++)for(int f=0;f<8;f++)slices[row*8+f]=new SpriteMetaData{name="Beam"+row+"_"+f,rect=new Rect(f*n,row*n,n,n),pivot=Vector2.one*.5f,alignment=0};
+#pragma warning disable 618
+   im.spritesheet=slices;
+#pragma warning restore 618
+   im.SaveAndReimport();
+  }
+ }
+}
