@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Skill3
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
   skillId: skill_sandstorm
-  displayName: "대지 강타"
+  displayName: "\uC9F1\uB3CC \uC2A4\uB9E4\uC26C"
   description: 
   elementType: 5
   effectKind: 3
@@ -24,6 +24,17 @@ MonoBehaviour:
   lunarPresentation: 0
   solarPresentation: 0
   volcanicPresentation: 0
+  genesisPresentation: 0
+  attackEmpowerDuration: 0
+  attackEmpowerDelay: 0
+  attackEmpowerDamage: 0
+  chargedBeam: 0
+  chargeDuration: 5
+  beamIgnitionDelay: 0.18
+  beamDuration: 5
+  protectedCastDelay: 0
+  completionDefenseDuration: 0
+  completionDefensePercent: 0
   statusOnFinalHit: 0
   targetCriticalBonus: 0
   targetCriticalDuration: 0

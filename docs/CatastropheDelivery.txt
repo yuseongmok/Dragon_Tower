@@ -1,0 +1,27 @@
+재해 / Storm Legendary — 2026-10-05
+
+스톰 전용 skill_catastrophe. 공용 Pool에는 넣지 않음. 기존 HUD/캐릭터/타 속성 VFX 변경 없음.
+연출: 전 화면 Navy 암전 → 3개 깊이의 사선 폭우 → 좌/우/후방 허리케인 → 내부 낙뢰 → 압축/정적 → 대형 허리케인/낙뢰/충격파 → 날씨 복귀.
+기존 LightningStylePrototype, LightningMeshLayer, LightningSkillLibrary, BattleVfxHudVisibility, LegendaryScreenDimming 사용. 재해만의 발광 가장자리 레이어는 암전 위에서 빛남.
+공격 이벤트 시각: 0.95 / 1.02 / 1.40 / 1.47 / 1.85 / 1.92 / 3.10초. 허리케인 접촉 3회 + 낙뢰 3회 + 최종 1회.
+임시 밸런스: 기본 피해 48, 최종 4배, 쿨타임 22초. Assets/Data/Skills/skill_catastrophe.asset에서 조절.
+Wind/Lightning 중 현재 상성 규칙상 유리한 속성 하나로 기존 Hit 처리. 배율 곱셈 및 중복 Damage 없음.
+마비: 최종 정상 적중 시 100%, 기존 뇌격의 1.5초 재사용. 기존 마비(적 공격 20% 실패) 규칙을 변경하지 않음. 현재 모델에 별도 적 마비 면역 필드는 없음.
+65ms 최종 시각 정지: VFX/적 포즈만 유지. 전역 timeScale, 입력, 쿨타임 시간은 변경하지 않음.
+
+검수: CATASTROPHE_VALIDATION_OK.
+모든 9개 대상 속성별 유리 배율, 데이터 기반 타격 시점/횟수, 쿨타임, 최종 마비 1회와 정확한 만료, TowerRun 데이터 전달, 볼트 장착 거절, 기존 DoubleCasting 14 Hit, Base/Middle/Final 반복 시전, 중도 전투 종료, 적/스톰 사망 후 날씨/암전 복구 확인.
+최종 에디터 샘플: BattleView.StepAnimation 평균 약 2.17ms, 최대 약 15.89ms. 전체 게임 프레임 시간이나 모바일 WebGL 측정치가 아님. 주요 pooled mesh peak 16172 quads / overflow 0. 별도 작은 발광 mesh 포함 실제 모바일 WebGL/GPU 실기기 검수는 미실시.
+Unity 촬영 MP4: C:/Users/PC/Documents/Codex/Catastrophe-20261005/Catastrophe-Preview.mp4 (480x850, 30fps, 7초, 무음).
+검수 로그: C:/Users/PC/Documents/Codex/Catastrophe-20261005/release-validation.log
+
+새 에셋: CatastropheVfx.cs / CatastropheSetup.cs / CatastropheValidation.cs / skill_catastrophe.asset / Assets/Art/Catastrophe/CatastropheIcon.png.
+공용 코드 변경은 SkillData/SkillStats의 선택형 secondary element, TowerRun 복사, 실제 Hit의 속성 선택, BattleAnimation/Controller의 재해 호출/정리 연결에 한정.
+
+Icon generation: built-in image_gen, not CLI. Original preserved in .codex/generated_images. Final icon Assets/Art/Catastrophe/CatastropheIcon.png; Unity Point/no mipmaps/max128.
+Prompt:
+Create a square game skill icon for a legendary skill Catastrophe, no text, no border. Polished stylized pixel art matching a premium mobile fantasy dragon game. A colossal dark navy and storm blue hurricane fills the icon, strongly volumetric spiral wind ribbons viewed in three quarter perspective, cyan ridges, a dark hollow center lit from within by jagged pure white lightning branching in electric blue and a little violet. Torn rain streaks and mist spiral inward. Lightning and hurricane silhouette must read at 64px. Very dramatic depth, sharp deliberate pixel clusters, luminous white core contrast with navy storm, not a flat cyan tornado, not a bird or weapon. Full bleed dark navy background. One icon only.
+
+2026-10-05 형태 수정: CatastropheVfx.cs의 허리케인만 수정. 원뿔 수렴 제거, 일정 폭의 원기둥형 나선, 화면 상단+120까지 연장. Damage/Cooldown/Hit/Status/HUD 변경 없음. cylinder-validation.log 통과(주요 mesh peak17268, overflow0). 영상: C:/Users/PC/Documents/Codex/Catastrophe-20261005/Catastrophe-Cylinder-Preview.mp4
+
+2026-10-05 구름형 리뉴얼: 규칙적 연속 나선 제거. 원기둥 높이/폭 유지, 불규칙 구름 덩어리의 다층 회전·짧고 찢어진 바람 면·내부 번개에 의한 국소 밝기 변화·지면 비보라 적용. CatastropheVfx의 Hurricane/helper만 변경, 타격/상태 로직 그대로. storm-volume-validation.log 통과, main mesh peak18722/overflow0. 데스크톱 StepAnimation 평균2.29ms(실기기 WebGL 수치 아님). 영상: C:/Users/PC/Documents/Codex/Catastrophe-20261005/Catastrophe-Storm-Volume-Preview.mp4

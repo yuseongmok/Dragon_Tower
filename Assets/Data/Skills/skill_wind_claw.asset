@@ -20,7 +20,36 @@ MonoBehaviour:
   effectKind: 2
   icon: {fileID: -3841170894649450732, guid: 49a2c17adca20e34b93829d8a2f01c86, type: 3}
   rarity: 5
+  exclusiveDragonId: 
+  wispPresentation: 0
+  lunarPresentation: 0
+  solarPresentation: 0
+  volcanicPresentation: 0
+  genesisPresentation: 0
+  chargedBeam: 0
+  chargeDuration: 5
+  beamIgnitionDelay: 0.18
+  beamDuration: 5
+  protectedCastDelay: 0
+  completionDefenseDuration: 0
+  completionDefensePercent: 0
+  statusOnFinalHit: 0
+  targetCriticalBonus: 0
+  targetCriticalDuration: 0
+  hitTimeOffsets: []
+  completionHealPercent: 0
+  completionHealDelay: 0.22
+  slowBonusDamagePercent: 0
+  slowBonusDelay: 0.16
+  dodgeFreeCastDuration: 0
+  dodgeFreeAfterDuration: 0
+  finalHitDamageMultiplier: 1
+  rewardEligibilityPercent: 100
+  protectedCastDuration: 0
   initialHitDelay: 0.18
+  icePresentation: 0
+  iceKind: 0
+  statusOnHit: 0
   battleVfx: {fileID: 0}
   vfxScale: 0.65
   vfxOffset: {x: 0, y: 0}

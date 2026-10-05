@@ -1,0 +1,30 @@
+강림 / Bolt Legendary — 2026-10-04
+
+Skill Data: Assets/Data/Skills/skill_ascension.asset
+attackEmpowerDelay 0.24 s; attackEmpowerDuration 5 s exactly.
+Temporary tuning: attackEmpowerDamage 48, cooldown 20 s.
+Activation does not damage the enemy or grant invulnerability.
+Uses existing elemental/critical/damage handling for the independent extra event.
+No proc on missed/rejected basic attacks; no recursion from extra damage.
+Left / right / center pattern increments only on a successful empowered attack.
+Existing attack and dodge timing and sprites are unchanged.
+
+Presentation: existing Skill pose, global HUD-inclusive dim, descending lightning,
+moving wing/spear sockets, body arcs, electric floor ring, weapon trail, directional
+extra strikes, end compression and thunder burst. Hit stop is VFX-only.
+At extreme rapid rates all bolt/contact events remain; older secondary residuals
+are bounded after a real stress test exceeded mesh capacity.
+
+Validation: exact 5-second interval; no activation damage; cooldown rejection;
+missed attacks; A/B/C pattern; Storm exclusion; dodge continuity; post-expiry no proc;
+251 rapid extra events / 251 visual events / zero dropped geometry; battle exit,
+death cleanup; Base/Middle fallback anchors; Final battle frames captured.
+No mobile WebGL hardware performance claim.
+
+Icon: built-in imagegen, copied to Assets/Art/Ascension/AscensionIcon.png.
+Prompt: Square pixel-art Legendary icon, white/cyan lightning spear centered,
+electric-blue dragon wings, dark thunder-warrior silhouette, deep navy background,
+violet arcs, bold pixel clusters, readable at 64px, no text or border.
+Generated original retained: exec-04e42a24-0acd-4ce5-a1e7-e5f69cb2657a.png.
+
+No Storm signature or future augmentation added.

@@ -22,10 +22,13 @@ namespace DragonTower
         void HandleCue(CombatCue cue,int damage)
         {
             if(cue==CombatCue.Dodge)view.SetDodgeDirection(requestedDodgeDirection);
+            var catastrophe=view.GetComponent<CatastropheVfx>();if(catastrophe!=null){catastrophe.DamageFromSkill=battle.ResolvingSkillHit;catastrophe.ScheduledHits=battle.ScheduledSkillHits;}
             var crushing=view.GetComponent<CrushingBeamVfx>();if(crushing!=null)crushing.DamageFromSkill=battle.ResolvingSkillHit;
             var genesis=view.GetComponent<GenesisVfx>();if(genesis!=null)genesis.DamageFromSkill=battle.ResolvingSkillHit;
             var volcanic=view.GetComponent<VolcanicMeteorVfx>();if(volcanic!=null){volcanic.DamageFromSkill=battle.ResolvingSkillHit;volcanic.ScheduledHits=battle.ScheduledSkillHits;}
             var solar=view.GetComponent<SolarPierceVfx>();if(solar!=null){solar.DamageFromSkill=battle.ResolvingSkillHit;solar.ScheduledHits=battle.ScheduledSkillHits;}
+            var motion=view.GetComponent<BattleAnimation>();if(motion!=null)motion.ascensionPattern=battle.EmpoweredHitPattern;
+            var lightning=view.GetComponent<LightningSkillVfx>();if(lightning!=null){lightning.DamageFromSkill=battle.ResolvingSkillHit;lightning.ScheduledHits=battle.ScheduledSkillHits;}
             var earth=view.GetComponent<EarthSkillVfx>();if(earth!=null){earth.DamageFromSkill=battle.ResolvingSkillHit;earth.ScheduledHits=battle.ScheduledSkillHits;}
             var fire=view.GetComponent<FireSkillVfx>();if(fire!=null){fire.DamageFromSkill=battle.ResolvingSkillHit;fire.ScheduledHits=battle.ScheduledSkillHits;}
             var ice=view.GetComponent<IceSkillVfx>();if(ice!=null)ice.DamageFromSkill=battle.ResolvingSkillHit;
@@ -42,7 +45,7 @@ namespace DragonTower
             Flow.Initialize(this,view,dragons);
         }
         public void EndBattle() { CancelSignature();view.CancelGesture();battle=null; }
-        void CancelSignature(){view.GetComponent<CrushingBeamVfx>()?.Cancel();battle?.CancelChargedBeam();view.GetComponent<GenesisVfx>()?.Cancel();battle?.CancelCompletionDefense();view.GetComponent<EarthSkillVfx>()?.Clear();battle?.CancelTargetModifier();view.GetComponent<VolcanicMeteorVfx>()?.Cancel();battle?.CancelCompletionHeal();view.GetComponent<SolarPierceVfx>()?.Cancel();view.GetComponent<FireSkillVfx>()?.Clear();battle?.CancelSlowSignature();view.GetComponent<LunarVfx>()?.Cancel();battle?.CancelDodgeRelease();view.GetComponent<WispVfx>()?.Cancel();view.GetComponent<IceSkillVfx>()?.Clear();battle?.CancelProtectedSkill();view.GetComponent<DantianVfx>()?.Cancel();view.GetComponent<DantianFeedback>()?.Clear();}
+        void CancelSignature(){view.GetComponent<CatastropheVfx>()?.Cancel();view.GetComponent<AscensionVfx>()?.Cancel();battle?.CancelAttackEmpower();view.GetComponent<LightningSkillVfx>()?.Clear();view.GetComponent<CrushingBeamVfx>()?.Cancel();battle?.CancelChargedBeam();view.GetComponent<GenesisVfx>()?.Cancel();battle?.CancelCompletionDefense();view.GetComponent<EarthSkillVfx>()?.Clear();battle?.CancelTargetModifier();view.GetComponent<VolcanicMeteorVfx>()?.Cancel();battle?.CancelCompletionHeal();view.GetComponent<SolarPierceVfx>()?.Cancel();view.GetComponent<FireSkillVfx>()?.Clear();battle?.CancelSlowSignature();view.GetComponent<LunarVfx>()?.Cancel();battle?.CancelDodgeRelease();view.GetComponent<WispVfx>()?.Cancel();view.GetComponent<IceSkillVfx>()?.Clear();battle?.CancelProtectedSkill();view.GetComponent<DantianVfx>()?.Cancel();view.GetComponent<DantianFeedback>()?.Clear();}
         void OnDisable(){if(view!=null)CancelSignature();}
         public void BeginBattle(DragonData dragon) { BeginBattle(dragon,BattleEnemyStats.Normal(),1,false); }
         public void BeginBattle(DragonData dragon,BattleEnemyStats enemy,int floor,bool boss)

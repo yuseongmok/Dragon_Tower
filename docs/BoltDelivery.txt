@@ -1,0 +1,10 @@
+볼트 제작 완료 — 2026-10-04
+Base/Middle/Final: 각 6상태 x 4프레임 = 총72프레임,18 Animation Sheet.
+Assets/Art/Bolt + Assets/Resources/DragonAnimations/BoltBase/Middle/Final.
+기존 volt ID 및 볼트/볼티스/볼트라크 표시 이름 유지.
+기존 Biped 분류, EvolutionSpriteSetup, 상태별 타이밍, BattleView Optional Attachment API 재사용.
+Final 창은 캐릭터 Sprite에 통합. SpearTip/WeaponTip/WeaponTrailStart/WeaponTrailEnd/LeftWing/RightWing을 프레임별 지정.
+세 형태 6상태·마우스/터치 탭·좌우 스와이프·Lightning Theme 및 Final Optional Anchor 조회 검증 통과.
+새 Controller, HUD, 스킬/VFX/강림 구현 없음.
+생성 초안의 Middle 성장 비율과 시트 간격을 보정한 뒤 적용. 실행 중 오류 없음.
+이미지 생성: built-in image_gen. 최종 프롬프트: docs/BoltPrompts.txt.

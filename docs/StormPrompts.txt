@@ -1,0 +1,9 @@
+Storm character production — built-in image generation.
+Three independent transparent 4 x 6 atlases, 24 poses each, facing right.
+Rows: Idle / Attack / Skill / Dodge / Hit / Death. Four frames per state.
+References: Assets/Art/Evolution/Separated/storm-base.png, storm-intermediate.png, storm-final.png.
+Base: turquoise baby, golden horns, small membrane wings, cloud curl tail.
+Middle: elongated adolescent, icy horns, feather wings, spiral markings.
+Final: mature long body, large cyclone-emblem feather wings, cyan/gold horns; broad weather-casting pose, no weapon.
+Shared direction: crisp dark outline, upper-left lighting, clustered shading, complete isolated poses, no detached VFX.
+Generated originals preserved in the Codex generated_images folder. Selected sources in Assets/Art/Storm/Source.

@@ -1,0 +1,11 @@
+Chrono character production — 2026-10-05
+Scope: Base/Middle/Final; Idle/Attack/Skill/Dodge/Hit/Death, four poses each.
+Art: Assets/Art/Chrono. Animation sets: Resources/DragonAnimations/ChronoBase, ChronoMiddle, ChronoFinal.
+Reused: EvolutionSpriteSetup, DragonAnimationSet/DragonIdleFrames, battle input and animation state API, Light HUD theme.
+Existing display names retained: 크로노 / 크로노스 / 크로마키나.
+Signature plan (not implemented): 시간의 태엽. Enemy Time Stop for 5 seconds while Chrono can attack; store final basic-attack damage instead of applying immediately; on expiry apply signature skill damage plus stored basic damage. No mechanic, VFX, skill data, or balance changes in this character task.
+Casting preparation: chest raised, wings open; existing CharacterCenter plus per-pose CastingCenter/AttackOrigin attachments. No speculative special sockets.
+Original Dragon15 backup: C:/Users/PC/Documents/Codex/Chrono-20261005/Dragon15.before
+Art generated with built-in image_gen, transparent alpha retained. Reference images from Assets/Art/Evolution/Separated/chrono-*.png.
+
+Validation: isolated Unity battle scene, all three forms pass six-state frame/timing, mouse/touch tap and left/right swipe, Light theme and per-pose anchor checks. CHRONO_VALIDATION_OK. Desktop render preview only; not mobile WebGL device profiling. Existing scripts/HUD/VFX unchanged.

@@ -12,6 +12,8 @@ namespace DragonTower
         public DragonVisualAnchors anchors;
         [Tooltip("Optional per-sprite weapon/socket points. Coordinates are normalized within the sprite rectangle, bottom-left = 0,0.")]
         public DragonSpriteAttachment[] attachments;
+        [Tooltip("Optional independent floating weapon visual. Null preserves existing character presentation.")]
+        public FloatingWeaponData floatingWeapon;
         public DragonIdleFrames idle,attack,skill,dodge,hit,death;
         public DragonIdleFrames Get(DragonAnimationState state)
         {

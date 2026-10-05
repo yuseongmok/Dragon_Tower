@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df955d89da62ac340891fd8f0a558f28, type: 3}
+  m_Name: Library
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.LightningSkillLibrary
+  style: {fileID: 11400000, guid: 2abb41ae34140844c85a678915ae59a7, type: 2}
+  entries:
+  - skill: {fileID: 11400000, guid: 5e1219208f2f8c94c8a7e6d322485ec8, type: 2}
+    kind: 0
+  - skill: {fileID: 11400000, guid: 6d82c168f49849a4bbc3c9adf3710f55, type: 2}
+    kind: 1
+  - skill: {fileID: 11400000, guid: 446d2410306cddf418046aa566e68e09, type: 2}
+    kind: 2
+  - skill: {fileID: 11400000, guid: afae83bfc2cf15e4b83fdaecf5a54f60, type: 2}
+    kind: 3

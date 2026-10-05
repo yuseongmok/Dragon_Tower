@@ -9,6 +9,9 @@ namespace DragonTower
         public string displayName = "Flame burst";
         [TextArea] public string description;
         public ElementType elementType;
+        [Tooltip("Optional secondary element: best existing matchup, never multiply both.")]
+        public bool useSecondaryElement;
+        public ElementType secondaryElement;
         public SkillEffectKind effectKind;
         public Sprite icon;
         public ContentRarity rarity=ContentRarity.Common;
@@ -21,6 +24,9 @@ namespace DragonTower
         public bool volcanicPresentation;
         public bool genesisPresentation;
         [Header("Optional damage-interrupted charged channel")]
+        [Header("Optional basic-attack empowerment")]
+        [Min(0)] public float attackEmpowerDuration,attackEmpowerDelay;
+        [Min(0)] public int attackEmpowerDamage;
         public bool chargedBeam;
         [Min(.1f)] public float chargeDuration=5;
         [Min(0)] public float beamIgnitionDelay=.18f;
@@ -71,7 +77,7 @@ namespace DragonTower
         [Min(0)] public float statusDuration;
         [Tooltip("Burn: damage per second. Slow: attack speed reduction percent.")][Min(0)] public float statusPower;
         public string StableId=>string.IsNullOrWhiteSpace(skillId)?name:skillId.Trim();
-        public SkillStats Snapshot()=>new SkillStats{chargedBeam=chargedBeam,chargeDuration=chargeDuration,beamIgnitionDelay=beamIgnitionDelay,beamDuration=beamDuration,protectedCastDelay=protectedCastDelay,completionDefenseDuration=completionDefenseDuration,completionDefensePercent=completionDefensePercent,statusOnFinalHit=statusOnFinalHit,targetCriticalBonus=targetCriticalBonus,targetCriticalDuration=targetCriticalDuration,hitTimeOffsets=hitTimeOffsets==null?null:(float[])hitTimeOffsets.Clone(),completionHealPercent=completionHealPercent,completionHealDelay=completionHealDelay,exclusiveDragonId=exclusiveDragonId,slowBonusDamagePercent=slowBonusDamagePercent,slowBonusDelay=slowBonusDelay,dodgeFreeCastDuration=dodgeFreeCastDuration,dodgeFreeAfterDuration=dodgeFreeAfterDuration,finalHitDamageMultiplier=Mathf.Max(1,finalHitDamageMultiplier),protectedCastDuration=Mathf.Max(0,protectedCastDuration),displayName=displayName,elementType=elementType,damage=damage,cooldown=cooldown,initialHitDelay=Mathf.Max(0,initialHitDelay),hitCount=Mathf.Max(1,hitCount),hitInterval=Mathf.Max(.03f,hitInterval),statusOnHit=statusOnHit,statusEffect=statusEffect,statusChancePercent=statusChancePercent,statusDuration=statusDuration,statusPower=statusPower};
+        public SkillStats Snapshot()=>new SkillStats{useSecondaryElement=useSecondaryElement,secondaryElement=secondaryElement,attackEmpowerDuration=attackEmpowerDuration,attackEmpowerDelay=attackEmpowerDelay,attackEmpowerDamage=attackEmpowerDamage,chargedBeam=chargedBeam,chargeDuration=chargeDuration,beamIgnitionDelay=beamIgnitionDelay,beamDuration=beamDuration,protectedCastDelay=protectedCastDelay,completionDefenseDuration=completionDefenseDuration,completionDefensePercent=completionDefensePercent,statusOnFinalHit=statusOnFinalHit,targetCriticalBonus=targetCriticalBonus,targetCriticalDuration=targetCriticalDuration,hitTimeOffsets=hitTimeOffsets==null?null:(float[])hitTimeOffsets.Clone(),completionHealPercent=completionHealPercent,completionHealDelay=completionHealDelay,exclusiveDragonId=exclusiveDragonId,slowBonusDamagePercent=slowBonusDamagePercent,slowBonusDelay=slowBonusDelay,dodgeFreeCastDuration=dodgeFreeCastDuration,dodgeFreeAfterDuration=dodgeFreeAfterDuration,finalHitDamageMultiplier=Mathf.Max(1,finalHitDamageMultiplier),protectedCastDuration=Mathf.Max(0,protectedCastDuration),displayName=displayName,elementType=elementType,damage=damage,cooldown=cooldown,initialHitDelay=Mathf.Max(0,initialHitDelay),hitCount=Mathf.Max(1,hitCount),hitInterval=Mathf.Max(.03f,hitInterval),statusOnHit=statusOnHit,statusEffect=statusEffect,statusChancePercent=statusChancePercent,statusDuration=statusDuration,statusPower=statusPower};
     }
 }
 

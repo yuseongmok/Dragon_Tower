@@ -208,6 +208,7 @@ namespace DragonTower
         public bool TryGetCharacterAnchor(DragonVisualAnchor kind,RectTransform relativeTo,out Vector2 point)
         {
             point=default;
+            if(floatingWeapon!=null&&floatingWeapon.TryOrigin(kind,relativeTo,out point))return true;
             if(activeAttachments!=null&&pixelPlayer!=null)
                 foreach(var attachment in activeAttachments)
                     if(attachment!=null&&attachment.sprite==pixelPlayer.sprite&&
@@ -220,9 +221,11 @@ namespace DragonTower
             return true;
         }
         DragonSpriteAttachment[] activeAttachments;
+        FloatingWeaponVisual floatingWeapon;
         public bool TryGetCharacterAttachment(string name,RectTransform relativeTo,out Vector2 point)
         {
             point=default;
+            if(floatingWeapon!=null&&floatingWeapon.TryAnchor(name,relativeTo,out point))return true;
             if(activeAttachments==null||pixelPlayer==null)return false;
             foreach(var attachment in activeAttachments)
                 if(attachment!=null&&attachment.name==name&&attachment.sprite==pixelPlayer.sprite)
@@ -267,6 +270,7 @@ namespace DragonTower
             var animations=dragon.LoadAnimationSet(stage);
             activeVisualAnchors=animations?.anchors;
             activeAttachments=animations?.attachments;
+            if(animations?.floatingWeapon!=null||floatingWeapon!=null){if(floatingWeapon==null)floatingWeapon=new FloatingWeaponVisual();floatingWeapon.Bind(animations?.floatingWeapon,pixelPlayer,playerArt.rectTransform);}
             DragonIdleFrames Frames(DragonAnimationState state)=>animations!=null?animations.Get(state):dragon.LegacyAnimation(state,stage);
             motion.SetIdle(Frames(DragonAnimationState.Idle),activeSprite);
             equippedSkillPresentation=selectedSkill;
@@ -311,7 +315,7 @@ namespace DragonTower
             if(pixelEnemy!=null&&enemySprite!=null)pixelEnemy.sprite=enemySprite;
             enemyArt.rectTransform.sizeDelta=boss?new Vector2(310,310):new Vector2(256,256);
         }
-        public void StepAnimation(BattleModel battle,float delta) { if(motion!=null) motion.Step(battle,delta); }
+        public void StepAnimation(BattleModel battle,float delta) { if(motion!=null) motion.Step(battle,delta);if(floatingWeapon!=null)floatingWeapon.Step(delta); }
         void LateUpdate() { Fit(); }
         void Fit()
         {

@@ -29,12 +29,26 @@ MonoBehaviour:
   dodgeFrames: {fileID: 0}
   hitFrames: {fileID: 0}
   deathFrames: {fileID: 0}
-  animationSetPath: 
+  animationSetPath: DragonAnimations/BoltBase
   basicPresentation: 0
   elementSkillPool: {fileID: 0}
   additionalSkillPools: []
-  signatureSkill: {fileID: 0}
-  evolutionForms: []
+  signatureSkill: {fileID: 11400000, guid: 1b337e617ba29d345af076ebc82a5cbf, type: 2}
+  evolutionForms:
+  - stage: 1
+    displayName: "\uBCFC\uD2F0\uC2A4"
+    battleSprite: {fileID: -5934083290497773055, guid: 25405f997421ac44d9179c360043f2bc, type: 3}
+    animationSetPath: DragonAnimations/BoltMiddle
+    defaultSkill: {fileID: 0}
+    healthMultiplier: 0
+    attackMultiplier: 0
+  - stage: 2
+    displayName: "\uBCFC\uD2B8\uB77C\uD06C"
+    battleSprite: {fileID: 589767257407381059, guid: 5ee81655fcda2f94d881fe9e9ee7add1, type: 3}
+    animationSetPath: DragonAnimations/BoltFinal
+    defaultSkill: {fileID: 0}
+    healthMultiplier: 0
+    attackMultiplier: 0
   intermediateEvolutionSprite: {fileID: 21300000, guid: a297e4e4a09e5515437998bfa0f2aab9, type: 3}
   finalEvolutionSprite: {fileID: 21300000, guid: cc66e7f635d5143832ffa57c4b1c7e51, type: 3}
   evolutionSheet: {fileID: 2800000, guid: 4d1185cb4d3a4931908398d7896565c4, type: 3}

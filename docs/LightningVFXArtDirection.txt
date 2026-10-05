@@ -1,0 +1,40 @@
+LIGHTNING ART DIRECTION — isolated prototype baseline, 2026-10-04
+
+Palette: Deep Navy #091339 / Electric Blue #1859F4 / Cyan #25DAFF /
+Pale Cyan #B2FAFF / White Core #F7FFFF / secondary Violet #704EE1.
+Five envelopes follow an irregular pixel-snapped path. Shorter/thinner branches,
+24 Hz path variation, back/main/front geometry layers. No Wind ribbons or fire flames.
+Charge -> instantaneous strike -> irregular electric burst -> residual current.
+
+Prototype set: LightningStrike / ElectricProjectile / LightningArc /
+HeavyThunderImpact / Paralysis. Preview scene cycles all five on Bolt and Storm.
+Open Assets/Scenes/Prototypes/LightningStylePreview.unity and enter Play.
+Inspector: autoplay, sample, dragonIndex (0 Bolt / 1 Storm), evolution (0/1/2).
+Use Restart context menu to replay manually. This scene is not added to shipping builds.
+
+Strike: 100 ms charge, 95 ms main bolt, brief branches, residual arcs to 650 ms.
+Projectile: 70 ms compression, 320 ms transfer, rotating local arcs and stepped trail.
+Arc: direct connection with small forks, reusable as a module.
+Heavy: three depth-separated strikes, strong localized white burst, shock rings,
+foreground sparks. 45 ms VFX-only hold and 120 ms arena impulse; no global hit stop.
+Paralysis: sparse body-contour arcs with intermittent white sparks, 2.4 s demonstration.
+No actual paralysis, damage, cooldown, signature skill or dual-element changes.
+
+Reusable modules: Bolt / Charge / Projectile / Impact / Burst / Ring / Residual / Status.
+Style colors/timings/spark counts live in LightningStyle.asset.
+Three preallocated Graphic meshes share the existing HUD-safe alpha material.
+No per-spark objects, raster atlas, real-time lights, bloom or full-screen flash.
+Existing HUD fade shader preserves tall VFX continuity under enemy information.
+
+Validation: 5 samples x Bolt/Storm Final battle captures at 30 fps; unchanged HP,
+cooldowns, timeScale, actor/HUD positions; stable object counts; no dropped geometry;
+disable and battle exit cleanup passed. Existing asset hashes unchanged.
+Peak quads: Strike 3087 / Projectile 2607 / Arc 3327 / Heavy 4299 / Paralysis 961.
+Warmed Step loop allocation: 0 bytes across 1000 updates.
+Desktop Unity batch-mode Step average: 0.1854 ms, includes inactive tail frames.
+This measures geometry update only, not full rendering/GPU/frame time.
+Mobile WebGL draw-call/frame-time/device performance has NOT been measured.
+If device profiling identifies cost: reduce secondary sparks, background arcs,
+residual lifetime first; preserve main path/core/impact/essential branches.
+
+No shared skills, Bolt signature or Storm signature implemented.

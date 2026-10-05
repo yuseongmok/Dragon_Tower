@@ -22,7 +22,33 @@ MonoBehaviour:
   maxHP: 90
   attackDamage: 9
   color: {r: 0, g: 0.2666664, b: 1, a: 1}
-  battleSprite: {fileID: 21300000, guid: 24f7fa427b93a90b50463582b22996ce, type: 3}
+  battleSprite: {fileID: 468798455346260272, guid: 069c9f97619c5f8409fb43ed8bfdf197, type: 3}
+  idleFrames: {fileID: 0}
+  attackFrames: {fileID: 0}
+  skillFrames: {fileID: 0}
+  dodgeFrames: {fileID: 0}
+  hitFrames: {fileID: 0}
+  deathFrames: {fileID: 0}
+  animationSetPath: DragonAnimations/StormBase
+  basicPresentation: 0
+  elementSkillPool: {fileID: 0}
+  additionalSkillPools: []
+  signatureSkill: {fileID: 11400000, guid: acc5634616a4f1a48ac3a554932b1184, type: 2}
+  evolutionForms:
+  - stage: 1
+    displayName: "\uC2A4\uD1A0\uBA38"
+    battleSprite: {fileID: -1589348838890620568, guid: e150474457025d843b20c61e20a82d7d, type: 3}
+    animationSetPath: DragonAnimations/StormMiddle
+    defaultSkill: {fileID: 0}
+    healthMultiplier: 0
+    attackMultiplier: 0
+  - stage: 2
+    displayName: "\uC0AC\uC774\uD074\uB860"
+    battleSprite: {fileID: 185354435981488880, guid: 1cf8f495c3c81d141ad6afaeaa6bd5aa, type: 3}
+    animationSetPath: DragonAnimations/StormFinal
+    defaultSkill: {fileID: 0}
+    healthMultiplier: 0
+    attackMultiplier: 0
   intermediateEvolutionSprite: {fileID: 21300000, guid: 386a300a6fb9d7a031d0fce40b212b11, type: 3}
   finalEvolutionSprite: {fileID: 21300000, guid: 09a20704465f0f74c73a90568a1310cb, type: 3}
   evolutionSheet: {fileID: 2800000, guid: 08c1162dfaf14cc0ad11b4b91dee74a0, type: 3}

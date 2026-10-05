@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a37d10c4b83957e4c868b03176c6d57b, type: 3}
+  m_Name: skill_ascension
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
+  skillId: skill_ascension
+  displayName: "\uAC15\uB9BC"
+  description: "\uBCFC\uD2B8 \uC804\uC6A9 \xB7 \uB1CC\uC2E0\uC73C\uB85C \uAC15\uB9BC\uD558\uC5EC
+    5\uCD08 \uB3D9\uC548 \uC77C\uBC18\uACF5\uACA9 \uC801\uC911\uB9C8\uB2E4 \uBCC4\uB3C4
+    \uB099\uB8B0 \uCD94\uAC00\uD0C0."
+  elementType: 6
+  effectKind: 4
+  icon: {fileID: 21300000, guid: e8bb7abfac709e24daccf2aae85595fd, type: 3}
+  rarity: 4
+  exclusiveDragonId: volt
+  wispPresentation: 0
+  lunarPresentation: 0
+  solarPresentation: 0
+  volcanicPresentation: 0
+  genesisPresentation: 0
+  attackEmpowerDuration: 5
+  attackEmpowerDelay: 0.24
+  attackEmpowerDamage: 48
+  chargedBeam: 0
+  chargeDuration: 5
+  beamIgnitionDelay: 0.18
+  beamDuration: 5
+  protectedCastDelay: 0
+  completionDefenseDuration: 0
+  completionDefensePercent: 0
+  statusOnFinalHit: 0
+  targetCriticalBonus: 0
+  targetCriticalDuration: 0
+  hitTimeOffsets: []
+  completionHealPercent: 0
+  completionHealDelay: 0.22
+  slowBonusDamagePercent: 0
+  slowBonusDelay: 0.16
+  dodgeFreeCastDuration: 0
+  dodgeFreeAfterDuration: 0
+  finalHitDamageMultiplier: 1
+  rewardEligibilityPercent: 100
+  protectedCastDuration: 0
+  initialHitDelay: 0
+  icePresentation: 0
+  iceKind: 0
+  statusOnHit: 0
+  battleVfx: {fileID: 0}
+  vfxScale: 0.65
+  vfxOffset: {x: 0, y: 0}
+  vfxEuler: {x: 0, y: 0, z: 0}
+  vfxDuration: 1.6
+  vfxSystemLimit: 14
+  damage: 0
+  cooldown: 20
+  hitCount: 1
+  hitInterval: 0.14
+  statusEffect: 0
+  statusChancePercent: 0
+  statusDuration: 0
+  statusPower: 0

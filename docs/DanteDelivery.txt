@@ -1,0 +1,11 @@
+Dante character production — 2026-10-05
+Scope: Base/Middle/Final, six states x four frames per evolution; independent Final floating staff.
+Art: Assets/Art/Dante. Existing Light theme and combat timings reused.
+Original display names preserved: 단테 / 단테라 / 단테리엘.
+FloatingWeaponVisual is an optional data-driven presentation accessory: one shared UI material, one fixed staff sprite, per-character-frame position/angle data and smooth interpolation. No Update component or combat logic. Child of existing player visual follows dodge/recoil/visibility. Idle bob stops during Death, staff falls alongside the body.
+Final StaffCenter/StaffTip/CastingPoint resolve from the live staff transform. Existing AttackOrigin/SkillOrigin route to the staff tip only when this optional data is populated. CharacterCenter and CastingCenter remain available separately.
+Minimal integration points: optional field in DragonAnimationSet, Bind/Step and anchor lookup in BattleView. No dragon-name branch or separate controller. Existing VFX, Legendary, HUD layout, Skill Data and battle calculations unchanged.
+Legendary = NEEDS DESIGN. No Light VFX or legendary functionality implemented.
+Backups: C:/Users/PC/Documents/Codex/Dante-20261005.
+
+Validation: DANTE_VALIDATION_OK. Three evolutions, six states, exact existing clip durations, touch/mouse tap and both swipe directions, Light theme, live casting anchors, fixed staff sprite/size, idle hover, dodge recovery, disabled-parent following and existing Chrono no-accessory compatibility passed in isolated Unity battle. Middle Idle direction and Final atlas overlap corrected; Idle staff moved clear of face. No mobile WebGL device profiling performed.

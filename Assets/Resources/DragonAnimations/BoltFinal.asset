@@ -1,0 +1,748 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b28f6030f920494e94e52a53d4d9ec3, type: 3}
+  m_Name: BoltFinal
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.DragonAnimationSet
+  archetype: 2
+  anchors:
+    attackOrigin: {x: 145.27695, y: 27.652515}
+    skillOrigin: {x: 135.51695, y: 48.18316}
+    characterCenter: {x: 64.75696, y: -11.127602}
+    hitPosition: {x: 74.51695, y: -8.846428}
+    groundPosition: {x: 27.207779, y: -109.2185}
+  attachments:
+  - name: SpearTip
+    sprite: {fileID: 589767257407381059, guid: 5ee81655fcda2f94d881fe9e9ee7add1, type: 3}
+    normalizedPosition: {x: 0.821875, y: 0.628125}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: WeaponTip
+    sprite: {fileID: 589767257407381059, guid: 5ee81655fcda2f94d881fe9e9ee7add1, type: 3}
+    normalizedPosition: {x: 0.821875, y: 0.628125}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailEnd
+    sprite: {fileID: 589767257407381059, guid: 5ee81655fcda2f94d881fe9e9ee7add1, type: 3}
+    normalizedPosition: {x: 0.821875, y: 0.628125}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailStart
+    sprite: {fileID: 589767257407381059, guid: 5ee81655fcda2f94d881fe9e9ee7add1, type: 3}
+    normalizedPosition: {x: 0.54325, y: 0.30221877}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: LeftWing
+    sprite: {fileID: 589767257407381059, guid: 5ee81655fcda2f94d881fe9e9ee7add1, type: 3}
+    normalizedPosition: {x: 0.33125, y: 0.5176875}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: RightWing
+    sprite: {fileID: 589767257407381059, guid: 5ee81655fcda2f94d881fe9e9ee7add1, type: 3}
+    normalizedPosition: {x: 0.54987496, y: 0.42534375}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: SpearTip
+    sprite: {fileID: 8322198028126887825, guid: 5ee81655fcda2f94d881fe9e9ee7add1, type: 3}
+    normalizedPosition: {x: 0.828125, y: 0.625}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: WeaponTip
+    sprite: {fileID: 8322198028126887825, guid: 5ee81655fcda2f94d881fe9e9ee7add1, type: 3}
+    normalizedPosition: {x: 0.828125, y: 0.625}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailEnd
+    sprite: {fileID: 8322198028126887825, guid: 5ee81655fcda2f94d881fe9e9ee7add1, type: 3}
+    normalizedPosition: {x: 0.828125, y: 0.625}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailStart
+    sprite: {fileID: 8322198028126887825, guid: 5ee81655fcda2f94d881fe9e9ee7add1, type: 3}
+    normalizedPosition: {x: 0.54590625, y: 0.30490625}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: LeftWing
+    sprite: {fileID: 8322198028126887825, guid: 5ee81655fcda2f94d881fe9e9ee7add1, type: 3}
+    normalizedPosition: {x: 0.32890624, y: 0.5225625}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: RightWing
+    sprite: {fileID: 8322198028126887825, guid: 5ee81655fcda2f94d881fe9e9ee7add1, type: 3}
+    normalizedPosition: {x: 0.55268747, y: 0.42928123}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: SpearTip
+    sprite: {fileID: -7711102340397074067, guid: 5ee81655fcda2f94d881fe9e9ee7add1, type: 3}
+    normalizedPosition: {x: 0.834375, y: 0.628125}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: WeaponTip
+    sprite: {fileID: -7711102340397074067, guid: 5ee81655fcda2f94d881fe9e9ee7add1, type: 3}
+    normalizedPosition: {x: 0.834375, y: 0.628125}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailEnd
+    sprite: {fileID: -7711102340397074067, guid: 5ee81655fcda2f94d881fe9e9ee7add1, type: 3}
+    normalizedPosition: {x: 0.834375, y: 0.628125}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailStart
+    sprite: {fileID: -7711102340397074067, guid: 5ee81655fcda2f94d881fe9e9ee7add1, type: 3}
+    normalizedPosition: {x: 0.545, y: 0.30490625}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: LeftWing
+    sprite: {fileID: -7711102340397074067, guid: 5ee81655fcda2f94d881fe9e9ee7add1, type: 3}
+    normalizedPosition: {x: 0.325, y: 0.5225625}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: RightWing
+    sprite: {fileID: -7711102340397074067, guid: 5ee81655fcda2f94d881fe9e9ee7add1, type: 3}
+    normalizedPosition: {x: 0.551875, y: 0.42928123}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: SpearTip
+    sprite: {fileID: -5725432737169299669, guid: 5ee81655fcda2f94d881fe9e9ee7add1, type: 3}
+    normalizedPosition: {x: 0.81875, y: 0.628125}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: WeaponTip
+    sprite: {fileID: -5725432737169299669, guid: 5ee81655fcda2f94d881fe9e9ee7add1, type: 3}
+    normalizedPosition: {x: 0.81875, y: 0.628125}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailEnd
+    sprite: {fileID: -5725432737169299669, guid: 5ee81655fcda2f94d881fe9e9ee7add1, type: 3}
+    normalizedPosition: {x: 0.81875, y: 0.628125}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailStart
+    sprite: {fileID: -5725432737169299669, guid: 5ee81655fcda2f94d881fe9e9ee7add1, type: 3}
+    normalizedPosition: {x: 0.54328126, y: 0.30490625}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: LeftWing
+    sprite: {fileID: -5725432737169299669, guid: 5ee81655fcda2f94d881fe9e9ee7add1, type: 3}
+    normalizedPosition: {x: 0.33828124, y: 0.5225625}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: RightWing
+    sprite: {fileID: -5725432737169299669, guid: 5ee81655fcda2f94d881fe9e9ee7add1, type: 3}
+    normalizedPosition: {x: 0.5496875, y: 0.42928123}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: SpearTip
+    sprite: {fileID: 1175204047470821421, guid: f048eb7b4dfc50f4689c8f278e20702c, type: 3}
+    normalizedPosition: {x: 0.83750004, y: 0.578125}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: WeaponTip
+    sprite: {fileID: 1175204047470821421, guid: f048eb7b4dfc50f4689c8f278e20702c, type: 3}
+    normalizedPosition: {x: 0.83750004, y: 0.578125}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailEnd
+    sprite: {fileID: 1175204047470821421, guid: f048eb7b4dfc50f4689c8f278e20702c, type: 3}
+    normalizedPosition: {x: 0.83750004, y: 0.578125}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailStart
+    sprite: {fileID: 1175204047470821421, guid: f048eb7b4dfc50f4689c8f278e20702c, type: 3}
+    normalizedPosition: {x: 0.54634374, y: 0.29146874}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: LeftWing
+    sprite: {fileID: 1175204047470821421, guid: f048eb7b4dfc50f4689c8f278e20702c, type: 3}
+    normalizedPosition: {x: 0.32734376, y: 0.49818748}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: RightWing
+    sprite: {fileID: 1175204047470821421, guid: f048eb7b4dfc50f4689c8f278e20702c, type: 3}
+    normalizedPosition: {x: 0.5531875, y: 0.40959376}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: SpearTip
+    sprite: {fileID: 4611182108186604425, guid: f048eb7b4dfc50f4689c8f278e20702c, type: 3}
+    normalizedPosition: {x: 0.875, y: 0.35625002}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: WeaponTip
+    sprite: {fileID: 4611182108186604425, guid: f048eb7b4dfc50f4689c8f278e20702c, type: 3}
+    normalizedPosition: {x: 0.875, y: 0.35625002}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailEnd
+    sprite: {fileID: 4611182108186604425, guid: f048eb7b4dfc50f4689c8f278e20702c, type: 3}
+    normalizedPosition: {x: 0.875, y: 0.35625002}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailStart
+    sprite: {fileID: 4611182108186604425, guid: f048eb7b4dfc50f4689c8f278e20702c, type: 3}
+    normalizedPosition: {x: 0.6503125, y: 0.2820625}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: LeftWing
+    sprite: {fileID: 4611182108186604425, guid: f048eb7b4dfc50f4689c8f278e20702c, type: 3}
+    normalizedPosition: {x: 0.30859375, y: 0.481125}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: RightWing
+    sprite: {fileID: 4611182108186604425, guid: f048eb7b4dfc50f4689c8f278e20702c, type: 3}
+    normalizedPosition: {x: 0.5591875, y: 0.3958125}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: SpearTip
+    sprite: {fileID: -7079549350398359828, guid: f048eb7b4dfc50f4689c8f278e20702c, type: 3}
+    normalizedPosition: {x: 0.865625, y: 0.353125}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: WeaponTip
+    sprite: {fileID: -7079549350398359828, guid: f048eb7b4dfc50f4689c8f278e20702c, type: 3}
+    normalizedPosition: {x: 0.865625, y: 0.353125}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailEnd
+    sprite: {fileID: -7079549350398359828, guid: f048eb7b4dfc50f4689c8f278e20702c, type: 3}
+    normalizedPosition: {x: 0.865625, y: 0.353125}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailStart
+    sprite: {fileID: -7079549350398359828, guid: f048eb7b4dfc50f4689c8f278e20702c, type: 3}
+    normalizedPosition: {x: 0.6453125, y: 0.28071874}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: LeftWing
+    sprite: {fileID: -7079549350398359828, guid: f048eb7b4dfc50f4689c8f278e20702c, type: 3}
+    normalizedPosition: {x: 0.31484374, y: 0.4786875}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: RightWing
+    sprite: {fileID: -7079549350398359828, guid: f048eb7b4dfc50f4689c8f278e20702c, type: 3}
+    normalizedPosition: {x: 0.5571875, y: 0.39384374}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: SpearTip
+    sprite: {fileID: -5746857595464472208, guid: f048eb7b4dfc50f4689c8f278e20702c, type: 3}
+    normalizedPosition: {x: 0.8375, y: 0.60625}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: WeaponTip
+    sprite: {fileID: -5746857595464472208, guid: f048eb7b4dfc50f4689c8f278e20702c, type: 3}
+    normalizedPosition: {x: 0.8375, y: 0.60625}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailEnd
+    sprite: {fileID: -5746857595464472208, guid: f048eb7b4dfc50f4689c8f278e20702c, type: 3}
+    normalizedPosition: {x: 0.8375, y: 0.60625}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailStart
+    sprite: {fileID: -5746857595464472208, guid: f048eb7b4dfc50f4689c8f278e20702c, type: 3}
+    normalizedPosition: {x: 0.54590625, y: 0.2955}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: LeftWing
+    sprite: {fileID: -5746857595464472208, guid: f048eb7b4dfc50f4689c8f278e20702c, type: 3}
+    normalizedPosition: {x: 0.32890624, y: 0.50549996}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: RightWing
+    sprite: {fileID: -5746857595464472208, guid: f048eb7b4dfc50f4689c8f278e20702c, type: 3}
+    normalizedPosition: {x: 0.55268747, y: 0.4155}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: SpearTip
+    sprite: {fileID: -8028015246999244893, guid: 3621a478086718f4ead93d6fc659fdc5, type: 3}
+    normalizedPosition: {x: 0.83125, y: 0.63125}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: WeaponTip
+    sprite: {fileID: -8028015246999244893, guid: 3621a478086718f4ead93d6fc659fdc5, type: 3}
+    normalizedPosition: {x: 0.83125, y: 0.63125}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailEnd
+    sprite: {fileID: -8028015246999244893, guid: 3621a478086718f4ead93d6fc659fdc5, type: 3}
+    normalizedPosition: {x: 0.83125, y: 0.63125}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailStart
+    sprite: {fileID: -8028015246999244893, guid: 3621a478086718f4ead93d6fc659fdc5, type: 3}
+    normalizedPosition: {x: 0.5436875, y: 0.31565624}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: LeftWing
+    sprite: {fileID: -8028015246999244893, guid: 3621a478086718f4ead93d6fc659fdc5, type: 3}
+    normalizedPosition: {x: 0.3296875, y: 0.54206246}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: RightWing
+    sprite: {fileID: -8028015246999244893, guid: 3621a478086718f4ead93d6fc659fdc5, type: 3}
+    normalizedPosition: {x: 0.550375, y: 0.44503126}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: SpearTip
+    sprite: {fileID: -4994687739606023702, guid: 3621a478086718f4ead93d6fc659fdc5, type: 3}
+    normalizedPosition: {x: 0.853125, y: 0.778125}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: WeaponTip
+    sprite: {fileID: -4994687739606023702, guid: 3621a478086718f4ead93d6fc659fdc5, type: 3}
+    normalizedPosition: {x: 0.853125, y: 0.778125}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailEnd
+    sprite: {fileID: -4994687739606023702, guid: 3621a478086718f4ead93d6fc659fdc5, type: 3}
+    normalizedPosition: {x: 0.853125, y: 0.778125}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailStart
+    sprite: {fileID: -4994687739606023702, guid: 3621a478086718f4ead93d6fc659fdc5, type: 3}
+    normalizedPosition: {x: 0.54853123, y: 0.35596874}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: LeftWing
+    sprite: {fileID: -4994687739606023702, guid: 3621a478086718f4ead93d6fc659fdc5, type: 3}
+    normalizedPosition: {x: 0.31953126, y: 0.61518747}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: RightWing
+    sprite: {fileID: -4994687739606023702, guid: 3621a478086718f4ead93d6fc659fdc5, type: 3}
+    normalizedPosition: {x: 0.72028124, y: 0.50409377}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: SpearTip
+    sprite: {fileID: -1788948584358515918, guid: 3621a478086718f4ead93d6fc659fdc5, type: 3}
+    normalizedPosition: {x: 0.85, y: 0.775}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: WeaponTip
+    sprite: {fileID: -1788948584358515918, guid: 3621a478086718f4ead93d6fc659fdc5, type: 3}
+    normalizedPosition: {x: 0.85, y: 0.775}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailEnd
+    sprite: {fileID: -1788948584358515918, guid: 3621a478086718f4ead93d6fc659fdc5, type: 3}
+    normalizedPosition: {x: 0.85, y: 0.775}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailStart
+    sprite: {fileID: -1788948584358515918, guid: 3621a478086718f4ead93d6fc659fdc5, type: 3}
+    normalizedPosition: {x: 0.54675, y: 0.35865626}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: LeftWing
+    sprite: {fileID: -1788948584358515918, guid: 3621a478086718f4ead93d6fc659fdc5, type: 3}
+    normalizedPosition: {x: 0.31875, y: 0.6200625}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: RightWing
+    sprite: {fileID: -1788948584358515918, guid: 3621a478086718f4ead93d6fc659fdc5, type: 3}
+    normalizedPosition: {x: 0.71775, y: 0.50803125}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: SpearTip
+    sprite: {fileID: 8104103067563071382, guid: 3621a478086718f4ead93d6fc659fdc5, type: 3}
+    normalizedPosition: {x: 0.83125, y: 0.63125}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: WeaponTip
+    sprite: {fileID: 8104103067563071382, guid: 3621a478086718f4ead93d6fc659fdc5, type: 3}
+    normalizedPosition: {x: 0.83125, y: 0.63125}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailEnd
+    sprite: {fileID: 8104103067563071382, guid: 3621a478086718f4ead93d6fc659fdc5, type: 3}
+    normalizedPosition: {x: 0.83125, y: 0.63125}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailStart
+    sprite: {fileID: 8104103067563071382, guid: 3621a478086718f4ead93d6fc659fdc5, type: 3}
+    normalizedPosition: {x: 0.54721874, y: 0.32103124}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: LeftWing
+    sprite: {fileID: 8104103067563071382, guid: 3621a478086718f4ead93d6fc659fdc5, type: 3}
+    normalizedPosition: {x: 0.32421875, y: 0.55181247}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: RightWing
+    sprite: {fileID: 8104103067563071382, guid: 3621a478086718f4ead93d6fc659fdc5, type: 3}
+    normalizedPosition: {x: 0.5541875, y: 0.45290625}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: SpearTip
+    sprite: {fileID: -894194424822552196, guid: bd0a530b8a5940a41b0e388e3f383294, type: 3}
+    normalizedPosition: {x: 0.8375, y: 0.625}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: WeaponTip
+    sprite: {fileID: -894194424822552196, guid: bd0a530b8a5940a41b0e388e3f383294, type: 3}
+    normalizedPosition: {x: 0.8375, y: 0.625}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailEnd
+    sprite: {fileID: -894194424822552196, guid: bd0a530b8a5940a41b0e388e3f383294, type: 3}
+    normalizedPosition: {x: 0.8375, y: 0.625}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailStart
+    sprite: {fileID: -894194424822552196, guid: bd0a530b8a5940a41b0e388e3f383294, type: 3}
+    normalizedPosition: {x: 0.54590625, y: 0.31565624}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: LeftWing
+    sprite: {fileID: -894194424822552196, guid: bd0a530b8a5940a41b0e388e3f383294, type: 3}
+    normalizedPosition: {x: 0.32890624, y: 0.54206246}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: RightWing
+    sprite: {fileID: -894194424822552196, guid: bd0a530b8a5940a41b0e388e3f383294, type: 3}
+    normalizedPosition: {x: 0.55268747, y: 0.44503126}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: SpearTip
+    sprite: {fileID: 8511498775055480421, guid: bd0a530b8a5940a41b0e388e3f383294, type: 3}
+    normalizedPosition: {x: 0.86875004, y: 0.29375}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: WeaponTip
+    sprite: {fileID: 8511498775055480421, guid: bd0a530b8a5940a41b0e388e3f383294, type: 3}
+    normalizedPosition: {x: 0.86875004, y: 0.29375}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailEnd
+    sprite: {fileID: 8511498775055480421, guid: bd0a530b8a5940a41b0e388e3f383294, type: 3}
+    normalizedPosition: {x: 0.86875004, y: 0.29375}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailStart
+    sprite: {fileID: 8511498775055480421, guid: bd0a530b8a5940a41b0e388e3f383294, type: 3}
+    normalizedPosition: {x: 0.5506875, y: 0.2928125}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: LeftWing
+    sprite: {fileID: 8511498775055480421, guid: bd0a530b8a5940a41b0e388e3f383294, type: 3}
+    normalizedPosition: {x: 0.3046875, y: 0.50062495}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: RightWing
+    sprite: {fileID: 8511498775055480421, guid: bd0a530b8a5940a41b0e388e3f383294, type: 3}
+    normalizedPosition: {x: 0.558375, y: 0.4115625}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: SpearTip
+    sprite: {fileID: -4815704420212987769, guid: bd0a530b8a5940a41b0e388e3f383294, type: 3}
+    normalizedPosition: {x: 0.875, y: 0.325}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: WeaponTip
+    sprite: {fileID: -4815704420212987769, guid: bd0a530b8a5940a41b0e388e3f383294, type: 3}
+    normalizedPosition: {x: 0.875, y: 0.325}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailEnd
+    sprite: {fileID: -4815704420212987769, guid: bd0a530b8a5940a41b0e388e3f383294, type: 3}
+    normalizedPosition: {x: 0.875, y: 0.325}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailStart
+    sprite: {fileID: -4815704420212987769, guid: bd0a530b8a5940a41b0e388e3f383294, type: 3}
+    normalizedPosition: {x: 0.5515937, y: 0.3035625}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: LeftWing
+    sprite: {fileID: -4815704420212987769, guid: bd0a530b8a5940a41b0e388e3f383294, type: 3}
+    normalizedPosition: {x: 0.30859375, y: 0.520125}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: RightWing
+    sprite: {fileID: -4815704420212987769, guid: bd0a530b8a5940a41b0e388e3f383294, type: 3}
+    normalizedPosition: {x: 0.5591875, y: 0.4273125}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: SpearTip
+    sprite: {fileID: -603235624635402631, guid: bd0a530b8a5940a41b0e388e3f383294, type: 3}
+    normalizedPosition: {x: 0.84375, y: 0.634375}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: WeaponTip
+    sprite: {fileID: -603235624635402631, guid: bd0a530b8a5940a41b0e388e3f383294, type: 3}
+    normalizedPosition: {x: 0.84375, y: 0.634375}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailEnd
+    sprite: {fileID: -603235624635402631, guid: bd0a530b8a5940a41b0e388e3f383294, type: 3}
+    normalizedPosition: {x: 0.84375, y: 0.634375}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailStart
+    sprite: {fileID: -603235624635402631, guid: bd0a530b8a5940a41b0e388e3f383294, type: 3}
+    normalizedPosition: {x: 0.54765624, y: 0.317}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: LeftWing
+    sprite: {fileID: -603235624635402631, guid: bd0a530b8a5940a41b0e388e3f383294, type: 3}
+    normalizedPosition: {x: 0.32265624, y: 0.5445}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: RightWing
+    sprite: {fileID: -603235624635402631, guid: bd0a530b8a5940a41b0e388e3f383294, type: 3}
+    normalizedPosition: {x: 0.5546875, y: 0.447}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: SpearTip
+    sprite: {fileID: 4297550184667467289, guid: be9c289e858951940adee7f3ae7de5ce, type: 3}
+    normalizedPosition: {x: 0.803125, y: 0.603125}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: WeaponTip
+    sprite: {fileID: 4297550184667467289, guid: be9c289e858951940adee7f3ae7de5ce, type: 3}
+    normalizedPosition: {x: 0.803125, y: 0.603125}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailEnd
+    sprite: {fileID: 4297550184667467289, guid: be9c289e858951940adee7f3ae7de5ce, type: 3}
+    normalizedPosition: {x: 0.803125, y: 0.603125}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailStart
+    sprite: {fileID: 4297550184667467289, guid: be9c289e858951940adee7f3ae7de5ce, type: 3}
+    normalizedPosition: {x: 0.54415625, y: 0.30759376}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: LeftWing
+    sprite: {fileID: 4297550184667467289, guid: be9c289e858951940adee7f3ae7de5ce, type: 3}
+    normalizedPosition: {x: 0.33515626, y: 0.5274375}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: RightWing
+    sprite: {fileID: 4297550184667467289, guid: be9c289e858951940adee7f3ae7de5ce, type: 3}
+    normalizedPosition: {x: 0.5506875, y: 0.43321875}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: SpearTip
+    sprite: {fileID: -5544545284801848377, guid: be9c289e858951940adee7f3ae7de5ce, type: 3}
+    normalizedPosition: {x: 0.79062504, y: 0.65625}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: WeaponTip
+    sprite: {fileID: -5544545284801848377, guid: be9c289e858951940adee7f3ae7de5ce, type: 3}
+    normalizedPosition: {x: 0.79062504, y: 0.65625}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailEnd
+    sprite: {fileID: -5544545284801848377, guid: be9c289e858951940adee7f3ae7de5ce, type: 3}
+    normalizedPosition: {x: 0.79062504, y: 0.65625}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailStart
+    sprite: {fileID: -5544545284801848377, guid: be9c289e858951940adee7f3ae7de5ce, type: 3}
+    normalizedPosition: {x: 0.540625, y: 0.31431252}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: LeftWing
+    sprite: {fileID: -5544545284801848377, guid: be9c289e858951940adee7f3ae7de5ce, type: 3}
+    normalizedPosition: {x: 0.340625, y: 0.539625}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: RightWing
+    sprite: {fileID: -5544545284801848377, guid: be9c289e858951940adee7f3ae7de5ce, type: 3}
+    normalizedPosition: {x: 0.546875, y: 0.44306248}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: SpearTip
+    sprite: {fileID: 356905639199649961, guid: be9c289e858951940adee7f3ae7de5ce, type: 3}
+    normalizedPosition: {x: 0.828125, y: 0.609375}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: WeaponTip
+    sprite: {fileID: 356905639199649961, guid: be9c289e858951940adee7f3ae7de5ce, type: 3}
+    normalizedPosition: {x: 0.828125, y: 0.609375}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailEnd
+    sprite: {fileID: 356905639199649961, guid: be9c289e858951940adee7f3ae7de5ce, type: 3}
+    normalizedPosition: {x: 0.828125, y: 0.609375}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailStart
+    sprite: {fileID: 356905639199649961, guid: be9c289e858951940adee7f3ae7de5ce, type: 3}
+    normalizedPosition: {x: 0.545875, y: 0.3089375}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: LeftWing
+    sprite: {fileID: 356905639199649961, guid: be9c289e858951940adee7f3ae7de5ce, type: 3}
+    normalizedPosition: {x: 0.321875, y: 0.529875}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: RightWing
+    sprite: {fileID: 356905639199649961, guid: be9c289e858951940adee7f3ae7de5ce, type: 3}
+    normalizedPosition: {x: 0.552875, y: 0.4351875}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: SpearTip
+    sprite: {fileID: -6586266322382282814, guid: be9c289e858951940adee7f3ae7de5ce, type: 3}
+    normalizedPosition: {x: 0.825, y: 0.6}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: WeaponTip
+    sprite: {fileID: -6586266322382282814, guid: be9c289e858951940adee7f3ae7de5ce, type: 3}
+    normalizedPosition: {x: 0.825, y: 0.6}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailEnd
+    sprite: {fileID: -6586266322382282814, guid: be9c289e858951940adee7f3ae7de5ce, type: 3}
+    normalizedPosition: {x: 0.825, y: 0.6}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailStart
+    sprite: {fileID: -6586266322382282814, guid: be9c289e858951940adee7f3ae7de5ce, type: 3}
+    normalizedPosition: {x: 0.54590625, y: 0.30759376}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: LeftWing
+    sprite: {fileID: -6586266322382282814, guid: be9c289e858951940adee7f3ae7de5ce, type: 3}
+    normalizedPosition: {x: 0.32890624, y: 0.5274375}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: RightWing
+    sprite: {fileID: -6586266322382282814, guid: be9c289e858951940adee7f3ae7de5ce, type: 3}
+    normalizedPosition: {x: 0.55268747, y: 0.43321875}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: SpearTip
+    sprite: {fileID: -447582488540365858, guid: a7a3a7fac50b5bd49bddfef1dff088d2, type: 3}
+    normalizedPosition: {x: 0.821875, y: 0.484375}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: WeaponTip
+    sprite: {fileID: -447582488540365858, guid: a7a3a7fac50b5bd49bddfef1dff088d2, type: 3}
+    normalizedPosition: {x: 0.821875, y: 0.484375}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailEnd
+    sprite: {fileID: -447582488540365858, guid: a7a3a7fac50b5bd49bddfef1dff088d2, type: 3}
+    normalizedPosition: {x: 0.821875, y: 0.484375}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailStart
+    sprite: {fileID: -447582488540365858, guid: a7a3a7fac50b5bd49bddfef1dff088d2, type: 3}
+    normalizedPosition: {x: 0.54634374, y: 0.3035625}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: LeftWing
+    sprite: {fileID: -447582488540365858, guid: a7a3a7fac50b5bd49bddfef1dff088d2, type: 3}
+    normalizedPosition: {x: 0.32734376, y: 0.520125}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: RightWing
+    sprite: {fileID: -447582488540365858, guid: a7a3a7fac50b5bd49bddfef1dff088d2, type: 3}
+    normalizedPosition: {x: 0.5531875, y: 0.4273125}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: SpearTip
+    sprite: {fileID: 1893333008420814898, guid: a7a3a7fac50b5bd49bddfef1dff088d2, type: 3}
+    normalizedPosition: {x: 0.853125, y: 0.140625}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: WeaponTip
+    sprite: {fileID: 1893333008420814898, guid: a7a3a7fac50b5bd49bddfef1dff088d2, type: 3}
+    normalizedPosition: {x: 0.853125, y: 0.140625}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailEnd
+    sprite: {fileID: 1893333008420814898, guid: a7a3a7fac50b5bd49bddfef1dff088d2, type: 3}
+    normalizedPosition: {x: 0.853125, y: 0.140625}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailStart
+    sprite: {fileID: 1893333008420814898, guid: a7a3a7fac50b5bd49bddfef1dff088d2, type: 3}
+    normalizedPosition: {x: 0.5485, y: 0.28071874}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: LeftWing
+    sprite: {fileID: 1893333008420814898, guid: a7a3a7fac50b5bd49bddfef1dff088d2, type: 3}
+    normalizedPosition: {x: 0.3125, y: 0.4786875}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: RightWing
+    sprite: {fileID: 1893333008420814898, guid: a7a3a7fac50b5bd49bddfef1dff088d2, type: 3}
+    normalizedPosition: {x: 0.555875, y: 0.39384374}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: SpearTip
+    sprite: {fileID: -2620273980946482323, guid: a7a3a7fac50b5bd49bddfef1dff088d2, type: 3}
+    normalizedPosition: {x: 0.840625, y: 0.109375}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: WeaponTip
+    sprite: {fileID: -2620273980946482323, guid: a7a3a7fac50b5bd49bddfef1dff088d2, type: 3}
+    normalizedPosition: {x: 0.840625, y: 0.109375}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailEnd
+    sprite: {fileID: -2620273980946482323, guid: a7a3a7fac50b5bd49bddfef1dff088d2, type: 3}
+    normalizedPosition: {x: 0.840625, y: 0.109375}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailStart
+    sprite: {fileID: -2620273980946482323, guid: a7a3a7fac50b5bd49bddfef1dff088d2, type: 3}
+    normalizedPosition: {x: 0.5463125, y: 0.09525}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: LeftWing
+    sprite: {fileID: -2620273980946482323, guid: a7a3a7fac50b5bd49bddfef1dff088d2, type: 3}
+    normalizedPosition: {x: 0.3203125, y: 0.285}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: RightWing
+    sprite: {fileID: -2620273980946482323, guid: a7a3a7fac50b5bd49bddfef1dff088d2, type: 3}
+    normalizedPosition: {x: 0.553375, y: 0.2025}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: SpearTip
+    sprite: {fileID: -3451812245834824129, guid: a7a3a7fac50b5bd49bddfef1dff088d2, type: 3}
+    normalizedPosition: {x: 0.82187504, y: 0.090624996}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 1
+  - name: WeaponTip
+    sprite: {fileID: -3451812245834824129, guid: a7a3a7fac50b5bd49bddfef1dff088d2, type: 3}
+    normalizedPosition: {x: 0.82187504, y: 0.090624996}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailEnd
+    sprite: {fileID: -3451812245834824129, guid: a7a3a7fac50b5bd49bddfef1dff088d2, type: 3}
+    normalizedPosition: {x: 0.82187504, y: 0.090624996}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: WeaponTrailStart
+    sprite: {fileID: -3451812245834824129, guid: a7a3a7fac50b5bd49bddfef1dff088d2, type: 3}
+    normalizedPosition: {x: 0.545875, y: 0.090875}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: LeftWing
+    sprite: {fileID: -3451812245834824129, guid: a7a3a7fac50b5bd49bddfef1dff088d2, type: 3}
+    normalizedPosition: {x: 0.321875, y: 0.26625}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: RightWing
+    sprite: {fileID: -3451812245834824129, guid: a7a3a7fac50b5bd49bddfef1dff088d2, type: 3}
+    normalizedPosition: {x: 0.552875, y: 0.19}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  idle: {fileID: 11400000, guid: ab85cb71eb612974d8f34e85265793c2, type: 2}
+  attack: {fileID: 11400000, guid: e3e2f3621927d104db12a7db2907a6e5, type: 2}
+  skill: {fileID: 11400000, guid: 748b2765e06c25c409e4ee0c5286aeb6, type: 2}
+  dodge: {fileID: 11400000, guid: e51924520a71e374a85a8b5880a476c4, type: 2}
+  hit: {fileID: 11400000, guid: 781f69b13246ca9498d2d7ebf60bd6fc, type: 2}
+  death: {fileID: 11400000, guid: 5e115141eeb7aad4f8f43333f922dd36, type: 2}

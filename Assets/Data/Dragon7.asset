@@ -22,19 +22,33 @@ MonoBehaviour:
   maxHP: 90
   attackDamage: 9
   color: {r: 1, g: 0.90783745, b: 0.4009434, a: 1}
-  battleSprite: {fileID: 21300000, guid: e250006ecdbe4d7a81214bec06554c1e, type: 3}
+  battleSprite: {fileID: 584541929019729782, guid: 5502d70cfe64c8547a510556c61e86b4, type: 3}
   idleFrames: {fileID: 0}
   attackFrames: {fileID: 0}
   skillFrames: {fileID: 0}
   dodgeFrames: {fileID: 0}
   hitFrames: {fileID: 0}
   deathFrames: {fileID: 0}
-  animationSetPath: 
+  animationSetPath: DragonAnimations/DanteBase
   basicPresentation: 0
   elementSkillPool: {fileID: 0}
   additionalSkillPools: []
   signatureSkill: {fileID: 0}
-  evolutionForms: []
+  evolutionForms:
+  - stage: 1
+    displayName: "\uB2E8\uD14C\uB77C"
+    battleSprite: {fileID: -1014390753673677515, guid: 5a0fd55b4d58aee4ca81f775978f7891, type: 3}
+    animationSetPath: DragonAnimations/DanteMiddle
+    defaultSkill: {fileID: 0}
+    healthMultiplier: 0
+    attackMultiplier: 0
+  - stage: 2
+    displayName: "\uB2E8\uD14C\uB9AC\uC5D8"
+    battleSprite: {fileID: -5816084425716679313, guid: 976ae3036f10a0b409196e128477e35a, type: 3}
+    animationSetPath: DragonAnimations/DanteFinal
+    defaultSkill: {fileID: 0}
+    healthMultiplier: 0
+    attackMultiplier: 0
   intermediateEvolutionSprite: {fileID: 21300000, guid: 92b18bb471526af25a4543d0ff3c476f, type: 3}
   finalEvolutionSprite: {fileID: 21300000, guid: 208c406a71306b7a12f4cecb1c84ea54, type: 3}
   evolutionSheet: {fileID: 2800000, guid: ba6a2afca01e473d9879337b8ae5dee8, type: 3}

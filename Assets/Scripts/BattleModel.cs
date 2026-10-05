@@ -45,6 +45,8 @@ namespace DragonTower
     }
     public sealed class SkillStats
     {
+        public bool useSecondaryElement;public ElementType secondaryElement;
+        public float attackEmpowerDuration,attackEmpowerDelay;public int attackEmpowerDamage;
         public bool chargedBeam;public float chargeDuration=5,beamIgnitionDelay=.18f,beamDuration=5;
         public bool statusOnFinalHit;public float targetCriticalBonus,targetCriticalDuration;public float[] hitTimeOffsets;
         public bool HasCustomTiming {get{if(hitTimeOffsets==null||hitTimeOffsets.Length!=hitCount)return false;float last=-1;foreach(float t in hitTimeOffsets){if(float.IsNaN(t)||float.IsInfinity(t)||t<0||t<=last)return false;last=t;}return Math.Abs(hitTimeOffsets[0]-initialHitDelay)<.0001f;}}
@@ -97,7 +99,7 @@ namespace DragonTower
             bossPattern=EnemyBossPattern.EarthShatter,patternEveryAttacks=4,patternIntervalMultiplier=1.3f,patternDamageMultiplier=1.6f};
     }
     public enum BattleResult { Fighting, Victory, Defeat }
-    public enum CombatCue { Attack, Skill, SkillHit, Dodge, EnemyHit, EnemyMiss, BossSkill, PlayerStatusHit, SkillCast, SkillBonusHit, SkillHeal, ChargeFailed, BeamPrimed, BeamStarted, BeamEnded }
+    public enum CombatCue { Attack, Skill, SkillHit, Dodge, EnemyHit, EnemyMiss, BossSkill, PlayerStatusHit, SkillCast, SkillBonusHit, SkillHeal, ChargeFailed, BeamPrimed, BeamStarted, BeamEnded, EmpowerStarted, EmpowerEnded, EmpoweredAttackHit }
     // Pure combat rules: no scene dependencies; can be tested without rendering.
     public sealed partial class BattleModel
     {
@@ -169,13 +171,14 @@ namespace DragonTower
             if(float.IsNaN(delta)||float.IsInfinity(delta)||delta<=0)return;
             double remaining=delta;
             while(remaining>0.0000001&&(Result==BattleResult.Fighting||CompletionHealPending))
-            {double step=ChargedBeamStep(Math.Min(.05,remaining));TickCompletionHeal(step);TickStep(step);remaining-=step;}
+            {double step=AttackEmpowerStep(ChargedBeamStep(Math.Min(.05,remaining)));TickCompletionHeal(step);TickStep(step);remaining-=step;}
         }
         void TickStep(double delta)
         {
             if (Result != BattleResult.Fighting || delta <= 0) return;
             SlowPlayerCooldowns(delta);
             Time += delta;
+            TickAttackEmpower();
             TickAreaMechanics();
             if(Result!=BattleResult.Fighting)return;
             if(Time>=shieldUntil)shieldHP=0;
@@ -308,6 +311,7 @@ namespace DragonTower
             if(Dragon.passiveMechanic==DragonPassiveMechanic.Tentacle&&Roll(Passive(20)))total+=RawExtra(damage,Passive(10));
             TriggerAttackStatus();
             Cue?.Invoke(CombatCue.Attack,total);
+            ApplyEmpoweredAttack(damage);
             Feedback?.Invoke((ElementRules.HasAdvantage(Dragon.elementType,Enemy.elementType)?"상성 우위!  ":"")+(critical?"치명타!  ":"")+"기본 공격!  −" + total);
             return true;
         }
@@ -319,6 +323,7 @@ namespace DragonTower
             SkillReady = Time+(Time<noSkillCooldownUntil?0:Math.Max(0,Dragon.skill.cooldown)*(Time<firstAidUntil?.5f:1f));
             if(PlayerActionMissed(true))return true;
             if(Dragon.skill.chargedBeam)return BeginChargedBeam();
+            if(Dragon.skill.attackEmpowerDuration>0)return BeginAttackEmpower();
             skillCastTime=Time;resolvedCastHits=0;
             BeginSlowSignature();
             protectedSkillUntil=Time+Math.Max(0,Dragon.skill.protectedCastDuration);protectedSkillFrom=Time+Math.Max(0,Dragon.skill.protectedCastDelay);
@@ -346,17 +351,18 @@ namespace DragonTower
             if(cost>0)Feedback?.Invoke(Dragon.skill.displayName+" · HP 소모");
             return true;
         }
+        public ElementType EffectiveSkillElement=>Dragon.skill.useSecondaryElement&&ElementRules.HasAdvantage(Dragon.skill.secondaryElement,Enemy.elementType)&&!ElementRules.HasAdvantage(Dragon.skill.elementType,Enemy.elementType)?Dragon.skill.secondaryElement:Dragon.skill.elementType;
         void PerformSkillHit(bool first)
         {
             bool critical;int baseDamage=Dragon.skill.damage;
             if(pendingSkillHits<=1||(pendingFirstSkillHit==false&&Dragon.skill.initialHitDelay>0&&(pendingSkillHits-1)%Math.Max(1,Dragon.skill.hitCount)==0))baseDamage=Math.Max(1,(int)Math.Round(baseDamage*Math.Max(1,Dragon.skill.finalHitDamageMultiplier)));
-            int damage=Hit(baseDamage,Dragon.skill.elementType,true,out critical);
+            int damage=Hit(baseDamage,EffectiveSkillElement,true,out critical);
             QueueSlowSignatureBonus(baseDamage);
             if(Dragon.skill.statusOnHit&&!Dragon.skill.statusOnFinalHit&&Result==BattleResult.Fighting)ApplySkillStatus();
             resolvedCastHits++;ApplyFinalTargetModifier(damage);NotifyCompletionDefenseHit();
             ResolvingSkillHit=true;
             try{Cue?.Invoke(first?CombatCue.Skill:CombatCue.SkillHit,damage);}finally{ResolvingSkillHit=false;}
-            Feedback?.Invoke((ElementRules.HasAdvantage(Dragon.skill.elementType,Enemy.elementType)?"상성 우위!  ":"")+(critical?"치명타!  ":"")+Dragon.skill.displayName+"!  −"+damage);
+            Feedback?.Invoke((ElementRules.HasAdvantage(EffectiveSkillElement,Enemy.elementType)?"상성 우위!  ":"")+(critical?"치명타!  ":"")+Dragon.skill.displayName+"!  −"+damage);
             NotifyCompletionHit(damage);
             if(Result!=BattleResult.Fighting)pendingSkillHits=0;
         }

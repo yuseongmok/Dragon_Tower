@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f2bcd92b58824d4583930abf14b0dd8, type: 3}
+  m_Name: Idle
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.DragonIdleFrames
+  frames:
+  - {fileID: 185354435981488880, guid: 1cf8f495c3c81d141ad6afaeaa6bd5aa, type: 3}
+  - {fileID: -3735601032041292447, guid: 1cf8f495c3c81d141ad6afaeaa6bd5aa, type: 3}
+  - {fileID: 8041755297608944659, guid: 1cf8f495c3c81d141ad6afaeaa6bd5aa, type: 3}
+  - {fileID: -647473958963633215, guid: 1cf8f495c3c81d141ad6afaeaa6bd5aa, type: 3}
+  durations:
+  - 0.6
+  - 0.2
+  - 0.12
+  - 0.28
+  offsets:
+  - {x: 0.22614476, y: 0.26335755}
+  - {x: 0.18885808, y: 0.25751016}
+  - {x: 0.19925782, y: 0.26335755}
+  - {x: 0.19310649, y: 0.26335755}
+  displayScale: 1.4969325

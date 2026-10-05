@@ -1,0 +1,7 @@
+using System.Linq;using UnityEditor;using UnityEngine;
+namespace DragonTower.Editor {
+ public static class AscensionSetup {
+  public const string SkillPath="Assets/Data/Skills/skill_ascension.asset";
+  public static void Install(){AssetDatabase.Refresh();var im=(TextureImporter)AssetImporter.GetAtPath("Assets/Art/Ascension/AscensionIcon.png");im.textureType=TextureImporterType.Sprite;im.spriteImportMode=SpriteImportMode.Single;im.filterMode=FilterMode.Point;im.mipmapEnabled=false;im.maxTextureSize=128;im.textureCompression=TextureImporterCompression.Uncompressed;im.SaveAndReimport();var s=AssetDatabase.LoadAssetAtPath<SkillData>(SkillPath);if(s==null){s=ScriptableObject.CreateInstance<SkillData>();AssetDatabase.CreateAsset(s,SkillPath);s.cooldown=20;s.attackEmpowerDamage=48;}s.skillId="skill_ascension";s.displayName="강림";s.description="볼트 전용 · 뇌신으로 강림하여 5초 동안 일반공격 적중마다 별도 낙뢰 추가타.";s.elementType=ElementType.Lightning;s.effectKind=SkillEffectKind.Lightning;s.rarity=ContentRarity.Legendary;s.exclusiveDragonId="volt";s.attackEmpowerDelay=.24f;s.attackEmpowerDuration=5;s.damage=0;s.icon=AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/Ascension/AscensionIcon.png");EditorUtility.SetDirty(s);var d=AssetDatabase.LoadAssetAtPath<DragonData>("Assets/Data/Dragon4.asset");d.signatureSkill=s;EditorUtility.SetDirty(d);var db=AssetDatabase.LoadAssetAtPath<ContentDatabase>("Assets/Resources/ContentDatabase.asset");if(!db.skills.Contains(s)){db.skills=db.skills.Concat(new[]{s}).ToArray();EditorUtility.SetDirty(db);}AssetDatabase.SaveAssets();}
+ }
+}
