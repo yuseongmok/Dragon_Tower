@@ -95,6 +95,7 @@ namespace DragonTower
                 if(Dodge())Feedback?.Invoke("돌풍! 자동 회피 발동 · 회피 쿨타임 소모");
                 nextWindAt=Time+7+random()*3;
             }
+            if(EnemyTimeStopped)return;
             bool timed=Enemy.bossPattern==EnemyBossPattern.FrostRecovery||Enemy.bossPattern==EnemyBossPattern.AzazelSeals||Enemy.bossPattern==EnemyBossPattern.UrielReflection;
             if(!timed)return;
             if(!specialWarning&&Time>=nextSpecialAt-1.2)

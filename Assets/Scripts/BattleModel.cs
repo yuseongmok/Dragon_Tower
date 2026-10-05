@@ -45,6 +45,8 @@ namespace DragonTower
     }
     public sealed class SkillStats
     {
+        public bool celestialSignature;public int celestialExtraDamage=42;
+        public bool timeDomain;public float timeDomainDelay=.24f,timeDomainDuration=5;
         public bool useSecondaryElement;public ElementType secondaryElement;
         public float attackEmpowerDuration,attackEmpowerDelay;public int attackEmpowerDamage;
         public bool chargedBeam;public float chargeDuration=5,beamIgnitionDelay=.18f,beamDuration=5;
@@ -73,6 +75,7 @@ namespace DragonTower
     }
     public sealed class BattleEnemyStats
     {
+        public bool timeStopImmune;public float timeStopDurationMultiplier=1;
         public int floor=1;
         public float specialPatternInterval=11,specialPatternDuration=3,barrierHealPercent=12,reflectionPercent=20;
         public string displayName;public ElementType elementType;public int maxHP,damage;public float interval;
@@ -99,7 +102,7 @@ namespace DragonTower
             bossPattern=EnemyBossPattern.EarthShatter,patternEveryAttacks=4,patternIntervalMultiplier=1.3f,patternDamageMultiplier=1.6f};
     }
     public enum BattleResult { Fighting, Victory, Defeat }
-    public enum CombatCue { Attack, Skill, SkillHit, Dodge, EnemyHit, EnemyMiss, BossSkill, PlayerStatusHit, SkillCast, SkillBonusHit, SkillHeal, ChargeFailed, BeamPrimed, BeamStarted, BeamEnded, EmpowerStarted, EmpowerEnded, EmpoweredAttackHit }
+    public enum CombatCue { Attack, Skill, SkillHit, Dodge, EnemyHit, EnemyMiss, BossSkill, PlayerStatusHit, SkillCast, SkillBonusHit, SkillHeal, ChargeFailed, BeamPrimed, BeamStarted, BeamEnded, EmpowerStarted, EmpowerEnded, EmpoweredAttackHit, TimeStopped, TimeStored, TimeReleased, CelestialPrimed, CelestialExtraHit }
     // Pure combat rules: no scene dependencies; can be tested without rendering.
     public sealed partial class BattleModel
     {
@@ -119,7 +122,7 @@ namespace DragonTower
         public int EnemyShieldMaxHP { get; private set; }
         public double EnemyShieldRemaining => enemyShieldHP>0?Math.Max(0,enemyShieldUntil-Time):0;
         public bool PassiveConsumed { get; private set; }
-        public bool CanUseSkill => Result==BattleResult.Fighting&&!ChargedBeamBusy&&ChargeCooldownReady&&!SignatureCastLocked&&(string.IsNullOrEmpty(Dragon.skill.exclusiveDragonId)||Dragon.skill.exclusiveDragonId==Dragon.speciesId)&&!PlayerStunned&&!PlayerSkillSealed&&!Dragon.skillDisabled&&(Time>=SkillReady||Dragon.passiveMechanic==DragonPassiveMechanic.VoidAccelerator);
+        public bool CanUseSkill => Result==BattleResult.Fighting&&!TimeDomainBusy&&!ChargedBeamBusy&&ChargeCooldownReady&&!SignatureCastLocked&&(string.IsNullOrEmpty(Dragon.skill.exclusiveDragonId)||Dragon.skill.exclusiveDragonId==Dragon.speciesId)&&!PlayerStunned&&!PlayerSkillSealed&&!Dragon.skillDisabled&&(Time>=SkillReady||Dragon.passiveMechanic==DragonPassiveMechanic.VoidAccelerator);
         double protectedSkillUntil,protectedSkillFrom;
         public bool SignatureCastLocked=>Result==BattleResult.Fighting&&Time<protectedSkillUntil;
         public bool ProtectedSkillActive=>SignatureCastLocked&&Time>=protectedSkillFrom;
@@ -171,13 +174,16 @@ namespace DragonTower
             if(float.IsNaN(delta)||float.IsInfinity(delta)||delta<=0)return;
             double remaining=delta;
             while(remaining>0.0000001&&(Result==BattleResult.Fighting||CompletionHealPending))
-            {double step=AttackEmpowerStep(ChargedBeamStep(Math.Min(.05,remaining)));TickCompletionHeal(step);TickStep(step);remaining-=step;}
+            {double step=CelestialStep(TimeDomainStep(AttackEmpowerStep(ChargedBeamStep(Math.Min(.05,remaining)))));TickCompletionHeal(step);TickStep(step);if(Result!=BattleResult.Fighting){CancelTimeDomain();CancelCelestial();}remaining-=step;}
         }
         void TickStep(double delta)
         {
             if (Result != BattleResult.Fighting || delta <= 0) return;
             SlowPlayerCooldowns(delta);
+            PauseEnemyTime(delta);
             Time += delta;
+            TickTimeDomain();
+            if(Result!=BattleResult.Fighting)return;
             TickAttackEmpower();
             TickAreaMechanics();
             if(Result!=BattleResult.Fighting)return;
@@ -190,6 +196,7 @@ namespace DragonTower
                 if(Result!=BattleResult.Fighting){pendingSkillHits=0;break;}
                 pendingSkillHits--;if(Dragon.skill.HasCustomTiming)nextSkillHit=skillCastTime+Dragon.skill.HitOffset(resolvedCastHits);else nextSkillHit+=Math.Max(.03f,Dragon.skill.hitInterval);
             }
+            TickCelestial();
             TickSlowSignature();
             while(burnNext>0&&burnNext<=Time&&burnNext<=burnUntil&&Result==BattleResult.Fighting)
             {
@@ -210,7 +217,7 @@ namespace DragonTower
                 int damage=ElementalExtra(Dragon.skill.damage,meteor.primaryValue*Math.Max(1,meteor.stacks),ElementType.Fire);meteorNext+=10;
                 Cue?.Invoke(CombatCue.SkillHit,damage);Feedback?.Invoke("운석 파편 추가 공격  −"+damage);
             }
-            while (NextEnemyStrike <= Time && Result == BattleResult.Fighting)
+            while (!EnemyTimeStopped && NextEnemyStrike <= Time && Result == BattleResult.Fighting)
             {
                 if(Time<stunUntil){NextEnemyStrike=Math.Max(NextEnemyStrike,stunUntil+enemyWindupDuration);break;}
                 bool paralyzed=EnemyParalyzed&&Roll(20);
@@ -295,7 +302,7 @@ namespace DragonTower
             if (Result != BattleResult.Fighting || PlayerStunned || PlayerAttackSealed || Time < AttackReady) return false;
             AttackReady = Time + AttackCooldownNow();
             if(PlayerActionMissed(false))return true;
-            bool critical;int damage;
+            bool storing=EnemyTimeStopped;bool critical;int damage;
             if(Dragon.passiveMechanic==DragonPassiveMechanic.RuyiOrb){int boosted=Percent(Dragon.attackDamage,Dragon.passiveStage*10);int first=Math.Max(1,boosted/2),second=Math.Max(1,boosted-first);damage=Hit(first,Dragon.elementType,false,out critical);bool secondCritical;damage+=Hit(second,Dragon.elementType,false,out secondCritical);critical|=secondCritical;}
             else damage=Hit(Dragon.attackDamage,Dragon.elementType,false,out critical);
             if(Result==BattleResult.Defeat)return true;
@@ -310,9 +317,10 @@ namespace DragonTower
             var rapid=Rule(AugmentMechanic.RapidFireInstinct);if(rapid!=null&&attackHits%Math.Max(1,rapid.triggerCount)==0){rapidUntil=Time+rapid.duration;AttackReady=Time+Math.Max(0,AttackReady-Time)*(1-rapid.primaryValue/100f);}
             if(Dragon.passiveMechanic==DragonPassiveMechanic.Tentacle&&Roll(Passive(20)))total+=RawExtra(damage,Passive(10));
             TriggerAttackStatus();
-            Cue?.Invoke(CombatCue.Attack,total);
+            if(storing){Cue?.Invoke(CombatCue.TimeStored,damage);if(total>damage)Cue?.Invoke(CombatCue.SkillBonusHit,total-damage);}else Cue?.Invoke(CombatCue.Attack,total);
             ApplyEmpoweredAttack(damage);
-            Feedback?.Invoke((ElementRules.HasAdvantage(Dragon.elementType,Enemy.elementType)?"상성 우위!  ":"")+(critical?"치명타!  ":"")+"기본 공격!  −" + total);
+            ApplyCelestialBasicHit(damage);
+            if(storing)Feedback?.Invoke("시간 속에 기본 공격 저장 +"+damage);else Feedback?.Invoke((ElementRules.HasAdvantage(Dragon.elementType,Enemy.elementType)?"상성 우위!  ":"")+(critical?"치명타!  ":"")+"기본 공격!  −" + total);
             return true;
         }
         public bool Skill()
@@ -321,7 +329,10 @@ namespace DragonTower
             bool overcast=Time<SkillReady&&Dragon.passiveMechanic==DragonPassiveMechanic.VoidAccelerator;
             if(overcast){float costPercent=Math.Max(6,10-Dragon.passiveStage*2);int overcastCost=Math.Max(1,(int)Math.Ceiling(Dragon.maxHP*costPercent/100f));PlayerHP=Math.Max(1,PlayerHP-overcastCost);Feedback?.Invoke("공허 가속기 · HP "+overcastCost+" 소모");}
             SkillReady = Time+(Time<noSkillCooldownUntil?0:Math.Max(0,Dragon.skill.cooldown)*(Time<firstAidUntil?.5f:1f));
+            if(Dragon.skill.celestialSignature)CancelCelestial();
             if(PlayerActionMissed(true))return true;
+            if(Dragon.skill.celestialSignature)ArmCelestial();
+            if(Dragon.skill.timeDomain)return BeginTimeDomain();
             if(Dragon.skill.chargedBeam)return BeginChargedBeam();
             if(Dragon.skill.attackEmpowerDuration>0)return BeginAttackEmpower();
             skillCastTime=Time;resolvedCastHits=0;
@@ -446,7 +457,7 @@ namespace DragonTower
             }
             Feedback?.Invoke(item.displayName+" 사용!");return true;
         }
-        int Hit(int baseDamage,ElementType element,bool skill,out bool critical)
+        int Hit(int baseDamage,ElementType element,bool skill,out bool critical,bool calculateOnly=false)
         {
             int damage=ElementRules.Damage(baseDamage,element,Enemy.elementType);
             if(skill&&Time<skillDamageBuffUntil)damage=Percent(damage,skillDamageBuffPercent);
@@ -456,6 +467,8 @@ namespace DragonTower
             var mark=ItemRule(ItemMechanic.ExecutionerMark);if(mark!=null&&EnemyHP<=Enemy.maxHP*.4f)damage=Percent(damage,mark.primaryValue*Math.Max(1,mark.stacks));
             float chance=EffectiveCriticalChancePercent;
             critical=Roll(chance);if(critical)damage=Math.Max(1,(int)Math.Round(damage*Dragon.criticalDamage,MidpointRounding.AwayFromZero));
+            if(calculateOnly)return damage;
+            if(!skill&&EnemyTimeStopped){storedBasicDamage=checked(storedBasicDamage+damage);storedBasicHits++;return damage;}
             damage=DamageEnemy(damage);
             if (EnemyHP == 0 && Result==BattleResult.Fighting) Result = BattleResult.Victory;
             return damage;

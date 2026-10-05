@@ -26,11 +26,12 @@ namespace DragonTower
         RectTransform parent;
         float clock;
         Vector2 position;
-        float angle;
+        float angle,castingWeight,castingAngle;Vector2 castingPosition;
+        public void SetCastingPose(float weight,Vector2 target,float rotation){castingWeight=Mathf.Clamp01(weight);castingPosition=target;castingAngle=rotation;if(Active)Apply(FindPose());}
         public bool Active=>data!=null&&image!=null&&image.gameObject.activeInHierarchy;
         public void Bind(FloatingWeaponData value,Image character,RectTransform root)
         {
-            data=value;actor=character;parent=root;clock=0;
+            data=value;actor=character;parent=root;clock=0;castingWeight=0;
             if(data==null||data.sprite==null){data=null;if(image!=null)image.gameObject.SetActive(false);return;}
             if(image==null){var go=new GameObject("Floating weapon",typeof(RectTransform),typeof(Image));image=go.GetComponent<Image>();image.raycastTarget=false;image.preserveAspect=true;}
             var r=image.rectTransform;r.SetParent(root,false);r.anchorMin=r.anchorMax=r.pivot=Vector2.one*.5f;
@@ -51,8 +52,8 @@ namespace DragonTower
         void Apply(FloatingWeaponPose pose)
         {
             bool hover=pose==null||pose.hover;
-            image.rectTransform.anchoredPosition=Vector2.Scale(position+new Vector2(0,hover?Mathf.Sin(clock*2.4f)*2.3f:0),parent.rect.size/256f);
-            image.rectTransform.localRotation=Quaternion.Euler(0,0,angle+(hover?Mathf.Sin(clock*1.7f)*1.6f:0));
+            image.rectTransform.anchoredPosition=Vector2.Scale(Vector2.Lerp(position,castingPosition,castingWeight)+new Vector2(0,hover?Mathf.Sin(clock*2.4f)*2.3f:0),parent.rect.size/256f);
+            image.rectTransform.localRotation=Quaternion.Euler(0,0,Mathf.LerpAngle(angle,castingAngle,castingWeight)+(hover?Mathf.Sin(clock*1.7f)*1.6f:0));
             image.color=actor.color;
         }
         public bool TryOrigin(DragonVisualAnchor kind,RectTransform relative,out Vector2 point)

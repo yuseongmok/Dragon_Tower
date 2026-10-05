@@ -1,0 +1,15 @@
+Light VFX Art Direction — 2026-10-05
+Scope: isolated Magic Circle / Perspective Circles / Light Beam / Holy Impact prototypes only.
+Palette: Deep Gold #3D1C09, Gold #DB8C21, Pale Gold #FFD97A, Ivory #FFF5C9, White Core. Accents: restrained lavender, pink and prism cyan.
+Language: controlled geometric light, radial symmetry, counter-rotating rings, sequential glyph illumination, inward concentration, brief white core, faceted rays and short afterglow. Not irregular electrical branches or flame turbulence.
+Library: Circle, Glyph, Ring, Radiance, Disc, Beam, Impact, Star. Tier 0/1/2 changes ring/glyph/geometric complexity, not only scale. No clocks, gears, staff-exclusive symbols or signature mechanics.
+Perspective: quaternion-rotated local circle plane, depth-dependent 620/(620+z) projection; independently tilted/rotating circles, smaller dimmer rear planes behind enemy, larger foreground planes. Rear/front geometry remains pixel snapped to the current two-pixel renderer convention.
+Beam: compact white core, ivory/pale body, gold outer envelope, restrained cyan/lavender edge, directed light streaks; launch circle and beam share the same live casting origin. Dante Final uses the floating staff tip via existing anchor API.
+Impact: brief core bloom, tapered geometric rays, tilted expanding gold/ivory shock rings, rune fragments and sparse prism sparks. No flames or fullscreen whiteout.
+Implementation: existing LightningMeshLayer reused only as generic preallocated geometry, no Lightning design reused. Shared HUD-safe alpha/additive shader, three mesh depths, no new particle GameObjects/textures, no per-frame managed allocations after warmup.
+Preview: Assets/Scenes/Prototypes/LightStylePreview.unity. Inspector selects Chrono/Dante and one of four prototypes. Autoplay cycles samples and dragons. Not included in normal skill routes.
+Forbidden scope preserved: no shared skills, time stop, stored damage, signature skills, status systems, or balance changes. Existing character/HUD/Pipeline/VFX assets untouched.
+Chrono signature plan: 시간의 태엽 (future only). Dante signature plan: 성천 (future only); multi-circle volley and 10% basic-hit proc during signature cooldown are not implemented.
+
+Validation: LIGHT_STYLE_VALIDATION_OK. Both Chrono/Dante tested across four samples; damage/HP/cooldown/timeScale unchanged, actor/HUD transforms unchanged, stable object count, no input interception, disable/battle-exit cleanup pass. Peak mesh quads: Circle 1649, Perspective 6661, Beam 2853, HolyImpact 4974; no overflow. Warmed prototype Step CPU average 0.441ms in desktop Unity Editor; managed allocation 0 bytes over 1000 measured steps. This excludes rendering/GPU and is not mobile WebGL frame time. Video: C:/Users/PC/Documents/Codex/LightStyle-20261005/Light-Prototypes-Preview.mp4
+WebGL: isolated preview build succeeded (LIGHT_STYLE_WEBGL_OK). No mobile device/browser GPU or frame-time claim; real-device measurement remains unverified.

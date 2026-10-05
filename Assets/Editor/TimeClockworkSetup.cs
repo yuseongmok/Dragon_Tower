@@ -1,0 +1,7 @@
+using System.Linq;using UnityEditor;using UnityEngine;
+namespace DragonTower.Editor {
+ public static class TimeClockworkSetup {
+  public const string SkillPath="Assets/Data/Skills/skill_time_clockwork.asset";
+  public static void Install(){AssetDatabase.Refresh();var im=(TextureImporter)AssetImporter.GetAtPath("Assets/Art/TimeClockwork/Icon.png");im.textureType=TextureImporterType.Sprite;im.spriteImportMode=SpriteImportMode.Single;im.filterMode=FilterMode.Point;im.mipmapEnabled=false;im.maxTextureSize=128;im.textureCompression=TextureImporterCompression.Uncompressed;im.SaveAndReimport();var s=AssetDatabase.LoadAssetAtPath<SkillData>(SkillPath);if(s==null){s=ScriptableObject.CreateInstance<SkillData>();AssetDatabase.CreateAsset(s,SkillPath);s.cooldown=22;s.damage=160;}s.skillId="skill_time_clockwork";s.displayName="시간의 태엽";s.description="크로노 전용 · 5초간 적의 시간을 멈추고 일반공격 최종 피해를 저장한 뒤 한 번에 해방.";s.elementType=ElementType.Light;s.effectKind=SkillEffectKind.Light;s.rarity=ContentRarity.Legendary;s.exclusiveDragonId="chrono";s.timeDomain=true;s.timeDomainDelay=.24f;s.timeDomainDuration=5;s.hitCount=1;s.icon=AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/TimeClockwork/Icon.png");EditorUtility.SetDirty(s);var d=AssetDatabase.LoadAssetAtPath<DragonData>("Assets/Data/Dragon15.asset");d.signatureSkill=s;EditorUtility.SetDirty(d);var db=AssetDatabase.LoadAssetAtPath<ContentDatabase>("Assets/Resources/ContentDatabase.asset");if(!db.skills.Contains(s)){db.skills=db.skills.Concat(new[]{s}).ToArray();EditorUtility.SetDirty(db);}AssetDatabase.SaveAssets();}
+ }
+}

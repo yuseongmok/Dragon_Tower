@@ -222,6 +222,7 @@ namespace DragonTower
         }
         DragonSpriteAttachment[] activeAttachments;
         FloatingWeaponVisual floatingWeapon;
+        public void SetFloatingCastingPose(float weight,Vector2 position,float angle)=>floatingWeapon?.SetCastingPose(weight,position,angle);
         public bool TryGetCharacterAttachment(string name,RectTransform relativeTo,out Vector2 point)
         {
             point=default;

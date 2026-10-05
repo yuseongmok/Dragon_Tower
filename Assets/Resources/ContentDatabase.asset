@@ -72,6 +72,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e208ba17cc9ede54e86151578a6a600e, type: 2}
   - {fileID: 11400000, guid: 8d70c1f9c98c8c5438479ca101665d1e, type: 2}
   skills:
+  - {fileID: 11400000, guid: d12a69e2e253483469c8edc8b77fd214, type: 2}
   - {fileID: 11400000, guid: acc5634616a4f1a48ac3a554932b1184, type: 2}
   - {fileID: 11400000, guid: 070adf2d61bdde8449ae75c0c29ed811, type: 2}
   - {fileID: 11400000, guid: 1b337e617ba29d345af076ebc82a5cbf, type: 2}
@@ -114,6 +115,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d5ab714f67d832543a42a291f5432720, type: 2}
   - {fileID: 11400000, guid: 6144f79c8c63b2a438d7a7ff921114a1, type: 2}
   - {fileID: 11400000, guid: f7b679ceee739de4c9300f1688ecd937, type: 2}
+  - {fileID: 11400000, guid: 52386c7546230374a82ee88c64f8f67b, type: 2}
   items:
   - {fileID: 11400000, guid: fe9c7472e0e09d7ab81af1905934263a, type: 2}
   - {fileID: 11400000, guid: 2a18e57df0a3b5b5c98846a760c76d16, type: 2}

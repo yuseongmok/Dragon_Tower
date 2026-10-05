@@ -1,0 +1,7 @@
+using System.Linq;using UnityEditor;using UnityEngine;
+namespace DragonTower.Editor {
+ public static class CelestialSetup {
+  public const string SkillPath="Assets/Data/Skills/skill_celestial.asset";
+  public static void Install(){AssetDatabase.Refresh();var im=(TextureImporter)AssetImporter.GetAtPath("Assets/Art/Celestial/Icon.png");im.textureType=TextureImporterType.Sprite;im.spriteImportMode=SpriteImportMode.Single;im.filterMode=FilterMode.Point;im.mipmapEnabled=false;im.maxTextureSize=128;im.textureCompression=TextureImporterCompression.Uncompressed;im.SaveAndReimport();var s=AssetDatabase.LoadAssetAtPath<SkillData>(SkillPath);if(s==null){s=ScriptableObject.CreateInstance<SkillData>();AssetDatabase.CreateAsset(s,SkillPath);s.cooldown=22;s.damage=360;s.initialHitDelay=1.3f;s.hitCount=1;s.celestialExtraDamage=42;}s.skillId="skill_celestial";s.displayName="성천";s.description="단테 전용 · 공간 마법진의 동시 성광 포격. 쿨타임 중 일반공격 적중 시 10% 확률로 작은 마법진이 추가 공격.";s.elementType=ElementType.Light;s.effectKind=SkillEffectKind.Light;s.rarity=ContentRarity.Legendary;s.exclusiveDragonId="dante";s.celestialSignature=true;s.icon=AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/Celestial/Icon.png");EditorUtility.SetDirty(s);var d=AssetDatabase.LoadAssetAtPath<DragonData>("Assets/Data/Dragon7.asset");d.signatureSkill=s;EditorUtility.SetDirty(d);var db=AssetDatabase.LoadAssetAtPath<ContentDatabase>("Assets/Resources/ContentDatabase.asset");if(!db.skills.Contains(s)){db.skills=db.skills.Concat(new[]{s}).ToArray();EditorUtility.SetDirty(db);}AssetDatabase.SaveAssets();}
+ }
+}

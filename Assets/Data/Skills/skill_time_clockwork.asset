@@ -10,16 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a37d10c4b83957e4c868b03176c6d57b, type: 3}
-  m_Name: skill_light_pillar
+  m_Name: skill_time_clockwork
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
-  skillId: skill_light_pillar
-  displayName: "\uC131\uC5ED"
-  description: "18 \uD53C\uD574\uB97C 3\uD68C \xB7 Paralyze 20%"
+  skillId: skill_time_clockwork
+  displayName: "\uC2DC\uAC04\uC758 \uD0DC\uC5FD"
+  description: "\uD06C\uB85C\uB178 \uC804\uC6A9 \xB7 5\uCD08\uAC04 \uC801\uC758 \uC2DC\uAC04\uC744
+    \uBA48\uCD94\uACE0 \uC77C\uBC18\uACF5\uACA9 \uCD5C\uC885 \uD53C\uD574\uB97C \uC800\uC7A5\uD55C
+    \uB4A4 \uD55C \uBC88\uC5D0 \uD574\uBC29."
   elementType: 8
+  timeDomain: 1
+  timeDomainDelay: 0.24
+  timeDomainDuration: 5
+  useSecondaryElement: 0
+  secondaryElement: 0
   effectKind: 7
-  icon: {fileID: 0}
-  rarity: 0
-  exclusiveDragonId: 
+  icon: {fileID: 21300000, guid: 633c790f32816744e842cc5198b8ef53, type: 3}
+  rarity: 4
+  exclusiveDragonId: chrono
   wispPresentation: 0
   lunarPresentation: 0
   solarPresentation: 0
@@ -52,17 +59,17 @@ MonoBehaviour:
   icePresentation: 0
   iceKind: 0
   statusOnHit: 0
-  battleVfx: {fileID: 1333753791454754328, guid: 0765bf5844a24f243b6b000172048c04, type: 3}
-  vfxScale: 0.55
+  battleVfx: {fileID: 0}
+  vfxScale: 0.65
   vfxOffset: {x: 0, y: 0}
   vfxEuler: {x: 0, y: 0, z: 0}
   vfxDuration: 1.6
-  vfxSystemLimit: 12
-  damage: 18
-  cooldown: 5
-  hitCount: 3
+  vfxSystemLimit: 14
+  damage: 160
+  cooldown: 22
+  hitCount: 1
   hitInterval: 0.14
-  statusEffect: 2
-  statusChancePercent: 20
-  statusDuration: 0.8
+  statusEffect: 0
+  statusChancePercent: 0
+  statusDuration: 0
   statusPower: 0
