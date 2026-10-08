@@ -29,12 +29,26 @@ MonoBehaviour:
   dodgeFrames: {fileID: 0}
   hitFrames: {fileID: 0}
   deathFrames: {fileID: 0}
-  animationSetPath: 
+  animationSetPath: DragonAnimations/NovaBase
   basicPresentation: 0
   elementSkillPool: {fileID: 0}
   additionalSkillPools: []
-  signatureSkill: {fileID: 0}
-  evolutionForms: []
+  signatureSkill: {fileID: 11400000, guid: 0af296322e392c9448ede448cfd4915c, type: 2}
+  evolutionForms:
+  - stage: 1
+    displayName: "\uB178\uBDF8\uB77C"
+    battleSprite: {fileID: 5535132139924773103, guid: 60d8144754b039143b77f1003a4ee73d, type: 3}
+    animationSetPath: DragonAnimations/NovaMiddle
+    defaultSkill: {fileID: 0}
+    healthMultiplier: 0
+    attackMultiplier: 0
+  - stage: 2
+    displayName: "\uB178\uBC14\uC2A4\uD2B8\uB77C"
+    battleSprite: {fileID: 5097662668787521614, guid: cf321930a0855624483888af4d3501c0, type: 3}
+    animationSetPath: DragonAnimations/NovaFinal
+    defaultSkill: {fileID: 0}
+    healthMultiplier: 0
+    attackMultiplier: 0
   intermediateEvolutionSprite: {fileID: 21300000, guid: bea6e7e2c54560e6c3f2c1ba02caf046, type: 3}
   finalEvolutionSprite: {fileID: 21300000, guid: 908f39c7d389880404a06c374e11c5d1, type: 3}
   evolutionSheet: {fileID: 2800000, guid: fab418999bac46f796ecff2eab6c3d6d, type: 3}

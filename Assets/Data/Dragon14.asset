@@ -23,7 +23,33 @@ MonoBehaviour:
   maxHP: 90
   attackDamage: 9
   color: {r: 0.093920365, g: 0, b: 0.2264151, a: 1}
-  battleSprite: {fileID: 21300000, guid: 380042761cb85907648d21c3951e9bcd, type: 3}
+  battleSprite: {fileID: -3571237137919103160, guid: 6f53f3ad9a5f4e34f905c64d19b2c990, type: 3}
+  idleFrames: {fileID: 0}
+  attackFrames: {fileID: 0}
+  skillFrames: {fileID: 0}
+  dodgeFrames: {fileID: 0}
+  hitFrames: {fileID: 0}
+  deathFrames: {fileID: 0}
+  animationSetPath: DragonAnimations/VenomBase
+  basicPresentation: 0
+  elementSkillPool: {fileID: 0}
+  additionalSkillPools: []
+  signatureSkill: {fileID: 11400000, guid: fdc9984438c47764097a949dd59c24b1, type: 2}
+  evolutionForms:
+  - stage: 1
+    displayName: "\uBCA0\uBCA0\uB188"
+    battleSprite: {fileID: -4081020512357100563, guid: da139dd810023684ab3ecb605f538f0a, type: 3}
+    animationSetPath: DragonAnimations/VenomMiddle
+    defaultSkill: {fileID: 0}
+    healthMultiplier: 0
+    attackMultiplier: 0
+  - stage: 2
+    displayName: "\uBC14\uC774\uD37C"
+    battleSprite: {fileID: -6318164740266426885, guid: e0a67f4c60a18b04f92adcfeb1496690, type: 3}
+    animationSetPath: DragonAnimations/VenomFinal
+    defaultSkill: {fileID: 0}
+    healthMultiplier: 0
+    attackMultiplier: 0
   intermediateEvolutionSprite: {fileID: 21300000, guid: a53ce07991f4d7f0760ba37905a380de, type: 3}
   finalEvolutionSprite: {fileID: 21300000, guid: 31a5e04fd6286bafd2fea13bec2f2904, type: 3}
   evolutionSheet: {fileID: 2800000, guid: 8a867082e55b4a20816412273f8acf8a, type: 3}

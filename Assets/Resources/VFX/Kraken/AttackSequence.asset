@@ -1,0 +1,84 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f4b6c4411d818145b067509c1efda1d, type: 3}
+  m_Name: AttackSequence
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.PersistentAttackData
+  duration: 10
+  attacks:
+  - time: 1.4
+    damageMultiplier: 1
+    limb: 2
+    motion: 0
+  - time: 2.3
+    damageMultiplier: 1
+    limb: 3
+    motion: 1
+  - time: 3.15
+    damageMultiplier: 1
+    limb: 0
+    motion: 0
+  - time: 4.1
+    damageMultiplier: 1
+    limb: 5
+    motion: 3
+  - time: 4.85
+    damageMultiplier: 1
+    limb: 4
+    motion: 2
+  - time: 5.55
+    damageMultiplier: 1
+    limb: 1
+    motion: 1
+  - time: 6.2
+    damageMultiplier: 1
+    limb: 2
+    motion: 0
+  - time: 6.8
+    damageMultiplier: 1
+    limb: 3
+    motion: 2
+  - time: 7.35
+    damageMultiplier: 1
+    limb: 5
+    motion: 3
+  - time: 7.9
+    damageMultiplier: 1
+    limb: 0
+    motion: 1
+  - time: 8.4
+    damageMultiplier: 1
+    limb: 4
+    motion: 0
+  - time: 9.2
+    damageMultiplier: 1.6
+    limb: 0
+    motion: 4
+  - time: 9.34
+    damageMultiplier: 1.6
+    limb: 2
+    motion: 4
+  - time: 9.48
+    damageMultiplier: 1.6
+    limb: 3
+    motion: 4
+  - time: 9.62
+    damageMultiplier: 1.6
+    limb: 1
+    motion: 4
+  - time: 9.76
+    damageMultiplier: 1.6
+    limb: 5
+    motion: 4
+  - time: 9.9
+    damageMultiplier: 4.5
+    limb: 4
+    motion: 4

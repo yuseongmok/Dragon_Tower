@@ -22,7 +22,7 @@ MonoBehaviour:
   maxHP: 90
   attackDamage: 9
   color: {r: 1, g: 0.90783745, b: 0.4009434, a: 1}
-  battleSprite: {fileID: 584541929019729782, guid: 5502d70cfe64c8547a510556c61e86b4, type: 3}
+  battleSprite: {fileID: 21300000, guid: e250006ecdbe4d7a81214bec06554c1e, type: 3}
   idleFrames: {fileID: 0}
   attackFrames: {fileID: 0}
   skillFrames: {fileID: 0}

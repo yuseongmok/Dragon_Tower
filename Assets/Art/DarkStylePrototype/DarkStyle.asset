@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 007f1d49083bc99479827bb494e6b15d, type: 3}
+  m_Name: DarkStyle
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.DarkVfxStyle
+  core: {r: 0.018, g: 0.012, b: 0.04, a: 1}
+  navy: {r: 0.035, g: 0.025, b: 0.13, a: 1}
+  blackPurple: {r: 0.12, g: 0.025, b: 0.22, a: 1}
+  violet: {r: 0.32, g: 0.06, b: 0.57, a: 1}
+  purple: {r: 0.62, g: 0.16, b: 0.91, a: 1}
+  bright: {r: 0.88, g: 0.52, b: 1, a: 1}
+  pale: {r: 0.98, g: 0.9, b: 1, a: 1}
+  gold: {r: 1, g: 0.68, b: 0.24, a: 1}
+  toxic: {r: 0.3, g: 0.74, b: 0.05, a: 1}
+  lime: {r: 0.66, g: 1, b: 0.08, a: 1}
+  poisonPale: {r: 0.89, g: 1, b: 0.55, a: 1}
+  duration: 3.4
+  cosmicRelease: 1.25
+  toxicRelease: 1.1
+  heavyRelease: 0.85

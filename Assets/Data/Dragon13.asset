@@ -21,7 +21,33 @@ MonoBehaviour:
   maxHP: 90
   attackDamage: 9
   color: {r: 0.07524917, g: 0.47630948, b: 0.8396226, a: 1}
-  battleSprite: {fileID: 21300000, guid: 24fca6c5bfab182ebf2c8a56d80d67f8, type: 3}
+  battleSprite: {fileID: -6230125121079219569, guid: ba88827703942e34785a5ed5a76aefa5, type: 3}
+  idleFrames: {fileID: 0}
+  attackFrames: {fileID: 0}
+  skillFrames: {fileID: 0}
+  dodgeFrames: {fileID: 0}
+  hitFrames: {fileID: 0}
+  deathFrames: {fileID: 0}
+  animationSetPath: DragonAnimations/SharkidBase
+  basicPresentation: 0
+  elementSkillPool: {fileID: 0}
+  additionalSkillPools: []
+  signatureSkill: {fileID: 11400000, guid: 7561950456a1ea946b4d5994a5ec152f, type: 2}
+  evolutionForms:
+  - stage: 1
+    displayName: "\uC0E4\uD0A4\uC628"
+    battleSprite: {fileID: -1580406577556283767, guid: 99b32cba1dc95444c8d6a370a8fd1e98, type: 3}
+    animationSetPath: DragonAnimations/SharkidMiddle
+    defaultSkill: {fileID: 0}
+    healthMultiplier: 0
+    attackMultiplier: 0
+  - stage: 2
+    displayName: "\uC0E4\uD06C\uB85C\uB3C8"
+    battleSprite: {fileID: 8955235835049533312, guid: 7522d7153ed44524da34399e4b35fac2, type: 3}
+    animationSetPath: DragonAnimations/SharkidFinal
+    defaultSkill: {fileID: 0}
+    healthMultiplier: 0
+    attackMultiplier: 0
   intermediateEvolutionSprite: {fileID: 21300000, guid: e3aa095392688394d1bdf0db01c1196c, type: 3}
   finalEvolutionSprite: {fileID: 21300000, guid: 1a6460ac31d71f93c3ad8e72ebb9d161, type: 3}
   evolutionSheet: {fileID: 2800000, guid: d83f96eb519b4d559fa9a4a6df2a1d1a, type: 3}

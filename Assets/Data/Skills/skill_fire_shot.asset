@@ -13,9 +13,23 @@ MonoBehaviour:
   m_Name: skill_fire_shot
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
   skillId: skill_fire_shot
+  hydraPresentation: 0
+  poisonAccelerationDuration: 0
+  poisonIntervalFactor: 1
+  eclipsePresentation: 0
+  castLockDuration: 0
+  cooldownRecastMaxHpPercent: 0
+  persistentAttack: {fileID: 0}
   displayName: "\uD654\uC5FC\uC0F7"
   description: "16 \uD53C\uD574\uB97C 3\uD68C \xB7 Burn 25%"
   elementType: 2
+  celestialSignature: 0
+  celestialExtraDamage: 42
+  timeDomain: 0
+  timeDomainDelay: 0.24
+  timeDomainDuration: 5
+  useSecondaryElement: 0
+  secondaryElement: 0
   effectKind: 0
   icon: {fileID: 8161436473146195207, guid: 29afedede0ef9ab419e767a99db54f8c, type: 3}
   rarity: 0

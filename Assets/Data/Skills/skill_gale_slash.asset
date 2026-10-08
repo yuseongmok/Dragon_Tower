@@ -13,10 +13,24 @@ MonoBehaviour:
   m_Name: skill_gale_slash
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
   skillId: skill_gale_slash
+  hydraPresentation: 0
+  poisonAccelerationDuration: 0
+  poisonIntervalFactor: 1
+  eclipsePresentation: 0
+  castLockDuration: 0
+  cooldownRecastMaxHpPercent: 0
+  persistentAttack: {fileID: 0}
   displayName: "\uC9C8\uD48D\uCC38"
   description: "\uAC70\uB300\uD55C \uBC14\uB78C \uD6A1\uBCA0\uAE30 \xB7 \uB2E8\uC77C
     \uD0C0\uACA9 \xB7 Slow 35%"
   elementType: 4
+  celestialSignature: 0
+  celestialExtraDamage: 42
+  timeDomain: 0
+  timeDomainDelay: 0.24
+  timeDomainDuration: 5
+  useSecondaryElement: 0
+  secondaryElement: 0
   effectKind: 2
   icon: {fileID: 21300000, guid: 218d67f7263458f41948e7b7a0ecc631, type: 3}
   rarity: 2

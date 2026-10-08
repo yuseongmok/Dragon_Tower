@@ -13,10 +13,24 @@ MonoBehaviour:
   m_Name: skill_moon_combo
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
   skillId: skill_moon_combo
+  hydraPresentation: 0
+  poisonAccelerationDuration: 0
+  poisonIntervalFactor: 1
+  eclipsePresentation: 0
+  castLockDuration: 0
+  cooldownRecastMaxHpPercent: 0
+  persistentAttack: {fileID: 0}
   displayName: "\uC544\uC774\uC2DC\uD074"
   description: "\uC544\uC774\uC2DC\uD074 \xB7 3 Hit \xB7 \uACF5\uACA9 \uAC04\uACA9
     \uB454\uD654 60%"
   elementType: 3
+  celestialSignature: 0
+  celestialExtraDamage: 42
+  timeDomain: 0
+  timeDomainDelay: 0.24
+  timeDomainDuration: 5
+  useSecondaryElement: 0
+  secondaryElement: 0
   effectKind: 1
   icon: {fileID: 5776730163395883879, guid: 32a6384435f7dd84485fb3b924ed18f3, type: 3}
   rarity: 5

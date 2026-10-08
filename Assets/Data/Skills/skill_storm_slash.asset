@@ -13,9 +13,23 @@ MonoBehaviour:
   m_Name: skill_storm_slash
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
   skillId: skill_storm_slash
+  hydraPresentation: 0
+  poisonAccelerationDuration: 0
+  poisonIntervalFactor: 1
+  eclipsePresentation: 0
+  castLockDuration: 0
+  cooldownRecastMaxHpPercent: 0
+  persistentAttack: {fileID: 0}
   displayName: "\uD3ED\uD48D\uCC38"
   description: "14 \uD53C\uD574\uB97C 6\uD68C \xB7 Slow 55%"
   elementType: 4
+  celestialSignature: 0
+  celestialExtraDamage: 42
+  timeDomain: 0
+  timeDomainDelay: 0.24
+  timeDomainDuration: 5
+  useSecondaryElement: 0
+  secondaryElement: 0
   effectKind: 2
   icon: {fileID: 0}
   rarity: 0

@@ -30,12 +30,26 @@ MonoBehaviour:
   dodgeFrames: {fileID: 0}
   hitFrames: {fileID: 0}
   deathFrames: {fileID: 0}
-  animationSetPath: 
+  animationSetPath: DragonAnimations/OctaBase
   basicPresentation: 0
   elementSkillPool: {fileID: 0}
   additionalSkillPools: []
-  signatureSkill: {fileID: 0}
-  evolutionForms: []
+  signatureSkill: {fileID: 11400000, guid: 3eedaedc12914ca48ac86a8336917b1d, type: 2}
+  evolutionForms:
+  - stage: 1
+    displayName: "\uC625\uD0C8\uB9AC\uC544"
+    battleSprite: {fileID: -4639829064823520485, guid: 04e3c653eed42ff4cb31266c0482006f, type: 3}
+    animationSetPath: DragonAnimations/OctaMiddle
+    defaultSkill: {fileID: 0}
+    healthMultiplier: 0
+    attackMultiplier: 0
+  - stage: 2
+    displayName: "\uC625\uD0C0\uBCA8"
+    battleSprite: {fileID: -4373249292308428329, guid: 9c4ec094223a532429b6f477c9096efa, type: 3}
+    animationSetPath: DragonAnimations/OctaFinal
+    defaultSkill: {fileID: 0}
+    healthMultiplier: 0
+    attackMultiplier: 0
   intermediateEvolutionSprite: {fileID: 21300000, guid: 18da9798914c91885d36455840e8add0, type: 3}
   finalEvolutionSprite: {fileID: 21300000, guid: 65594224f2043fb1a914e678c30e4bf9, type: 3}
   evolutionSheet: {fileID: 2800000, guid: 9c053c6b5ece44f0bf10d054b31e4499, type: 3}

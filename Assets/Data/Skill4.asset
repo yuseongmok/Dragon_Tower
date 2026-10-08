@@ -13,9 +13,23 @@ MonoBehaviour:
   m_Name: Skill4
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
   skillId: skill_electric_shock
+  hydraPresentation: 0
+  poisonAccelerationDuration: 0
+  poisonIntervalFactor: 1
+  eclipsePresentation: 0
+  castLockDuration: 0
+  cooldownRecastMaxHpPercent: 0
+  persistentAttack: {fileID: 0}
   displayName: "\uC804\uAE30 \uC1FC\uD06C"
   description: 
   elementType: 6
+  celestialSignature: 0
+  celestialExtraDamage: 42
+  timeDomain: 0
+  timeDomainDelay: 0.24
+  timeDomainDuration: 5
+  useSecondaryElement: 0
+  secondaryElement: 0
   effectKind: 4
   icon: {fileID: 0}
   rarity: 0

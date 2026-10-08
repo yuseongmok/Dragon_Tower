@@ -13,9 +13,23 @@ MonoBehaviour:
   m_Name: skill_purgatory
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
   skillId: skill_purgatory
+  hydraPresentation: 0
+  poisonAccelerationDuration: 0
+  poisonIntervalFactor: 1
+  eclipsePresentation: 0
+  castLockDuration: 0
+  cooldownRecastMaxHpPercent: 0
+  persistentAttack: {fileID: 0}
   displayName: "\uC5F0\uC625"
   description: "18 \uD53C\uD574\uB97C 6\uD68C \xB7 Burn 70%"
   elementType: 2
+  celestialSignature: 0
+  celestialExtraDamage: 42
+  timeDomain: 0
+  timeDomainDelay: 0.24
+  timeDomainDuration: 5
+  useSecondaryElement: 0
+  secondaryElement: 0
   effectKind: 0
   icon: {fileID: -6080870913537891260, guid: 29afedede0ef9ab419e767a99db54f8c, type: 3}
   rarity: 0

@@ -13,9 +13,23 @@ MonoBehaviour:
   m_Name: Skill5
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
   skillId: skill_bubble_shot
+  hydraPresentation: 0
+  poisonAccelerationDuration: 0
+  poisonIntervalFactor: 1
+  eclipsePresentation: 0
+  castLockDuration: 0
+  cooldownRecastMaxHpPercent: 0
+  persistentAttack: {fileID: 0}
   displayName: "\uBC84\uBE14 \uC0F7"
   description: 
   elementType: 1
+  celestialSignature: 0
+  celestialExtraDamage: 42
+  timeDomain: 0
+  timeDomainDelay: 0.24
+  timeDomainDuration: 5
+  useSecondaryElement: 0
+  secondaryElement: 0
   effectKind: 5
   icon: {fileID: 0}
   rarity: 0

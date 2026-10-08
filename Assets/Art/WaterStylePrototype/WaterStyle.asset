@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97ec8c83fbabe6947a937061015c2b3b, type: 3}
+  m_Name: WaterStyle
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.WaterVfxStyle
+  deep: {r: 0.025, g: 0.09, b: 0.23, a: 1}
+  azure: {r: 0.025, g: 0.35, b: 0.65, a: 1}
+  cyan: {r: 0.05, g: 0.66, b: 0.83, a: 1}
+  aqua: {r: 0.23, g: 0.85, b: 0.88, a: 1}
+  pale: {r: 0.64, g: 0.96, b: 0.98, a: 1}
+  foam: {r: 0.93, g: 1, b: 1, a: 1}
+  duration: 3
+  shotTravel: 0.48
+  pressureCharge: 0.38

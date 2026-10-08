@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f2bcd92b58824d4583930abf14b0dd8, type: 3}
+  m_Name: Hit
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.DragonIdleFrames
+  frames:
+  - {fileID: -3110562284600626118, guid: 880ec1961020398468ce530ca9cac0a9, type: 3}
+  - {fileID: -2203424323562189218, guid: 880ec1961020398468ce530ca9cac0a9, type: 3}
+  - {fileID: 7327688515399686146, guid: 880ec1961020398468ce530ca9cac0a9, type: 3}
+  - {fileID: -5121278237462532842, guid: 880ec1961020398468ce530ca9cac0a9, type: 3}
+  durations:
+  - 0.04
+  - 0.07
+  - 0.07
+  - 0.06
+  offsets:
+  - {x: 0.16543357, y: 0.11716786}
+  - {x: 0.19829217, y: 0.11716786}
+  - {x: 0.15275666, y: 0.11716786}
+  - {x: 0.13851982, y: 0.11716786}
+  displayScale: 1.1797752

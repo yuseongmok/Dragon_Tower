@@ -1,0 +1,395 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b28f6030f920494e94e52a53d4d9ec3, type: 3}
+  m_Name: MirBase
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.DragonAnimationSet
+  archetype: 0
+  anchors:
+    attackOrigin: {x: 78.105064, y: -13.463081}
+    skillOrigin: {x: 71.145065, y: 0.9002304}
+    characterCenter: {x: 20.685066, y: -40.59379}
+    hitPosition: {x: 27.645063, y: -38.99786}
+    groundPosition: {x: 27.207779, y: -109.2185}
+  attachments:
+  - name: AttackOrigin
+    sprite: {fileID: 7753850469080743316, guid: 31baae079989ba040b240b0c97aa4e0a, type: 3}
+    normalizedPosition: {x: 0.754125, y: 0.37375}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 0
+  - name: DragonHead
+    sprite: {fileID: 7753850469080743316, guid: 31baae079989ba040b240b0c97aa4e0a, type: 3}
+    normalizedPosition: {x: 0.754125, y: 0.37375}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: CastingCenter
+    sprite: {fileID: 7753850469080743316, guid: 31baae079989ba040b240b0c97aa4e0a, type: 3}
+    normalizedPosition: {x: 0.71125, y: 0.30625}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 1
+  - name: AttackOrigin
+    sprite: {fileID: -5879881542495326043, guid: 31baae079989ba040b240b0c97aa4e0a, type: 3}
+    normalizedPosition: {x: 0.75675, y: 0.385375}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 0
+  - name: DragonHead
+    sprite: {fileID: -5879881542495326043, guid: 31baae079989ba040b240b0c97aa4e0a, type: 3}
+    normalizedPosition: {x: 0.75675, y: 0.385375}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: CastingCenter
+    sprite: {fileID: -5879881542495326043, guid: 31baae079989ba040b240b0c97aa4e0a, type: 3}
+    normalizedPosition: {x: 0.7134375, y: 0.315625}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 1
+  - name: AttackOrigin
+    sprite: {fileID: -5140822680765773455, guid: 31baae079989ba040b240b0c97aa4e0a, type: 3}
+    normalizedPosition: {x: 0.757, y: 0.3718125}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 0
+  - name: DragonHead
+    sprite: {fileID: -5140822680765773455, guid: 31baae079989ba040b240b0c97aa4e0a, type: 3}
+    normalizedPosition: {x: 0.757, y: 0.3718125}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: CastingCenter
+    sprite: {fileID: -5140822680765773455, guid: 31baae079989ba040b240b0c97aa4e0a, type: 3}
+    normalizedPosition: {x: 0.7139063, y: 0.3046875}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 1
+  - name: AttackOrigin
+    sprite: {fileID: 5154169977832191625, guid: 31baae079989ba040b240b0c97aa4e0a, type: 3}
+    normalizedPosition: {x: 0.75175, y: 0.3815}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 0
+  - name: DragonHead
+    sprite: {fileID: 5154169977832191625, guid: 31baae079989ba040b240b0c97aa4e0a, type: 3}
+    normalizedPosition: {x: 0.75175, y: 0.3815}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: CastingCenter
+    sprite: {fileID: 5154169977832191625, guid: 31baae079989ba040b240b0c97aa4e0a, type: 3}
+    normalizedPosition: {x: 0.70953125, y: 0.3125}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 1
+  - name: AttackOrigin
+    sprite: {fileID: 1618951275439368146, guid: 3ba3261b54dfdc44d807d2c94574ab80, type: 3}
+    normalizedPosition: {x: 0.77275, y: 0.3195}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 0
+  - name: DragonHead
+    sprite: {fileID: 1618951275439368146, guid: 3ba3261b54dfdc44d807d2c94574ab80, type: 3}
+    normalizedPosition: {x: 0.77275, y: 0.3195}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: CastingCenter
+    sprite: {fileID: 1618951275439368146, guid: 3ba3261b54dfdc44d807d2c94574ab80, type: 3}
+    normalizedPosition: {x: 0.7270313, y: 0.2625}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 1
+  - name: AttackOrigin
+    sprite: {fileID: 6457663508887553001, guid: 3ba3261b54dfdc44d807d2c94574ab80, type: 3}
+    normalizedPosition: {x: 0.80137503, y: 0.3291875}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 0
+  - name: DragonHead
+    sprite: {fileID: 6457663508887553001, guid: 3ba3261b54dfdc44d807d2c94574ab80, type: 3}
+    normalizedPosition: {x: 0.80137503, y: 0.3291875}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: CastingCenter
+    sprite: {fileID: 6457663508887553001, guid: 3ba3261b54dfdc44d807d2c94574ab80, type: 3}
+    normalizedPosition: {x: 0.750625, y: 0.2703125}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 1
+  - name: AttackOrigin
+    sprite: {fileID: -4793941657275168283, guid: 3ba3261b54dfdc44d807d2c94574ab80, type: 3}
+    normalizedPosition: {x: 0.79875, y: 0.3136875}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 0
+  - name: DragonHead
+    sprite: {fileID: -4793941657275168283, guid: 3ba3261b54dfdc44d807d2c94574ab80, type: 3}
+    normalizedPosition: {x: 0.79875, y: 0.3136875}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: CastingCenter
+    sprite: {fileID: -4793941657275168283, guid: 3ba3261b54dfdc44d807d2c94574ab80, type: 3}
+    normalizedPosition: {x: 0.7484375, y: 0.2578125}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 1
+  - name: AttackOrigin
+    sprite: {fileID: -6354863715058411797, guid: 3ba3261b54dfdc44d807d2c94574ab80, type: 3}
+    normalizedPosition: {x: 0.75175, y: 0.35825}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 0
+  - name: DragonHead
+    sprite: {fileID: -6354863715058411797, guid: 3ba3261b54dfdc44d807d2c94574ab80, type: 3}
+    normalizedPosition: {x: 0.75175, y: 0.35825}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: CastingCenter
+    sprite: {fileID: -6354863715058411797, guid: 3ba3261b54dfdc44d807d2c94574ab80, type: 3}
+    normalizedPosition: {x: 0.70953125, y: 0.29375}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 1
+  - name: AttackOrigin
+    sprite: {fileID: -59057985870619535, guid: 857f104f72e4725468acba1d003c88d7, type: 3}
+    normalizedPosition: {x: 0.780625, y: 0.304}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 0
+  - name: DragonHead
+    sprite: {fileID: -59057985870619535, guid: 857f104f72e4725468acba1d003c88d7, type: 3}
+    normalizedPosition: {x: 0.780625, y: 0.304}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: CastingCenter
+    sprite: {fileID: -59057985870619535, guid: 857f104f72e4725468acba1d003c88d7, type: 3}
+    normalizedPosition: {x: 0.73359376, y: 0.304}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 1
+  - name: AttackOrigin
+    sprite: {fileID: -1464306379530808721, guid: 857f104f72e4725468acba1d003c88d7, type: 3}
+    normalizedPosition: {x: 0.757, y: 0.3795625}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 0
+  - name: DragonHead
+    sprite: {fileID: -1464306379530808721, guid: 857f104f72e4725468acba1d003c88d7, type: 3}
+    normalizedPosition: {x: 0.757, y: 0.3795625}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: CastingCenter
+    sprite: {fileID: -1464306379530808721, guid: 857f104f72e4725468acba1d003c88d7, type: 3}
+    normalizedPosition: {x: 0.7139063, y: 0.3795625}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 1
+  - name: AttackOrigin
+    sprite: {fileID: -5236184660794411169, guid: 857f104f72e4725468acba1d003c88d7, type: 3}
+    normalizedPosition: {x: 0.785875, y: 0.573375}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 0
+  - name: DragonHead
+    sprite: {fileID: -5236184660794411169, guid: 857f104f72e4725468acba1d003c88d7, type: 3}
+    normalizedPosition: {x: 0.785875, y: 0.573375}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: CastingCenter
+    sprite: {fileID: -5236184660794411169, guid: 857f104f72e4725468acba1d003c88d7, type: 3}
+    normalizedPosition: {x: 0.73796874, y: 0.439625}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 1
+  - name: AttackOrigin
+    sprite: {fileID: 1266662263099404370, guid: 857f104f72e4725468acba1d003c88d7, type: 3}
+    normalizedPosition: {x: 0.75675, y: 0.369875}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 0
+  - name: DragonHead
+    sprite: {fileID: 1266662263099404370, guid: 857f104f72e4725468acba1d003c88d7, type: 3}
+    normalizedPosition: {x: 0.75675, y: 0.369875}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: CastingCenter
+    sprite: {fileID: 1266662263099404370, guid: 857f104f72e4725468acba1d003c88d7, type: 3}
+    normalizedPosition: {x: 0.7134375, y: 0.369875}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 1
+  - name: AttackOrigin
+    sprite: {fileID: 8628296693374958960, guid: c0358cc0d01ad6e469e7a676a6fb17bc, type: 3}
+    normalizedPosition: {x: 0.78325003, y: 0.307875}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 0
+  - name: DragonHead
+    sprite: {fileID: 8628296693374958960, guid: c0358cc0d01ad6e469e7a676a6fb17bc, type: 3}
+    normalizedPosition: {x: 0.78325003, y: 0.307875}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: CastingCenter
+    sprite: {fileID: 8628296693374958960, guid: c0358cc0d01ad6e469e7a676a6fb17bc, type: 3}
+    normalizedPosition: {x: 0.73578125, y: 0.253125}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 1
+  - name: AttackOrigin
+    sprite: {fileID: 8958774154476174856, guid: c0358cc0d01ad6e469e7a676a6fb17bc, type: 3}
+    normalizedPosition: {x: 0.80950004, y: 0.2788125}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 0
+  - name: DragonHead
+    sprite: {fileID: 8958774154476174856, guid: c0358cc0d01ad6e469e7a676a6fb17bc, type: 3}
+    normalizedPosition: {x: 0.80950004, y: 0.2788125}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: CastingCenter
+    sprite: {fileID: 8958774154476174856, guid: c0358cc0d01ad6e469e7a676a6fb17bc, type: 3}
+    normalizedPosition: {x: 0.7576563, y: 0.2296875}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 1
+  - name: AttackOrigin
+    sprite: {fileID: 3505930296148074909, guid: c0358cc0d01ad6e469e7a676a6fb17bc, type: 3}
+    normalizedPosition: {x: 0.78325003, y: 0.284625}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 0
+  - name: DragonHead
+    sprite: {fileID: 3505930296148074909, guid: c0358cc0d01ad6e469e7a676a6fb17bc, type: 3}
+    normalizedPosition: {x: 0.78325003, y: 0.284625}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: CastingCenter
+    sprite: {fileID: 3505930296148074909, guid: c0358cc0d01ad6e469e7a676a6fb17bc, type: 3}
+    normalizedPosition: {x: 0.73578125, y: 0.234375}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 1
+  - name: AttackOrigin
+    sprite: {fileID: -5914539780824508513, guid: c0358cc0d01ad6e469e7a676a6fb17bc, type: 3}
+    normalizedPosition: {x: 0.75175, y: 0.3795625}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 0
+  - name: DragonHead
+    sprite: {fileID: -5914539780824508513, guid: c0358cc0d01ad6e469e7a676a6fb17bc, type: 3}
+    normalizedPosition: {x: 0.75175, y: 0.3795625}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: CastingCenter
+    sprite: {fileID: -5914539780824508513, guid: c0358cc0d01ad6e469e7a676a6fb17bc, type: 3}
+    normalizedPosition: {x: 0.70953125, y: 0.3109375}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 1
+  - name: AttackOrigin
+    sprite: {fileID: -566531989883362016, guid: cf479c20e6621ad41957b575afc90706, type: 3}
+    normalizedPosition: {x: 0.74625003, y: 0.4028125}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 0
+  - name: DragonHead
+    sprite: {fileID: -566531989883362016, guid: cf479c20e6621ad41957b575afc90706, type: 3}
+    normalizedPosition: {x: 0.74625003, y: 0.4028125}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: CastingCenter
+    sprite: {fileID: -566531989883362016, guid: cf479c20e6621ad41957b575afc90706, type: 3}
+    normalizedPosition: {x: 0.70468754, y: 0.3296875}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 1
+  - name: AttackOrigin
+    sprite: {fileID: -2358568517588516023, guid: cf479c20e6621ad41957b575afc90706, type: 3}
+    normalizedPosition: {x: 0.754125, y: 0.3815}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 0
+  - name: DragonHead
+    sprite: {fileID: -2358568517588516023, guid: cf479c20e6621ad41957b575afc90706, type: 3}
+    normalizedPosition: {x: 0.754125, y: 0.3815}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: CastingCenter
+    sprite: {fileID: -2358568517588516023, guid: cf479c20e6621ad41957b575afc90706, type: 3}
+    normalizedPosition: {x: 0.71125, y: 0.3125}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 1
+  - name: AttackOrigin
+    sprite: {fileID: -2886223604069058645, guid: cf479c20e6621ad41957b575afc90706, type: 3}
+    normalizedPosition: {x: 0.764875, y: 0.3505}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 0
+  - name: DragonHead
+    sprite: {fileID: -2886223604069058645, guid: cf479c20e6621ad41957b575afc90706, type: 3}
+    normalizedPosition: {x: 0.764875, y: 0.3505}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: CastingCenter
+    sprite: {fileID: -2886223604069058645, guid: cf479c20e6621ad41957b575afc90706, type: 3}
+    normalizedPosition: {x: 0.72046876, y: 0.2875}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 1
+  - name: AttackOrigin
+    sprite: {fileID: -143413377965538673, guid: cf479c20e6621ad41957b575afc90706, type: 3}
+    normalizedPosition: {x: 0.749125, y: 0.3911875}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 0
+  - name: DragonHead
+    sprite: {fileID: -143413377965538673, guid: cf479c20e6621ad41957b575afc90706, type: 3}
+    normalizedPosition: {x: 0.749125, y: 0.3911875}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: CastingCenter
+    sprite: {fileID: -143413377965538673, guid: cf479c20e6621ad41957b575afc90706, type: 3}
+    normalizedPosition: {x: 0.70734376, y: 0.3203125}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 1
+  - name: AttackOrigin
+    sprite: {fileID: 3539345708355445249, guid: a572d4c412168844ab2b65cf412a53ec, type: 3}
+    normalizedPosition: {x: 0.749125, y: 0.3911875}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 0
+  - name: DragonHead
+    sprite: {fileID: 3539345708355445249, guid: a572d4c412168844ab2b65cf412a53ec, type: 3}
+    normalizedPosition: {x: 0.749125, y: 0.3911875}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: CastingCenter
+    sprite: {fileID: 3539345708355445249, guid: a572d4c412168844ab2b65cf412a53ec, type: 3}
+    normalizedPosition: {x: 0.70734376, y: 0.3203125}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 1
+  - name: AttackOrigin
+    sprite: {fileID: -4248497856951152013, guid: a572d4c412168844ab2b65cf412a53ec, type: 3}
+    normalizedPosition: {x: 0.769875, y: 0.292375}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 0
+  - name: DragonHead
+    sprite: {fileID: -4248497856951152013, guid: a572d4c412168844ab2b65cf412a53ec, type: 3}
+    normalizedPosition: {x: 0.769875, y: 0.292375}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: CastingCenter
+    sprite: {fileID: -4248497856951152013, guid: a572d4c412168844ab2b65cf412a53ec, type: 3}
+    normalizedPosition: {x: 0.724375, y: 0.240625}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 1
+  - name: AttackOrigin
+    sprite: {fileID: 2905082009556154270, guid: a572d4c412168844ab2b65cf412a53ec, type: 3}
+    normalizedPosition: {x: 0.804, y: 0.12625}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 0
+  - name: DragonHead
+    sprite: {fileID: 2905082009556154270, guid: a572d4c412168844ab2b65cf412a53ec, type: 3}
+    normalizedPosition: {x: 0.804, y: 0.12625}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: CastingCenter
+    sprite: {fileID: 2905082009556154270, guid: a572d4c412168844ab2b65cf412a53ec, type: 3}
+    normalizedPosition: {x: 0.7528125, y: 0.106}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 1
+  - name: AttackOrigin
+    sprite: {fileID: 6945724366087055307, guid: a572d4c412168844ab2b65cf412a53ec, type: 3}
+    normalizedPosition: {x: 0.790875, y: 0.1159375}
+    useAsAttackOrigin: 1
+    useAsSkillOrigin: 0
+  - name: DragonHead
+    sprite: {fileID: 6945724366087055307, guid: a572d4c412168844ab2b65cf412a53ec, type: 3}
+    normalizedPosition: {x: 0.790875, y: 0.1159375}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 0
+  - name: CastingCenter
+    sprite: {fileID: 6945724366087055307, guid: a572d4c412168844ab2b65cf412a53ec, type: 3}
+    normalizedPosition: {x: 0.741875, y: 0.09775}
+    useAsAttackOrigin: 0
+    useAsSkillOrigin: 1
+  floatingWeapon:
+    sprite: {fileID: 0}
+    size: {x: 44, y: 150}
+    tip: {x: 0.5, y: 0.92}
+    attackFromTip: 1
+    skillFromTip: 1
+    poses: []
+  idle: {fileID: 11400000, guid: 4356532148cb7ce439f92e65cbe5d983, type: 2}
+  attack: {fileID: 11400000, guid: 647e5b6f2e9e6044aa8185c89bc929dd, type: 2}
+  skill: {fileID: 11400000, guid: 8fb80bfeae37a394385d0540a7d301db, type: 2}
+  dodge: {fileID: 11400000, guid: 093c2291a13e9144bb0ff056b3ca4d66, type: 2}
+  hit: {fileID: 11400000, guid: 8a6ad21fee68af14f8fc403ac36cf0a4, type: 2}
+  death: {fileID: 11400000, guid: be73fba982b756e48a9b0f973e4cc0f9, type: 2}

@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a37d10c4b83957e4c868b03176c6d57b, type: 3}
+  m_Name: skill_kraken
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
+  skillId: skill_kraken
+  persistentAttack: {fileID: 11400000, guid: 2d2f00d69b4e1a94b9a81c350339a53c, type: 2}
+  displayName: "\uD06C\uB77C\uCF04"
+  description: "\uC625\uD0C0 \uC804\uC6A9 \xB7 \uC2EC\uD574\uC758 \uCD09\uC218\uAC00
+    10\uCD08\uAC04 \uB3C5\uB9BD \uACF5\uACA9\uD569\uB2C8\uB2E4. \uC18C\uD658 \uC911\uC5D0\uB3C4
+    \uAE30\uC874 \uC804\uD22C \uD589\uB3D9\uC744 \uC0AC\uC6A9\uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4."
+  elementType: 1
+  celestialSignature: 0
+  celestialExtraDamage: 42
+  timeDomain: 0
+  timeDomainDelay: 0.24
+  timeDomainDuration: 5
+  useSecondaryElement: 0
+  secondaryElement: 0
+  effectKind: 5
+  icon: {fileID: 21300000, guid: 2d40e588767685b49a7fe609151d5df5, type: 3}
+  rarity: 4
+  exclusiveDragonId: okta
+  wispPresentation: 0
+  lunarPresentation: 0
+  solarPresentation: 0
+  volcanicPresentation: 0
+  genesisPresentation: 0
+  attackEmpowerDuration: 0
+  attackEmpowerDelay: 0
+  attackEmpowerDamage: 0
+  chargedBeam: 0
+  chargeDuration: 5
+  beamIgnitionDelay: 0.18
+  beamDuration: 5
+  protectedCastDelay: 0
+  completionDefenseDuration: 0
+  completionDefensePercent: 0
+  statusOnFinalHit: 0
+  targetCriticalBonus: 0
+  targetCriticalDuration: 0
+  hitTimeOffsets: []
+  completionHealPercent: 0
+  completionHealDelay: 0.22
+  slowBonusDamagePercent: 0
+  slowBonusDelay: 0.16
+  dodgeFreeCastDuration: 0
+  dodgeFreeAfterDuration: 0
+  finalHitDamageMultiplier: 1
+  rewardEligibilityPercent: 100
+  protectedCastDuration: 0
+  initialHitDelay: 0
+  icePresentation: 0
+  iceKind: 0
+  statusOnHit: 0
+  battleVfx: {fileID: 0}
+  vfxScale: 0.65
+  vfxOffset: {x: 0, y: 0}
+  vfxEuler: {x: 0, y: 0, z: 0}
+  vfxDuration: 11.15
+  vfxSystemLimit: 14
+  damage: 24
+  cooldown: 22
+  hitCount: 1
+  hitInterval: 0.14
+  statusEffect: 0
+  statusChancePercent: 0
+  statusDuration: 0
+  statusPower: 0

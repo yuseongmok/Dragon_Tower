@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c98ebb20e04b574d84a778f11942208, type: 3}
+  m_Name: Library
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.DarkSkillLibrary
+  style: {fileID: 11400000, guid: 2affc3c40bbf73a4d8a697e9ff5b0ca1, type: 2}
+  entries:
+  - skill: {fileID: 11400000, guid: 6144f79c8c63b2a438d7a7ff921114a1, type: 2}
+    kind: 0
+  - skill: {fileID: 11400000, guid: 50f15dd0ed332f840992b78915fee06e, type: 2}
+    kind: 1
+  - skill: {fileID: 11400000, guid: 38c9a7b4c1b7cbb49b95d03b6a7a4ace, type: 2}
+    kind: 2
+  - skill: {fileID: 11400000, guid: 070adf2d61bdde8449ae75c0c29ed811, type: 2}
+    kind: 3

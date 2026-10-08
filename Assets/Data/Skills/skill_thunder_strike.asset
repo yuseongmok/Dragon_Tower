@@ -13,9 +13,23 @@ MonoBehaviour:
   m_Name: skill_thunder_strike
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
   skillId: skill_thunder_strike
+  hydraPresentation: 0
+  poisonAccelerationDuration: 0
+  poisonIntervalFactor: 1
+  eclipsePresentation: 0
+  castLockDuration: 0
+  cooldownRecastMaxHpPercent: 0
+  persistentAttack: {fileID: 0}
   displayName: "\uB1CC\uACA9"
   description: "24 \uD53C\uD574\uB97C 4\uD68C \xB7 Paralyze 55%"
   elementType: 6
+  celestialSignature: 0
+  celestialExtraDamage: 42
+  timeDomain: 0
+  timeDomainDelay: 0.24
+  timeDomainDuration: 5
+  useSecondaryElement: 0
+  secondaryElement: 0
   effectKind: 4
   icon: {fileID: 0}
   rarity: 0

@@ -13,9 +13,23 @@ MonoBehaviour:
   m_Name: skill_snipe
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
   skillId: skill_snipe
+  hydraPresentation: 0
+  poisonAccelerationDuration: 0
+  poisonIntervalFactor: 1
+  eclipsePresentation: 0
+  castLockDuration: 0
+  cooldownRecastMaxHpPercent: 0
+  persistentAttack: {fileID: 0}
   displayName: "\uC800\uACA9"
   description: "\uD53C\uD574 62"
   elementType: 1
+  celestialSignature: 0
+  celestialExtraDamage: 42
+  timeDomain: 0
+  timeDomainDelay: 0.24
+  timeDomainDuration: 5
+  useSecondaryElement: 0
+  secondaryElement: 0
   effectKind: 5
   icon: {fileID: 0}
   rarity: 0
@@ -48,7 +62,7 @@ MonoBehaviour:
   finalHitDamageMultiplier: 1
   rewardEligibilityPercent: 100
   protectedCastDuration: 0
-  initialHitDelay: 0
+  initialHitDelay: 0.65
   icePresentation: 0
   iceKind: 0
   statusOnHit: 0

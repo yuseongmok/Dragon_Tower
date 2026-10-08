@@ -13,9 +13,23 @@ MonoBehaviour:
   m_Name: skill_splash
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
   skillId: skill_splash
-  displayName: "\uC2A4\uD50C\uB798\uC26C"
+  hydraPresentation: 0
+  poisonAccelerationDuration: 0
+  poisonIntervalFactor: 1
+  eclipsePresentation: 0
+  castLockDuration: 0
+  cooldownRecastMaxHpPercent: 0
+  persistentAttack: {fileID: 0}
+  displayName: "\uC2A4\uD50C\uB808\uC26C"
   description: "14 \uD53C\uD574\uB97C 6\uD68C \xB7 Slow 60%"
   elementType: 1
+  celestialSignature: 0
+  celestialExtraDamage: 42
+  timeDomain: 0
+  timeDomainDelay: 0.24
+  timeDomainDuration: 5
+  useSecondaryElement: 0
+  secondaryElement: 0
   effectKind: 5
   icon: {fileID: 0}
   rarity: 0

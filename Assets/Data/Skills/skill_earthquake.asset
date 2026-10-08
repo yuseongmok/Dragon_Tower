@@ -13,9 +13,23 @@ MonoBehaviour:
   m_Name: skill_earthquake
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
   skillId: skill_earthquake
+  hydraPresentation: 0
+  poisonAccelerationDuration: 0
+  poisonIntervalFactor: 1
+  eclipsePresentation: 0
+  castLockDuration: 0
+  cooldownRecastMaxHpPercent: 0
+  persistentAttack: {fileID: 0}
   displayName: "\uC5B4\uC2A4\uD018\uC774\uD06C"
   description: "32 \uD53C\uD574\uB97C 3\uD68C \xB7 Slow 60%"
   elementType: 5
+  celestialSignature: 0
+  celestialExtraDamage: 42
+  timeDomain: 0
+  timeDomainDelay: 0.24
+  timeDomainDuration: 5
+  useSecondaryElement: 0
+  secondaryElement: 0
   effectKind: 3
   icon: {fileID: 0}
   rarity: 0

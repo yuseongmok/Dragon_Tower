@@ -6,6 +6,14 @@ namespace DragonTower
     {
         [Tooltip("Stable identifier used by content tools and CSV.")]
         public string skillId;
+        [Header("Optional cinematic / cooldown recast cost")]
+        public bool hydraPresentation;
+        [Min(0)] public float poisonAccelerationDuration;
+        [Range(.05f,1)] public float poisonIntervalFactor=1;
+        public bool eclipsePresentation;
+        [Min(0)] public float castLockDuration;
+        [Range(0,100)] public float cooldownRecastMaxHpPercent;
+        public PersistentAttackData persistentAttack;
         public string displayName = "Flame burst";
         [TextArea] public string description;
         public ElementType elementType;
@@ -80,7 +88,7 @@ namespace DragonTower
         [Min(0)] public float statusDuration;
         [Tooltip("Burn: damage per second. Slow: attack speed reduction percent.")][Min(0)] public float statusPower;
         public string StableId=>string.IsNullOrWhiteSpace(skillId)?name:skillId.Trim();
-        public SkillStats Snapshot()=>new SkillStats{celestialSignature=celestialSignature,celestialExtraDamage=celestialExtraDamage,timeDomain=timeDomain,timeDomainDelay=timeDomainDelay,timeDomainDuration=timeDomainDuration,useSecondaryElement=useSecondaryElement,secondaryElement=secondaryElement,attackEmpowerDuration=attackEmpowerDuration,attackEmpowerDelay=attackEmpowerDelay,attackEmpowerDamage=attackEmpowerDamage,chargedBeam=chargedBeam,chargeDuration=chargeDuration,beamIgnitionDelay=beamIgnitionDelay,beamDuration=beamDuration,protectedCastDelay=protectedCastDelay,completionDefenseDuration=completionDefenseDuration,completionDefensePercent=completionDefensePercent,statusOnFinalHit=statusOnFinalHit,targetCriticalBonus=targetCriticalBonus,targetCriticalDuration=targetCriticalDuration,hitTimeOffsets=hitTimeOffsets==null?null:(float[])hitTimeOffsets.Clone(),completionHealPercent=completionHealPercent,completionHealDelay=completionHealDelay,exclusiveDragonId=exclusiveDragonId,slowBonusDamagePercent=slowBonusDamagePercent,slowBonusDelay=slowBonusDelay,dodgeFreeCastDuration=dodgeFreeCastDuration,dodgeFreeAfterDuration=dodgeFreeAfterDuration,finalHitDamageMultiplier=Mathf.Max(1,finalHitDamageMultiplier),protectedCastDuration=Mathf.Max(0,protectedCastDuration),displayName=displayName,elementType=elementType,damage=damage,cooldown=cooldown,initialHitDelay=Mathf.Max(0,initialHitDelay),hitCount=Mathf.Max(1,hitCount),hitInterval=Mathf.Max(.03f,hitInterval),statusOnHit=statusOnHit,statusEffect=statusEffect,statusChancePercent=statusChancePercent,statusDuration=statusDuration,statusPower=statusPower};
+        public SkillStats Snapshot()=>new SkillStats{poisonAccelerationDuration=poisonAccelerationDuration,poisonIntervalFactor=poisonIntervalFactor,skillId=StableId,castLockDuration=castLockDuration,cooldownRecastMaxHpPercent=cooldownRecastMaxHpPercent,persistentAttack=persistentAttack==null?null:persistentAttack.Snapshot(),celestialSignature=celestialSignature,celestialExtraDamage=celestialExtraDamage,timeDomain=timeDomain,timeDomainDelay=timeDomainDelay,timeDomainDuration=timeDomainDuration,useSecondaryElement=useSecondaryElement,secondaryElement=secondaryElement,attackEmpowerDuration=attackEmpowerDuration,attackEmpowerDelay=attackEmpowerDelay,attackEmpowerDamage=attackEmpowerDamage,chargedBeam=chargedBeam,chargeDuration=chargeDuration,beamIgnitionDelay=beamIgnitionDelay,beamDuration=beamDuration,protectedCastDelay=protectedCastDelay,completionDefenseDuration=completionDefenseDuration,completionDefensePercent=completionDefensePercent,statusOnFinalHit=statusOnFinalHit,targetCriticalBonus=targetCriticalBonus,targetCriticalDuration=targetCriticalDuration,hitTimeOffsets=hitTimeOffsets==null?null:(float[])hitTimeOffsets.Clone(),completionHealPercent=completionHealPercent,completionHealDelay=completionHealDelay,exclusiveDragonId=exclusiveDragonId,slowBonusDamagePercent=slowBonusDamagePercent,slowBonusDelay=slowBonusDelay,dodgeFreeCastDuration=dodgeFreeCastDuration,dodgeFreeAfterDuration=dodgeFreeAfterDuration,finalHitDamageMultiplier=Mathf.Max(1,finalHitDamageMultiplier),protectedCastDuration=Mathf.Max(0,protectedCastDuration),displayName=displayName,elementType=elementType,damage=damage,cooldown=cooldown,initialHitDelay=Mathf.Max(0,initialHitDelay),hitCount=Mathf.Max(1,hitCount),hitInterval=Mathf.Max(.03f,hitInterval),statusOnHit=statusOnHit,statusEffect=statusEffect,statusChancePercent=statusChancePercent,statusDuration=statusDuration,statusPower=statusPower};
     }
 }
 

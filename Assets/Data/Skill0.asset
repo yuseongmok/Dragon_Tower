@@ -13,9 +13,23 @@ MonoBehaviour:
   m_Name: Skill0
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
   skillId: skill_fire_burst
+  hydraPresentation: 0
+  poisonAccelerationDuration: 0
+  poisonIntervalFactor: 1
+  eclipsePresentation: 0
+  castLockDuration: 0
+  cooldownRecastMaxHpPercent: 0
+  persistentAttack: {fileID: 0}
   displayName: "\uD654\uC5FC \uD3ED\uBC1C"
   description: 
   elementType: 2
+  celestialSignature: 0
+  celestialExtraDamage: 42
+  timeDomain: 0
+  timeDomainDelay: 0.24
+  timeDomainDuration: 5
+  useSecondaryElement: 0
+  secondaryElement: 0
   effectKind: 0
   icon: {fileID: -8931649982321883935, guid: 29afedede0ef9ab419e767a99db54f8c, type: 3}
   rarity: 0

@@ -13,9 +13,23 @@ MonoBehaviour:
   m_Name: skill_lightning_orb
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
   skillId: skill_lightning_orb
+  hydraPresentation: 0
+  poisonAccelerationDuration: 0
+  poisonIntervalFactor: 1
+  eclipsePresentation: 0
+  castLockDuration: 0
+  cooldownRecastMaxHpPercent: 0
+  persistentAttack: {fileID: 0}
   displayName: "\uBC88\uAC1C\uAD6C\uCCB4"
   description: "10 \uD53C\uD574\uB97C 6\uD68C \xB7 Paralyze 35%"
   elementType: 6
+  celestialSignature: 0
+  celestialExtraDamage: 42
+  timeDomain: 0
+  timeDomainDelay: 0.24
+  timeDomainDuration: 5
+  useSecondaryElement: 0
+  secondaryElement: 0
   effectKind: 4
   icon: {fileID: 0}
   rarity: 0

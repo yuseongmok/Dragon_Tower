@@ -13,9 +13,23 @@ MonoBehaviour:
   m_Name: skill_shockwave
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
   skillId: skill_shockwave
+  hydraPresentation: 0
+  poisonAccelerationDuration: 0
+  poisonIntervalFactor: 1
+  eclipsePresentation: 0
+  castLockDuration: 0
+  cooldownRecastMaxHpPercent: 0
+  persistentAttack: {fileID: 0}
   displayName: "\uC1FC\uD06C\uC6E8\uC774\uBE0C"
   description: "22 \uD53C\uD574\uB97C 4\uD68C \xB7 Paralyze 30%"
   elementType: 5
+  celestialSignature: 0
+  celestialExtraDamage: 42
+  timeDomain: 0
+  timeDomainDelay: 0.24
+  timeDomainDuration: 5
+  useSecondaryElement: 0
+  secondaryElement: 0
   effectKind: 3
   icon: {fileID: 0}
   rarity: 0

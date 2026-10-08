@@ -13,9 +13,23 @@ MonoBehaviour:
   m_Name: skill_holy_explosion
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
   skillId: skill_holy_explosion
+  hydraPresentation: 0
+  poisonAccelerationDuration: 0
+  poisonIntervalFactor: 1
+  eclipsePresentation: 0
+  castLockDuration: 0
+  cooldownRecastMaxHpPercent: 0
+  persistentAttack: {fileID: 0}
   displayName: "\uC2E0\uC131 \uD3ED\uBC1C"
   description: "30 \uD53C\uD574\uB97C 3\uD68C \xB7 Paralyze 35%"
   elementType: 8
+  celestialSignature: 0
+  celestialExtraDamage: 42
+  timeDomain: 0
+  timeDomainDelay: 0.24
+  timeDomainDuration: 5
+  useSecondaryElement: 0
+  secondaryElement: 0
   effectKind: 7
   icon: {fileID: 0}
   rarity: 0

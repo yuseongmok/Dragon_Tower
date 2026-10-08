@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45ca09b427f78b147994a4ba6aa979ff, type: 3}
+  m_Name: Profile
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.KrakenProfile
+  skill: {fileID: 11400000, guid: 3eedaedc12914ca48ac86a8336917b1d, type: 2}
+  style: {fileID: 11400000, guid: 9d158570fbedb4b459f2fb52751bc6f9, type: 2}
+  shadow: {r: 0.012, g: 0.028, b: 0.09, a: 1}
+  body: {r: 0.018, g: 0.23, b: 0.33, a: 1}
+  face: {r: 0.045, g: 0.49, b: 0.58, a: 1}
+  cups: {r: 0.53, g: 0.27, b: 0.59, a: 1}
+  cupLight: {r: 0.88, g: 0.57, b: 0.76, a: 1}

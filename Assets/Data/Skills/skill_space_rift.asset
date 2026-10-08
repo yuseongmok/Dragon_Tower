@@ -13,9 +13,23 @@ MonoBehaviour:
   m_Name: skill_space_rift
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
   skillId: skill_space_rift
+  hydraPresentation: 0
+  poisonAccelerationDuration: 0
+  poisonIntervalFactor: 1
+  eclipsePresentation: 0
+  castLockDuration: 0
+  cooldownRecastMaxHpPercent: 0
+  persistentAttack: {fileID: 0}
   displayName: "\uC6B0\uC8FC \uADE0\uC5F4"
   description: "22 \uD53C\uD574\uB97C 4\uD68C \xB7 Burn 35%"
   elementType: 7
+  celestialSignature: 0
+  celestialExtraDamage: 42
+  timeDomain: 0
+  timeDomainDelay: 0.24
+  timeDomainDuration: 5
+  useSecondaryElement: 0
+  secondaryElement: 0
   effectKind: 6
   icon: {fileID: 0}
   rarity: 0

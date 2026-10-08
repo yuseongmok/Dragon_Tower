@@ -13,9 +13,23 @@ MonoBehaviour:
   m_Name: skill_big_bang
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
   skillId: skill_big_bang
+  hydraPresentation: 0
+  poisonAccelerationDuration: 0
+  poisonIntervalFactor: 1
+  eclipsePresentation: 0
+  castLockDuration: 0
+  cooldownRecastMaxHpPercent: 0
+  persistentAttack: {fileID: 0}
   displayName: "\uBE45\uBC45"
   description: "18 \uD53C\uD574\uB97C 6\uD68C \xB7 Paralyze 55%"
   elementType: 8
+  celestialSignature: 0
+  celestialExtraDamage: 42
+  timeDomain: 0
+  timeDomainDelay: 0.24
+  timeDomainDuration: 5
+  useSecondaryElement: 0
+  secondaryElement: 0
   effectKind: 7
   icon: {fileID: 0}
   rarity: 0

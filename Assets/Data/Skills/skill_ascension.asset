@@ -13,11 +13,25 @@ MonoBehaviour:
   m_Name: skill_ascension
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
   skillId: skill_ascension
+  hydraPresentation: 0
+  poisonAccelerationDuration: 0
+  poisonIntervalFactor: 1
+  eclipsePresentation: 0
+  castLockDuration: 0
+  cooldownRecastMaxHpPercent: 0
+  persistentAttack: {fileID: 0}
   displayName: "\uAC15\uB9BC"
   description: "\uBCFC\uD2B8 \uC804\uC6A9 \xB7 \uB1CC\uC2E0\uC73C\uB85C \uAC15\uB9BC\uD558\uC5EC
     5\uCD08 \uB3D9\uC548 \uC77C\uBC18\uACF5\uACA9 \uC801\uC911\uB9C8\uB2E4 \uBCC4\uB3C4
     \uB099\uB8B0 \uCD94\uAC00\uD0C0."
   elementType: 6
+  celestialSignature: 0
+  celestialExtraDamage: 42
+  timeDomain: 0
+  timeDomainDelay: 0.24
+  timeDomainDuration: 5
+  useSecondaryElement: 0
+  secondaryElement: 0
   effectKind: 4
   icon: {fileID: 21300000, guid: e8bb7abfac709e24daccf2aae85595fd, type: 3}
   rarity: 4
