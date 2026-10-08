@@ -10,22 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
-  m_Name: augment_battle_instinct
-  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.AugmentData
-  contentId: augment_battle_instinct
-  displayName: 전투 본능
-  description: 일반 공격 피해 15% 증가
+  m_Name: "augment_battle_instinct"
+  m_EditorClassIdentifier: "Assembly-CSharp::DragonTower.AugmentData"
+  contentId: "augment_battle_instinct"
+  displayName: "전투 본능"
+  description: "일반공격 피해 +15%."
+  buildTags: "일반공격"
+  rulesDescription: "일반공격 본체에 적용. 추가타 재계산으로 이중 증폭하지 않음."
   rarity: 0
   icon: {fileID: 0}
   grade: 0
   maximumStacks: 1
+  requirements: 0
+  prerequisites: []
+  exclusions: []
   mechanic: 0
   primaryValue: 0
   secondaryValue: 0
-  chancePercent: 0
+  tertiaryValue: 0
   duration: 0
+  chancePercent: 0
   triggerCount: 1
+  internalCooldown: 0
   effects:
   - type: 10
-    value: 15
+    value: 15.0
     note: 

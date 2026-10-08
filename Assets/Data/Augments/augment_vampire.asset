@@ -10,23 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
-  m_Name: augment_vampire
-  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.AugmentData
-  contentId: augment_vampire
-  displayName: "\uBC40\uD30C\uC774\uC5B4"
-  description: "\uC2A4\uD0AC \uCFE8\uD0C0\uC784 \uC0AD\uC81C \xB7 \uC2A4\uD0AC \uC0AC\uC6A9\uB9C8\uB2E4
-    \uCD5C\uB300 HP\uC758 5% \uC18C\uBAA8"
+  m_Name: "augment_vampire"
+  m_EditorClassIdentifier: "Assembly-CSharp::DragonTower.AugmentData"
+  contentId: "augment_vampire"
+  displayName: "뱀파이어"
+  description: "공용 스킬 쿨타임 -50%, 시전 시 최대 HP 5% 소비. 일반공격 본체 실제 피해의 5% 흡혈."
+  buildTags: "HP·회복·스킬·대가"
+  rulesDescription: "흡혈은 초당 최대 HP의 3%까지 가능합니다. 전용기는 쿨타임 감소와 추가 HP 비용 대상이 아닙니다. HP 비용은 합산하며 사용 후 HP가 1 이상 남아야 합니다."
   rarity: 0
   icon: {fileID: 0}
   grade: 3
   maximumStacks: 1
+  requirements: 64
+  prerequisites: []
+  exclusions: []
   mechanic: 17
   primaryValue: 5
-  secondaryValue: 0
+  secondaryValue: 5
+  tertiaryValue: 3
+  duration: 50
   chancePercent: 0
-  duration: 0
   triggerCount: 1
-  effects:
-  - type: 14
-    value: 1
-    note: 
+  internalCooldown: 0
+  effects: []

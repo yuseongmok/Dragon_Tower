@@ -10,25 +10,32 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
-  m_Name: augment_survival_instinct
-  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.AugmentData
-  contentId: augment_survival_instinct
-  displayName: 생존 본능
-  description: 최대 HP 30% 증가 · 회피 쿨타임 25% 감소
+  m_Name: "augment_survival_instinct"
+  m_EditorClassIdentifier: "Assembly-CSharp::DragonTower.AugmentData"
+  contentId: "augment_survival_instinct"
+  displayName: "생존 본능"
+  description: "최대 HP +30%. 회피 쿨타임 -25%."
+  buildTags: "HP·회피"
+  rulesDescription: "회피 무적 종료 후 다음 회피까지 최소 0.15초의 간격이 있습니다."
   rarity: 0
   icon: {fileID: 0}
   grade: 2
   maximumStacks: 1
+  requirements: 0
+  prerequisites: []
+  exclusions: []
   mechanic: 0
   primaryValue: 0
   secondaryValue: 0
-  chancePercent: 0
+  tertiaryValue: 0
   duration: 0
+  chancePercent: 0
   triggerCount: 1
+  internalCooldown: 0
   effects:
   - type: 9
-    value: 30
+    value: 30.0
     note: 
   - type: 6
-    value: 25
+    value: 25.0
     note: 

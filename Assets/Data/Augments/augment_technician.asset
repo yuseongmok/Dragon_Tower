@@ -10,22 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
-  m_Name: augment_technician
-  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.AugmentData
-  contentId: augment_technician
-  displayName: "\uAE30\uC220\uC790"
-  description: "\uC2A4\uD0AC \uD53C\uD574 10% \uC99D\uAC00"
+  m_Name: "augment_technician"
+  m_EditorClassIdentifier: "Assembly-CSharp::DragonTower.AugmentData"
+  contentId: "augment_technician"
+  displayName: "기술자"
+  description: "스킬 종료 후 3초 안에 맞힌 다음 일반공격 피해 +30%."
+  buildTags: "스킬·일반공격"
+  rulesDescription: "1회 소비. 재발동은 시간 갱신. 다단히트 공격은 행동 합산 피해 기준."
   rarity: 0
   icon: {fileID: 0}
   grade: 0
   maximumStacks: 1
-  mechanic: 0
-  primaryValue: 0
+  requirements: 0
+  prerequisites: []
+  exclusions: []
+  mechanic: 23
+  primaryValue: 30
   secondaryValue: 0
+  tertiaryValue: 0
+  duration: 3
   chancePercent: 0
-  duration: 0
   triggerCount: 1
-  effects:
-  - type: 3
-    value: 10
-    note: 
+  internalCooldown: 0
+  effects: []

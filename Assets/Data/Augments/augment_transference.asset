@@ -10,24 +10,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
-  m_Name: augment_transference
-  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.AugmentData
-  contentId: augment_transference
-  displayName: "\uC804\uC774"
-  description: "\uC77C\uBC18 \uACF5\uACA9 \uD53C\uD574 70% \uAC10\uC18C \xB7 \uC77C\uBC18
-    \uACF5\uACA9 \uC801\uC911\uB9C8\uB2E4 \uB0A8\uC740 \uC2A4\uD0AC \uCFE8\uD0C0\uC784
-    1\uCD08 \uAC10\uC18C"
+  m_Name: "augment_transference"
+  m_EditorClassIdentifier: "Assembly-CSharp::DragonTower.AugmentData"
+  contentId: "augment_transference"
+  displayName: "전이"
+  description: "일반공격 본체와 그에 종속된 추가타 피해 -50%. 적중 행동마다 남은 스킬 쿨타임 0.75초 감소."
+  buildTags: "일반공격·스킬·대가"
+  rulesDescription: "과부하 코어와 배타. 강림/성천/정전기 추가타도 피해 대가 적용."
   rarity: 0
   icon: {fileID: 0}
   grade: 2
   maximumStacks: 1
+  requirements: 0
+  prerequisites: []
+  exclusions:
+  - augment_overload_core
   mechanic: 15
-  primaryValue: 1
-  secondaryValue: 0
-  chancePercent: 0
+  primaryValue: 0.75
+  secondaryValue: 50
+  tertiaryValue: 0
   duration: 0
+  chancePercent: 0
   triggerCount: 1
+  internalCooldown: 0
   effects:
   - type: 10
-    value: -70
+    value: -50
     note: 

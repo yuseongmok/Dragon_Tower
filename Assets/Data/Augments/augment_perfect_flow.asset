@@ -10,28 +10,35 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
-  m_Name: augment_perfect_flow
-  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.AugmentData
-  contentId: augment_perfect_flow
-  displayName: 완전한 흐름
-  description: 일반 공격·스킬·회피 쿨타임 30% 감소
+  m_Name: "augment_perfect_flow"
+  m_EditorClassIdentifier: "Assembly-CSharp::DragonTower.AugmentData"
+  contentId: "augment_perfect_flow"
+  displayName: "완전한 흐름"
+  description: "일반공격·스킬·회피 쿨타임 -30%."
+  buildTags: "쿨타임"
+  rulesDescription: "쿨타임 감소는 합계 60%까지 적용됩니다. 회피 무적 종료 후 다음 회피까지 최소 0.15초의 간격이 있습니다."
   rarity: 0
   icon: {fileID: 0}
   grade: 3
   maximumStacks: 1
+  requirements: 0
+  prerequisites: []
+  exclusions: []
   mechanic: 0
   primaryValue: 0
   secondaryValue: 0
-  chancePercent: 0
+  tertiaryValue: 0
   duration: 0
+  chancePercent: 0
   triggerCount: 1
+  internalCooldown: 0
   effects:
   - type: 5
-    value: 30
+    value: 30.0
     note: 
   - type: 4
-    value: 30
+    value: 30.0
     note: 
   - type: 6
-    value: 30
+    value: 30.0
     note: 

@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
+  m_Name: "augment_steady_breath"
+  m_EditorClassIdentifier: "Assembly-CSharp::DragonTower.AugmentData"
+  contentId: "augment_steady_breath"
+  displayName: "차분한 호흡"
+  description: "적 공격으로 HP 피해를 받지 않고 5초가 지나면 최대 HP 1% 회복."
+  buildTags: "HP·회복·회피"
+  rulesDescription: "5초마다 반복. 자발적 HP 소비는 대기 시간을 초기화하지 않음."
+  rarity: 0
+  icon: {fileID: 0}
+  grade: 0
+  maximumStacks: 1
+  requirements: 0
+  prerequisites: []
+  exclusions: []
+  mechanic: 28
+  primaryValue: 1
+  secondaryValue: 0
+  tertiaryValue: 0
+  duration: 5
+  chancePercent: 0
+  triggerCount: 1
+  internalCooldown: 0
+  effects: []

@@ -10,20 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
-  m_Name: augment_flame_remnant
-  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.AugmentData
-  contentId: augment_flame_remnant
-  displayName: "\uD654\uC5FC \uC794\uC7AC"
-  description: "\uC2A4\uD0AC \uD53C\uD574 \uC2DC 3\uCD08\uAC04 \uD654\uC0C1 (\uC784\uC2DC
-    \uACC4\uC218: \uB9E4\uCD08 \uACF5\uACA9\uB825\uC758 20%)"
+  m_Name: "augment_flame_remnant"
+  m_EditorClassIdentifier: "Assembly-CSharp::DragonTower.AugmentData"
+  contentId: "augment_flame_remnant"
+  displayName: "화염 잔재"
+  description: "스킬이 처음 적중할 때 화상 3초. 매초 기본 공격력의 20% 피해."
+  buildTags: "상태이상·화상"
+  rulesDescription: "시전당 1회. 갱신해도 다음 틱 지연 금지. 기존 강한 화상 덮어쓰기 금지."
   rarity: 0
   icon: {fileID: 0}
   grade: 1
   maximumStacks: 1
+  requirements: 0
+  prerequisites: []
+  exclusions: []
   mechanic: 8
   primaryValue: 20
   secondaryValue: 0
-  chancePercent: 0
+  tertiaryValue: 0
   duration: 3
+  chancePercent: 0
   triggerCount: 1
+  internalCooldown: 0
   effects: []

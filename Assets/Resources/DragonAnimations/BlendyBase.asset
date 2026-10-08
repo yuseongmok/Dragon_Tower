@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.DragonAnimationSet
   archetype: 2
   anchors:
-    attackOrigin: {x: 88.71985, y: 14.210073}
-    skillOrigin: {x: 81.51985, y: 32.724354}
-    characterCenter: {x: 29.319843, y: -20.761364}
-    hitPosition: {x: 36.51985, y: -18.70422}
+    attackOrigin: {x: 70.26623, y: -22.818497}
+    skillOrigin: {x: 65.22623, y: -9.858498}
+    characterCenter: {x: 28.686224, y: -47.298504}
+    hitPosition: {x: 33.72623, y: -45.8585}
     groundPosition: {x: 27.207779, y: -109.2185}
   attachments:
   - name: CastingOrigin
@@ -140,6 +140,13 @@ MonoBehaviour:
     normalizedPosition: {x: 0.73578125, y: 0.189}
     useAsAttackOrigin: 1
     useAsSkillOrigin: 1
+  floatingWeapon:
+    sprite: {fileID: 0}
+    size: {x: 44, y: 150}
+    tip: {x: 0.5, y: 0.92}
+    attackFromTip: 1
+    skillFromTip: 1
+    poses: []
   idle: {fileID: 11400000, guid: c75c29e9f425ccb49817e9e9dfa77868, type: 2}
   attack: {fileID: 11400000, guid: 8a8c6bde5d4efca48a44352cc8a14481, type: 2}
   skill: {fileID: 11400000, guid: b4e7a04985f524e44a3a0eb4d2a22683, type: 2}

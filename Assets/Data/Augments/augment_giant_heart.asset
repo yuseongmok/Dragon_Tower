@@ -10,29 +10,35 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
-  m_Name: augment_giant_heart
-  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.AugmentData
-  contentId: augment_giant_heart
-  displayName: "\uAC70\uC778\uC758 \uC2EC\uC7A5"
-  description: "\uCD5C\uB300 HP 40% \uC99D\uAC00 \xB7 \uC77C\uBC18 \uACF5\uACA9\uACFC
-    \uC2A4\uD0AC \uCFE8\uD0C0\uC784 10% \uC99D\uAC00"
+  m_Name: "augment_giant_heart"
+  m_EditorClassIdentifier: "Assembly-CSharp::DragonTower.AugmentData"
+  contentId: "augment_giant_heart"
+  displayName: "거인의 심장"
+  description: "최대 HP +40%. 일반공격·스킬 쿨타임 +10%."
+  buildTags: "HP·방어"
+  rulesDescription: "피해 감소와 별개."
   rarity: 0
   icon: {fileID: 0}
   grade: 1
   maximumStacks: 1
+  requirements: 0
+  prerequisites: []
+  exclusions: []
   mechanic: 0
   primaryValue: 0
   secondaryValue: 0
-  chancePercent: 0
+  tertiaryValue: 0
   duration: 0
+  chancePercent: 0
   triggerCount: 1
+  internalCooldown: 0
   effects:
   - type: 9
-    value: 40
+    value: 40.0
     note: 
   - type: 5
-    value: -10
+    value: -10.0
     note: 
   - type: 4
-    value: -10
+    value: -10.0
     note: 

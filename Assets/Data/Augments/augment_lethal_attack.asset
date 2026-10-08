@@ -10,22 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
-  m_Name: augment_lethal_attack
-  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.AugmentData
-  contentId: augment_lethal_attack
-  displayName: "\uCE58\uBA85\uC801\uC778 \uACF5\uACA9"
-  description: "\uCE58\uBA85\uD0C0 \uD53C\uD574 10% \uC99D\uAC00"
+  m_Name: "augment_lethal_attack"
+  m_EditorClassIdentifier: "Assembly-CSharp::DragonTower.AugmentData"
+  contentId: "augment_lethal_attack"
+  displayName: "치명적인 공격"
+  description: "치명타 피해 배율 +0.10. 예: 1.50배에서 1.60배."
+  buildTags: "치명타"
+  rulesDescription: "치명타 확률이 있는 빌드에 유효."
   rarity: 0
   icon: {fileID: 0}
   grade: 0
   maximumStacks: 1
+  requirements: 0
+  prerequisites: []
+  exclusions: []
   mechanic: 0
   primaryValue: 0
   secondaryValue: 0
-  chancePercent: 0
+  tertiaryValue: 0
   duration: 0
+  chancePercent: 0
   triggerCount: 1
+  internalCooldown: 0
   effects:
   - type: 12
-    value: 10
+    value: 10.0
     note: 

@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
+  m_Name: "augment_perfect_reversal"
+  m_EditorClassIdentifier: "Assembly-CSharp::DragonTower.AugmentData"
+  contentId: "augment_perfect_reversal"
+  displayName: "완벽한 역전"
+  description: "실제 회피 3회 성공 시 다음 일반공격의 본체 피해 +100% 및 치명타 확정. 적중 시 최대 HP 8% 회복."
+  buildTags: "회피·치명타·회복"
+  rulesDescription: "강화 1개 저장, 저장 중 누적 중지. 내부 쿨타임 6초."
+  rarity: 0
+  icon: {fileID: 0}
+  grade: 4
+  maximumStacks: 1
+  requirements: 0
+  prerequisites: []
+  exclusions: []
+  mechanic: 55
+  primaryValue: 100
+  secondaryValue: 8
+  tertiaryValue: 0
+  duration: 0
+  chancePercent: 0
+  triggerCount: 3
+  internalCooldown: 6
+  effects: []

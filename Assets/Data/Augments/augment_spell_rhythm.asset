@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
+  m_Name: "augment_spell_rhythm"
+  m_EditorClassIdentifier: "Assembly-CSharp::DragonTower.AugmentData"
+  contentId: "augment_spell_rhythm"
+  displayName: "마법의 박자"
+  description: "일반공격 4회 적중 행동마다 다음 스킬 본체 피해 +20%."
+  buildTags: "일반공격·스킬"
+  rulesDescription: "1개 저장. 스킬 첫 발동에서 소비, 해당 시전 전체에 적용."
+  rarity: 0
+  icon: {fileID: 0}
+  grade: 1
+  maximumStacks: 1
+  requirements: 0
+  prerequisites: []
+  exclusions: []
+  mechanic: 38
+  primaryValue: 20
+  secondaryValue: 0
+  tertiaryValue: 0
+  duration: 0
+  chancePercent: 0
+  triggerCount: 4
+  internalCooldown: 0
+  effects: []

@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
+  m_Name: "augment_cold_opening"
+  m_EditorClassIdentifier: "Assembly-CSharp::DragonTower.AugmentData"
+  contentId: "augment_cold_opening"
+  displayName: "서리의 틈"
+  description: "둔화 대상 일반공격 피해 +20%."
+  buildTags: "둔화·일반공격"
+  rulesDescription: "둔화 강도·스택 수에 관계없이 한 번."
+  rarity: 0
+  icon: {fileID: 0}
+  grade: 1
+  maximumStacks: 1
+  requirements: 4
+  prerequisites: []
+  exclusions: []
+  mechanic: 40
+  primaryValue: 20
+  secondaryValue: 0
+  tertiaryValue: 0
+  duration: 0
+  chancePercent: 0
+  triggerCount: 1
+  internalCooldown: 0
+  effects: []

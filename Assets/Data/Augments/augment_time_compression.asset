@@ -10,28 +10,35 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
-  m_Name: augment_time_compression
-  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.AugmentData
-  contentId: augment_time_compression
-  displayName: 시간 압축
-  description: 최대 HP 15% 감소 · 일반 공격과 스킬 쿨타임 25% 감소
+  m_Name: "augment_time_compression"
+  m_EditorClassIdentifier: "Assembly-CSharp::DragonTower.AugmentData"
+  contentId: "augment_time_compression"
+  displayName: "시간 압축"
+  description: "최대 HP -15%. 일반공격·스킬 쿨타임 -25%."
+  buildTags: "HP·쿨타임"
+  rulesDescription: "최대 HP가 감소해도 현재 HP는 최소 1 남습니다. 쿨타임 감소는 합계 60%까지 적용됩니다."
   rarity: 0
   icon: {fileID: 0}
   grade: 2
   maximumStacks: 1
+  requirements: 0
+  prerequisites: []
+  exclusions: []
   mechanic: 0
   primaryValue: 0
   secondaryValue: 0
-  chancePercent: 0
+  tertiaryValue: 0
   duration: 0
+  chancePercent: 0
   triggerCount: 1
+  internalCooldown: 0
   effects:
   - type: 9
-    value: -15
+    value: -15.0
     note: 
   - type: 5
-    value: 25
+    value: 25.0
     note: 
   - type: 4
-    value: 25
+    value: 25.0
     note: 

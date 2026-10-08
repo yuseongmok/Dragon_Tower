@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
+  m_Name: "augment_crimson_cycle"
+  m_EditorClassIdentifier: "Assembly-CSharp::DragonTower.AugmentData"
+  contentId: "augment_crimson_cycle"
+  displayName: "불멸의 순환"
+  description: "실제 HP 소비 누적이 최대 HP 20%에 도달하면 4초간 일반공격·스킬 피해 +40%, 최대 HP 8% 회복."
+  buildTags: "HP·회복·스킬"
+  rulesDescription: "강화 중에는 HP 소비를 누적하지 않습니다. 재발동 대기시간 8초. 비용 관련 회복은 누적 소비 HP를 넘지 않습니다."
+  rarity: 0
+  icon: {fileID: 0}
+  grade: 4
+  maximumStacks: 1
+  requirements: 16
+  prerequisites: []
+  exclusions: []
+  mechanic: 53
+  primaryValue: 40
+  secondaryValue: 8
+  tertiaryValue: 20
+  duration: 4
+  chancePercent: 0
+  triggerCount: 1
+  internalCooldown: 8
+  effects: []

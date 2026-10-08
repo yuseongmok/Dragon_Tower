@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
+  m_Name: "augment_armored_offense"
+  m_EditorClassIdentifier: "Assembly-CSharp::DragonTower.AugmentData"
+  contentId: "augment_armored_offense"
+  displayName: "공방일체"
+  description: "보호막이 있는 동안 일반공격·스킬 피해 +25%. 보호막이 흡수한 피해 30%를 다음 일반공격 추가타로 방출."
+  buildTags: "방어·일반공격·스킬"
+  rulesDescription: "저장 상한 기본 공격력 200%. 소비 후 초기화. 연쇄 재발동·별도 치명타 없음. 전투 종료 시 삭제."
+  rarity: 0
+  icon: {fileID: 0}
+  grade: 3
+  maximumStacks: 1
+  requirements: 8
+  prerequisites: []
+  exclusions: []
+  mechanic: 50
+  primaryValue: 25
+  secondaryValue: 30
+  tertiaryValue: 200
+  duration: 0
+  chancePercent: 0
+  triggerCount: 1
+  internalCooldown: 0
+  effects: []

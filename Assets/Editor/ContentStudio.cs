@@ -132,7 +132,7 @@ namespace DragonTower.Editor
             else if(tab=="Items")
             {rows.Add(new[]{"id","name","grade","kind","mechanic","maximumStacks","price","primaryValue","secondaryValue","duration","description","effects"});foreach(ItemData i in assets)rows.Add(new[]{i.StableId,i.displayName,i.grade.ToString(),i.kind.ToString(),i.mechanic.ToString(),i.maximumStacks.ToString(),i.price.ToString(),F(i.primaryValue),F(i.secondaryValue),F(i.duration),Clean(i.description),Effects(i.effects)});}
             else
-            {rows.Add(new[]{"id","name","grade","maximumStacks","description","mechanic","primaryValue","secondaryValue","chancePercent","duration","triggerCount","effects"});foreach(AugmentData a in assets)rows.Add(new[]{a.StableId,a.displayName,a.grade.ToString(),a.maximumStacks.ToString(),Clean(a.description),a.mechanic.ToString(),F(a.primaryValue),F(a.secondaryValue),F(a.chancePercent),F(a.duration),a.triggerCount.ToString(),Effects(a.effects)});}
+            {rows.Add(new[]{"id","name","grade","maximumStacks","description","mechanic","primaryValue","secondaryValue","chancePercent","duration","triggerCount","effects","tertiaryValue","internalCooldown","buildTags","rulesDescription","requirements","prerequisites","exclusions"});foreach(AugmentData a in assets)rows.Add(new[]{a.StableId,a.displayName,a.grade.ToString(),a.maximumStacks.ToString(),Clean(a.description),a.mechanic.ToString(),F(a.primaryValue),F(a.secondaryValue),F(a.chancePercent),F(a.duration),a.triggerCount.ToString(),Effects(a.effects),F(a.tertiaryValue),F(a.internalCooldown),Clean(a.buildTags),Clean(a.rulesDescription),a.requirements.ToString(),string.Join(";",a.prerequisites),string.Join(";",a.exclusions)});}
             var builder=new StringBuilder();foreach(var row in rows)builder.AppendLine(string.Join(",",row.Select(Escape)));return builder.ToString();
         }
         public static int Import(string tab,string path)
@@ -173,7 +173,10 @@ namespace DragonTower.Editor
                 var a=FindOrCreate<AugmentData>(id,"Assets/Data/Augments",x=>x.StableId);a.contentId=id;a.displayName=Get(row,"name");
                 if(row.ContainsKey("grade"))a.grade=E<AugmentGrade>(row,"grade");
                 else if(row.ContainsKey("rarity")){a.rarity=E<ContentRarity>(row,"rarity");a.grade=LegacyAugmentGrade(a.rarity);}
-                a.maximumStacks=I(row,"maximumStacks");a.description=Get(row,"description");a.mechanic=E<AugmentMechanic>(row,"mechanic");a.primaryValue=R(row,"primaryValue");a.secondaryValue=R(row,"secondaryValue");a.chancePercent=R(row,"chancePercent");a.duration=R(row,"duration");a.triggerCount=I(row,"triggerCount");a.effects=ParseEffects(Get(row,"effects"));EditorUtility.SetDirty(a);
+                a.maximumStacks=I(row,"maximumStacks");a.description=Get(row,"description");a.mechanic=E<AugmentMechanic>(row,"mechanic");a.primaryValue=R(row,"primaryValue");a.secondaryValue=R(row,"secondaryValue");a.chancePercent=R(row,"chancePercent");a.duration=R(row,"duration");a.triggerCount=I(row,"triggerCount");a.effects=ParseEffects(Get(row,"effects"));
+                if(row.ContainsKey("tertiaryValue"))a.tertiaryValue=R(row,"tertiaryValue");if(row.ContainsKey("internalCooldown"))a.internalCooldown=R(row,"internalCooldown");
+                if(row.ContainsKey("buildTags"))a.buildTags=Get(row,"buildTags");if(row.ContainsKey("rulesDescription"))a.rulesDescription=Get(row,"rulesDescription");if(row.ContainsKey("requirements"))a.requirements=E<AugmentRequirement>(row,"requirements");
+                if(row.ContainsKey("prerequisites"))a.prerequisites=Get(row,"prerequisites").Split(new[]{';'},StringSplitOptions.RemoveEmptyEntries);if(row.ContainsKey("exclusions"))a.exclusions=Get(row,"exclusions").Split(new[]{';'},StringSplitOptions.RemoveEmptyEntries);EditorUtility.SetDirty(a);
             }
         }
         static AugmentGrade LegacyAugmentGrade(ContentRarity rarity)

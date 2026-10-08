@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
+  m_Name: "augment_arcane_apotheosis"
+  m_EditorClassIdentifier: "Assembly-CSharp::DragonTower.AugmentData"
+  contentId: "augment_arcane_apotheosis"
+  displayName: "마력의 정점"
+  description: "스킬 3회 정상 종료마다 다음 공용 스킬 피해 +100%."
+  buildTags: "스킬"
+  rulesDescription: "시그니처 종료도 카운트 가능. 강화는 공용 스킬만 소비. 설치기는 설치 성공을 종료로 셈. 최대 1개 저장."
+  rarity: 0
+  icon: {fileID: 0}
+  grade: 4
+  maximumStacks: 1
+  requirements: 64
+  prerequisites: []
+  exclusions: []
+  mechanic: 52
+  primaryValue: 100
+  secondaryValue: 0
+  tertiaryValue: 0
+  duration: 0
+  chancePercent: 0
+  triggerCount: 3
+  internalCooldown: 0
+  effects: []

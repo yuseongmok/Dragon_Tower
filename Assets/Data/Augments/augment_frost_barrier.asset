@@ -10,20 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
-  m_Name: augment_frost_barrier
-  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.AugmentData
-  contentId: augment_frost_barrier
-  displayName: "\uC11C\uB9AC \uC7A5\uBCBD"
-  description: "\uD68C\uD53C \uC2E4\uD328 \uC2DC \uCD5C\uB300 HP 15% \uBCF4\uD638\uB9C9\uC744
-    4\uCD08\uAC04 \uD68D\uB4DD (\uCFE8\uD0C0\uC784 15\uCD08)"
+  m_Name: "augment_frost_barrier"
+  m_EditorClassIdentifier: "Assembly-CSharp::DragonTower.AugmentData"
+  contentId: "augment_frost_barrier"
+  displayName: "서리 장벽"
+  description: "회피를 시도했지만 피하지 못하고 HP 피해를 받으면 최대 HP 15% 보호막, 4초."
+  buildTags: "회피·방어"
+  rulesDescription: "내부 쿨타임 15초. 보호막 출처별 수명 유지."
   rarity: 0
   icon: {fileID: 0}
   grade: 2
   maximumStacks: 1
+  requirements: 0
+  prerequisites: []
+  exclusions: []
   mechanic: 10
   primaryValue: 15
   secondaryValue: 15
-  chancePercent: 0
+  tertiaryValue: 0
   duration: 4
+  chancePercent: 0
   triggerCount: 1
+  internalCooldown: 15
   effects: []

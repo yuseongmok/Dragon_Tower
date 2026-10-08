@@ -10,22 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
-  m_Name: augment_mana_crystal
-  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.AugmentData
-  contentId: augment_mana_crystal
-  displayName: 마력 결정
-  description: 스킬 피해 15% 증가
+  m_Name: "augment_mana_crystal"
+  m_EditorClassIdentifier: "Assembly-CSharp::DragonTower.AugmentData"
+  contentId: "augment_mana_crystal"
+  displayName: "마력 결정"
+  description: "스킬 피해 +15%."
+  buildTags: "스킬"
+  rulesDescription: "시그니처의 별도 피해 필드까지 동일 기준 적용 필요."
   rarity: 0
   icon: {fileID: 0}
   grade: 0
   maximumStacks: 1
+  requirements: 0
+  prerequisites: []
+  exclusions: []
   mechanic: 0
   primaryValue: 0
   secondaryValue: 0
-  chancePercent: 0
+  tertiaryValue: 0
   duration: 0
+  chancePercent: 0
   triggerCount: 1
+  internalCooldown: 0
   effects:
   - type: 3
-    value: 15
+    value: 15.0
     note: 

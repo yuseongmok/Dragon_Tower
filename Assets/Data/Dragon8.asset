@@ -23,7 +23,17 @@ MonoBehaviour:
   attackDamage: 9
   color: {r: 0.9339623, g: 0.29796636, b: 0.048460312, a: 1}
   battleSprite: {fileID: 6788171137231864173, guid: 430f070ea6f1fec45b99ecd5181dc5da, type: 3}
+  idleFrames: {fileID: 0}
+  attackFrames: {fileID: 0}
+  skillFrames: {fileID: 0}
+  dodgeFrames: {fileID: 0}
+  hitFrames: {fileID: 0}
+  deathFrames: {fileID: 0}
   animationSetPath: DragonAnimations/SolBase
+  basicPresentation: 0
+  elementSkillPool: {fileID: 0}
+  additionalSkillPools: []
+  signatureSkill: {fileID: 11400000, guid: d4db826fcba7e874b8c386267da01a03, type: 2}
   evolutionForms:
   - stage: 1
     displayName: "\uC194\uB9AC\uC5D8"
@@ -52,5 +62,3 @@ MonoBehaviour:
   passiveMechanic: 2
   alternateSkillElement: 0
   evolutionSheetIncludesBase: 1
-
-  signatureSkill: {fileID: 11400000, guid: d4db826fcba7e874b8c386267da01a03, type: 2}

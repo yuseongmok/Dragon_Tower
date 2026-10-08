@@ -10,22 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
-  m_Name: augment_tailwind
-  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.AugmentData
-  contentId: augment_tailwind
-  displayName: 순풍
-  description: 회피 쿨타임 15% 감소
+  m_Name: "augment_tailwind"
+  m_EditorClassIdentifier: "Assembly-CSharp::DragonTower.AugmentData"
+  contentId: "augment_tailwind"
+  displayName: "순풍"
+  description: "회피 쿨타임 -15%."
+  buildTags: "회피·쿨타임"
+  rulesDescription: "회피 무적 종료 후 다음 회피까지 최소 0.15초의 간격이 있습니다."
   rarity: 0
   icon: {fileID: 0}
   grade: 0
   maximumStacks: 1
+  requirements: 0
+  prerequisites: []
+  exclusions: []
   mechanic: 0
   primaryValue: 0
   secondaryValue: 0
-  chancePercent: 0
+  tertiaryValue: 0
   duration: 0
+  chancePercent: 0
   triggerCount: 1
+  internalCooldown: 0
   effects:
   - type: 6
-    value: 15
+    value: 15.0
     note: 

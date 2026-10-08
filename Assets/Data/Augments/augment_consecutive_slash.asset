@@ -10,20 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
-  m_Name: augment_consecutive_slash
-  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.AugmentData
-  contentId: augment_consecutive_slash
-  displayName: "\uC5F0\uC18D\uBCA0\uAE30"
-  description: "\uC77C\uBC18 \uACF5\uACA9 \uC2DC 25% \uD655\uB960\uB85C \uD53C\uD574\uC758
-    60% \uCD94\uAC00 \uD0C0\uACA9"
+  m_Name: "augment_consecutive_slash"
+  m_EditorClassIdentifier: "Assembly-CSharp::DragonTower.AugmentData"
+  contentId: "augment_consecutive_slash"
+  displayName: "연속베기"
+  description: "일반공격 적중 행동마다 25% 확률로 해당 본체 최종 피해의 60% 추가타."
+  buildTags: "일반공격·추가타"
+  rulesDescription: "행동당 1회 추첨. 추가타는 연쇄 재발동·추가 치명타 없음."
   rarity: 0
   icon: {fileID: 0}
   grade: 1
   maximumStacks: 1
+  requirements: 0
+  prerequisites: []
+  exclusions: []
   mechanic: 4
   primaryValue: 60
   secondaryValue: 0
-  chancePercent: 25
+  tertiaryValue: 0
   duration: 0
+  chancePercent: 25
   triggerCount: 1
+  internalCooldown: 0
   effects: []

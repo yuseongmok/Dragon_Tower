@@ -13,6 +13,20 @@ MonoBehaviour:
   m_Name: ZephyrMiddle
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.DragonAnimationSet
   archetype: 0
+  anchors:
+    attackOrigin: {x: 0, y: 0}
+    skillOrigin: {x: 0, y: 0}
+    characterCenter: {x: 0, y: 0}
+    hitPosition: {x: 0, y: 0}
+    groundPosition: {x: 0, y: 0}
+  attachments: []
+  floatingWeapon:
+    sprite: {fileID: 0}
+    size: {x: 44, y: 150}
+    tip: {x: 0.5, y: 0.92}
+    attackFromTip: 1
+    skillFromTip: 1
+    poses: []
   idle: {fileID: 11400000, guid: 1f0c528387e5fe1429d11baba70d4ff2, type: 2}
   attack: {fileID: 11400000, guid: 0a38dc88b667147488485afe74f868d9, type: 2}
   skill: {fileID: 11400000, guid: 20a831c8f2c50784a93586fc604f2f5f, type: 2}

@@ -10,20 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
-  m_Name: augment_spread
-  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.AugmentData
-  contentId: augment_spread
-  displayName: "\uC2A4\uD504\uB808\uB4DC"
-  description: "\uC77C\uBC18 \uACF5\uACA9 \uC2DC \uD53C\uD574\uC758 30% \uCD94\uAC00
-    \uACF5\uACA9"
+  m_Name: "augment_spread"
+  m_EditorClassIdentifier: "Assembly-CSharp::DragonTower.AugmentData"
+  contentId: "augment_spread"
+  displayName: "스프레드"
+  description: "일반공격 적중 시 본체 최종 피해의 30%를 별도 추가타로 적용."
+  buildTags: "일반공격·추가타"
+  rulesDescription: "행동당 1회. 한 대상에게만 적용됩니다. 연쇄 재발동·추가 치명타 없음."
   rarity: 0
   icon: {fileID: 0}
   grade: 1
   maximumStacks: 1
+  requirements: 0
+  prerequisites: []
+  exclusions: []
   mechanic: 19
   primaryValue: 30
   secondaryValue: 0
-  chancePercent: 0
+  tertiaryValue: 0
   duration: 0
+  chancePercent: 0
   triggerCount: 1
+  internalCooldown: 0
   effects: []

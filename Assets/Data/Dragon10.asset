@@ -33,7 +33,7 @@ MonoBehaviour:
   basicPresentation: 1
   elementSkillPool: {fileID: 11400000, guid: f028d08f90678cf47b5434b0010b3766, type: 2}
   additionalSkillPools: []
-  signatureSkill: {fileID: 0}
+  signatureSkill: {fileID: 11400000, guid: e933c99c143ca194e89e809e60b36565, type: 2}
   evolutionForms:
   - stage: 1
     displayName: "\uBBF8\uB9AC\uC628"

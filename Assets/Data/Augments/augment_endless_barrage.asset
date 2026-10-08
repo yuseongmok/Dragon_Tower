@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
+  m_Name: "augment_endless_barrage"
+  m_EditorClassIdentifier: "Assembly-CSharp::DragonTower.AugmentData"
+  contentId: "augment_endless_barrage"
+  displayName: "끝없는 맹공"
+  description: "일반공격 6회 적중 행동마다 2초간 맹공. 기간 중 본체 최종 피해의 50% 추가타가 매 공격에 발생."
+  buildTags: "일반공격·추가타"
+  rulesDescription: "맹공 중 카운트 중지. 추가타 연쇄 재발동/치명타 없음."
+  rarity: 0
+  icon: {fileID: 0}
+  grade: 4
+  maximumStacks: 1
+  requirements: 0
+  prerequisites: []
+  exclusions: []
+  mechanic: 51
+  primaryValue: 50
+  secondaryValue: 0
+  tertiaryValue: 0
+  duration: 2
+  chancePercent: 0
+  triggerCount: 6
+  internalCooldown: 0
+  effects: []

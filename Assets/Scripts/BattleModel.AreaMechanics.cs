@@ -113,7 +113,7 @@ namespace DragonTower
                 if(!ProtectedSkillActive)
                 {
                     if(sealAttackNext)attackSealUntil=Time+Enemy.specialPatternDuration;
-                    else {skillSealUntil=Time+Enemy.specialPatternDuration;pendingSkillHits=0;}
+                    else {skillSealUntil=Time+Enemy.specialPatternDuration;pendingSkillHits=0;CancelAugmentCast();}
                     Feedback?.Invoke(SpecialName+"! 회피 불가 · "+Enemy.specialPatternDuration.ToString("0.#")+"초");
                 }
                 sealAttackNext=!sealAttackNext;
@@ -133,9 +133,9 @@ namespace DragonTower
             if(Enemy.floor>=41&&Enemy.floor<=50)playerParalyzeUntil=Time+4;
             if(Enemy.floor>=51&&Enemy.floor<=60)playerSlowUntil=Time+4;
             if(Enemy.floor>=61&&Enemy.floor<=70&&Time>=skillSealAllowedAt)
-            {skillSealUntil=Math.Max(skillSealUntil,Time+3);skillSealAllowedAt=skillSealUntil+2;pendingSkillHits=0;}
+            {skillSealUntil=Math.Max(skillSealUntil,Time+3);skillSealAllowedAt=skillSealUntil+2;pendingSkillHits=0;CancelAugmentCast();}
             if(Enemy.floor>=71&&Enemy.floor<=80&&Time>=stunAllowedAt&&Roll(25))
-            {playerStunUntil=Time+1;stunAllowedAt=playerStunUntil+3;pendingSkillHits=0;}
+            {playerStunUntil=Time+1;stunAllowedAt=playerStunUntil+3;pendingSkillHits=0;CancelAugmentCast();}
             if(Enemy.bossPattern==EnemyBossPattern.GarudaRend)
             {
                 if(!PlayerRending)playerRendNext=Time+.5;
@@ -160,13 +160,13 @@ namespace DragonTower
         {
             if(Result!=BattleResult.Fighting||ProtectedSkillActive)return;
             // Damage-over-time and reflection cannot be dodged, but mitigation and shields still work.
-            damage=Math.Max(0,(int)Math.Round(damage*(1-Math.Min(80,Math.Max(0,Dragon.damageReductionPercent))/100f),MidpointRounding.AwayFromZero));
-            int absorbed=Math.Min(ShieldHP,damage);shieldHP-=absorbed;damage-=absorbed;damage=ApplyCompletionDefense(damage);
+            damage=Math.Max(0,(int)Math.Round(damage*(1-IncomingReduction/100f),MidpointRounding.AwayFromZero));
+            int absorbed=AbsorbDamage(damage);damage-=absorbed;damage=ApplyCompletionDefense(damage);
             NotifyChargedBeamDamage(Math.Min(PlayerHP,damage));
-            PlayerHP=Math.Max(0,PlayerHP-damage);
+            int actualHP=Math.Min(PlayerHP,damage);PlayerHP=Math.Max(0,PlayerHP-damage);
             ResolvePlayerSurvival();
             Cue?.Invoke(CombatCue.PlayerStatusHit,damage);Feedback?.Invoke(source+" −"+damage+" HP");
-            if(Result==BattleResult.Fighting)TriggerFirstAid();
+            if(actualHP>0)steadyHealAt=Time+5;
         }
         void ResolvePlayerSurvival()
         {
@@ -176,7 +176,7 @@ namespace DragonTower
             var feather=ItemRule(ItemMechanic.PhoenixFeather);
             if(feather!=null&&!phoenixUsed)
             {phoenixUsed=true;PlayerHP=Math.Max(1,(int)Math.Ceiling(Dragon.maxHP*feather.primaryValue/100f));Feedback?.Invoke("불사조의 깃털! 다시 일어났습니다");}
-            else {Result=BattleResult.Defeat;pendingSkillHits=0;}
+            else {Result=BattleResult.Defeat;pendingSkillHits=0;CancelAugmentCast();}
         }
     }
 }

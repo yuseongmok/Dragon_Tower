@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
+  m_Name: "augment_casting_ward"
+  m_EditorClassIdentifier: "Assembly-CSharp::DragonTower.AugmentData"
+  contentId: "augment_casting_ward"
+  displayName: "시전 보호"
+  description: "스킬 시작 시 최대 HP 8% 보호막, 2초."
+  buildTags: "스킬·방어"
+  rulesDescription: "내부 쿨타임 6초. 출처별 수명. 보호막은 티탄 시전 성공을 보장하지 않음."
+  rarity: 0
+  icon: {fileID: 0}
+  grade: 2
+  maximumStacks: 1
+  requirements: 0
+  prerequisites: []
+  exclusions: []
+  mechanic: 45
+  primaryValue: 8
+  secondaryValue: 0
+  tertiaryValue: 0
+  duration: 2
+  chancePercent: 0
+  triggerCount: 1
+  internalCooldown: 6
+  effects: []

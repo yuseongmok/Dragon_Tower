@@ -85,9 +85,9 @@ namespace DragonTower
         public bool CanOfferSkill(SkillData candidate)
         {
             if(candidate==null||!candidate.CanEquip(StableId)||!CanLearnSkill(candidate.elementType))return false;
+            if(candidate.IsSignatureSkill)return candidate==signatureSkill;
             // Existing unmigrated dragons retain their original element-based candidate list.
             if(elementSkillPool==null)return true;
-            if(candidate.rarity==ContentRarity.Legendary)return candidate==signatureSkill;
             if(elementSkillPool.Contains(candidate))return true;
             if(additionalSkillPools!=null)foreach(var pool in additionalSkillPools)if(pool!=null&&pool.Contains(candidate))return true;
             return false;

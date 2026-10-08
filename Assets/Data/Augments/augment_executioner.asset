@@ -10,25 +10,32 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
-  m_Name: augment_executioner
-  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.AugmentData
-  contentId: augment_executioner
-  displayName: 처형자
-  description: 치명타 확률 20% · 치명타 피해 35% 증가
+  m_Name: "augment_executioner"
+  m_EditorClassIdentifier: "Assembly-CSharp::DragonTower.AugmentData"
+  contentId: "augment_executioner"
+  displayName: "처형자"
+  description: "치명타 확률 +20%p. 치명타 피해 배율 +0.35."
+  buildTags: "치명타"
+  rulesDescription: "확률 100% 상한."
   rarity: 0
   icon: {fileID: 0}
   grade: 2
   maximumStacks: 1
+  requirements: 0
+  prerequisites: []
+  exclusions: []
   mechanic: 0
   primaryValue: 0
   secondaryValue: 0
-  chancePercent: 0
+  tertiaryValue: 0
   duration: 0
+  chancePercent: 0
   triggerCount: 1
+  internalCooldown: 0
   effects:
   - type: 11
-    value: 20
+    value: 20.0
     note: 
   - type: 12
-    value: 35
+    value: 35.0
     note: 

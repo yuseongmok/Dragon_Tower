@@ -10,22 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
-  m_Name: augment_acceleration_circuit
-  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.AugmentData
-  contentId: augment_acceleration_circuit
-  displayName: "\uAC00\uC18D \uD68C\uB85C"
-  description: "\uC77C\uBC18 \uACF5\uACA9 \uCFE8\uD0C0\uC784 20% \uAC10\uC18C"
+  m_Name: "augment_acceleration_circuit"
+  m_EditorClassIdentifier: "Assembly-CSharp::DragonTower.AugmentData"
+  contentId: "augment_acceleration_circuit"
+  displayName: "가속 회로"
+  description: "일반공격 쿨타임 -20%."
+  buildTags: "일반공격·쿨타임"
+  rulesDescription: "쿨타임 감소는 다른 효과와 합쳐 최대 60%까지 적용됩니다."
   rarity: 0
   icon: {fileID: 0}
   grade: 1
   maximumStacks: 1
+  requirements: 0
+  prerequisites: []
+  exclusions: []
   mechanic: 0
   primaryValue: 0
   secondaryValue: 0
-  chancePercent: 0
+  tertiaryValue: 0
   duration: 0
+  chancePercent: 0
   triggerCount: 1
+  internalCooldown: 0
   effects:
   - type: 5
-    value: 20
+    value: 20.0
     note: 

@@ -10,19 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
-  m_Name: augment_indomitable_will
-  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.AugmentData
-  contentId: augment_indomitable_will
-  displayName: "\uBD88\uAD74\uC758 \uC758\uC9C0"
-  description: "\uD53C\uACA9 \uC2DC \uC2A4\uD0AC \uCFE8\uD0C0\uC784 \uCD08\uAE30\uD654"
+  m_Name: "augment_indomitable_will"
+  m_EditorClassIdentifier: "Assembly-CSharp::DragonTower.AugmentData"
+  contentId: "augment_indomitable_will"
+  displayName: "불굴의 의지"
+  description: "적 공격으로 실제 HP 피해를 받으면 남은 스킬 쿨타임 30% 감소."
+  buildTags: "방어·스킬·쿨타임"
+  rulesDescription: "내부 쿨타임 5초. HP 소비·무적·보호막 완전 흡수 제외."
   rarity: 0
   icon: {fileID: 0}
   grade: 2
   maximumStacks: 1
+  requirements: 0
+  prerequisites: []
+  exclusions: []
   mechanic: 18
-  primaryValue: 0
+  primaryValue: 30
   secondaryValue: 0
-  chancePercent: 0
+  tertiaryValue: 0
   duration: 0
+  chancePercent: 0
   triggerCount: 1
+  internalCooldown: 5
   effects: []

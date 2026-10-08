@@ -65,7 +65,7 @@ namespace DragonTower
         }
         public static int AugmentGradeWeight(AugmentGrade grade)
         {
-            switch(grade){case AugmentGrade.Rare:return 28;case AugmentGrade.Epic:return 10;case AugmentGrade.Unique:return 2;default:return 60;}
+            switch(grade){case AugmentGrade.Rare:return 30;case AugmentGrade.Epic:return 15;case AugmentGrade.Unique:return 4;case AugmentGrade.Legendary:return 1;default:return 50;}
         }
         public static AugmentData PickWeightedAugment(IReadOnlyList<AugmentData> candidates,System.Random random)
         {

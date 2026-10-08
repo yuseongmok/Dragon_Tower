@@ -14,9 +14,11 @@ Shader "DragonTower/Hydra Living Toxin" {
   float2 wobble=float2(n-.5,current-.5)*.007;fixed4 tex=tex2D(_MainTex,i.uv+wobble);float originalToxin=saturate((tex.g-max(tex.r,tex.b))*3);
   float edge=saturate(tex.a-min(tex2D(_MainTex,i.uv+float2(.004,0)).a,tex2D(_MainTex,i.uv-float2(.004,0)).a));
   float ridge=pow(saturate(1-abs(current-.52)*10),3);float face=saturate(dot(tex.rgb,float3(.22,.5,.28)));
-  float3 col=lerp(float3(.06,.016,.12),float3(.42,.095,.59),saturate(face*1.6+n*.55));
-  col+=float3(.24,.70,.045)*ridge*(.45+.65*n);col+=float3(.46,.95,.10)*originalToxin*(.85+.55*n);col+=float3(.27,.20,.38)*edge*.7;
-  float vapor=smoothstep(.12,.52,n);float rear=smoothstep(.025,.23,i.uv.x+n*.10);float alpha=tex.a*(.73+.25*vapor)*rear*i.color.a;
+  // Readable broad violet planes; fine poison veins remain an accent.
+  float plane=floor(saturate(face*2.1+n*.24)*4)/3;
+  float3 col=lerp(float3(.12,.045,.20),float3(.57,.29,.72),saturate(plane));
+  col+=float3(.24,.70,.045)*ridge*(.16+.24*n);col+=float3(.46,.95,.10)*originalToxin*(.55+.25*n);col+=float3(.48,.32,.62)*edge*.85;
+  float vapor=smoothstep(.12,.52,n);float rear=smoothstep(.025,.23,i.uv.x+n*.10);float alpha=tex.a*(.88+.10*vapor)*rear*i.color.a;
   // A physical closure plane occludes the summon. It never shrinks the head texture.
   float2 rel=i.local-_RiftCenter.xy;float u=saturate(dot(rel,float2(.82,.57236))/525+.5);float close=smoothstep(0,1,saturate(((_Phase-.86)/.14)*1.5-(1-u)*.5));float width=pow(max(.001,sin(u*3.14159265)),.75)*136*(1-close);float across=abs(dot(rel,float2(-.57236,.82)));float mask=1-smoothstep(width-10,width+3,across);
   alpha*=lerp(1,mask,saturate((_Phase-.84)*50));float emerge=smoothstep(.10,.85,i.color.a);alpha*=smoothstep((1-emerge)*.8,(1-emerge)*.8+.18,n+.30);

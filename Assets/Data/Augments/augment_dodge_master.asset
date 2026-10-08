@@ -10,20 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
-  m_Name: augment_dodge_master
-  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.AugmentData
-  contentId: augment_dodge_master
-  displayName: "\uD68C\uD53C \uB9C8\uC2A4\uD130"
-  description: "\uD68C\uD53C \uC131\uACF5 \uC2DC \uB0A8\uC740 \uC2A4\uD0AC \uCFE8\uD0C0\uC784
-    10% \uAC10\uC18C"
+  m_Name: "augment_dodge_master"
+  m_EditorClassIdentifier: "Assembly-CSharp::DragonTower.AugmentData"
+  contentId: "augment_dodge_master"
+  displayName: "회피 마스터"
+  description: "실제 회피 성공 시 남은 스킬 쿨타임 10% 감소."
+  buildTags: "회피·스킬·쿨타임"
+  rulesDescription: "플레이어 회피 무적으로 적 공격을 피한 경우만. 마비/신기루/시전 무적 제외."
   rarity: 0
   icon: {fileID: 0}
   grade: 1
   maximumStacks: 1
+  requirements: 0
+  prerequisites: []
+  exclusions: []
   mechanic: 13
   primaryValue: 10
   secondaryValue: 0
-  chancePercent: 0
+  tertiaryValue: 0
   duration: 0
+  chancePercent: 0
   triggerCount: 1
+  internalCooldown: 0
   effects: []

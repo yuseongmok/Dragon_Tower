@@ -10,22 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
-  m_Name: augment_healthy_beauty
-  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.AugmentData
-  contentId: augment_healthy_beauty
-  displayName: "\uAC74\uAC15\uBBF8"
-  description: "\uCD5C\uB300 HP 15% \uC99D\uAC00"
+  m_Name: "augment_healthy_beauty"
+  m_EditorClassIdentifier: "Assembly-CSharp::DragonTower.AugmentData"
+  contentId: "augment_healthy_beauty"
+  displayName: "건강미"
+  description: "실제로 받는 HP 회복량 +15%."
+  buildTags: "HP·회복"
+  rulesDescription: "초과 회복은 버림. HP 증가에 따른 현재 HP 보정은 회복에서 제외."
   rarity: 0
   icon: {fileID: 0}
   grade: 0
   maximumStacks: 1
-  mechanic: 0
-  primaryValue: 0
+  requirements: 0
+  prerequisites: []
+  exclusions: []
+  mechanic: 22
+  primaryValue: 15
   secondaryValue: 0
-  chancePercent: 0
+  tertiaryValue: 0
   duration: 0
+  chancePercent: 0
   triggerCount: 1
-  effects:
-  - type: 9
-    value: 15
-    note: 
+  internalCooldown: 0
+  effects: []

@@ -10,22 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
-  m_Name: augment_hardened_claws
-  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.AugmentData
-  contentId: augment_hardened_claws
-  displayName: "\uB2E8\uB2E8\uD55C \uBC1C\uD1B1"
-  description: "\uC77C\uBC18 \uACF5\uACA9 \uD53C\uD574 10% \uC99D\uAC00"
+  m_Name: "augment_hardened_claws"
+  m_EditorClassIdentifier: "Assembly-CSharp::DragonTower.AugmentData"
+  contentId: "augment_hardened_claws"
+  displayName: "단단한 발톱"
+  description: "상태이상에 걸린 적에게 일반공격 피해 +12%."
+  buildTags: "일반공격·상태이상"
+  rulesDescription: "상태 종류/개수와 무관하게 한 번만 적용."
   rarity: 0
   icon: {fileID: 0}
   grade: 0
   maximumStacks: 1
-  mechanic: 0
-  primaryValue: 0
+  requirements: 128
+  prerequisites: []
+  exclusions: []
+  mechanic: 21
+  primaryValue: 12
   secondaryValue: 0
-  chancePercent: 0
+  tertiaryValue: 0
   duration: 0
+  chancePercent: 0
   triggerCount: 1
-  effects:
-  - type: 10
-    value: 10
-    note: 
+  internalCooldown: 0
+  effects: []

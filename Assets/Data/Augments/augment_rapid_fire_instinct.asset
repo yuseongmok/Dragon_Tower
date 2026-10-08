@@ -10,20 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
-  m_Name: augment_rapid_fire_instinct
-  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.AugmentData
-  contentId: augment_rapid_fire_instinct
-  displayName: "\uC18D\uC0AC \uBCF8\uB2A5"
-  description: "\uC77C\uBC18 \uACF5\uACA9 3\uD68C \uC801\uC911\uB9C8\uB2E4 5\uCD08\uAC04
-    \uACF5\uACA9 \uCFE8\uD0C0\uC784 15% \uAC10\uC18C"
+  m_Name: "augment_rapid_fire_instinct"
+  m_EditorClassIdentifier: "Assembly-CSharp::DragonTower.AugmentData"
+  contentId: "augment_rapid_fire_instinct"
+  displayName: "속사 본능"
+  description: "일반공격 3회 적중 행동마다 5초간 일반공격 쿨타임 -15%."
+  buildTags: "일반공격·쿨타임"
+  rulesDescription: "버프 중첩 없이 갱신. 추가타/미르의 두 번째 타격은 행동 수 증가 없음."
   rarity: 0
   icon: {fileID: 0}
   grade: 1
   maximumStacks: 1
+  requirements: 0
+  prerequisites: []
+  exclusions: []
   mechanic: 3
   primaryValue: 15
   secondaryValue: 0
-  chancePercent: 0
+  tertiaryValue: 0
   duration: 5
+  chancePercent: 0
   triggerCount: 3
+  internalCooldown: 0
   effects: []

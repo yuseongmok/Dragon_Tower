@@ -29,9 +29,9 @@ namespace DragonTower
             if(button==null)return;var image=button.targetGraphic as Image;if(image==null)return;Frame(image,accent);var colors=button.colors;colors.normalColor=image.color;colors.highlightedColor=Color.Lerp(image.color,Color.white,.14f);colors.pressedColor=Color.Lerp(image.color,Color.black,.22f);colors.selectedColor=colors.highlightedColor;colors.disabledColor=new Color(.15f,.17f,.2f,.78f);colors.colorMultiplier=1;button.colors=colors;
         }
         public static Color Grade(ItemGrade grade){switch(grade){case ItemGrade.Rare:return new Color(.20f,.58f,.82f);case ItemGrade.Epic:return new Color(.63f,.32f,.88f);case ItemGrade.Unique:return new Color(1,.63f,.18f);default:return Parchment;}}
-        public static Color Grade(AugmentGrade grade){switch(grade){case AugmentGrade.Rare:return new Color(.20f,.58f,.82f);case AugmentGrade.Epic:return new Color(.63f,.32f,.88f);case AugmentGrade.Unique:return new Color(1,.63f,.18f);default:return Parchment;}}
+        public static Color Grade(AugmentGrade grade){switch(grade){case AugmentGrade.Rare:return new Color(.20f,.58f,.82f);case AugmentGrade.Epic:return new Color(.63f,.32f,.88f);case AugmentGrade.Unique:return new Color(1,.63f,.18f);case AugmentGrade.Legendary:return new Color(1,.85f,.36f);default:return Parchment;}}
     }
-    public sealed class CollectionFlow : MonoBehaviour
+    public sealed partial class CollectionFlow : MonoBehaviour
     {
         BattleController controller;BattleView battleView;DragonData[] catalog;ContentDatabase database;
         RectTransform root,body,portrait,roomIcon,startPrompt;
@@ -144,6 +144,7 @@ namespace DragonTower
         void StyleCard(Button button,Color fill,Color accent){if(button==null)return;button.targetGraphic.color=fill;DragonTowerTheme.StyleButton(button,accent);}
         void Screen(string name)
         {
+            CancelRewardReveal();
             DragonTowerAudio.SetMusic(MusicMood.Lobby);
             if(body!=null){body.gameObject.SetActive(false);Destroy(body.gameObject);}
             portrait=null;roomIcon=null;startPrompt=null;egg=null;HatchButton=TowerButton=ContinueButton=RoomButton=SecondRoomButton=DragonButton=null;ChoiceButtons=null;
@@ -478,8 +479,8 @@ namespace DragonTower
         void ShowAugmentChoices(bool levelReward)
         {
             Screen(levelReward?"레벨 "+towerRun.Level+" 증강":"증강방");
-            Label("세 선택지는 모두 무작위로 등장합니다",0,165,430,44,20,Gold);
-            Label("스킬은 현재 드래곤과 같은 속성만 등장",0,208,420,32,16,Muted);
+            Label("이번 성장을 선택하세요",0,161,430,36,21,Gold);
+            Label("카드를 눌러 자세히 읽고 선택할 수 있어요",0,194,430,30,16,Muted);
             var rewards=PickRandomRewards(Environment.TickCount^towerRun.Level^(towerRun.Floor<<8),3);
             ChoiceButtons=new Button[Math.Max(3,rewards.Length)];
             if(rewards.Length>0)
@@ -490,21 +491,25 @@ namespace DragonTower
                     if(reward.augment!=null)
                     {
                         var augment=reward.augment;
-                        choice=RewardCard(GradeName(augment.grade)+" · 증강",augment.displayName,AugmentSummary(augment),AugmentIcon(augment),300+slot*120,GradeColor(augment.grade),DragonTowerTheme.Grade(augment.grade),()=>ChooseAugment(augment,levelReward));
+                        choice=AugmentRewardCard(GradeName(augment.grade)+" · 증강",augment.displayName,AugmentSummary(augment),AugmentIcon(augment),301+slot*178,DragonTowerTheme.Grade(augment.grade),()=>ShowRewardDetails(augment,null,levelReward));
                     }
                     else
                     {
                         var skill=reward.skill;
-                        choice=RewardCard("스킬 · "+ElementLabel(skill.elementType),skill.displayName,SkillSummary(skill),SkillIcon(skill),300+slot*120,new Color(.12f,.22f,.36f,.98f),new Color(.35f,.72f,1),()=>ChooseSkill(skill,levelReward));
+                        choice=AugmentRewardCard("스킬 · "+ElementLabel(skill.elementType),skill.displayName,SkillSummary(skill),SkillIcon(skill),301+slot*178,new Color(.35f,.72f,1),()=>ShowRewardDetails(null,skill,levelReward));
                     }
                     ChoiceButtons[slot]=choice;
                 }
-                notice.text="일반 60% · 레어 28% · 에픽 10% · 유니크 2%";
+                notice.text="증강을 불러오는 중…";
+                BeginRewardReveal();
+                SecondRoomButton=Button("선택하지 않고 넘어가기",0,765,400,40,()=>SkipAugmentReward(levelReward));
+                SecondRoomButton.GetComponentInChildren<Text>().fontSize=17;
+                SecondRoomButton.interactable=false;
             }
             else
             {
-                for(int i=0;i<3;i++){int index=i;ChoiceButtons[i]=Button("증강 슬롯 "+(i+1)+"\n효과 내용은 추후 추가",0,300+i*120,400,92,()=>ChooseAugment("augment-slot-"+index,levelReward));}
-                notice.text="콘텐츠 관리 창에서 증강 데이터를 추가할 수 있습니다.";
+                ContinueButton=Button("다음 층으로",0,430,380,66,()=>{towerRun.ConsumeEmptyAugmentReward(levelReward);AdvanceFloor();});
+                notice.text="현재 획득할 수 있는 선택지가 없습니다.";
             }
         }
         sealed class RandomReward { public AugmentData augment;public SkillData skill; }
@@ -512,11 +517,11 @@ namespace DragonTower
         {
             if(database==null)return Array.Empty<RandomReward>();
             var augments=(database.augments??Array.Empty<AugmentData>()).Where(a=>a!=null&&towerRun.CanTakeAugment(a)).ToList();
-            var skills=(database.skills??Array.Empty<SkillData>()).Where(s=>s!=null&&Session.Selected.CanOfferSkill(s)&&s.StableId!=towerRun.CurrentSkillId(Session.Selected.SkillAtLevel(towerRun.Level))).ToList();
+            var skills=(database.skills??Array.Empty<SkillData>()).Where(s=>s!=null&&towerRun.CanOfferSkill(s)&&s.StableId!=towerRun.CurrentSkillId(Session.Selected.SkillAtLevel(towerRun.Level))).ToList();
             var result=new System.Collections.Generic.List<RandomReward>();var random=new System.Random(seed);
             // Separate eligibility roll: ordinary rewards retain their existing random stream.
             var signatureRandom=new System.Random(seed^0x5A17);
-            skills.RemoveAll(s=>s.rewardEligibilityPercent<100&&signatureRandom.NextDouble()*100>=s.rewardEligibilityPercent);
+            skills.RemoveAll(s=>s.EffectiveRewardEligibilityPercent<100&&signatureRandom.NextDouble()*100>=s.EffectiveRewardEligibilityPercent);
             while(result.Count<count&&(augments.Count>0||skills.Count>0))
             {
                 // A skill is possible in every slot but never guaranteed. With both pools present,
@@ -535,11 +540,11 @@ namespace DragonTower
             return result.ToArray();
         }
         static string GradeName(AugmentGrade grade)
-        {switch(grade){case AugmentGrade.Rare:return "레어";case AugmentGrade.Epic:return "에픽";case AugmentGrade.Unique:return "유니크";default:return "일반";}}
+        {switch(grade){case AugmentGrade.Rare:return "레어";case AugmentGrade.Epic:return "에픽";case AugmentGrade.Unique:return "유니크";case AugmentGrade.Legendary:return "전설";default:return "일반";}}
         static string ItemGradeName(ItemGrade grade)
         {switch(grade){case ItemGrade.Rare:return "레어";case ItemGrade.Epic:return "에픽";case ItemGrade.Unique:return "유니크";default:return "일반";}}
         static Color GradeColor(AugmentGrade grade)
-        {switch(grade){case AugmentGrade.Rare:return new Color(.18f,.38f,.58f);case AugmentGrade.Epic:return new Color(.39f,.22f,.58f);case AugmentGrade.Unique:return new Color(.68f,.40f,.12f);default:return new Color(.18f,.27f,.36f);}}
+        {switch(grade){case AugmentGrade.Rare:return new Color(.18f,.38f,.58f);case AugmentGrade.Epic:return new Color(.39f,.22f,.58f);case AugmentGrade.Unique:return new Color(.68f,.40f,.12f);case AugmentGrade.Legendary:return new Color(.45f,.28f,.06f);default:return new Color(.18f,.27f,.36f);}}
         string AugmentSummary(AugmentData augment)
         {
             if(augment==null)return "효과 없음";

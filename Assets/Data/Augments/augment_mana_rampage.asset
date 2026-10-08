@@ -10,23 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
-  m_Name: augment_mana_rampage
-  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.AugmentData
-  contentId: augment_mana_rampage
-  displayName: "\uB9C8\uB098\uD3ED\uC8FC"
-  description: "\uC2A4\uD0AC \uCFE8\uD0C0\uC784 30% \uAC10\uC18C \xB7 \uC2A4\uD0AC
-    \uC2DC\uC804 \uC2DC \uCD5C\uB300 HP\uC758 2% \uC18C\uBAA8"
+  m_Name: "augment_mana_rampage"
+  m_EditorClassIdentifier: "Assembly-CSharp::DragonTower.AugmentData"
+  contentId: "augment_mana_rampage"
+  displayName: "마나폭주"
+  description: "스킬 쿨타임 -30%. 실제 시전 시작 시 최대 HP 2% 소비."
+  buildTags: "HP·스킬·쿨타임"
+  rulesDescription: "모든 HP 비용을 합산해 지불합니다. 사용 후 HP가 1 이상 남아야 합니다. 취소해도 비용은 돌아오지 않으며 추가타에는 비용이 없습니다."
   rarity: 0
   icon: {fileID: 0}
   grade: 2
   maximumStacks: 1
+  requirements: 0
+  prerequisites: []
+  exclusions: []
   mechanic: 2
   primaryValue: 2
   secondaryValue: 0
-  chancePercent: 0
+  tertiaryValue: 0
   duration: 0
+  chancePercent: 0
   triggerCount: 1
+  internalCooldown: 0
   effects:
   - type: 4
-    value: 30
+    value: 30.0
     note: 

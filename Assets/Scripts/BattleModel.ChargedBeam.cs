@@ -20,7 +20,7 @@ namespace DragonTower {
   double ChargedBeamStep(double step){double due=beamPhase==ChargedBeamPhase.Charging?chargeDue:beamPhase==ChargedBeamPhase.Priming?beamDue:beamPhase==ChargedBeamPhase.Beam?beamEnds:double.MaxValue;double left=due-Time;return left>0?Math.Min(step,left):step;}
   void NotifyChargedBeamDamage(int actualHPDamage){
    if(actualHPDamage<=0||beamPhase!=ChargedBeamPhase.Charging)return;
-   beamPhase=ChargedBeamPhase.Failed;beamPhaseAt=Time;pendingSkillHits=0;pendingFirstSkillHit=false;SkillReady=Math.Max(SkillReady,chargedCooldownUntil);
+   CancelAugmentCast();beamPhase=ChargedBeamPhase.Failed;beamPhaseAt=Time;pendingSkillHits=0;pendingFirstSkillHit=false;SkillReady=Math.Max(SkillReady,chargedCooldownUntil);
    Cue?.Invoke(CombatCue.ChargeFailed,0);Feedback?.Invoke(Dragon.skill.displayName+" · 충전 실패");
   }
   void TickChargedBeam(){

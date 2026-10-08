@@ -10,21 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
-  m_Name: augment_first_aid
-  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.AugmentData
-  contentId: augment_first_aid
-  displayName: "\uC751\uAE09 \uCC98\uCE58"
-  description: "HP\uAC00 30% \uC774\uD558\uAC00 \uB418\uBA74 3\uCD08\uAC04 \uC77C\uBC18
-    \uACF5\uACA9\xB7\uC2A4\uD0AC \uCFE8\uD0C0\uC784 50% \uAC10\uC18C (\uC804\uD22C\uB2F9
-    1\uD68C)"
+  m_Name: "augment_first_aid"
+  m_EditorClassIdentifier: "Assembly-CSharp::DragonTower.AugmentData"
+  contentId: "augment_first_aid"
+  displayName: "응급 처치"
+  description: "HP 30% 이하에서 적 공격으로 HP가 감소하면 3초간 일반공격·스킬 쿨타임 -50%. 전투당 1회."
+  buildTags: "HP·쿨타임"
+  rulesDescription: "자발적 HP 소비·완전 흡수·0 피해 제외. 이름과 달리 회복 효과 없음을 설명."
   rarity: 0
   icon: {fileID: 0}
   grade: 2
   maximumStacks: 1
+  requirements: 0
+  prerequisites: []
+  exclusions: []
   mechanic: 6
   primaryValue: 50
   secondaryValue: 30
-  chancePercent: 0
+  tertiaryValue: 0
   duration: 3
+  chancePercent: 0
   triggerCount: 1
+  internalCooldown: 0
   effects: []

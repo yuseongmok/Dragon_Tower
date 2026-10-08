@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
+  m_Name: "augment_critical_destiny"
+  m_EditorClassIdentifier: "Assembly-CSharp::DragonTower.AugmentData"
+  contentId: "augment_critical_destiny"
+  displayName: "필살의 운명"
+  description: "치명타가 없는 일반공격 행동 1회마다 집중 1개. 3개가 되면 다음 일반공격은 치명타 확정, 치명타 배율 +1.00."
+  buildTags: "일반공격·치명타"
+  rulesDescription: "집중은 자연 치명타로 사라지지 않음. 강화 공격 후 초기화. 확정 치명타 효과끼리 배율 중복 적용 금지."
+  rarity: 0
+  icon: {fileID: 0}
+  grade: 4
+  maximumStacks: 1
+  requirements: 0
+  prerequisites: []
+  exclusions: []
+  mechanic: 59
+  primaryValue: 100
+  secondaryValue: 0
+  tertiaryValue: 0
+  duration: 0
+  chancePercent: 0
+  triggerCount: 3
+  internalCooldown: 0
+  effects: []

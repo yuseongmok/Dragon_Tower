@@ -10,26 +10,32 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
-  m_Name: augment_sharp_claws
-  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.AugmentData
-  contentId: augment_sharp_claws
-  displayName: "\uC608\uB9AC\uD55C \uBC1C\uD1B1"
-  description: "\uC77C\uBC18 \uACF5\uACA9 \uD53C\uD574 35% \uC99D\uAC00 \xB7 \uC2A4\uD0AC
-    \uCFE8\uD0C0\uC784 30% \uC99D\uAC00"
+  m_Name: "augment_sharp_claws"
+  m_EditorClassIdentifier: "Assembly-CSharp::DragonTower.AugmentData"
+  contentId: "augment_sharp_claws"
+  displayName: "예리한 발톱"
+  description: "일반공격 피해 +35%. 스킬 쿨타임 +30%."
+  buildTags: "일반공격·대가"
+  rulesDescription: "강림 재사용 빈도와 교환 관계."
   rarity: 0
   icon: {fileID: 0}
   grade: 1
   maximumStacks: 1
+  requirements: 0
+  prerequisites: []
+  exclusions: []
   mechanic: 0
   primaryValue: 0
   secondaryValue: 0
-  chancePercent: 0
+  tertiaryValue: 0
   duration: 0
+  chancePercent: 0
   triggerCount: 1
+  internalCooldown: 0
   effects:
   - type: 10
-    value: 35
+    value: 35.0
     note: 
   - type: 4
-    value: -30
+    value: -30.0
     note: 

@@ -12,7 +12,7 @@ namespace DragonTower
     }
 
     // Everything in this class belongs to one tower attempt and is discarded on defeat.
-    public sealed class TowerRun
+    public sealed partial class TowerRun
     {
         public const int ItemSlotCapacity=3;
         readonly List<string> items=new List<string>();
@@ -66,9 +66,19 @@ namespace DragonTower
         }
         public SkillData CurrentSkill(SkillData fallback)=>replacedSkill??fallback;
         public string CurrentSkillId(SkillData fallback){var skill=CurrentSkill(fallback);return skill==null?string.Empty:skill.StableId;}
+        public bool CanOfferSkill(SkillData skill)
+        {
+            if(skill==null||!skill.CanEquip(dragonId))return false;
+            if(SkillDisabled&&!skill.IsSignatureSkill)return false;
+            if(skill.elementType!=dragonElement&&skill.elementType!=alternateSkillElement)return false;
+            if((skill.IsSignatureSkill||(definition!=null&&skill==definition.signatureSkill))&&
+                (DragonData.EvolutionStage(Level)<2||PendingEvolutionStage>0))return false;
+            return definition==null||definition.CanOfferSkill(skill);
+        }
         public void ReplaceSkill(SkillData skill,bool levelReward)
         {
             if(skill==null)throw new ArgumentNullException(nameof(skill));
+            if(!CanOfferSkill(skill))throw new InvalidOperationException("현재 진화 단계 또는 드래곤이 배울 수 없는 스킬입니다. 전용기는 최종진화 후 해금됩니다.");
             if(!skill.CanEquip(dragonId))throw new InvalidOperationException("이 드래곤의 전용 스킬이 아닙니다.");
             if(skill.elementType!=dragonElement&&skill.elementType!=alternateSkillElement)throw new InvalidOperationException("현재 드래곤이 사용할 수 있는 속성의 스킬만 배울 수 있습니다.");
             if(definition!=null&&!definition.CanOfferSkill(skill))throw new InvalidOperationException("Skill is not in this dragon production pool.");
@@ -116,22 +126,22 @@ namespace DragonTower
             int itemDodgeDuration=ItemEffect(ContentEffectType.DodgeDurationPercent),itemCrit=ItemEffect(ContentEffectType.CriticalChancePercent);
             int itemCritDamage=ItemEffect(ContentEffectType.CriticalDamagePercent),itemReduction=ItemEffect(ContentEffectType.DamageReductionPercent);
             int affinityPassiveBonus=(source.passiveMechanic==DragonPassiveMechanic.StormAffinity||source.passiveMechanic==DragonPassiveMechanic.FrozenBlade)?evolutionStage*10:0;
-            return new BattleStats{speciesId=source.speciesId,displayName=source.displayName,element=source.element,elementType=source.elementType,skillEffect=replacedSkill==null?source.skillEffect:replacedSkill.effectKind,maxHP=MaxHP,attackDamage=Math.Max(1,(int)Math.Round((source.attackDamage*(definition==null?AttackEvolutionMultiplier(evolutionStage):definition.AttackMultiplier(evolutionStage))+AttackBonus+itemAttack)*(1+(AttackDamagePercent+itemAttackPercent)/100f))),
+            int rawAttack=Math.Max(1,(int)Math.Round(source.attackDamage*(definition==null?AttackEvolutionMultiplier(evolutionStage):definition.AttackMultiplier(evolutionStage))+AttackBonus+itemAttack));
+            return new BattleStats{baseAttackDamage=rawAttack,baseAttackCooldown=source.attackCooldown,baseSkillCooldown=selected.cooldown,attackDamageBonusPercent=AttackDamagePercent+itemAttackPercent,skillDamageBonusPercent=SkillDamagePercent+itemSkillPercent+affinityPassiveBonus,speciesId=source.speciesId,displayName=source.displayName,element=source.element,elementType=source.elementType,skillEffect=replacedSkill==null?source.skillEffect:replacedSkill.effectKind,maxHP=MaxHP,attackDamage=Math.Max(1,(int)Math.Round((source.attackDamage*(definition==null?AttackEvolutionMultiplier(evolutionStage):definition.AttackMultiplier(evolutionStage))+AttackBonus+itemAttack)*(1+(AttackDamagePercent+itemAttackPercent)/100f))),
                 attackCooldown=ScaleTime(source.attackCooldown,AttackCooldownPercent+itemAttackCooldown,.08f),dodgeCooldown=ScaleTime(source.dodgeCooldown,DodgeCooldownPercent+itemDodgeCooldown,.2f),
                 dodgeDuration=Math.Max(.05f,source.dodgeDuration*(1+(DodgeDurationPercent+itemDodgeDuration)/100f)),criticalChance=Math.Max(0,source.criticalChance+(CriticalChancePercent+itemCrit)/100f),criticalDamage=Math.Max(1,source.criticalDamage+(CriticalDamagePercent+itemCritDamage)/100f),damageReductionPercent=Math.Max(0,Math.Min(80,DamageReductionPercent+itemReduction)),skillDisabled=SkillDisabled,augments=augmentData.Select(x=>x.Snapshot()).ToArray(),items=itemSlots.Where(x=>x.Item!=null&&x.Item.kind==ItemKind.Equipment).Select(x=>x.Item.Snapshot(x.Count)).ToArray(),
                 passiveName=source.passiveName,passiveDescription=source.passiveDescription,passiveMechanic=source.passiveMechanic,alternateSkillElement=source.alternateSkillElement,passiveAvailable=PassiveAvailable,passiveStage=evolutionStage,
-                skill=new SkillStats{useSecondaryElement=selected.useSecondaryElement,secondaryElement=selected.secondaryElement,statusOnFinalHit=selected.statusOnFinalHit,targetCriticalBonus=selected.targetCriticalBonus,targetCriticalDuration=selected.targetCriticalDuration,hitTimeOffsets=selected.hitTimeOffsets==null?null:(float[])selected.hitTimeOffsets.Clone(),completionHealPercent=selected.completionHealPercent,completionHealDelay=selected.completionHealDelay,exclusiveDragonId=selected.exclusiveDragonId,slowBonusDamagePercent=selected.slowBonusDamagePercent,slowBonusDelay=selected.slowBonusDelay,dodgeFreeCastDuration=selected.dodgeFreeCastDuration,dodgeFreeAfterDuration=selected.dodgeFreeAfterDuration,finalHitDamageMultiplier=selected.finalHitDamageMultiplier,protectedCastDuration=selected.protectedCastDuration,displayName=selected.displayName,elementType=selected.elementType,damage=Math.Max(1,(int)Math.Round(selected.damage*(1+(SkillDamagePercent+itemSkillPercent+affinityPassiveBonus)/100f))),
-                    cooldown=SkillCooldownZero?0:ScaleTime(selected.cooldown,SkillCooldownPercent+itemSkillCooldown,.2f),statusOnHit=selected.statusOnHit,initialHitDelay=selected.initialHitDelay,hitCount=Math.Max(1,selected.hitCount),hitInterval=Math.Max(.03f,selected.hitInterval),
-                    statusEffect=selected.statusEffect,statusChancePercent=selected.statusChancePercent,statusDuration=selected.statusDuration,statusPower=selected.statusPower}};
+                skill=BuildAugmentedSkill(selected,itemSkillPercent,affinityPassiveBonus,itemSkillCooldown)};
         }
         public static float HealthEvolutionMultiplier(int stage)=>stage>=2?1.45f:stage>=1?1.20f:1f;
         public static float AttackEvolutionMultiplier(int stage)=>stage>=2?1.40f:stage>=1?1.18f:1f;
         public static float PassiveEvolutionMultiplier(int stage)=>1+Math.Max(0,Math.Min(2,stage))*.25f;
-        static float ScaleTime(float value,int reductionPercent,float minimum)=>Math.Max(minimum,value*(1-reductionPercent/100f));
+        static float ScaleTime(float value,int reductionPercent,float minimum)=>Math.Max(minimum,value*(1-Math.Min(60,reductionPercent)/100f));
         public void RecordBattleVictory(int remainingHP)
         {
             int previousStage=DragonData.EvolutionStage(Level);
             CurrentHP=Math.Max(0,Math.Min(MaxHP,remainingHP));MonstersDefeated++;
+            Heal((int)Math.Ceiling(MaxHP*AugmentValue(AugmentMechanic.BattleBreath)/100f));
             LastExperienceGain=ExperienceToNext;Experience+=LastExperienceGain;
             while(Experience>=ExperienceToNext){Experience-=ExperienceToNext;Level++;}
             int currentStage=DragonData.EvolutionStage(Level);
@@ -147,7 +157,7 @@ namespace DragonTower
         public int Heal(int amount)
         {
             if(amount<0)throw new ArgumentOutOfRangeException(nameof(amount));
-            int before=CurrentHP;CurrentHP=Math.Min(MaxHP,CurrentHP+amount);return CurrentHP-before;
+            int before=CurrentHP;CurrentHP=Math.Min(MaxHP,CurrentHP+(int)Math.Round(amount*(1+AugmentValue(AugmentMechanic.HealthyBeauty)/100f)));return CurrentHP-before;
         }
         public int HealFull()=>Heal(MaxHP);
         public void AddGold(int amount){if(amount<0)throw new ArgumentOutOfRangeException(nameof(amount));Gold+=amount;}
@@ -192,7 +202,7 @@ namespace DragonTower
         {
             if(augment==null)return false;
             int stacks=0;foreach(var id in augments)if(id==augment.StableId)stacks++;
-            return stacks<Math.Max(1,augment.maximumStacks);
+            return stacks<Math.Max(1,augment.maximumStacks)&&AugmentCompatible(augment);
         }
         void ApplyEffects(IReadOnlyList<ContentEffect> effects)
         {

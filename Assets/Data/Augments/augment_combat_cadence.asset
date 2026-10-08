@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
+  m_Name: "augment_combat_cadence"
+  m_EditorClassIdentifier: "Assembly-CSharp::DragonTower.AugmentData"
+  contentId: "augment_combat_cadence"
+  displayName: "전투의 운율"
+  description: "일반공격 5회 적중 행동마다 기본 공격력 150%의 독립 추가타."
+  buildTags: "일반공격·추가타"
+  rulesDescription: "본체 추가타가 아님. 캐릭터 속성·상성 적용, 별도 치명타/연쇄 재발동 없음. 3초 미적중 시 카운터 초기화."
+  rarity: 0
+  icon: {fileID: 0}
+  grade: 3
+  maximumStacks: 1
+  requirements: 0
+  prerequisites: []
+  exclusions: []
+  mechanic: 48
+  primaryValue: 150
+  secondaryValue: 0
+  tertiaryValue: 0
+  duration: 3
+  chancePercent: 0
+  triggerCount: 5
+  internalCooldown: 0
+  effects: []

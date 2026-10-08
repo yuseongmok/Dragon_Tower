@@ -10,23 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
-  m_Name: augment_double_casting
-  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.AugmentData
-  contentId: augment_double_casting
-  displayName: "\uB354\uBE14 \uCE90\uC2A4\uD305"
-  description: "\uC2A4\uD0AC \uCFE8\uD0C0\uC784 70% \uC99D\uAC00 \xB7 \uC2A4\uD0AC\uC774
-    \uC989\uC2DC 2\uD68C \uBC1C\uB3D9"
+  m_Name: "augment_double_casting"
+  m_EditorClassIdentifier: "Assembly-CSharp::DragonTower.AugmentData"
+  contentId: "augment_double_casting"
+  displayName: "더블 캐스팅"
+  description: "공용 스킬 쿨타임 +50%. 공용 스킬 본체 피해의 60%를 0.15초 뒤 한 번 메아리 타격."
+  buildTags: "스킬·추가타·대가"
+  rulesDescription: "전용 Legendary 제외. 원본 실제 피해 합산 후 파생 피해 1회. 회복/상태/HP 비용/시전 이벤트 복제 금지."
   rarity: 0
   icon: {fileID: 0}
   grade: 3
   maximumStacks: 1
+  requirements: 64
+  prerequisites: []
+  exclusions: []
   mechanic: 16
-  primaryValue: 0
-  secondaryValue: 0
+  primaryValue: 60
+  secondaryValue: 50
+  tertiaryValue: 0
+  duration: 0.15
   chancePercent: 0
-  duration: 0
   triggerCount: 1
-  effects:
-  - type: 4
-    value: -70
-    note: 
+  internalCooldown: 0
+  effects: []

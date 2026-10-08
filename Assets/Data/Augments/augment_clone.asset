@@ -10,20 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
-  m_Name: augment_clone
-  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.AugmentData
-  contentId: augment_clone
-  displayName: "\uBD84\uC2E0"
-  description: "\uCE58\uBA85\uD0C0 \uC77C\uBC18 \uACF5\uACA9 \uC2DC \uD53C\uD574\uC758
-    20%\uB85C 2\uD68C \uCD94\uAC00 \uACF5\uACA9"
+  m_Name: "augment_clone"
+  m_EditorClassIdentifier: "Assembly-CSharp::DragonTower.AugmentData"
+  contentId: "augment_clone"
+  displayName: "분신"
+  description: "치명타 일반공격 행동에서 치명타가 난 본체 피해 합계의 20%로 추가타 2회."
+  buildTags: "일반공격·치명타·추가타"
+  rulesDescription: "행동당 최대 한 쌍. 추가타는 다른 발동 효과를 부르지 않음."
   rarity: 0
   icon: {fileID: 0}
   grade: 2
   maximumStacks: 1
+  requirements: 0
+  prerequisites: []
+  exclusions: []
   mechanic: 20
   primaryValue: 20
   secondaryValue: 0
-  chancePercent: 0
+  tertiaryValue: 0
   duration: 0
+  chancePercent: 0
   triggerCount: 2
+  internalCooldown: 0
   effects: []

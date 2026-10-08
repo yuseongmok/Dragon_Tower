@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
+  m_Name: "augment_patient_aim"
+  m_EditorClassIdentifier: "Assembly-CSharp::DragonTower.AugmentData"
+  contentId: "augment_patient_aim"
+  displayName: "신중한 조준"
+  description: "일반공격을 1.5초 이상 사용하지 않은 뒤 다음 일반공격 치명타 확률 +15%p."
+  buildTags: "일반공격·치명타"
+  rulesDescription: "행동당 1회. 한 번 공격하면 대기 시간 초기화."
+  rarity: 0
+  icon: {fileID: 0}
+  grade: 0
+  maximumStacks: 1
+  requirements: 0
+  prerequisites: []
+  exclusions: []
+  mechanic: 26
+  primaryValue: 15
+  secondaryValue: 0
+  tertiaryValue: 0
+  duration: 1.5
+  chancePercent: 0
+  triggerCount: 1
+  internalCooldown: 0
+  effects: []

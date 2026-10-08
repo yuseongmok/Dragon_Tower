@@ -10,20 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2a9c13f79c2450a87bdb3ac7717dca8, type: 3}
-  m_Name: augment_inferno
-  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.AugmentData
-  contentId: augment_inferno
-  displayName: "\uC5C5\uD654"
-  description: "\uD654\uC0C1 \uC0C1\uD0DC\uC778 \uC801\uC744 \uACF5\uACA9\uD560 \uB54C
-    \uCE58\uBA85\uD0C0 \uD655\uB960 50% \uC99D\uAC00"
+  m_Name: "augment_inferno"
+  m_EditorClassIdentifier: "Assembly-CSharp::DragonTower.AugmentData"
+  contentId: "augment_inferno"
+  displayName: "업화"
+  description: "화상 대상에게 치명타 확률 +25%p, 치명타 피해 배율 +0.20."
+  buildTags: "화상·치명타"
+  rulesDescription: "엠버 전용기의 +50%p와 합산 후 확률 상한."
   rarity: 0
   icon: {fileID: 0}
   grade: 2
   maximumStacks: 1
+  requirements: 1
+  prerequisites: []
+  exclusions: []
   mechanic: 11
-  primaryValue: 50
-  secondaryValue: 0
-  chancePercent: 0
+  primaryValue: 25
+  secondaryValue: 20
+  tertiaryValue: 0
   duration: 0
+  chancePercent: 0
   triggerCount: 1
+  internalCooldown: 0
   effects: []
