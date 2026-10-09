@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8104a060aef340d2bae800e3c7ba2cac, type: 3}
+  m_Name: item_ground_fissure
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.ItemData
+  contentId: item_ground_fissure
+  displayName: "대지 균열"
+  description: "공격 회피 성공 시 스킬 피해의 80% 대지 피해. 재사용 12초."
+  rarity: 2
+  icon: {fileID: 0}
+  grade: 1
+  kind: 1
+  mechanic: 0
+  maximumStacks: 1
+  price: 80
+  primaryValue: 0
+  secondaryValue: 0
+  duration: 0
+  effects: []
+  autoTrigger:
+    enabled: 1
+    effect: 0
+    art: 6
+    damageBasis: 2
+    damagePercent: 80
+    trigger: 3
+    cooldown: 12
+    chancePercent: 100
+    element: 5
+    hitCount: 1
+    initialDelay: 0.25
+    hitInterval: 0.22
+    status: 0
+    statusChancePercent: 100
+    statusDuration: 3
+    statusPower: 0
+    visualScale: 0.9

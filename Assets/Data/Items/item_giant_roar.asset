@@ -13,17 +13,39 @@ MonoBehaviour:
   m_Name: item_giant_roar
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.ItemData
   contentId: item_giant_roar
-  displayName: "\uAC70\uC778\uC758 \uC678\uCE68"
-  description: "\uC0AC\uC6A9 \uC2DC \uC801\uC758 \uD589\uB3D9\uC744 3\uCD08\uAC04
-    \uBD09\uC1C4"
+  displayName: "거인의 외침"
+  description: "피격 시 스킬 피해의 40% 대지 피해 및 1초 기절. 재사용 12초."
   rarity: 2
   icon: {fileID: 0}
   grade: 1
-  kind: 0
-  mechanic: 4
-  maximumStacks: 3
-  price: 75
+  kind: 1
+  mechanic: 0
+  maximumStacks: 1
+  price: 80
   primaryValue: 0
   secondaryValue: 0
   duration: 3
   effects: []
+  hasLegacyConsumable: 1
+  legacyMechanic: 4
+  legacyPrimary: 0
+  legacySecondary: 0
+  legacyDuration: 3
+  autoTrigger:
+    enabled: 1
+    effect: 0
+    art: 6
+    damageBasis: 2
+    damagePercent: 40
+    trigger: 4
+    cooldown: 12
+    chancePercent: 100
+    element: 5
+    hitCount: 1
+    initialDelay: 0.25
+    hitInterval: 0.22
+    status: 4
+    statusChancePercent: 100
+    statusDuration: 1
+    statusPower: 0
+    visualScale: 0.9

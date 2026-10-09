@@ -14,15 +14,39 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.ItemData
   contentId: item_echo_crystal
   displayName: "메아리 수정"
-  description: "다음 스킬이 총 피해의 50%로 한 번 더 울려 퍼짐"
-  rarity: 4
+  description: "추가 공격은 발동 조건 충족 2초 후 시작. 스킬 적중 시 스킬 피해의 30% 빛 추가타 3회. 재사용 18초."
+  rarity: 5
   icon: {fileID: 0}
   grade: 3
-  kind: 0
-  mechanic: 22
+  kind: 1
+  mechanic: 0
   maximumStacks: 1
-  price: 200
+  price: 150
   primaryValue: 50
   secondaryValue: 0
   duration: 0
   effects: []
+  hasLegacyConsumable: 1
+  legacyMechanic: 22
+  legacyPrimary: 50
+  legacySecondary: 0
+  legacyDuration: 0
+  autoTrigger:
+    enabled: 1
+    effect: 0
+    art: 8
+    damageBasis: 2
+    damagePercent: 30
+    trigger: 2
+    cooldown: 18
+    chancePercent: 100
+    element: 8
+    hitCount: 3
+    activationDelay: 2
+    initialDelay: 0.4
+    hitInterval: 0.22
+    status: 0
+    statusChancePercent: 100
+    statusDuration: 3
+    statusPower: 0
+    visualScale: 1.05

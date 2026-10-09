@@ -14,18 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.ItemData
   contentId: item_assassin_sword
   displayName: "암살자의 검"
-  description: "장착 시 치명타 확률 20% 증가"
-  rarity: 3
+  description: "치명타 확률 20% 증가."
+  rarity: 2
   icon: {fileID: 0}
-  grade: 2
+  grade: 1
   kind: 1
   mechanic: 0
-  maximumStacks: 2
-  price: 125
+  maximumStacks: 1
+  price: 80
   primaryValue: 0
   secondaryValue: 0
   duration: 0
   effects:
   - type: 11
     value: 20
-    note: 
+    note:

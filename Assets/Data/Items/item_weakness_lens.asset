@@ -20,7 +20,7 @@ MonoBehaviour:
   grade: 2
   kind: 0
   mechanic: 9
-  maximumStacks: 2
+  maximumStacks: 3
   price: 125
   primaryValue: 100
   secondaryValue: 0

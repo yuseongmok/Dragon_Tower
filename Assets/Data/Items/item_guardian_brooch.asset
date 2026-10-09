@@ -13,19 +13,39 @@ MonoBehaviour:
   m_Name: item_guardian_brooch
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.ItemData
   contentId: item_guardian_brooch
-  displayName: "수호자의 브로치"
-  description: "장착 시 받는 피해 12% 감소"
-  rarity: 2
+  displayName: "수호석"
+  description: "피격 시 해당 공격의 최종 피해 12% 감소. 재사용 15초."
+  rarity: 0
   icon: {fileID: 0}
-  grade: 1
+  grade: 0
   kind: 1
-  mechanic: 18
-  maximumStacks: 3
+  mechanic: 0
+  maximumStacks: 1
   price: 80
-  primaryValue: 0
+  primaryValue: 12
   secondaryValue: 0
   duration: 0
-  effects:
-  - type: 15
-    value: 12
-    note: 
+  effects: []
+  autoTrigger:
+    enabled: 1
+    effect: 1
+    art: 5
+    damageBasis: 0
+    reductionPercent: 12
+    damagePercent: 0
+    trigger: 4
+    cooldown: 15
+    chancePercent: 100
+    eachSkillHit: 0
+    damage: 0
+    element: 0
+    hitCount: 1
+    initialDelay: 0
+    hitInterval: 0.1
+    status: 0
+    statusChancePercent: 100
+    statusDuration: 0
+    statusPower: 0
+    vfxOrigin: 0
+    vfxLifetime: 1
+    vfxPrefab: {fileID: 0}

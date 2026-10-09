@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
@@ -9,10 +9,16 @@ namespace DragonTower
     {
         public string instanceId;
         public string speciesId;
+        public string customName;
     }
     [Serializable] public sealed class PlayerProfile
     {
         public int version=1;
+        public string playerName;
+        public AchievementProgress achievementProgress;
+        public bool hasActiveRun;
+        public TowerRunSave activeRun;
+        public RunResultRecord lastRun;
         public bool starterGiftClaimed;
         public int eggs;
         public List<OwnedDragon> dragons=new List<OwnedDragon>();
@@ -88,7 +94,7 @@ namespace DragonTower
             if(!selected)throw new InvalidOperationException("Invalid selection");
         }
     }
-    public sealed class CollectionSession
+    public sealed partial class CollectionSession
     {
         readonly ProfileStore store;
         readonly DragonData[] catalog;

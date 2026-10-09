@@ -63,7 +63,7 @@ namespace DragonTower
             choosingReward=true;
             if(SecondRoomButton!=null)SecondRoomButton.interactable=false;
             towerRun.ConsumeEmptyAugmentReward(levelReward);
-            if(levelReward)ContinueAfterLevelRewards();else AdvanceFloor();
+            if(levelReward){SaveProgress();ContinueAfterLevelRewards();}else AdvanceFloor();
         }
         void ShowRewardDetails(AugmentData augment,SkillData skill,bool levelReward)
         {

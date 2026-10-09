@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7bae229d39584593b8ca376ce5c9ae33, type: 3}
+  m_Name: FloorProgression
+  augmentBattleChance: 40
+  goldBattleChance: 50
+  itemBattleChance: 35
+  recoveryBattleChance: 35
+  nestBattleChance: 35
+  shopBattleChance: 35
+  baseBattleExperience: 100
+  augmentExperiencePercent: 15
+  goldExperiencePercent: 10
+  experienceMultipliers: [50, 75, 100, 125, 150]
+  experienceWeights: [15, 25, 35, 20, 5]
+  normalKillGold: 10
+  bossKillGold: 20
+  monsterShopChance: 10

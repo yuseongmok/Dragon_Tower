@@ -12,13 +12,17 @@ namespace DragonTower
         {
             vh.Clear();var r=rectTransform.rect;float l=r.xMin,b=r.yMin,w=r.width,h=r.height;
             var bright=Color.Lerp(edge,Color.white,.35f);
+            var fill=Color.Lerp(color,new Color(.23f,.20f,.32f,color.a),.8f);
             var shadow=Color.Lerp(edge,new Color(.01f,.035f,.055f),.72f);
             if(outlineOnly)
             {
-                Box(vh,l+8,b,w-16,2,edge);Box(vh,l+8,b+h-2,w-16,2,edge);
-                Box(vh,l,b+8,2,h-16,edge);Box(vh,l+w-2,b+8,2,h-16,edge);
-                Box(vh,l+2,b+2,6,2,edge);Box(vh,l+w-8,b+2,6,2,edge);
-                Box(vh,l+2,b+h-4,6,2,edge);Box(vh,l+w-8,b+h-4,6,2,edge);return;
+                // Stepped bevel: light upper lip, broad tinted rim, inset shadow and heavy lower edge.
+                Box(vh,l+8,b,w-16,4,shadow);Box(vh,l+8,b+h-4,w-16,4,bright);
+                Box(vh,l,b+8,4,h-16,edge);Box(vh,l+w-4,b+8,4,h-16,shadow);
+                Box(vh,l+4,b+4,4,4,edge);Box(vh,l+w-8,b+4,4,4,shadow);
+                Box(vh,l+4,b+h-8,4,4,bright);Box(vh,l+w-8,b+h-8,4,4,edge);
+                Box(vh,l+10,b+6,w-20,2,edge);Box(vh,l+10,b+h-8,w-20,2,shadow);
+                Box(vh,l+6,b+10,2,h-20,shadow);Box(vh,l+w-8,b+10,2,h-20,edge);return;
             }
             if(prominent)
             {
@@ -32,17 +36,17 @@ namespace DragonTower
                     if(d>radius-1)continue;
                     if(d>radius-5){if(((int)(angle*32)%4)==0)continue;c=shadow;}
                     else if(d>radius-8)c=charged?edge:shadow;
-                    else if(d>radius-12)c=color;
+                    else if(d>radius-12)c=fill;
                     else if(d>radius-15)c=charged?bright:shadow;
                     else if(d>radius-19)c=shadow;
-                    else c=color;
+                    else c=fill;
                     Box(vh,r.center.x+x,r.center.y+y,pixel,pixel,c);
                 }
                 return;
             }
             Box(vh,l+6,b,w-12,h,shadow);Box(vh,l+2,b+4,w-4,h-8,shadow);
             Box(vh,l+8,b+2,w-16,h-4,edge);Box(vh,l+4,b+6,w-8,h-12,edge);
-            Box(vh,l+8,b+4,w-16,h-8,color);Box(vh,l+6,b+8,w-12,h-16,color);
+            Box(vh,l+8,b+4,w-16,h-8,fill);Box(vh,l+6,b+8,w-12,h-16,fill);
             Box(vh,l+10,b+h-6,w-20,2,bright);
             Box(vh,l+9,b+8,w-18,1,shadow);Box(vh,l+8,b+9,1,h-18,shadow);
             foreach(float x in new[]{l+5,l+w-9})foreach(float y in new[]{b+5,b+h-9})Box(vh,x,y,4,4,edge);

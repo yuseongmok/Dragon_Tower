@@ -41,7 +41,7 @@ namespace DragonTower
             return result.ToArray();
         }
         public static int ItemGradeWeight(ItemGrade grade)
-        {switch(grade){case ItemGrade.Rare:return 30;case ItemGrade.Epic:return 12;case ItemGrade.Unique:return 3;default:return 55;}}
+        {switch(grade){case ItemGrade.Rare:return 30;case ItemGrade.Epic:return 12;case ItemGrade.Unique:return 3;case ItemGrade.Legendary:return 1;default:return 55;}}
         public static ItemData PickWeightedItem(IReadOnlyList<ItemData> candidates,System.Random random)
         {
             if(candidates==null||candidates.Count==0)return null;if(random==null)throw new ArgumentNullException(nameof(random));

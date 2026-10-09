@@ -14,14 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.ItemData
   contentId: item_phoenix_feather
   displayName: "불사조의 깃털"
-  description: "전투당 1회 쓰러질 때 최대 HP의 25%로 부활"
+  description: "전투당 1회, 치명상 시 최대 HP의 25%로 부활."
   rarity: 4
   icon: {fileID: 0}
-  grade: 3
+  grade: 4
   kind: 1
   mechanic: 19
   maximumStacks: 1
-  price: 220
+  price: 250
   primaryValue: 25
   secondaryValue: 0
   duration: 0

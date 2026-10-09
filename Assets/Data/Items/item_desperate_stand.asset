@@ -14,15 +14,39 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.ItemData
   contentId: item_desperate_stand
   displayName: "배수의 진"
-  description: "사용 시 5초간 일반 공격 쿨타임 제거"
-  rarity: 3
+  description: "HP 30% 미만에서 일반공격 적중 시 일반공격 피해의 180% 암흑 피해. 재사용 8초."
+  rarity: 5
   icon: {fileID: 0}
-  grade: 2
-  kind: 0
-  mechanic: 3
-  maximumStacks: 2
-  price: 130
+  grade: 3
+  kind: 1
+  mechanic: 0
+  maximumStacks: 1
+  price: 150
   primaryValue: 0
   secondaryValue: 0
   duration: 5
   effects: []
+  hasLegacyConsumable: 1
+  legacyMechanic: 3
+  legacyPrimary: 0
+  legacySecondary: 0
+  legacyDuration: 5
+  autoTrigger:
+    enabled: 1
+    effect: 0
+    art: 10
+    damageBasis: 1
+    damagePercent: 180
+    trigger: 0
+    cooldown: 8
+    chancePercent: 100
+    element: 7
+    hitCount: 1
+    initialDelay: 0.25
+    hitInterval: 0.22
+    status: 0
+    statusChancePercent: 100
+    statusDuration: 3
+    statusPower: 0
+    visualScale: 1.1
+    belowHealthPercent: 30

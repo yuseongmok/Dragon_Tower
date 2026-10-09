@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da65f3142f834cd594edef47005fcbc5, type: 3}
+  m_Name: ProgressionRewards
+  normalKill: 10
+  bossKill: 200
+  newFloor: 50
+  achievements:
+  - id: first_kill
+    title: 첫 몬스터 처치
+    metric: 0
+    target: 1
+    reward: 100
+  - id: normal_50
+    title: 일반 몬스터 50마리 처치
+    metric: 1
+    target: 50
+    reward: 300
+  - id: first_boss
+    title: 첫 보스 처치
+    metric: 2
+    target: 1
+    reward: 200
+  - id: floor_10
+    title: 10층 도달
+    metric: 3
+    target: 10
+    reward: 200
+  - id: floor_20
+    title: 20층 도달
+    metric: 3
+    target: 20
+    reward: 500

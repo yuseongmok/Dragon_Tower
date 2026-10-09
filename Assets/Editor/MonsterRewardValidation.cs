@@ -1,0 +1,18 @@
+using System;using UnityEngine;using UnityEditor;
+namespace DragonTower.Editor {
+ public static class MonsterRewardValidation {
+  static int checks;static void Check(bool ok,string label){if(!ok)throw new Exception("MONSTER_REWARD_FAIL "+label);checks++;}
+  public static void Run(){try{Verify();ProgressionRewardsValidation.Verify();FloorProgressionValidation.Verify();Debug.Log("MONSTER_REWARD_OK checks="+checks+" plus progression and floor regression");EditorApplication.Exit(0);}catch(Exception e){Debug.LogException(e);EditorApplication.Exit(1);}}
+  public static void Verify(){var db=ContentDatabase.Load();var d=db.dragons[0];var c=FloorProgressionConfig.Load();
+   Func<int,TowerRun> create=roll=>{var r=new TowerRun(d.maxHP,roll,1,d.elementType,d.alternateSkillElement,d.StableId,d);r.AttachInstance("test");r.BeginFloorRoom(0,77);return r;};
+   var r=create(0);r.BeginFloorCombat(c,40);Check(r.CompleteFloorCombat(r.MaxHP,c,9)&&r.Gold==10&&r.PostBattleShopPending,"kill gold shop 10 percent");Check(!r.CompleteFloorCombat(r.MaxHP,c,99)&&r.Gold==10&&r.PostBattleShopPending,"no duplicate or reroll");
+   var restored=TowerRun.Restore(JsonUtility.FromJson<TowerRunSave>(JsonUtility.ToJson(r.Capture())),db);Check(restored.Gold==10&&restored.PostBattleShopPending&&restored.LastBattleGold==10,"save before rewards");restored.AcknowledgeExperience();restored.CompleteBattleRewards();Check(restored.Phase==FloorPhase.PostBattleShop,"rewards then shop");
+   restored=TowerRun.Restore(JsonUtility.FromJson<TowerRunSave>(JsonUtility.ToJson(restored.Capture())),db);Check(restored.Phase==FloorPhase.PostBattleShop&&restored.RewardSeed==77,"resume same shop and goods seed");restored.AddGold(100);Check(restored.SpendGold(30)&&restored.Gold==80,"shop spending");restored.CompletePostBattleShop();restored.CompletePostBattleShop();Check(restored.Phase==FloorPhase.Complete&&!restored.PostBattleShopPending,"shop finishes once without another encounter");restored.MoveToNextFloor(0,1);Check(restored.Floor==2&&restored.Gold==80&&!restored.PostBattleShopPending&&restored.LastBattleGold==0,"next floor reset");
+   var no=create(0);no.BeginFloorCombat(c,40);no.CompleteFloorCombat(no.MaxHP,c,10);no.CompleteBattleRewards();Check(no.Phase==FloorPhase.Complete&&!no.PostBattleShopPending,"10 percent boundary");no=TowerRun.Restore(no.Capture(),db);Check(!no.CompleteFloorCombat(no.MaxHP,c,0)&&!no.PostBattleShopPending&&no.Gold==10,"negative roll decision persists");
+   var extra=create(85);extra.AddGold(50);extra.CompleteRoomEvent(c,0,40);extra.BeginFloorCombat(c,0);extra.CompleteFloorCombat(extra.MaxHP,c,0);extra.CompleteBattleRewards();Check(extra.Gold==60&&!extra.PostBattleShopPending&&extra.Phase==FloorPhase.Complete,"extra battle gold no shop");
+   var boss=create(0);var save=boss.Capture();save.Floor=10;save.Room=TowerRoomKind.Boss;save.Phase=FloorPhase.CombatPending;boss=TowerRun.Restore(save,db);boss.BeginFloorCombat(c,40);boss.CompleteFloorCombat(boss.MaxHP,c,0);boss.CompleteBattleRewards();Check(boss.Gold==20&&!boss.PostBattleShopPending&&boss.Phase==FloorPhase.Complete,"boss reward no shop");
+   int hits=0;for(int i=0;i<100;i++){var sample=create(0);sample.BeginFloorCombat(c,40);sample.CompleteFloorCombat(sample.MaxHP,c,i);if(sample.PostBattleShopPending)hits++;}Check(hits==10,"exact probability mapping");
+   var old=r.Capture();old.LastBattleGold=0;old.PostBattleShopPending=false;var legacy=TowerRun.Restore(old,db);int gold=legacy.Gold;Check(!legacy.CompleteFloorCombat(legacy.MaxHP,c,0)&&legacy.Gold==gold&&!legacy.PostBattleShopPending,"old completed save no retroactive reward");
+  }
+ }
+}

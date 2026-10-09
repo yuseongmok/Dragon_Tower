@@ -14,14 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.ItemData
   contentId: item_executioner_mark
   displayName: "처형자의 표식"
-  description: "체력 40% 이하인 적에게 주는 피해 50% 증가"
-  rarity: 3
+  description: "HP 40% 이하인 적에게 기존 처형 효과: 일반공격·스킬 피해 50% 증가."
+  rarity: 5
   icon: {fileID: 0}
-  grade: 2
+  grade: 3
   kind: 1
   mechanic: 14
-  maximumStacks: 2
-  price: 135
+  maximumStacks: 1
+  price: 150
   primaryValue: 50
   secondaryValue: 0
   duration: 0

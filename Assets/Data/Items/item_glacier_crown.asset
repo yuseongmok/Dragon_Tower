@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8104a060aef340d2bae800e3c7ba2cac, type: 3}
+  m_Name: item_glacier_crown
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.ItemData
+  contentId: item_glacier_crown
+  displayName: "빙하왕관"
+  description: "추가 공격은 발동 조건 충족 2초 후 시작. 스킬 적중 시 스킬 피해의 70% 얼음 추가타 4회 및 4초간 30% 둔화. 재사용 22초."
+  rarity: 4
+  icon: {fileID: 0}
+  grade: 4
+  kind: 1
+  mechanic: 0
+  maximumStacks: 1
+  price: 250
+  primaryValue: 0
+  secondaryValue: 0
+  duration: 0
+  effects: []
+  autoTrigger:
+    enabled: 1
+    effect: 0
+    art: 2
+    damageBasis: 2
+    damagePercent: 70
+    trigger: 2
+    cooldown: 22
+    chancePercent: 100
+    element: 3
+    hitCount: 4
+    activationDelay: 2
+    initialDelay: 0.45
+    hitInterval: 0.22
+    status: 3
+    statusChancePercent: 100
+    statusDuration: 4
+    statusPower: 30
+    visualScale: 1.35

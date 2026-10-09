@@ -14,15 +14,39 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.ItemData
   contentId: item_emergency_accelerator
   displayName: "비상용 가속 장치"
-  description: "사용 시 3초간 스킬 쿨타임 제거"
-  rarity: 4
+  description: "공격 회피 성공 시 남은 스킬 쿨타임 2초 단축. 재사용 12초."
+  rarity: 5
   icon: {fileID: 0}
   grade: 3
-  kind: 0
-  mechanic: 10
+  kind: 1
+  mechanic: 0
   maximumStacks: 1
-  price: 210
+  price: 150
   primaryValue: 0
   secondaryValue: 0
   duration: 3
   effects: []
+  hasLegacyConsumable: 1
+  legacyMechanic: 10
+  legacyPrimary: 0
+  legacySecondary: 0
+  legacyDuration: 3
+  autoTrigger:
+    enabled: 1
+    effect: 4
+    art: 5
+    damageBasis: 2
+    damagePercent: 40
+    trigger: 3
+    cooldown: 12
+    chancePercent: 100
+    element: 0
+    hitCount: 1
+    initialDelay: 0.25
+    hitInterval: 0.22
+    status: 0
+    statusChancePercent: 100
+    statusDuration: 3
+    statusPower: 0
+    visualScale: 0.9
+    rechargeSeconds: 2

@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8104a060aef340d2bae800e3c7ba2cac, type: 3}
+  m_Name: item_abyss_heart
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.ItemData
+  contentId: item_abyss_heart
+  displayName: "심해의 심장"
+  description: "일반공격 적중 시 일반공격 피해의 40% 물 추가타 4회. 재사용 16초."
+  rarity: 5
+  icon: {fileID: 0}
+  grade: 3
+  kind: 1
+  mechanic: 0
+  maximumStacks: 1
+  price: 150
+  primaryValue: 0
+  secondaryValue: 0
+  duration: 0
+  effects: []
+  autoTrigger:
+    enabled: 1
+    effect: 0
+    art: 9
+    damageBasis: 1
+    damagePercent: 40
+    trigger: 0
+    cooldown: 16
+    chancePercent: 100
+    element: 1
+    hitCount: 4
+    initialDelay: 0.4
+    hitInterval: 0.22
+    status: 0
+    statusChancePercent: 100
+    statusDuration: 3
+    statusPower: 0
+    visualScale: 1.15

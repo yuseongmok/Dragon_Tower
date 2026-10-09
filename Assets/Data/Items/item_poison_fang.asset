@@ -14,15 +14,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.ItemData
   contentId: item_poison_fang
   displayName: "독니"
-  description: "전투 중 10초마다 공격력의 35% 지속 피해"
+  description: "추가 공격은 발동 조건 충족 2초 후 시작. 스킬 적중 시 스킬 피해의 35% 암흑 피해 및 기존 중독(기본 초당 5 피해, 전투 종료까지). 재사용 10초."
   rarity: 2
   icon: {fileID: 0}
   grade: 1
   kind: 1
-  mechanic: 15
-  maximumStacks: 3
+  mechanic: 0
+  maximumStacks: 1
   price: 80
   primaryValue: 35
   secondaryValue: 0
   duration: 0
   effects: []
+  autoTrigger:
+    enabled: 1
+    effect: 0
+    art: 10
+    damageBasis: 2
+    damagePercent: 35
+    trigger: 2
+    cooldown: 10
+    chancePercent: 100
+    element: 7
+    hitCount: 1
+    activationDelay: 2
+    initialDelay: 0.25
+    hitInterval: 0.22
+    status: 5
+    statusChancePercent: 100
+    statusDuration: 3
+    statusPower: 5
+    visualScale: 0.65

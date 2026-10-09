@@ -14,14 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.ItemData
   contentId: item_chrono_gear
   displayName: "시간의 톱니"
-  description: "장착 시 일반 공격과 스킬 쿨타임 12% 감소"
-  rarity: 3
+  description: "일반공격과 스킬 쿨타임 12% 감소."
+  rarity: 5
   icon: {fileID: 0}
-  grade: 2
+  grade: 3
   kind: 1
   mechanic: 0
-  maximumStacks: 2
-  price: 125
+  maximumStacks: 1
+  price: 150
   primaryValue: 0
   secondaryValue: 0
   duration: 0
@@ -31,4 +31,4 @@ MonoBehaviour:
     note: 
   - type: 4
     value: 12
-    note: 
+    note:

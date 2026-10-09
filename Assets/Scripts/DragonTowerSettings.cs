@@ -54,9 +54,9 @@ namespace DragonTower
         static Sprite CircleSprite()
         {
             if(circleSprite!=null)return circleSprite;
-            const int size=64;var texture=new Texture2D(size,size,TextureFormat.RGBA32,false);texture.name="Settings circle";texture.filterMode=FilterMode.Bilinear;texture.wrapMode=TextureWrapMode.Clamp;
+            const int size=24;var texture=new Texture2D(size,size,TextureFormat.RGBA32,false);texture.name="Settings circle";texture.filterMode=FilterMode.Point;texture.wrapMode=TextureWrapMode.Clamp;
             var pixels=new Color32[size*size];var center=new Vector2((size-1)*.5f,(size-1)*.5f);float radius=size*.5f-1;
-            for(int y=0;y<size;y++)for(int x=0;x<size;x++){float distance=Vector2.Distance(new Vector2(x,y),center);byte alpha=(byte)Mathf.RoundToInt(Mathf.Clamp01(radius-distance)*255);pixels[y*size+x]=new Color32(255,255,255,alpha);}
+            for(int y=0;y<size;y++)for(int x=0;x<size;x++){float distance=Vector2.Distance(new Vector2(x,y),center);byte alpha=(byte)(distance<=radius?255:0);pixels[y*size+x]=new Color32(255,255,255,alpha);}
             texture.SetPixels32(pixels);texture.Apply(false,true);circleSprite=Sprite.Create(texture,new Rect(0,0,size,size),new Vector2(.5f,.5f),100);circleSprite.name="Settings circle";return circleSprite;
         }
         Button MakeGearButton(Transform parent)

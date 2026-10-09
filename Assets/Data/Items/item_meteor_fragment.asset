@@ -13,16 +13,40 @@ MonoBehaviour:
   m_Name: item_meteor_fragment
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.ItemData
   contentId: item_meteor_fragment
-  displayName: "운석 파편"
-  description: "전투 중 10초마다 스킬 피해의 30% 화염 추가 공격"
-  rarity: 3
+  displayName: "유성 낙하"
+  description: "추가 공격은 발동 조건 충족 2초 후 시작. 스킬 사용 시 운석 낙하. 스킬 피해의 30% 추가 피해. 재사용 15초."
+  rarity: 5
   icon: {fileID: 0}
-  grade: 2
+  grade: 3
   kind: 1
-  mechanic: 16
-  maximumStacks: 3
+  mechanic: 0
+  maximumStacks: 1
   price: 130
-  primaryValue: 30
+  primaryValue: 0
   secondaryValue: 0
   duration: 0
   effects: []
+  autoTrigger:
+    enabled: 1
+    effect: 0
+    art: 4
+    damageBasis: 2
+    reductionPercent: 0
+    damagePercent: 30
+    trigger: 1
+    cooldown: 15
+    chancePercent: 100
+    eachSkillHit: 0
+    damage: 0
+    element: 2
+    hitCount: 1
+    activationDelay: 2
+    initialDelay: 0.72
+    hitInterval: 0.1
+    status: 0
+    statusChancePercent: 100
+    statusDuration: 0
+    statusPower: 0
+    vfxOrigin: 0
+    vfxLifetime: 1
+    vfxPrefab: {fileID: 0}

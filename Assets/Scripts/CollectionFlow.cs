@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Linq;
 using UnityEngine;
@@ -8,27 +8,35 @@ namespace DragonTower
 {
     public static class DragonTowerTheme
     {
-        public static readonly Color Night=new Color(.025f,.035f,.06f,1),Slate=new Color(.075f,.105f,.15f,.94f),SlateLight=new Color(.12f,.16f,.22f,.96f),Gold=new Color(.88f,.66f,.30f,1),GoldDim=new Color(.43f,.31f,.15f,1),Parchment=new Color(.82f,.74f,.59f,1);
-        static Sprite roundedPanel;
-        static Sprite RoundedPanel()
+        public static readonly Color Night=new Color(.095f,.075f,.15f,1),Slate=new Color(.23f,.20f,.32f,.98f),SlateLight=new Color(.32f,.28f,.43f,1),Gold=new Color(.88f,.66f,.30f,1),GoldDim=new Color(.43f,.31f,.15f,1),Parchment=new Color(.82f,.74f,.59f,1);
+        static Sprite pixelPanel;
+        static Sprite PixelPanel()
         {
-            if(roundedPanel!=null)return roundedPanel;
-            const int size=64,radius=15;var texture=new Texture2D(size,size,TextureFormat.RGBA32,false);texture.name="Rounded UI panel";texture.filterMode=FilterMode.Bilinear;texture.wrapMode=TextureWrapMode.Clamp;
+            if(pixelPanel!=null)return pixelPanel;
+            const int size=32,radius=5;var texture=new Texture2D(size,size,TextureFormat.RGBA32,false);texture.name="Pixel UI panel";texture.filterMode=FilterMode.Point;texture.wrapMode=TextureWrapMode.Clamp;
             var pixels=new Color32[size*size];for(int y=0;y<size;y++)for(int x=0;x<size;x++)
-            {float dx=Mathf.Max(radius-Mathf.Min(x,size-1-x),0),dy=Mathf.Max(radius-Mathf.Min(y,size-1-y),0);float distance=Mathf.Sqrt(dx*dx+dy*dy);byte alpha=(byte)Mathf.RoundToInt(255*Mathf.Clamp01(radius+1-distance));pixels[y*size+x]=new Color32(255,255,255,alpha);}
-            texture.SetPixels32(pixels);texture.Apply(false,true);roundedPanel=Sprite.Create(texture,new Rect(0,0,size,size),new Vector2(.5f,.5f),100,0,SpriteMeshType.FullRect,new Vector4(18,18,18,18));roundedPanel.name="Rounded UI panel";return roundedPanel;
+            {float dx=Mathf.Max(radius-Mathf.Min(x,size-1-x),0),dy=Mathf.Max(radius-Mathf.Min(y,size-1-y),0);byte alpha=(byte)(dx+dy<=radius?255:0);int border=Mathf.Min(Mathf.Min(x,size-1-x),Mathf.Min(y,size-1-y));
+             byte shade=(byte)(border<2?65:border<4?(y>size/2?245:110):border<6?(y>size/2?150:220):255);
+             pixels[y*size+x]=new Color32(shade,shade,shade,alpha);}
+            texture.SetPixels32(pixels);texture.Apply(false,true);pixelPanel=Sprite.Create(texture,new Rect(0,0,size,size),new Vector2(.5f,.5f),100,0,SpriteMeshType.FullRect,new Vector4(7,7,7,7));pixelPanel.name="Pixel UI panel";return pixelPanel;
         }
         public static void Frame(Image panel,Color edge,bool corners=true)
         {
-            if(panel==null)return;panel.sprite=RoundedPanel();panel.type=Image.Type.Sliced;
-            var shadow=panel.gameObject.AddComponent<Shadow>();shadow.effectColor=new Color(0,0,0,.58f);shadow.effectDistance=new Vector2(0,-4);shadow.useGraphicAlpha=true;
-            var outline=panel.gameObject.GetComponent<Outline>()??panel.gameObject.AddComponent<Outline>();outline.effectColor=new Color(edge.r,edge.g,edge.b,.92f);outline.effectDistance=new Vector2(2.5f,-2.5f);outline.useGraphicAlpha=true;
+            if(panel==null)return;panel.sprite=PixelPanel();panel.type=Image.Type.Sliced;
+            if(edge==Gold||edge==GoldDim)edge=new Color(.58f,.49f,.70f,1);
+            var fill=panel.color;float high=Mathf.Max(fill.r,Mathf.Max(fill.g,fill.b));
+            if(high<.31f&&fill.a>.6f&&fill.r<fill.g*1.8f)panel.color=Color.Lerp(new Color(.16f,.13f,.24f,fill.a),new Color(.29f,.25f,.39f,fill.a),Mathf.Clamp01(high/.31f));
+            var shadow=panel.gameObject.GetComponent<Shadow>()??panel.gameObject.AddComponent<Shadow>();shadow.effectColor=new Color(0,0,0,.58f);shadow.effectDistance=new Vector2(0,-6);shadow.useGraphicAlpha=true;
+            var outline=panel.gameObject.GetComponent<Outline>()??panel.gameObject.AddComponent<Outline>();outline.effectColor=new Color(edge.r,edge.g,edge.b,1);outline.effectDistance=new Vector2(2,-2);outline.useGraphicAlpha=true;
+            var trim=panel.transform.Find("Pixel edge trim");PixelHudFrame pixel;
+            if(trim==null){var go=new GameObject("Pixel edge trim",typeof(RectTransform),typeof(PixelHudFrame));var r=go.GetComponent<RectTransform>();r.SetParent(panel.transform,false);r.anchorMin=Vector2.zero;r.anchorMax=Vector2.one;r.offsetMin=Vector2.one*3;r.offsetMax=-Vector2.one*3;pixel=go.GetComponent<PixelHudFrame>();pixel.outlineOnly=true;pixel.raycastTarget=false;}else pixel=trim.GetComponent<PixelHudFrame>();
+            pixel.edge=edge;pixel.SetVerticesDirty();
         }
         public static void StyleButton(Button button,Color accent)
         {
-            if(button==null)return;var image=button.targetGraphic as Image;if(image==null)return;Frame(image,accent);var colors=button.colors;colors.normalColor=image.color;colors.highlightedColor=Color.Lerp(image.color,Color.white,.14f);colors.pressedColor=Color.Lerp(image.color,Color.black,.22f);colors.selectedColor=colors.highlightedColor;colors.disabledColor=new Color(.15f,.17f,.2f,.78f);colors.colorMultiplier=1;button.colors=colors;
+            if(button==null)return;var image=button.targetGraphic as Image;if(image==null)return;Frame(image,accent);var colors=button.colors;colors.normalColor=Color.white;colors.highlightedColor=new Color(1.12f,1.12f,1.12f,1);colors.pressedColor=new Color(.68f,.68f,.74f,1);colors.selectedColor=colors.highlightedColor;colors.disabledColor=new Color(.15f,.17f,.2f,.78f);colors.colorMultiplier=1;button.colors=colors;
         }
-        public static Color Grade(ItemGrade grade){switch(grade){case ItemGrade.Rare:return new Color(.20f,.58f,.82f);case ItemGrade.Epic:return new Color(.63f,.32f,.88f);case ItemGrade.Unique:return new Color(1,.63f,.18f);default:return Parchment;}}
+        public static Color Grade(ItemGrade grade){switch(grade){case ItemGrade.Rare:return new Color(.20f,.58f,.82f);case ItemGrade.Epic:return new Color(.63f,.32f,.88f);case ItemGrade.Legendary:return new Color(1,.35f,.25f);case ItemGrade.Unique:return new Color(1,.63f,.18f);default:return Parchment;}}
         public static Color Grade(AugmentGrade grade){switch(grade){case AugmentGrade.Rare:return new Color(.20f,.58f,.82f);case AugmentGrade.Epic:return new Color(.63f,.32f,.88f);case AugmentGrade.Unique:return new Color(1,.63f,.18f);case AugmentGrade.Legendary:return new Color(1,.85f,.36f);default:return Parchment;}}
     }
     public sealed partial class CollectionFlow : MonoBehaviour
@@ -52,6 +60,8 @@ namespace DragonTower
         public Button SecondRoomButton { get; private set; }
         public Button DragonButton { get; private set; }
         public Button[] ChoiceButtons { get; private set; }
+        bool AncientScreen=>ScreenName=="드래곤 로비"||ScreenName=="드래곤 상태"||ScreenName=="드래곤 도감";
+        Color UiText(Color value)=>!AncientScreen?value:value==Color.white?AncientUi.Ivory:value==Gold||value==DragonTowerTheme.Gold?AncientUi.Gold:value==Muted?AncientUi.Muted:value;
         static Color Background=>new Color(.035f,.055f,.09f);
         static Color Gold=>new Color(1,.76f,.42f);
         static Color Muted=>new Color(.65f,.74f,.83f);
@@ -70,7 +80,7 @@ namespace DragonTower
                 string isolated=Environment.GetEnvironmentVariable("DRAGON_TOWER_TEST_SAVE");
                 if(!string.IsNullOrEmpty(isolated))key=isolated;
 #endif
-                Session=new CollectionSession(new ProfileStore(key),catalog);
+                Session=new CollectionSession(new ProfileStore(key),catalog);progression=FloorProgressionConfig.Load();SetupAchievements();
                 ShowTitleScreen();
                 if(Session.RecoveredBackup)notice.text="이전 정상 저장 데이터를 복구했습니다.";
             }
@@ -83,11 +93,11 @@ namespace DragonTower
         }
         Image Panel(string name,Transform parent,float x,float y,float w,float h,Color color,Color edge)
         {
-            var r=Rect(name,parent,x,y,w,h);var image=r.gameObject.AddComponent<Image>();image.color=color;image.raycastTarget=false;DragonTowerTheme.Frame(image,edge);return image;
+            var r=Rect(name,parent,x,y,w,h);var image=r.gameObject.AddComponent<Image>();image.color=color;image.raycastTarget=false;DragonTowerTheme.Frame(image,edge);if(AncientScreen)AncientUi.Frame(image,name.Contains("Title")?AncientSurfaceKind.Title:name.Contains("portrait")?AncientSurfaceKind.Portrait:AncientSurfaceKind.Panel);return image;
         }
         Text Label(string text,float x,float y,float w,float h,int size,Color color)
         {
-            var r=Rect(text,body,x,y,w,h);var t=r.gameObject.AddComponent<Text>();t.font=battleView.font;t.text=text;t.fontSize=size;t.color=color;t.alignment=TextAnchor.MiddleCenter;t.raycastTarget=false;return t;
+            var r=Rect(text,body,x,y,w,h);var t=r.gameObject.AddComponent<Text>();t.font=battleView.font;t.text=text;t.fontSize=size;t.color=UiText(color);t.alignment=TextAnchor.MiddleCenter;t.raycastTarget=false;return t;
         }
         Button Button(string title,float x,float y,float w,float h,UnityAction action)
         {
@@ -95,14 +105,16 @@ namespace DragonTower
             var b=r.gameObject.AddComponent<Button>();b.targetGraphic=image;b.onClick.AddListener(action);var nav=b.navigation;nav.mode=Navigation.Mode.None;b.navigation=nav;
             b.gameObject.AddComponent<DragonTowerUiSound>();
             var text=Rect("Label",r,0,h/2,w-18,h-12).gameObject.AddComponent<Text>();text.font=battleView.font;text.text=title;text.fontSize=20;text.color=Color.white;text.alignment=TextAnchor.MiddleCenter;text.raycastTarget=false;
-            DragonTowerTheme.StyleButton(b,DragonTowerTheme.Gold);return b;
+            var textShadow=text.gameObject.AddComponent<Shadow>();textShadow.effectColor=new Color(.06f,.035f,.10f,.9f);textShadow.effectDistance=new Vector2(0,-2);
+            DragonTowerTheme.StyleButton(b,DragonTowerTheme.Gold);if(AncientScreen)AncientUi.Button(b);return b;
         }
         Text CardText(Transform parent,string name,string value,float x,float y,float w,float h,int size,Color color,TextAnchor alignment)
         {
-            var r=Rect(name,parent,x,y,w,h);var text=r.gameObject.AddComponent<Text>();text.font=battleView.font;text.text=value;text.fontSize=size;text.color=color;text.alignment=alignment;text.raycastTarget=false;text.horizontalOverflow=HorizontalWrapMode.Wrap;text.verticalOverflow=VerticalWrapMode.Truncate;return text;
+            var r=Rect(name,parent,x,y,w,h);var text=r.gameObject.AddComponent<Text>();text.font=battleView.font;text.text=value;text.fontSize=size;text.color=UiText(color);text.alignment=alignment;text.raycastTarget=false;text.horizontalOverflow=HorizontalWrapMode.Wrap;text.verticalOverflow=VerticalWrapMode.Truncate;return text;
         }
-        Button RewardCard(string badge,string title,string summary,Sprite icon,float y,Color fill,Color accent,UnityAction action)
+        Button RewardCard(string badge,string title,string summary,Sprite icon,float y,Color fill,Color accent,UnityAction action,ElementType? itemElement=null)
         {
+            if(itemElement.HasValue)badge+=" · "+ItemElementName(itemElement.Value);
             var card=Button("",0,y,410,108,action);StyleCard(card,fill,accent);
             var iconFrame=Rect("Reward icon frame",card.transform,-154,54,76,76);var frame=iconFrame.gameObject.AddComponent<Image>();frame.color=new Color(.025f,.035f,.055f,.9f);frame.raycastTarget=false;DragonTowerTheme.Frame(frame,accent,false);
             var art=Rect("Reward icon",iconFrame,0,38,64,64).gameObject.AddComponent<Image>();art.sprite=icon;art.preserveAspect=true;art.color=icon==null?accent:Color.white;art.raycastTarget=false;
@@ -110,8 +122,15 @@ namespace DragonTower
             CardText(card.transform,"Reward badge",badge,35,17,250,22,13,accent,TextAnchor.MiddleLeft);
             CardText(card.transform,"Reward title",title,35,43,250,28,19,Color.white,TextAnchor.MiddleLeft);
             CardText(card.transform,"Reward summary",summary,35,77,250,36,14,new Color(.80f,.85f,.9f),TextAnchor.UpperLeft);
+            if(itemElement.HasValue){
+                var symbol=ElementBadge(card.transform,itemElement.Value,178,17,18);
+                var badgeText=card.transform.Find("Reward badge").GetComponent<Text>();
+                badgeText.color=ElementHudThemes.Get(itemElement.Value).primaryColor;
+                badgeText.rectTransform.sizeDelta=new Vector2(228,22);badgeText.rectTransform.anchoredPosition+=new Vector2(-11,0);
+            }
             return card;
         }
+        static string ItemElementName(ElementType element)=>element==ElementType.Neutral?"무속성":ElementRules.DisplayName(element);
         static Sprite RewardIcon(int index)
         {
             if(rewardIcons==null)
@@ -132,16 +151,16 @@ namespace DragonTower
             if(value==null)return null;if(value.icon!=null)return value.icon;int icon;
             switch(value.mechanic){case AugmentMechanic.RapidFireInstinct:case AugmentMechanic.DodgeMaster:icon=5;break;case AugmentMechanic.FlameRemnant:case AugmentMechanic.Inferno:icon=6;break;case AugmentMechanic.FrostBarrier:case AugmentMechanic.IceCream:icon=7;break;case AugmentMechanic.StaticDischarge:case AugmentMechanic.Tingly:icon=8;break;case AugmentMechanic.Vampire:icon=9;break;case AugmentMechanic.ExploitWeakness:icon=10;break;case AugmentMechanic.ConsecutiveSlash:case AugmentMechanic.Spread:case AugmentMechanic.Clone:icon=11;break;case AugmentMechanic.FirstAid:case AugmentMechanic.LastStand:icon=2;break;case AugmentMechanic.IndomitableWill:icon=3;break;case AugmentMechanic.OverloadCore:case AugmentMechanic.ManaRampage:case AugmentMechanic.Transference:case AugmentMechanic.DoubleCasting:icon=14;break;default:icon=EffectIcon(value.effects,value.displayName);break;}return RewardIcon(icon);
         }
-        static Sprite ItemIcon(ItemData value)
+        public static Sprite ItemIcon(ItemData value)
         {
-            if(value==null)return null;if(value.icon!=null)return value.icon;int icon;
+            if(value==null)return null;if(value.icon!=null)return value.icon;if(value.autoTrigger!=null&&value.autoTrigger.enabled){switch(value.autoTrigger.art){case ItemProcArt.Fireball:return RewardIcon(6);case ItemProcArt.Meteor:var fireLibrary=Resources.Load<FireSkillLibrary>("FireSkills/Library");return fireLibrary!=null?fireLibrary.meteor:RewardIcon(6);case ItemProcArt.FrostSpear:return RewardIcon(7);case ItemProcArt.Tornado:return RewardIcon(5);case ItemProcArt.Guard:return RewardIcon(3);case ItemProcArt.Lightning:return RewardIcon(8);case ItemProcArt.Earth:return RewardIcon(3);case ItemProcArt.Light:return RewardIcon(10);case ItemProcArt.Water:return RewardIcon(7);case ItemProcArt.Dark:return RewardIcon(9);}}int icon;
             switch(value.mechanic){case ItemMechanic.HealingPotion:case ItemMechanic.GreaterHealingPotion:case ItemMechanic.BloodPotion:icon=12;break;case ItemMechanic.TimeShard:case ItemMechanic.EmergencyAccelerator:icon=4;break;case ItemMechanic.BurstCore:case ItemMechanic.EchoCrystal:icon=14;break;case ItemMechanic.GiantRoar:case ItemMechanic.StunGun:icon=8;break;case ItemMechanic.BloodTome:case ItemMechanic.InfernoBreath:icon=6;break;case ItemMechanic.FrostWitchTear:icon=7;break;case ItemMechanic.WeaknessLens:case ItemMechanic.ExecutionerMark:icon=10;break;case ItemMechanic.PoisonFang:icon=9;break;case ItemMechanic.MeteorFragment:icon=1;break;case ItemMechanic.InfightingGlove:icon=13;break;case ItemMechanic.GuardianBrooch:case ItemMechanic.BarrierStone:icon=3;break;case ItemMechanic.PhoenixFeather:icon=5;break;default:icon=EffectIcon(value.effects,value.displayName);break;}return RewardIcon(icon);
         }
         static Sprite SkillIcon(SkillData value)
         {if(value==null)return null;if(value.icon!=null)return value.icon;switch(value.elementType){case ElementType.Fire:return RewardIcon(6);case ElementType.Ice:return RewardIcon(7);case ElementType.Lightning:return RewardIcon(8);case ElementType.Wind:return RewardIcon(5);default:return RewardIcon(1);}}
         static string ElementLabel(ElementType value)
         {switch(value){case ElementType.Fire:return "불";case ElementType.Ice:return "얼음";case ElementType.Wind:return "바람";case ElementType.Earth:return "땅";case ElementType.Lightning:return "전기";case ElementType.Water:return "물";case ElementType.Dark:return "어둠";case ElementType.Light:return "빛";default:return "무속성";}}
-        void StyleCard(Button button,Color fill,Color accent){if(button==null)return;button.targetGraphic.color=fill;DragonTowerTheme.StyleButton(button,accent);}
+        void StyleCard(Button button,Color fill,Color accent){if(button==null)return;button.targetGraphic.color=fill;DragonTowerTheme.StyleButton(button,accent);if(AncientScreen)AncientUi.Button(button,fill.g>fill.r*1.8f&&fill.g>.3f);}
         void Screen(string name)
         {
             CancelRewardReveal();
@@ -150,7 +169,7 @@ namespace DragonTower
             portrait=null;roomIcon=null;startPrompt=null;egg=null;HatchButton=TowerButton=ContinueButton=RoomButton=SecondRoomButton=DragonButton=null;ChoiceButtons=null;
             ScreenName=name;root.gameObject.SetActive(true);root.SetAsLastSibling();
             body=Rect(name,root,0,425,480,850);
-            bool lobby=name=="드래곤 로비",title=name=="시작 화면",mapTransition=name=="탑 이동",nestScene=lobby||title;var baseLayer=body.gameObject.AddComponent<Image>();baseLayer.color=nestScene?Color.white:DragonTowerTheme.Night;baseLayer.raycastTarget=false;
+            bool lobby=name=="드래곤 로비",title=name=="시작 화면",mapTransition=name=="탑 이동",nestScene=lobby||title;var baseLayer=body.gameObject.AddComponent<Image>();baseLayer.color=nestScene?Color.white:AncientScreen?AncientUi.Background:DragonTowerTheme.Night;baseLayer.raycastTarget=false;
             if(nestScene){baseLayer.sprite=Resources.Load<Sprite>("UI/dragon-nest-lobby");baseLayer.preserveAspect=false;}
             var skin=Resources.Load<BattleSkin>("PixelBattleSkin");if(!nestScene&&skin!=null&&skin.towerBackground!=null)
             {var scenic=Rect("Dim tower backdrop",body,0,425,480,850).gameObject.AddComponent<Image>();scenic.sprite=skin.towerBackground;scenic.preserveAspect=false;scenic.color=new Color(.23f,.29f,.38f,.28f);scenic.raycastTarget=false;}
@@ -161,8 +180,8 @@ namespace DragonTower
             }
             else if(!title&&!mapTransition)
             {
-                Panel("Ornate content frame",body,0,454,454,674,new Color(.035f,.055f,.085f,.88f),DragonTowerTheme.GoldDim);
-                Panel("Title ribbon",body,0,94,420,54,new Color(.12f,.105f,.105f,.96f),DragonTowerTheme.Gold);
+                Panel("Ornate content frame",body,0,454,454,674,new Color(.17f,.14f,.24f,.98f),DragonTowerTheme.GoldDim);
+                Panel("Title ribbon",body,0,94,420,54,new Color(.32f,.27f,.43f,1),DragonTowerTheme.Gold);
                 Label("유 대 의   탑",0,42,440,32,21,Color.white);Label(name,0,95,420,45,28,Gold);
                 Label("◆",-216,94,24,30,12,DragonTowerTheme.Gold);Label("◆",216,94,24,30,12,DragonTowerTheme.Gold);
             }
@@ -170,12 +189,13 @@ namespace DragonTower
         }
         void Portrait(DragonData dragon,float y=348,int level=1,UnityAction onClick=null,bool framed=true)
         {
-            if(framed)Panel("Dragon portrait frame",body,0,y,286,286,new Color(.025f,.04f,.065f,.72f),new Color(dragon.color.r,dragon.color.g,dragon.color.b,1));
+            if(framed)Panel("Dragon portrait frame",body,0,y,AncientScreen?420:286,286,new Color(.025f,.04f,.065f,.72f),new Color(dragon.color.r,dragon.color.g,dragon.color.b,1));
             portrait=Rect("Selected dragon",body,0,y,framed?260:310,framed?260:310);
             var activeSprite=dragon.BattleSpriteAtLevel(level);
             Graphic target;
             if(activeSprite!=null)
-            {var image=portrait.gameObject.AddComponent<Image>();image.sprite=activeSprite;image.preserveAspect=true;image.raycastTarget=onClick!=null;target=image;}
+            {var image=portrait.gameObject.AddComponent<Image>();image.sprite=activeSprite;image.preserveAspect=true;image.raycastTarget=onClick!=null;target=image;
+             portrait.gameObject.AddComponent<DragonPortraitIdle>().Bind(dragon,DragonData.EvolutionStage(level),framed?new Vector2(164,164):new Vector2(172,160));}
             else
             {portrait.gameObject.AddComponent<CanvasRenderer>();var graphic=portrait.gameObject.AddComponent<DragonGraphic>();graphic.color=dragon.color;graphic.raycastTarget=onClick!=null;target=graphic;}
             if(!framed){var shadow=portrait.gameObject.AddComponent<Shadow>();shadow.effectColor=new Color(0,0,0,.66f);shadow.effectDistance=new Vector2(0,-8);shadow.useGraphicAlpha=true;}
@@ -243,14 +263,16 @@ namespace DragonTower
         public void ShowLobby()
         {
             if(hatchTime>=0)return;
-            controller.EndBattle();towerRun=null;
+            returningToLobby=true;CheckpointBattle();StopAllCoroutines();controller.EndBattle();towerRun=null;returningToLobby=false;
             if(Session.Selected==null){ShowEgg();return;}
-            Screen("드래곤 로비");var d=Session.Selected;Portrait(d,324,1,ShowDragonSelect,false);
-            Label(d.displayName,0,493,410,52,32,Gold);
+            Screen("드래곤 로비");var d=Session.Selected;Portrait(d,389,1,ShowDragonSelect,false);
+            Panel("Dragon nameplate",body,0,493,254,42,AncientUi.Stone,AncientUi.DarkGold);
+            var partnerName=Label(Session.SelectedName(),0,493,230,36,28,Gold);partnerName.supportRichText=false;partnerName.resizeTextForBestFit=true;partnerName.resizeTextMinSize=16;partnerName.resizeTextMaxSize=28;
             Label(d.element+"  ·  드래곤을 눌러 교체",0,541,410,34,17,Muted);
-            TowerButton=Button("타워 오르기",0,622,400,70,EnterTower);TowerButton.targetGraphic.color=new Color(.74f,.27f,.12f,.98f);
+            TowerButton=Button(Session.HasSavedRun?"이어하기 · "+Session.Profile.activeRun.Floor+"층":"타워 오르기",0,622,400,70,()=>{if(Session.HasSavedRun)ResumeRun();else EnterTower();});StyleCard(TowerButton,new Color(.12f,.36f,.23f,1),new Color(.46f,.77f,.48f));
             Button("드래곤 도감",-105,713,190,62,ShowCodex);Button("드래곤 상태",105,713,190,62,ShowStatus);
             if(Session.Profile.eggs>0)Button("보관 알 "+Session.Profile.eggs,135,159,155,40,ShowEgg);
+            Button("업적 · 도전 기록",0,771,330,40,ShowProgressRecords);
             notice.text="도전 중 얻는 성장과 보상은 로비의 수집 정보와 분리됩니다.";
         }
         public void EnterTower()
@@ -260,9 +282,10 @@ namespace DragonTower
         public void EnterTowerWithRoll(int firstRoll) { EnterTowerWithRoll(firstRoll,(firstRoll+53)%100); }
         public void EnterTowerWithRoll(int firstRoll,int secondRoll)
         {
+            if(Session.HasSavedRun){ResumeRun();return;}
             if(Session.Selected==null||hatchTime>=0)return;
             towerRun=new TowerRun(Session.Selected.maxHP,firstRoll,secondRoll,Session.Selected.elementType,Session.Selected.alternateSkillElement,Session.Selected.StableId,Session.Selected);
-            StartCoroutine(ShowFloorTransition(0,1,true));
+            towerRun.AttachInstance(Session.Profile.selectedInstanceId);SaveProgress();StartCoroutine(ShowFloorTransition(0,1,true));
         }
         string RoomName(TowerRoomKind room)
         {
@@ -278,7 +301,7 @@ namespace DragonTower
         {
             switch(room)
             {
-                case TowerRoomKind.Monster:return "전투 · 승리하면 레벨 상승";case TowerRoomKind.Item:return "상자에서 아이템 하나 선택";
+                case TowerRoomKind.Monster:return "전투 · 승리하면 유대 경험치 획득";case TowerRoomKind.Item:return "상자에서 아이템 하나 선택";
                 case TowerRoomKind.Augment:return "세 가지 증강 중 하나 선택";case TowerRoomKind.Recovery:return "초록 십자를 눌러 완전 회복";
                 case TowerRoomKind.Nest:return "알을 부화시켜 도감에 등록";case TowerRoomKind.Gold:return "골드를 획득";
                 case TowerRoomKind.Shop:return "골드로 회복 구매";default:return "강력한 수호자와 전투";
@@ -289,7 +312,7 @@ namespace DragonTower
             if(towerRun==null||!towerRun.Active)return;
             controller.EndBattle();Screen("다음 길 선택");
             Label("타워 "+towerRun.Floor+"층",0,154,420,45,23,Gold);
-            Label("LV "+towerRun.Level+"   HP "+towerRun.CurrentHP+" / "+towerRun.MaxHP+"   GOLD "+towerRun.Gold,0,202,430,35,16,Muted);
+            Label("유대 "+towerRun.Level+"   HP "+towerRun.CurrentHP+" / "+towerRun.MaxHP+"   GOLD "+towerRun.Gold,0,202,430,35,16,Muted);
             var first=towerRun.Choices[0];
             RoomButton=Button(RoomName(first)+"\n"+RoomDetail(first),0,towerRun.Choices.Count==1?385:326,400,112,()=>SelectTowerRoom(0));
             if(towerRun.Choices.Count>1)
@@ -297,11 +320,11 @@ namespace DragonTower
                 var second=towerRun.Choices[1];
                 SecondRoomButton=Button(RoomName(second)+"\n"+RoomDetail(second),0,492,400,112,()=>SelectTowerRoom(1));
             }
-            notice.text=towerRun.Floor%10==0?"보스층은 하나의 길만 열립니다.":"두 방 중 하나를 선택하세요.";
+            notice.text=towerRun.Floor%10==0?"보스층은 하나의 길만 열립니다.":"두 방 중 하나를 선택하세요. · "+towerRun.Progress.score+"점";
         }
         void SelectTowerRoom(int index)
         {
-            towerRun.ChooseRoom(index);ShowChosenRoom();
+            towerRun.BeginFloorRoom(index,UnityEngine.Random.Range(0,int.MaxValue));SaveProgress();ShowChosenRoom();
         }
         Button IconButton(string symbol,string caption,Color color,UnityAction action)
         {
@@ -313,6 +336,7 @@ namespace DragonTower
         void ShowChosenRoom()
         {
             if(towerRun==null||!towerRun.RoomChosen)return;
+            if(towerRun.RewardClaimed){ContinueRunPhase();return;}
             switch(towerRun.Room)
             {
                 case TowerRoomKind.Augment:ShowAugmentChoices(false);return;
@@ -324,12 +348,13 @@ namespace DragonTower
             bool boss=towerRun.Room==TowerRoomKind.Boss;
             string encounter=boss?(towerRun.Floor==20?"크라켄 수호자가 심해에서 깨어납니다.":"고대 룬 골렘이 깨어납니다."):"이 층의 몬스터가 길을 막고 있습니다.";
             Label(encounter,0,300,420,80,22,Color.white);
-            Label("LV "+towerRun.Level+"   HP "+towerRun.CurrentHP+" / "+towerRun.MaxHP,0,438,420,35,17,Muted);
+            Label("유대 "+towerRun.Level+"   HP "+towerRun.CurrentHP+" / "+towerRun.MaxHP,0,438,420,35,17,Muted);
             RoomButton=Button(boss?"보스 전투":"전투 시작",0,585,360,72,StartCurrentBattle);
             notice.text="다음 층에서도 현재 HP가 그대로 이어집니다.";
         }
         void StartCurrentBattle()
         {
+            towerRun.BeginFloorCombat(progression,UnityEngine.Random.Range(0,100));
             bool boss=towerRun.Room==TowerRoomKind.Boss;
             var skin=Resources.Load<BattleSkin>("PixelBattleSkin");Sprite enemySprite=null;BattleEnemyStats enemy;
             if(boss)
@@ -349,8 +374,10 @@ namespace DragonTower
                     if(enemySprite==null&&skin!=null)enemySprite=skin.rockSlime;
                 }
             }
+            if(towerRun.BattleResume==null){enemy.floor=towerRun.Floor;towerRun.BattleResume=new BattleResumeData{initialRunJson=JsonUtility.ToJson(towerRun.Capture(false)),seed=UnityEngine.Random.Range(0,int.MaxValue),enemy=enemy,monsterId=database.monsters.FirstOrDefault(m=>m!=null&&m.displayName==enemy.displayName)?.StableId};SaveProgress();}
+            else{enemy=towerRun.BattleResume.enemy;var savedMonster=database.monsters.FirstOrDefault(m=>m!=null&&m.StableId==towerRun.BattleResume.monsterId);if(savedMonster!=null)enemySprite=savedMonster.battleSprite;}
             root.gameObject.SetActive(false);ScreenName=boss?"보스 전투":"몬스터 전투";
-            controller.BeginBattle(Session.Selected,towerRun.BuildBattleStats(Session.Selected.Snapshot(towerRun.Level)),enemy,towerRun.Floor,boss,towerRun.CurrentHP,enemySprite,towerRun.Level,towerRun.CurrentSkill(Session.Selected.SkillAtLevel(towerRun.Level)));
+            controller.BeginBattle(Session.Selected,NamedBattleStats(),enemy,towerRun.Floor,boss,towerRun.CurrentHP,enemySprite,towerRun.Level,towerRun.CurrentSkill(Session.Selected.SkillAtLevel(towerRun.Level)));
         }
         IEnumerator AnimateRoomAction(Action done)
         {
@@ -370,7 +397,7 @@ namespace DragonTower
         {
             Screen("아이템 선택");Label("하나를 선택하거나 그냥 나갈 수 있습니다",0,154,420,34,18,Muted);
             Label(CurrentItemsSummary(),0,205,420,58,13,Color.white);
-            var choices=database==null?Array.Empty<ItemData>():database.PickItems(3,Environment.TickCount^towerRun.Floor);
+            var choices=database==null?Array.Empty<ItemData>():database.PickItems(3,towerRun.RewardSeed^towerRun.Floor);
             if(choices.Length>0)
             {
                 ChoiceButtons=new Button[choices.Length];for(int i=0;i<choices.Length;i++){var item=choices[i];ChoiceButtons[i]=ItemChoice(item,300+i*120);}
@@ -380,32 +407,35 @@ namespace DragonTower
         }
         string CurrentItemsSummary()
         {
-            if(towerRun==null||towerRun.ItemSlots.Count==0)return "현재 보유 아이템 · 없음";string text="현재 보유 아이템";
-            for(int i=0;i<towerRun.ItemSlots.Count;i++){var slot=towerRun.ItemSlots[i];text+="\n"+(i+1)+". "+slot.DisplayName+(slot.Count>1?" ×"+slot.Count:"")+" — "+ItemCardSummary(slot.Item);}return text;
+            if(towerRun==null)return "현재 보유 아이템 · 없음";string text="현재 보유 아이템";
+            for(int i=0;i<towerRun.ItemSlots.Count;i++){var slot=towerRun.ItemSlots[i];text+="\n"+(i+1)+". "+slot.DisplayName+(slot.Count>1?" ×"+slot.Count:"")+" — "+ItemCardSummary(slot.Item);}var consumable=towerRun.ItemAt(3);text+="\n소모품 · "+(consumable==null?"없음":consumable.displayName+" ×"+towerRun.ItemCountAt(3));return text;
         }
         Button ItemChoice(ItemData item,float y)
-        {return RewardCard(ItemGradeName(item.grade)+" · "+(item.kind==ItemKind.Consumable?"소모품":"장착"),item.displayName,ItemCardSummary(item),ItemIcon(item),y,DragonTowerTheme.Slate,DragonTowerTheme.Grade(item.grade),()=>AcquireItem(item,()=>ShowRoomResult(item.displayName+"을(를) 획득했습니다.")));}
+        {return RewardCard(ItemGradeName(item.grade)+" · "+(item.kind==ItemKind.Consumable?"소모품":"장착"),item.displayName,ItemCardSummary(item),ItemIcon(item),y,DragonTowerTheme.Slate,DragonTowerTheme.Grade(item.grade),()=>AcquireItem(item,()=>ShowRoomResult(item.displayName+"을(를) 획득했습니다.")),item.DamageElement);}
         string ItemSummary(ItemData item)
         {
             if(item==null)return "효과 없음";string kind=item.kind==ItemKind.Consumable?"소모품":"장착";
-            return kind+" · "+(!string.IsNullOrWhiteSpace(item.description)?item.description:EffectSummary(item.effects));
+            return kind+" · "+ItemElementName(item.DamageElement)+" · "+(!string.IsNullOrWhiteSpace(item.description)?item.description:EffectSummary(item.effects));
         }
         string ItemCardSummary(ItemData item)
         {return item==null?"효과 없음":(!string.IsNullOrWhiteSpace(item.description)?item.description:EffectSummary(item.effects));}
-        void AcquireItem(ItemData item,Action complete)
+        void AcquireItem(ItemData item,Action complete,Action decline=null)
         {
             if(towerRun.CanAddItem(item)){towerRun.AddItem(item);complete();return;}
             Screen("아이템 교체");Label("새 아이템  ["+ItemGradeName(item.grade)+"] "+item.displayName,0,185,430,54,22,Gold);
-            Label(ItemSummary(item),0,245,420,58,17,Color.white);
-            ChoiceButtons=new Button[towerRun.ItemSlots.Count];
-            for(int i=0;i<towerRun.ItemSlots.Count;i++)
+            ElementBadge(body,item.DamageElement,-194,245,22);Label(ItemSummary(item),15,245,375,58,17,ElementHudThemes.Get(item.DamageElement).primaryColor);
+            bool consumable=item.kind==ItemKind.Consumable;
+            bool duplicate=consumable?towerRun.ItemAt(3)?.StableId==item.StableId:towerRun.OwnsEquipment(item);
+            int count=duplicate?0:consumable?1:towerRun.ItemSlots.Count;ChoiceButtons=new Button[count];
+            for(int i=0;i<count;i++)
             {
-                int slot=i;var owned=towerRun.ItemSlots[i];
-                ChoiceButtons[i]=Button((i+1)+"번 교체 · "+owned.DisplayName+(owned.Count>1?" ×"+owned.Count:"")+"\n"+ItemCardSummary(owned.Item)+"  →  "+item.displayName,0,330+i*92,400,78,()=>{towerRun.AddItem(item,slot);complete();});
-                ChoiceButtons[i].GetComponentInChildren<Text>().fontSize=15;
+                int slot=consumable?TowerRun.ConsumableSlotIndex:i;var owned=towerRun.ItemAt(slot);
+                ChoiceButtons[i]=Button((consumable?"소모품 전체 교체":"장착 "+(i+1)+"번 교체")+" · "+owned.displayName+" ×"+towerRun.ItemCountAt(slot)+"\n→ "+item.displayName+" ×1",0,330+i*92,400,78,()=>{towerRun.AddItem(item,slot);complete();});
+                ChoiceButtons[i].GetComponentInChildren<Text>().fontSize=16;
             }
-            SecondRoomButton=Button("교체하지 않고 나간다",0,640,360,56,AdvanceFloor);
-            notice.text="아이템은 세 종류까지 보유할 수 있습니다. 같은 아이템은 한 슬롯에 중첩됩니다.";
+            if(duplicate)Label(consumable?"같은 소모품을 이미 3개 보유하고 있습니다.":"이미 장착 중인 아이템입니다.\n같은 아이템은 중복 장착할 수 없습니다.",0,390,420,110,20,Gold);
+            SecondRoomButton=Button("획득하지 않고 돌아가기",0,640,360,56,()=>{if(decline!=null)decline();else AdvanceFloor();});
+            notice.text="장착 3종 + 소모품 1종(최대 3개) · 교체한 기존 아이템은 사라집니다.";
         }
         string EffectSummary(System.Collections.Generic.IReadOnlyList<ContentEffect> effects)
         {
@@ -440,21 +470,30 @@ namespace DragonTower
         }
         void ShowShopRoom()
         {
-            Screen("상점방");Label("보유 골드  "+towerRun.Gold,0,175,420,42,24,Gold);
-            var goods=database==null?Array.Empty<ItemData>():database.PickItems(2,Environment.TickCount^(towerRun.Floor<<10));
+            Screen(towerRun.Phase==FloorPhase.PostBattleShop?"떠돌이 상인 등장!":"상점방");Label("보유 골드  "+towerRun.Gold,0,175,420,42,24,Gold);
+            var goods=database==null?Array.Empty<ItemData>():database.PickItems(2,towerRun.RewardSeed^(towerRun.Floor<<10));
             ChoiceButtons=new Button[goods.Length];
             for(int i=0;i<goods.Length;i++)
             {
-                var item=goods[i];ChoiceButtons[i]=RewardCard(ItemGradeName(item.grade)+" · "+(item.kind==ItemKind.Consumable?"소모품":"장착")+" · "+item.price+"G",item.displayName,ItemCardSummary(item),ItemIcon(item),315+i*125,DragonTowerTheme.Slate,DragonTowerTheme.Grade(item.grade),()=>BuyItem(item));
+                var item=goods[i];ChoiceButtons[i]=RewardCard(ItemGradeName(item.grade)+" · "+(item.kind==ItemKind.Consumable?"소모품":"장착")+" · "+item.price+"G",item.displayName,ItemCardSummary(item),ItemIcon(item),315+i*125,DragonTowerTheme.Slate,DragonTowerTheme.Grade(item.grade),()=>BuyItem(item),item.DamageElement);
             }
-            SecondRoomButton=Button("구매하지 않고 다음 층",0,600,400,66,AdvanceFloor);
+            SecondRoomButton=Button("구매하지 않고 다음 층",0,600,400,66,()=>{if(towerRun.Phase==FloorPhase.PostBattleShop)FinishPostBattleShop();else AdvanceFloor();});
             notice.text="구매한 아이템은 빈 슬롯에 넣거나 기존 아이템과 교체합니다.";
+        }
+        void FinishPostBattleShop(string purchase=null)
+        {
+            if(towerRun.Phase!=FloorPhase.PostBattleShop)return;
+            towerRun.CompletePostBattleShop();SaveProgress();
+            if(purchase==null){ContinueRunPhase();return;}
+            Screen("구매 완료");Label(purchase,0,330,420,100,24,Gold);Label("남은 골드 "+towerRun.Gold,0,440,420,40,20,Muted);
+            RoomButton=Button("다음 층으로",0,610,360,60,ContinueRunPhase);
         }
         void BuyItem(ItemData item)
         {
-            if(item==null)return;if(!towerRun.SpendGold(item.price)){notice.text="골드가 부족합니다.";return;}
+            if(item==null)return;if(towerRun.Gold<item.price){notice.text="골드가 부족합니다.";return;}
             DragonTowerAudio.PlayPurchase();
-            AcquireItem(item,()=>ShowRoomResult(item.displayName+"을(를) "+item.price+"G에 구매했습니다."));
+            bool travelling=towerRun.Phase==FloorPhase.PostBattleShop;
+            AcquireItem(item,()=>{towerRun.SpendGold(item.price);if(travelling)FinishPostBattleShop(item.displayName+" 구매 · "+item.price+"G");else ShowRoomResult(item.displayName+"을(를) "+item.price+"G에 구매했습니다.");},()=>ShowShopRoom());
         }
         void ShowNestRoom()
         {
@@ -467,21 +506,21 @@ namespace DragonTower
         {
             if(RoomButton==null||!RoomButton.interactable)return;
             hatched=catalog[UnityEngine.Random.Range(0,catalog.Length)];
-            try{Session.RegisterHatchedDragon(hatched);DragonTowerAudio.PlayEvolution();if(egg!=null){egg.cracked=true;egg.SetVerticesDirty();}StartCoroutine(AnimateRoomAction(ShowNestResult));}
+            try{FinishNestReward(hatched);DragonTowerAudio.PlayEvolution();if(egg!=null){egg.cracked=true;egg.SetVerticesDirty();}StartCoroutine(AnimateRoomAction(ShowNestResult));}
             catch(Exception e){notice.text="등록하지 못했습니다. 알은 유지됩니다.";Debug.LogException(e);}
         }
         void ShowNestResult()
         {
-            Screen("둥지 부화 성공!");Portrait(hatched,315);Label(hatched.displayName+" · "+hatched.element,0,505,420,48,28,Gold);
+            Screen("둥지 부화 성공!");Portrait(hatched,315);Label(hatched.displayName+" · "+hatched.element,0,505,420,48,28,Gold);AutoContinueReward();
             Label("도감과 보유 목록에 등록되었습니다.",0,558,420,38,18,Color.white);
             RoomButton=Button("다음 층",0,680,360,66,AdvanceFloor);
         }
         void ShowAugmentChoices(bool levelReward)
         {
-            Screen(levelReward?"레벨 "+towerRun.Level+" 증강":"증강방");
+            Screen(levelReward?"유대 "+towerRun.Level+" 증강":"증강방");
             Label("이번 성장을 선택하세요",0,161,430,36,21,Gold);
             Label("카드를 눌러 자세히 읽고 선택할 수 있어요",0,194,430,30,16,Muted);
-            var rewards=PickRandomRewards(Environment.TickCount^towerRun.Level^(towerRun.Floor<<8),3);
+            var rewards=PickRandomRewards(towerRun.RewardSeed^towerRun.Level^(towerRun.Floor<<8),3);
             ChoiceButtons=new Button[Math.Max(3,rewards.Length)];
             if(rewards.Length>0)
             {
@@ -542,7 +581,7 @@ namespace DragonTower
         static string GradeName(AugmentGrade grade)
         {switch(grade){case AugmentGrade.Rare:return "레어";case AugmentGrade.Epic:return "에픽";case AugmentGrade.Unique:return "유니크";case AugmentGrade.Legendary:return "전설";default:return "일반";}}
         static string ItemGradeName(ItemGrade grade)
-        {switch(grade){case ItemGrade.Rare:return "레어";case ItemGrade.Epic:return "에픽";case ItemGrade.Unique:return "유니크";default:return "일반";}}
+        {switch(grade){case ItemGrade.Rare:return "레어";case ItemGrade.Epic:return "에픽";case ItemGrade.Unique:return "유니크";case ItemGrade.Legendary:return "전설";default:return "일반";}}
         static Color GradeColor(AugmentGrade grade)
         {switch(grade){case AugmentGrade.Rare:return new Color(.18f,.38f,.58f);case AugmentGrade.Epic:return new Color(.39f,.22f,.58f);case AugmentGrade.Unique:return new Color(.68f,.40f,.12f);case AugmentGrade.Legendary:return new Color(.45f,.28f,.06f);default:return new Color(.18f,.27f,.36f);}}
         string AugmentSummary(AugmentData augment)
@@ -559,25 +598,29 @@ namespace DragonTower
         }
         string StatusName(CombatStatusEffect effect)=>StatusDisplay(effect);
         void ChooseAugment(AugmentData augment,bool levelReward)
-        {try{towerRun.AddAugment(augment,levelReward);DragonTowerAudio.PlayAugment();ShowRoomResult(augment.displayName+"을(를) 선택했습니다.");}catch(Exception e){notice.text=e.Message;}}
+        {try{towerRun.AddAugment(augment,levelReward);DragonTowerAudio.PlayAugment();if(levelReward)FinishLevelReward(augment.displayName+"을(를) 선택했습니다.");else ShowRoomResult(augment.displayName+"을(를) 선택했습니다.");}catch(Exception e){notice.text=e.Message;}}
         void ChooseAugment(string id,bool levelReward)
         {
-            towerRun.AddAugment(id,levelReward);DragonTowerAudio.PlayAugment();ShowRoomResult("증강을 선택했습니다.");
+            towerRun.AddAugment(id,levelReward);DragonTowerAudio.PlayAugment();if(levelReward)FinishLevelReward("증강을 선택했습니다.");else ShowRoomResult("증강을 선택했습니다.");
         }
         void ChooseSkill(SkillData skill,bool levelReward)
-        {try{towerRun.ReplaceSkill(skill,levelReward);DragonTowerAudio.PlayAugment();ShowRoomResult(skill.displayName+" 스킬로 교체했습니다.");}catch(Exception e){notice.text=e.Message;}}
+        {try{towerRun.ReplaceSkill(skill,levelReward);DragonTowerAudio.PlayAugment();if(levelReward)FinishLevelReward(skill.displayName+" 스킬로 교체했습니다.");else ShowRoomResult(skill.displayName+" 스킬로 교체했습니다.");}catch(Exception e){notice.text=e.Message;}}
         void ShowRoomResult(string result)
         {
+            FinishRoomEvent();
             Screen("방 완료");Label(result,0,310,420,100,24,Color.white);
-            Label("LV "+towerRun.Level+"   HP "+towerRun.CurrentHP+" / "+towerRun.MaxHP+"   GOLD "+towerRun.Gold,0,435,430,36,16,Muted);
-            RoomButton=Button("다음 층",0,610,360,68,AdvanceFloor);
+            Label("유대 "+towerRun.Level+"   HP "+towerRun.CurrentHP+" / "+towerRun.MaxHP+"   GOLD "+towerRun.Gold,0,435,430,36,16,Muted);
+            Label("방 경험치 +"+progression.RoomExperience(towerRun.Room)+" EXP",0,489,420,35,18,Gold);
+            notice.text=towerRun.AdditionalBattle?"몬스터가 접근합니다…":"다음 층으로 이동합니다…";AutoContinueReward();
         }
         void AdvanceFloor()
         {
-            if(towerRun==null)return;int clearedFloor=towerRun.Floor;
-            towerRun.AdvanceFloor(UnityEngine.Random.Range(0,100),UnityEngine.Random.Range(0,100));
-            if(towerRun.Floor%10==1)StartCoroutine(ShowFloorTransition(clearedFloor,towerRun.Floor,false));
-            else ShowTowerChoices();
+            if(towerRun==null)return;
+            if(towerRun.Phase==FloorPhase.RoomEvent){FinishRoomEvent();ContinueRunPhase();return;}
+            if(towerRun.Phase!=FloorPhase.Complete||towerRun.PendingEvolutionStage>0||towerRun.PendingLevelAugments>0){ContinueRunPhase();return;}
+            if(towerRun.Floor>=80){Session.FinishRun(towerRun,true);towerRun.End();Screen("타워 완주");Label("80층을 돌파했습니다!\n최종 점수 "+towerRun.Progress.score+"점",0,350,420,80,28,Gold);Button("로비로",0,610,360,60,ShowLobby);return;}
+            int clearedFloor=towerRun.Floor;towerRun.MoveToNextFloor(UnityEngine.Random.Range(0,100),UnityEngine.Random.Range(0,100));SaveProgress();
+            if(towerRun.Floor%10==1)StartCoroutine(ShowFloorTransition(clearedFloor,towerRun.Floor,false));else ShowTowerChoices();
         }
         static int TowerAreaIndex(int floor)
         {return floor>=100?10:Mathf.Clamp((Mathf.Max(1,floor)-1)/10,0,9);}
@@ -624,69 +667,82 @@ namespace DragonTower
         public void ResolveBattleResult()
         {
             if(towerRun==null||controller.CurrentBattle==null||controller.CurrentBattle.Result==BattleResult.Fighting)return;
-            towerRun.RecordPassiveUse(controller.CurrentBattle.PassiveConsumed);
             if(controller.CurrentBattle.Result==BattleResult.Victory)
             {
-                int hp=controller.CurrentBattle.PlayerHP,previousLevel=towerRun.Level,previousExperience=towerRun.Experience;
-                towerRun.RecordBattleVictory(hp);controller.EndBattle();ShowExperienceReward(previousLevel,previousExperience);return;
+                BattleSettled();controller.EndBattle();ContinueRunPhase();return;
             }
+            BattleSettled();
             int floor=towerRun.Floor;towerRun.End();controller.EndBattle();
-            Screen("도전 종료");Label(floor+"층에서 모험을 마쳤습니다",0,312,420,70,28,Gold);
-            Label("보유 드래곤과 도감은 그대로 유지됩니다.\n레벨·골드·아이템·증강은 초기화됩니다.",0,430,420,110,19,Color.white);
+            Screen("도전 종료");Label(Session.SelectedName()+"\n"+floor+"층에서 모험을 마쳤습니다",0,312,420,70,28,Gold);
+            Label("최종 점수 "+towerRun.Progress.score+"점\n최대 유대 "+towerRun.Progress.maxBond+" · 처치 "+towerRun.MonstersDefeated+" (보스 "+towerRun.BossesDefeated+")\n보유 드래곤과 업적은 유지됩니다.",0,430,420,110,19,Color.white);
             RoomButton=Button("로비로 돌아가기",0,610,360,68,ShowLobby);
             notice.text="같은 드래곤으로 다시 도전할 수 있습니다.";
         }
         void ShowExperienceReward(int previousLevel,int previousExperience)
         {
-            Screen("전투 경험치");
-            var levelText=Label("LV "+previousLevel,0,230,420,54,31,Color.white);
+            Screen(towerRun.Phase==FloorPhase.BattleRewards?"전투 경험치":"방 보상 경험치");
+            Label(Session.SelectedName(),0,170,420,36,23,Gold);
+            var levelText=Label("유대 "+previousLevel,0,230,420,54,31,Color.white);
             var expText=Label("EXP "+previousExperience+" / "+towerRun.ExperienceToNext,0,294,420,34,17,Muted);
             var back=Panel("Experience gauge",body,0,350,390,24,new Color(.07f,.10f,.15f,.98f),DragonTowerTheme.GoldDim);
             var fill=Rect("Experience fill",back.transform,-195,12,390,18).gameObject.AddComponent<Image>();fill.color=new Color(.35f,.76f,1);fill.raycastTarget=false;
             fill.rectTransform.anchorMin=fill.rectTransform.anchorMax=new Vector2(0,.5f);fill.rectTransform.pivot=new Vector2(0,.5f);fill.rectTransform.anchoredPosition=Vector2.zero;
             fill.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,390f*previousExperience/towerRun.ExperienceToNext);
-            Label("몬스터 처치  +"+towerRun.LastExperienceGain+" EXP",0,410,420,42,21,Gold);
-            notice.text="경험치가 가득 차면 레벨이 상승합니다.";StartCoroutine(AnimateExperience(previousLevel,previousExperience,fill,expText,levelText));
+            Label((towerRun.Phase==FloorPhase.BattleRewards?"몬스터 처치  +":"방 보상  +")+towerRun.LastExperienceGain+" EXP",0,410,420,42,21,Gold);
+            if(towerRun.Phase==FloorPhase.BattleRewards&&towerRun.LastBattleGold>0)Label("처치 보상 +"+towerRun.LastBattleGold+" GOLD",0,475,420,40,21,Gold);
+            notice.text="경험치가 가득 차면 유대가 상승합니다.";StartCoroutine(AnimateExperience(previousLevel,previousExperience,fill,expText,levelText));
         }
         IEnumerator AnimateExperience(int previousLevel,int previousExperience,Image fill,Text expText,Text levelText)
         {
-            float time=0,duration=1.15f;int required=towerRun.ExperienceToNext;
-            while(time<duration)
+            var owner=body;int required=towerRun.ExperienceToNext;
+            int shownLevel=previousLevel,shownExperience=previousExperience;
+            while(shownLevel<towerRun.Level||shownExperience<towerRun.Experience)
             {
-                time+=Mathf.Min(Time.deltaTime,.1f);float t=Mathf.Clamp01(time/duration),value=Mathf.Lerp(previousExperience,required,t);
-                fill.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,390f*value/required);expText.text="EXP "+Mathf.RoundToInt(value)+" / "+required;yield return null;
+                int target=shownLevel<towerRun.Level?required:towerRun.Experience;
+                float elapsed=0,duration=Mathf.Max(.45f,1.05f*(target-shownExperience)/required);
+                while(elapsed<duration)
+                {
+                    if(body!=owner||fill==null)yield break;
+                    elapsed+=Mathf.Min(Time.deltaTime,.1f);float t=Mathf.SmoothStep(0,1,Mathf.Clamp01(elapsed/duration));
+                    float value=Mathf.Lerp(shownExperience,target,t);
+                    fill.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,390f*value/required);
+                    expText.text="EXP "+Mathf.RoundToInt(value)+" / "+required;yield return null;
+                }
+                shownExperience=target;
+                if(target==required){shownLevel++;shownExperience=0;DragonTowerAudio.PlayLevelUp();levelText.text="유대 상승!   유대 "+shownLevel;levelText.color=Gold;yield return new WaitForSeconds(.25f);}
             }
-            if(towerRun.Level>previousLevel)
+            if(body!=owner||fill==null)yield break;
+            fill.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,390f*towerRun.Experience/required);
+            expText.text="EXP "+towerRun.Experience+" / "+required;
+            ContinueButton=Button("계속",0,610,360,68,ContinueAfterExperienceReward);
+            // Room rewards still flow automatically into the saved encounter decision.
+            if(towerRun.Phase!=FloorPhase.BattleRewards)
             {
-                DragonTowerAudio.PlayLevelUp();levelText.text="LEVEL UP!   LV "+previousLevel+"  →  LV "+towerRun.Level;levelText.color=Gold;levelText.fontSize=27;
-                fill.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,390f*towerRun.Experience/required);expText.text="EXP "+towerRun.Experience+" / "+required;
+                yield return new WaitForSeconds(.8f);
+                if(body==owner&&!returningToLobby)ContinueAfterExperienceReward();
             }
-            ContinueButton=Button("보상 확인",0,610,360,68,ContinueAfterExperienceReward);
         }
-        void ContinueAfterExperienceReward(){if(TryShowMonsterDrop())return;ContinueAfterBattleRewards();}
+        void ContinueAfterExperienceReward(){towerRun.AcknowledgeExperience();SaveProgress();ContinueRunPhase();}
         bool TryShowMonsterDrop()
         {
-            int chance=towerRun.Room==TowerRoomKind.Boss?25:towerRun.Room==TowerRoomKind.Monster?12:0;
-            if(database==null||database.items==null||database.items.Length==0||UnityEngine.Random.Range(0,100)>=chance)return false;
-            var drops=database.PickItems(1,Environment.TickCount^(towerRun.Floor<<12));if(drops.Length==0)return false;var item=drops[0];
-            Screen("몬스터 전리품");Label("["+ItemGradeName(item.grade)+"] "+item.displayName,0,250,420,54,26,Gold);
-            Label(ItemSummary(item),0,330,420,82,19,Color.white);
-            RoomButton=Button("획득 또는 교체",0,475,360,72,()=>AcquireItem(item,ContinueAfterBattleRewards));
-            SecondRoomButton=Button("두고 간다",0,575,360,62,ContinueAfterBattleRewards);
-            notice.text="몬스터가 아이템을 떨어뜨렸습니다.";return true;
+            if(string.IsNullOrEmpty(towerRun.PendingDropId))return false;
+            var item=database.items.FirstOrDefault(x=>x.StableId==towerRun.PendingDropId);if(item==null)throw new InvalidOperationException("전리품을 찾을 수 없습니다.");
+            Screen("몬스터 전리품");Label("["+ItemGradeName(item.grade)+"] "+item.displayName,0,250,420,54,26,Gold);ElementBadge(body,item.DamageElement,-194,330,22);Label(ItemSummary(item),15,330,375,82,19,ElementHudThemes.Get(item.DamageElement).primaryColor);
+            Action finish=()=>{towerRun.ConsumeDrop();SaveProgress();ContinueRunPhase();};
+            RoomButton=Button("획득 또는 교체",0,475,360,72,()=>AcquireItem(item,finish,finish));SecondRoomButton=Button("두고 간다",0,575,360,62,()=>finish());return true;
         }
         void ContinueAfterBattleRewards()
-        {if(towerRun.PendingEvolutionStage>0)ShowEvolutionCutscene();else ContinueAfterLevelRewards();}
+        {ContinueRunPhase();}
         void ContinueAfterLevelRewards()
         {
-            if(towerRun.PendingLevelAugments>0)ShowAugmentChoices(true);else AdvanceFloor();
+            ContinueRunPhase();
         }
         void ShowEvolutionCutscene()
         {
             int stage=towerRun.PendingEvolutionStage;var dragon=Session.Selected;
             DragonTowerAudio.PlayEvolution();
             Screen(stage==1?"중간 진화":"최종 진화");
-            Label("LEVEL "+towerRun.Level,0,148,420,38,19,Muted);
+            Label("유대 "+towerRun.Level,0,148,420,38,19,Muted);
             Label(dragon.NameForStage(stage-1)+"  →  "+dragon.NameForStage(stage),0,202,440,44,23,Gold);
             var auraRect=Rect("Evolution aura",body,0,416,350,350);var aura=auraRect.gameObject.AddComponent<Image>();
             aura.color=new Color(dragon.color.r,dragon.color.g,dragon.color.b,.18f);aura.raycastTarget=false;
@@ -722,30 +778,31 @@ namespace DragonTower
                 dragon.passiveName+" 패시브 +"+Mathf.RoundToInt((TowerRun.PassiveEvolutionMultiplier(stage)-1)*100)+"%";
             evolutionText.color=Gold;evolutionText.fontSize=20;
             ContinueButton=Button(towerRun.PendingLevelAugments>0?"증강 선택으로":"다음 층으로",0,710,360,66,FinishEvolution);
-            notice.text=stage==1?"레벨 20에서 최종 진화합니다.":"최종 진화를 완료했습니다.";
+            notice.text=stage==1?"유대 20에서 최종 진화합니다.":"최종 진화를 완료했습니다.";
         }
         void FinishEvolution()
         {
             if(towerRun==null||towerRun.PendingEvolutionStage<=0)return;
-            towerRun.ConsumeEvolution();ContinueAfterLevelRewards();
+            towerRun.ConsumeEvolution();SaveProgress();ContinueAfterLevelRewards();
         }
         public void ShowCodex()
         {
             Screen("드래곤 도감");int found=0;foreach(var d in catalog)if(Session.Owns(d.StableId))found++;
             Label("발견한 드래곤  "+found+" / "+catalog.Length,0,145,420,34,19,Muted);
-            int start=codexPage*8,end=Math.Min(catalog.Length,start+8);
+            int start=codexPage*6,end=Math.Min(catalog.Length,start+6);
             for(int i=start;i<end;i++)
             {
                 var d=catalog[i];bool owns=Session.Owns(d.StableId);
-                int local=i-start,column=local%2,row=local/2;float x=column==0?-106:106,y=215+row*100;
-                var b=Button(owns?d.displayName+"\n"+ElementRules.DisplayName(d.elementType):"???\n미발견",x,y,198,86,()=>ShowCodexEntry(d));
+                int local=i-start,column=local%2,row=local/2;float x=column==0?-106:106,y=237+row*143;
+                var b=Button(owns?d.displayName+"\n"+ElementRules.DisplayName(d.elementType):"???\n미발견",x,y,198,136,()=>ShowCodexEntry(d));
                 StyleCard(b,owns?new Color(.09f,.16f,.23f,.98f):new Color(.035f,.045f,.065f,.98f),owns?new Color(d.color.r,d.color.g,d.color.b,1):new Color(.22f,.24f,.28f));
-                var text=b.GetComponentInChildren<Text>();text.fontSize=14;text.rectTransform.anchoredPosition=new Vector2(37,-43);text.rectTransform.sizeDelta=new Vector2(108,76);
-                DragonArtwork(b.transform,d,0,-57,43,68,68,!owns);
-                if(owns)ElementBadge(b.transform,d.elementType,78,18,24);
+                if(AncientScreen){AncientUi.Button(b,false,owns&&Session.Selected!=null&&Session.Selected.StableId==d.StableId,!owns);b.GetComponentInChildren<AncientStoneSurface>().kind=AncientSurfaceKind.Collection;}
+                var text=b.GetComponentInChildren<Text>();text.fontSize=14;text.rectTransform.anchoredPosition=new Vector2(0,-107);text.rectTransform.sizeDelta=new Vector2(180,44);
+                DragonArtwork(b.transform,d,0,0,54,86,86,!owns);
+                if(owns)ElementBadge(b.transform,d.elementType,-74,105,26);
             }
             if(codexPage>0)Button("◀",-105,650,90,46,()=>{codexPage--;ShowCodex();});
-            Label((codexPage+1)+" / "+Math.Max(1,(catalog.Length+7)/8),0,650,100,42,16,Muted);
+            Label((codexPage+1)+" / "+Math.Max(1,(catalog.Length+5)/6),0,650,100,42,16,Muted);
             if(end<catalog.Length)Button("▶",105,650,90,46,()=>{codexPage++;ShowCodex();});
             Button("로비로 돌아가기",0,728,380,60,ShowLobby);
         }
@@ -757,7 +814,7 @@ namespace DragonTower
             for(int stage=0;stage<3;stage++)
             {
                 float x=(stage-1)*145;var card=Rect("Evolution form "+stage,body,x,306,136,190);
-                var panel=card.gameObject.AddComponent<Image>();panel.color=new Color(.075f,.105f,.15f,.9f);panel.raycastTarget=false;
+                var panel=card.gameObject.AddComponent<Image>();panel.color=new Color(.075f,.105f,.15f,.9f);panel.raycastTarget=false;DragonTowerTheme.Frame(panel,DragonTowerTheme.GoldDim);if(AncientScreen)AncientUi.Frame(panel,AncientSurfaceKind.Collection);
                 DragonArtwork(card,dragon,stage,0,84,124,124,!owns);
                 string formName=owns?dragon.NameForStage(stage):"???";
                 var title=Label(formName,0,390,130,46,14,owns?Color.white:Muted);title.transform.SetParent(card,false);title.rectTransform.anchoredPosition=new Vector2(0,-166);
@@ -766,10 +823,10 @@ namespace DragonTower
             if(owns)
             {
                 string description=string.IsNullOrWhiteSpace(dragon.description)?"함께 타워를 오르는 "+dragon.element+" 속성 드래곤입니다.":dragon.description;
-                Label(ElementRules.DisplayName(dragon.elementType)+" 속성  ·  HP "+dragon.maxHP+"  ·  공격력 "+dragon.attackDamage+"\n"+
-                    "패시브 · "+dragon.passiveName+" — "+dragon.passiveDescription+"\n"+
-                    "\n소개\n"+description,0,550,430,190,15,Color.white);
-                notice.text="소개 문구는 DragonData의 '도감 소개 코멘트'에서 직접 수정할 수 있습니다.";
+                DragonStatsRow(dragon,445);
+                DragonInfoCard("타고난 능력",dragon.passiveName,dragon.passiveDescription,3,518,94);
+                DragonInfoCard("드래곤 이야기","",description,14,626,92);
+                notice.text="진화할수록 모습과 힘이 함께 성장합니다.";
             }
             else
             {
@@ -795,6 +852,7 @@ namespace DragonTower
             }
             var image=art.gameObject.AddComponent<Image>();image.sprite=sprite;image.preserveAspect=true;image.raycastTarget=false;
             image.color=silhouette?new Color(0,0,0,1):Color.white;
+            art.gameObject.AddComponent<DragonPortraitIdle>().Bind(dragon,stage,new Vector2(w,h)*(stage==0?.68f:stage==1?.84f:.98f));
             return image;
         }
         Image ElementBadge(Transform parent,ElementType element,float x,float y,float size)
@@ -806,14 +864,14 @@ namespace DragonTower
         public void ShowDragonSelect()
         {
             Screen("플레이 드래곤 선택");
-            var owned=catalog.Where(d=>Session.Owns(d.StableId)).ToArray();
+            var owned=Session.Profile.dragons.ToArray();
             Label("함께 타워를 오를 드래곤을 선택하세요",0,145,420,34,18,Muted);
             int start=selectPage*8,end=Math.Min(owned.Length,start+8);ChoiceButtons=new Button[end-start];
             for(int i=start;i<end;i++)
             {
-                var dragon=owned[i];bool selected=Session.Selected!=null&&Session.Selected.StableId==dragon.StableId;
+                var instance=owned[i];var dragon=Session.Find(instance.speciesId);bool selected=Session.Profile.selectedInstanceId==instance.instanceId;
                 int local=i-start,column=local%2,row=local/2;float x=column==0?-106:106,y=215+row*100;
-                var b=Button(dragon.displayName+(selected?"\n선택 중":"\n"+dragon.element),x,y,198,86,()=>SelectSpecies(dragon));
+                var b=Button(DragonNames.Display(instance,dragon)+(selected?"\n선택 중":"\n"+dragon.element),x,y,198,86,()=>{try{Session.Select(instance.instanceId);ShowLobby();}catch(Exception){notice.text="선택을 저장하지 못했습니다.";}});
                 StyleCard(b,selected?new Color(.30f,.20f,.07f,.98f):new Color(.09f,.16f,.23f,.98f),selected?DragonTowerTheme.Gold:new Color(dragon.color.r,dragon.color.g,dragon.color.b,1));
                 var text=b.GetComponentInChildren<Text>();text.fontSize=14;text.rectTransform.anchoredPosition=new Vector2(35,-43);text.rectTransform.sizeDelta=new Vector2(112,76);
                 DragonArtwork(b.transform,dragon,0,-57,43,68,68,false);ChoiceButtons[local]=b;
@@ -835,17 +893,20 @@ namespace DragonTower
         public void ShowStatus()
         {
             var d=Session.Selected;if(d==null)return;
-            Screen("드래곤 상태");Portrait(d,271);
-            Label(d.displayName+"  /  "+d.element,0,440,420,48,27,Gold);
-            Label("기본 체력  "+d.maxHP+"\n기본 공격력  "+d.attackDamage+"\n패시브  "+d.passiveName+"\n"+d.passiveDescription+"\n"+d.skill.displayName+"  ·  피해 "+d.skill.damage+" / "+d.skill.cooldown+"초",0,560,430,210,18,Color.white);
-            Button("로비로 돌아가기",0,728,380,60,ShowLobby);
-            notice.text="레벨·진화·아이템·증강은 타워 도전 중에만 적용됩니다.";
+            Screen("드래곤 상태");Portrait(d,269);
+            var nameLabel=Label(Session.SelectedName()+"  /  "+d.element,0,440,420,48,27,Gold);nameLabel.resizeTextForBestFit=true;nameLabel.resizeTextMinSize=18;nameLabel.resizeTextMaxSize=27;
+            DragonStatsRow(d,477);
+            DragonInfoCard("타고난 능력",d.passiveName,d.passiveDescription,3,548,90);
+            if(d.skill!=null)DragonInfoCard("시작 스킬",d.skill.displayName,"피해 "+d.skill.damage+"   ·   재사용 "+d.skill.cooldown+"초"+SkillStatus(d.skill),1,631,64);
+            Button("이름 변경",0,684,380,44,ShowRenameDragon);
+            Button("로비로 돌아가기",0,744,380,48,ShowLobby);
+            notice.text="유대·진화·아이템·증강은 타워 도전 중에만 적용됩니다.";
         }
         void Update()
         {
             if(root==null||!root.gameObject.activeInHierarchy)return;
             float dt=Mathf.Min(Time.deltaTime,.1f);clock+=dt;
-            if(portrait!=null)portrait.localScale=new Vector3(1-Mathf.Sin(clock*3)*.015f,1+Mathf.Sin(clock*3)*.025f,1);
+
             if(startPrompt!=null)startPrompt.localScale=Vector3.one*(1+Mathf.Sin(clock*4)*.035f);
             if(hatchTime<0)return;
             hatchTime+=dt;if(egg!=null)egg.rectTransform.localRotation=Quaternion.Euler(0,0,Mathf.Sin(hatchTime*38)*10);

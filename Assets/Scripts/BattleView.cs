@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 namespace DragonTower
@@ -75,7 +75,7 @@ namespace DragonTower
             Label("D R A G O N   T O W E R",frame,-55,34,330,28,20,Color.white);
             floorLabel=Label("01",frame,145,33,45,32,22,C(.96f,.75f,.40f));
             modeLabel=Label("타워 1층  /  MONSTER ROOM",frame,42,66,310,24,12,Muted);
-            levelLabel=Label("LV 1",frame,-190,60,72,20,16,C(1,.76f,.42f),TextAnchor.MiddleLeft);
+            levelLabel=Label("유대 1",frame,-190,60,72,20,16,C(1,.76f,.42f),TextAnchor.MiddleLeft);
             var expBack=Panel("EXP gauge",frame,-151,75,78,5,C(.10f,.14f,.20f));
             experienceFill=Panel("EXP fill",expBack.transform,-39,2.5f,78,5,C(.45f,.78f,1));
             experienceFill.rectTransform.anchorMin=experienceFill.rectTransform.anchorMax=new Vector2(0,.5f);experienceFill.rectTransform.pivot=new Vector2(0,.5f);experienceFill.rectTransform.anchoredPosition=Vector2.zero;
@@ -93,6 +93,7 @@ namespace DragonTower
             message=Label("",frame,0,634,440,30,16,C(.7f,.82f,.9f));
             playerElementIcon=ElementIcon(frame,-198,674,28);
             playerName=Label("",frame,-45,674,245,28,19,Color.white,TextAnchor.MiddleLeft);
+            playerName.resizeTextForBestFit=true;playerName.resizeTextMinSize=11;playerName.resizeTextMaxSize=19;playerName.supportRichText=false;
             playerHP=Label("",frame,140,674,120,28,16,Muted,TextAnchor.MiddleRight);
             playerFill=Bar("Player HP",700,C(.36f,.83f,.69f));
             itemButton1=MakeButton("아이템 1 · 빈 슬롯",frame,-145,727,138,38,C(.20f,.25f,.31f),out itemLabel1);
@@ -143,7 +144,7 @@ namespace DragonTower
                 var back=Panel("EXP gauge",frame,-151,75,78,5,C(.10f,.14f,.20f));experienceFill=Panel("EXP fill",back.transform,-39,2.5f,78,5,C(.45f,.78f,1));
                 experienceFill.rectTransform.anchorMin=experienceFill.rectTransform.anchorMax=new Vector2(0,.5f);experienceFill.rectTransform.pivot=new Vector2(0,.5f);experienceFill.rectTransform.anchoredPosition=Vector2.zero;
             }
-            levelLabel.text="LV "+level;experienceFill.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,78f*Mathf.Clamp01(experience/(float)Mathf.Max(1,required)));
+            levelLabel.text="유대 "+level;experienceFill.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,78f*Mathf.Clamp01(experience/(float)Mathf.Max(1,required)));
         }
         void EnsureItemControls()
         {
@@ -293,7 +294,8 @@ namespace DragonTower
             if(motion==null){motion=gameObject.AddComponent<BattleAnimation>();motion.Initialize(this);}
             motion.ResetBattle(skill);
         }
-        public void PlayCue(CombatCue cue,int damage) { DragonTowerAudio.PlayCombat(cue,activeSkillEffect,activeSkillName);if(motion!=null) motion.Play(cue,damage); }
+        public void PlayCue(CombatCue cue,int damage) { PlayCue(cue,damage,true); }
+        public void PlayCue(CombatCue cue,int damage,bool playAudio) { if(playAudio)DragonTowerAudio.PlayCombat(cue,activeSkillEffect,activeSkillName);if(motion!=null) motion.Play(cue,damage); }
         public void SetEncounter(BattleEnemyStats enemy,int floor,bool boss,Sprite enemySprite=null)
         {
             EnsureElementIcons();SetElementIcon(enemyElementIcon,enemy.elementType);
@@ -336,6 +338,7 @@ namespace DragonTower
         public void SetItems(TowerRun run)
         {
             SetItemButton(itemButton1,itemLabel1,run,0);SetItemButton(itemButton2,itemLabel2,run,1);SetItemButton(itemButton3,itemLabel3,run,2);
+            var consumable=run?.ItemAt(TowerRun.ConsumableSlotIndex);SetRecoverySlot(CollectionFlow.ItemIcon(consumable),run?.ItemCountAt(TowerRun.ConsumableSlotIndex)??0,true);
         }
         void SetItemButton(Button button,Text label,TowerRun run,int index)
         {
@@ -414,6 +417,7 @@ namespace DragonTower
                 skillLabel.text="기절\n"+b.StunRemaining.ToString("0.0")+"초";
             }
             UpdateFantasyHud(b);
+            if(RecoveryButton!=null)RecoveryButton.interactable=recoveryAction!=null&&recoveryAmount>0&&!b.PlayerStunned&&b.Result==BattleResult.Fighting;
             itemButton1.interactable=usableItems[0]&&!b.PlayerStunned&&b.Result==BattleResult.Fighting;
             itemButton2.interactable=usableItems[1]&&!b.PlayerStunned&&b.Result==BattleResult.Fighting;
             itemButton3.interactable=usableItems[2]&&!b.PlayerStunned&&b.Result==BattleResult.Fighting;
@@ -422,7 +426,7 @@ namespace DragonTower
             {
                 if(lastAudioResult!=b.Result){lastAudioResult=b.Result;DragonTowerAudio.PlayResult(b.Result==BattleResult.Victory);}
                 resultTitle.text=b.Result==BattleResult.Victory?"승리!":"다시 도전!";
-                resultDetail.text=b.Result==BattleResult.Victory?"적을 물리쳤습니다.\n남은 HP  "+b.PlayerHP+" / "+b.Dragon.maxHP:"드래곤이 쓰러졌습니다.\n주황색 게이지가 차기 직전에 회피하세요.";
+                resultDetail.text=b.Dragon.displayName+"\n"+(b.Result==BattleResult.Victory?"적을 물리쳤습니다.\n남은 HP  "+b.PlayerHP+" / "+b.Dragon.maxHP:"드래곤이 쓰러졌습니다.\n주황색 게이지가 차기 직전에 회피하세요.");
                 restartButton.GetComponentInChildren<Text>().text=b.Result==BattleResult.Victory?"다음 층":"도전 결과";
             }
         }

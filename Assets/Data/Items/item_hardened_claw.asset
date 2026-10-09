@@ -14,13 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.ItemData
   contentId: item_hardened_claw
   displayName: "단단한 발톱"
-  description: "장착 시 일반 공격 피해 10% 증가"
+  description: "일반공격 피해 10% 증가."
   rarity: 0
   icon: {fileID: 0}
   grade: 0
   kind: 1
   mechanic: 0
-  maximumStacks: 3
+  maximumStacks: 1
   price: 35
   primaryValue: 0
   secondaryValue: 0
@@ -28,4 +28,4 @@ MonoBehaviour:
   effects:
   - type: 10
     value: 10
-    note: 
+    note:

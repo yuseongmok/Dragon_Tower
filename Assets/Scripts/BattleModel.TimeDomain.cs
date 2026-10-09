@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 namespace DragonTower {
  public sealed partial class BattleModel {
   bool timeDomainBusy,timeDomainStarted;double timeDomainStart,timeDomainEnd;long storedBasicDamage;int storedBasicHits;
@@ -14,7 +14,7 @@ namespace DragonTower {
   double TimeDomainStep(double step){if(!TimeDomainBusy)return step;double next=timeDomainStarted?timeDomainEnd:timeDomainStart;return next>Time+1e-8?Math.Min(step,next-Time):step;}
   void PauseEnemyTime(double delta){if(!TimeDomainBusy)return;double paused=Math.Max(0,Math.Min(Time+delta,timeDomainEnd)-Math.Max(Time,timeDomainStart));if(paused<=0)return;NextEnemyStrike+=paused;nextSpecialAt+=paused;if(enemyShieldHP>0)enemyShieldUntil+=paused;if(reflectUntil>Time)reflectUntil+=paused;}
   void TickTimeDomain(){if(!TimeDomainBusy)return;if(!timeDomainStarted&&Time>=timeDomainStart-1e-8){timeDomainStarted=true;Cue?.Invoke(CombatCue.TimeStopped,0);}if(Time<timeDomainEnd-1e-8)return;
-   bool critical;int skillDamage=Hit(Dragon.skill.damage,EffectiveSkillElement,true,out critical,true);long saved=storedBasicDamage;long total=saved+skillDamage;int before=EnemyHP;CancelTimeDomain();LastTimeRelease=DamageEnemy((int)Math.Min(int.MaxValue,total));if(EnemyHP==0&&Result==BattleResult.Fighting)Result=BattleResult.Victory;LifeSteal((int)Math.Min(saved,Math.Max(0,before-EnemyHP)));NotifyAugmentSkillHit(skillDamage,critical);FinishAugmentCast(activeAugmentCast);Cue?.Invoke(CombatCue.TimeReleased,LastTimeRelease);Feedback?.Invoke("시간의 태엽 · 해방 −"+LastTimeRelease);
+   bool critical;int skillDamage=Hit(Dragon.skill.damage,EffectiveSkillElement,true,out critical,true);long saved=storedBasicDamage;long total=saved+skillDamage;int before=EnemyHP;CancelTimeDomain();LastTimeRelease=DamageEnemy((int)Math.Min(int.MaxValue,total));if(EnemyHP==0&&Result==BattleResult.Fighting)Result=BattleResult.Victory;RecordOriginalItemHit(ItemTrigger.SkillHit,CombatEventSource.Legendary,before,itemCastSerial);LifeSteal((int)Math.Min(saved,Math.Max(0,before-EnemyHP)));NotifyAugmentSkillHit(skillDamage,critical);FinishAugmentCast(activeAugmentCast);Cue?.Invoke(CombatCue.TimeReleased,LastTimeRelease);Feedback?.Invoke("시간의 태엽 · 해방 −"+LastTimeRelease);
   }
  }
 }

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 namespace DragonTower
@@ -15,6 +15,7 @@ namespace DragonTower
     public sealed partial class TowerRun
     {
         public const int ItemSlotCapacity=3;
+        public ItemCooldownSave[] ItemCooldowns {get;set;}=Array.Empty<ItemCooldownSave>();
         readonly List<string> items=new List<string>();
         readonly List<RunItemSlot> itemSlots=new List<RunItemSlot>();
         readonly List<string> augments=new List<string>();
@@ -137,16 +138,11 @@ namespace DragonTower
         public static float AttackEvolutionMultiplier(int stage)=>stage>=2?1.40f:stage>=1?1.18f:1f;
         public static float PassiveEvolutionMultiplier(int stage)=>1+Math.Max(0,Math.Min(2,stage))*.25f;
         static float ScaleTime(float value,int reductionPercent,float minimum)=>Math.Max(minimum,value*(1-Math.Min(60,reductionPercent)/100f));
-        public void RecordBattleVictory(int remainingHP)
+        public void RecordBattleVictory(int remainingHP,int experienceGain=100)
         {
-            int previousStage=DragonData.EvolutionStage(Level);
             CurrentHP=Math.Max(0,Math.Min(MaxHP,remainingHP));MonstersDefeated++;
             Heal((int)Math.Ceiling(MaxHP*AugmentValue(AugmentMechanic.BattleBreath)/100f));
-            LastExperienceGain=ExperienceToNext;Experience+=LastExperienceGain;
-            while(Experience>=ExperienceToNext){Experience-=ExperienceToNext;Level++;}
-            int currentStage=DragonData.EvolutionStage(Level);
-            if(currentStage>previousStage){PendingEvolutionStage=currentStage;RecalculateMaxHP();}
-            if(Level%5==0)PendingLevelAugments++;
+            GrantExperience(experienceGain);
         }
         public void RecordPassiveUse(bool consumed){if(consumed)PassiveAvailable=false;}
         public void ConsumeEvolution()
@@ -169,29 +165,40 @@ namespace DragonTower
             else if(id=="iron-scale"){FlatMaxHPBonus+=15;RecalculateMaxHP();}
             else if(id=="sharp-claw")AttackBonus+=2;
         }
+        public const int ConsumableSlotIndex=3;
+        RunItemSlot consumable;
+        readonly List<RunItemSlot> pendingInventory=new List<RunItemSlot>();
+        public IReadOnlyList<RunItemSlot> PendingInventory=>pendingInventory;
+        public bool OwnsEquipment(ItemData item)=>item!=null&&itemSlots.Any(x=>x.Item.StableId==item.StableId);
         public bool CanAddItem(ItemData item)
         {
             if(item==null)return false;
-            var same=itemSlots.FirstOrDefault(x=>x.Item!=null&&x.Item.StableId==item.StableId);
-            return (same!=null&&same.Count<Math.Max(1,item.maximumStacks))||itemSlots.Count<ItemSlotCapacity;
+            return item.kind==ItemKind.Consumable ? consumable==null||(consumable.Item.StableId==item.StableId&&consumable.Count<3) : !OwnsEquipment(item)&&itemSlots.Count<ItemSlotCapacity;
         }
         public void AddItem(ItemData item,int replaceIndex=-1)
         {
             if(item==null)throw new ArgumentNullException(nameof(item));
-            var same=itemSlots.FirstOrDefault(x=>x.Item!=null&&x.Item.StableId==item.StableId);
-            if(same!=null&&same.Count<Math.Max(1,item.maximumStacks)){same.Count++;RecalculateMaxHP();return;}
-            if(itemSlots.Count<ItemSlotCapacity){itemSlots.Add(new RunItemSlot{Item=item,Count=1});items.Add(item.StableId);RecalculateMaxHP();return;}
-            if(replaceIndex<0||replaceIndex>=itemSlots.Count)throw new InvalidOperationException("아이템 슬롯이 가득 찼습니다. 교체할 아이템을 선택하세요.");
-            itemSlots[replaceIndex]=new RunItemSlot{Item=item,Count=1};items[replaceIndex]=item.StableId;RecalculateMaxHP();
+            if(item.kind==ItemKind.Consumable){
+                if(consumable==null)consumable=new RunItemSlot{Item=item,Count=1};
+                else if(consumable.Item.StableId==item.StableId){if(consumable.Count>=3)throw new InvalidOperationException("소모품은 최대 3개까지 보유할 수 있습니다.");consumable.Count++;}
+                else {if(replaceIndex!=ConsumableSlotIndex)throw new InvalidOperationException("기존 소모품을 교체할지 선택해주세요.");consumable=new RunItemSlot{Item=item,Count=1};}
+            }else{
+                if(OwnsEquipment(item))throw new InvalidOperationException("같은 장착 아이템은 중복 장착할 수 없습니다.");
+                var slot=new RunItemSlot{Item=item,Count=1};
+                if(itemSlots.Count<ItemSlotCapacity)itemSlots.Add(slot);
+                else {if(replaceIndex<0||replaceIndex>=itemSlots.Count)throw new InvalidOperationException("교체할 장착 아이템을 선택해주세요.");itemSlots[replaceIndex]=slot;}
+            }
+            RefreshItemIds();RecalculateMaxHP();
         }
-        public ItemData ItemAt(int index)=>index>=0&&index<itemSlots.Count?itemSlots[index].Item:null;
-        public int ItemCountAt(int index)=>index>=0&&index<itemSlots.Count?itemSlots[index].Count:0;
+        void RefreshItemIds(){items.Clear();items.AddRange(itemSlots.Select(x=>x.Item.StableId));if(consumable!=null)items.Add(consumable.Item.StableId);}
+        public ItemData ItemAt(int index)=>index==ConsumableSlotIndex?consumable?.Item:index>=0&&index<itemSlots.Count?itemSlots[index].Item:null;
+        public int ItemCountAt(int index)=>index==ConsumableSlotIndex?(consumable?.Count??0):index>=0&&index<itemSlots.Count?itemSlots[index].Count:0;
         public void ConsumeItem(int index)
         {
-            if(index<0||index>=itemSlots.Count)throw new ArgumentOutOfRangeException(nameof(index));
-            var slot=itemSlots[index];if(slot.Item==null||slot.Item.kind!=ItemKind.Consumable)throw new InvalidOperationException("소모품만 사용할 수 있습니다.");
-            slot.Count--;if(slot.Count<=0){itemSlots.RemoveAt(index);items.RemoveAt(index);}RecalculateMaxHP();
+            if(index!=ConsumableSlotIndex||consumable==null)throw new InvalidOperationException("소모품 슬롯에서만 사용할 수 있습니다.");
+            if(--consumable.Count==0)consumable=null;RefreshItemIds();
         }
+        public void ResolvePendingInventory(){if(pendingInventory.Count==0)return;if(--pendingInventory[0].Count<=0)pendingInventory.RemoveAt(0);}
         public void AddAugment(AugmentData augment,bool levelReward)
         {
             if(augment==null)throw new ArgumentNullException(nameof(augment));
