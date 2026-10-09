@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UI;
@@ -28,7 +28,7 @@ namespace DragonTower
             CardText(card.transform,"Reward badge",badge,-8,18,288,19,13,accent,TextAnchor.MiddleLeft);
             CardText(card.transform,"Reward title",title,-8,44,288,30,23,Color.white,TextAnchor.MiddleLeft);
             var desc=CardText(card.transform,"Reward summary",EmphasizeNumbers(summary),0,104,394,74,16,new Color(.91f,.94f,1),TextAnchor.UpperLeft);
-            desc.lineSpacing=1.16f;desc.supportRichText=true;
+            desc.resizeTextForBestFit=true;desc.resizeTextMinSize=14;desc.resizeTextMaxSize=16;desc.lineSpacing=1.1f;desc.supportRichText=true;
             CardText(card.transform,"Read detail","자세히 보기  ›",131,149,126,18,13,new Color(.72f,.8f,.91f),TextAnchor.MiddleRight);
             var group=card.gameObject.AddComponent<CanvasGroup>();group.alpha=0;group.interactable=false;group.blocksRaycasts=false;
             return card;
@@ -69,7 +69,7 @@ namespace DragonTower
         {
             if(!rewardsReady||rewardDetail!=null)return;
             var overlay=Rect("Reward details",body,0,425,480,850);rewardDetail=overlay.gameObject;
-            var shade=overlay.gameObject.AddComponent<Image>();shade.color=new Color(.015f,.025f,.05f,.97f);shade.raycastTarget=true;
+            var shade=overlay.gameObject.AddComponent<Image>();shade.color=new Color(.015f,.025f,.05f,.97f);shade.raycastTarget=true;AncientUi.Frame(shade,AncientSurfaceKind.Popup);
             string title=augment!=null?augment.displayName:skill.displayName;
             Color accent=augment!=null?DragonTowerTheme.Grade(augment.grade):new Color(.4f,.8f,1);
             CardText(overlay,"Detail grade",augment!=null?GradeName(augment.grade)+" 증강":"스킬 교체",0,128,404,30,17,accent,TextAnchor.MiddleLeft);

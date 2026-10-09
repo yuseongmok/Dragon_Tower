@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 namespace DragonTower
 {
     public partial class BattleController : MonoBehaviour
@@ -9,6 +9,7 @@ namespace DragonTower
         public BattleModel CurrentBattle => battle;
         public CollectionFlow Flow { get; private set; }
         bool focused=true;
+        bool resultPresentationSettled;
         int requestedDodgeDirection=-1;
         public bool CanControl=>focused&&battle!=null&&battle.Result==BattleResult.Fighting&&view.IsBattleUncovered;
         public bool RequestAttack(){if(!CanControl||!battle.Attack())return false;RecordBattleInput(1);return true;}
@@ -52,7 +53,7 @@ namespace DragonTower
             view.BindRecoveryAction(()=>UseItem(TowerRun.ConsumableSlotIndex));
             Flow.Initialize(this,view,dragons);
         }
-        public void EndBattle() { ClearItemProcVisuals();CancelSignature();view.CancelGesture();battle=null; }
+        public void EndBattle() { view.HideResultPresentation(); ClearItemProcVisuals();CancelSignature();view.CancelGesture();battle=null; }
         void CancelSignature(){view.GetComponent<MirLegendaryVfx>()?.Cancel();view.GetComponent<HydraVfx>()?.Cancel();battle?.CancelPoisonAcceleration();view.GetComponent<EclipseVfx>()?.Cancel();view.GetComponent<DarkSkillVfx>()?.Clear();battle?.CancelPersistentAttack();view.GetComponent<KrakenVfx>()?.Cancel();view.GetComponent<HaesinVfx>()?.Cancel();battle?.CancelCelestial();view.GetComponent<CelestialVfx>()?.Cancel();battle?.CancelTimeDomain();view.GetComponent<TimeClockworkVfx>()?.Cancel();view.GetComponent<CatastropheVfx>()?.Cancel();view.GetComponent<AscensionVfx>()?.Cancel();battle?.CancelAttackEmpower();view.GetComponent<WaterSkillVfx>()?.Clear();view.GetComponent<LightSkillVfx>()?.Clear();view.GetComponent<LightningSkillVfx>()?.Clear();view.GetComponent<CrushingBeamVfx>()?.Cancel();battle?.CancelChargedBeam();view.GetComponent<GenesisVfx>()?.Cancel();battle?.CancelCompletionDefense();view.GetComponent<EarthSkillVfx>()?.Clear();battle?.CancelTargetModifier();view.GetComponent<VolcanicMeteorVfx>()?.Cancel();battle?.CancelCompletionHeal();view.GetComponent<SolarPierceVfx>()?.Cancel();view.GetComponent<FireSkillVfx>()?.Clear();battle?.CancelSlowSignature();view.GetComponent<LunarVfx>()?.Cancel();battle?.CancelDodgeRelease();view.GetComponent<WispVfx>()?.Cancel();view.GetComponent<IceSkillVfx>()?.Clear();battle?.CancelProtectedSkill();view.GetComponent<DantianVfx>()?.Cancel();view.GetComponent<DantianFeedback>()?.Clear();}
         void OnDisable(){ClearItemProcVisuals();if(view!=null)CancelSignature();}
         public void BeginBattle(DragonData dragon) { BeginBattle(dragon,BattleEnemyStats.Normal(),1,false); }
@@ -60,7 +61,7 @@ namespace DragonTower
         { BeginBattle(dragon,dragon.Snapshot(),enemy,floor,boss,dragon.maxHP,null); }
         public void BeginBattle(DragonData dragon,BattleStats stats,BattleEnemyStats enemy,int floor,bool boss,int initialHP,UnityEngine.Sprite enemySprite=null,int dragonLevel=1,SkillData activeSkill=null)
         {
-            ClearItemProcVisuals();CancelSignature();
+            ClearItemProcVisuals();CancelSignature();resultPresentationSettled=false;
             enemy.floor=floor;
             view.CancelGesture();
             view.SetDragonArt(dragon,dragonLevel);
@@ -68,6 +69,7 @@ namespace DragonTower
             view.SetEncounter(enemy,floor,boss,enemySprite);
             battle=RestoreOrCreateBattle(stats,enemy,initialHP);
             var run=Flow==null?null:Flow.CurrentRun;
+            view.PrepareResultPresentation(run);
             view.SetRunProgress(run==null?dragonLevel:run.Level,run==null?0:run.Experience,run==null?100:run.ExperienceToNext);
             view.message.text=battle.AreaHint;
             view.Show(battle);
@@ -94,7 +96,8 @@ namespace DragonTower
             if(battle==null || !focused) return;
             // Returning from a hidden browser tab must not cause accumulated hits.
             float delta=Mathf.Min(Time.deltaTime,.1f);
-            if(battle.Result==BattleResult.Fighting){battle.Tick(delta);RecordBattleInput(0,delta);if(battle.Result!=BattleResult.Fighting)Flow.BattleSettled();}
+            if(battle.Result==BattleResult.Fighting){battle.Tick(delta);RecordBattleInput(0,delta);}
+            if(battle.Result!=BattleResult.Fighting&&!resultPresentationSettled){Flow.BattleSettled();resultPresentationSettled=true;}
             Flow.AutoSaveRun();
             view.StepAnimation(battle,delta);StepItemProcVisuals(delta);
             view.Show(battle);

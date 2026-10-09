@@ -12,7 +12,7 @@ namespace DragonTower
         {
             vh.Clear();var r=rectTransform.rect;float l=r.xMin,b=r.yMin,w=r.width,h=r.height;
             var bright=Color.Lerp(edge,Color.white,.35f);
-            var fill=Color.Lerp(color,new Color(.23f,.20f,.32f,color.a),.8f);
+            var fill=Color.Lerp(color,new Color(.22f,.23f,.25f,color.a),.8f);
             var shadow=Color.Lerp(edge,new Color(.01f,.035f,.055f),.72f);
             if(outlineOnly)
             {

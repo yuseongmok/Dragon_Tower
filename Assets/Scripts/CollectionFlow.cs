@@ -8,7 +8,7 @@ namespace DragonTower
 {
     public static class DragonTowerTheme
     {
-        public static readonly Color Night=new Color(.095f,.075f,.15f,1),Slate=new Color(.23f,.20f,.32f,.98f),SlateLight=new Color(.32f,.28f,.43f,1),Gold=new Color(.88f,.66f,.30f,1),GoldDim=new Color(.43f,.31f,.15f,1),Parchment=new Color(.82f,.74f,.59f,1);
+        public static readonly Color Night=AncientUi.Background,Slate=AncientUi.Stone,SlateLight=AncientUi.Raised,Gold=AncientUi.Gold,GoldDim=AncientUi.DarkGold,Parchment=AncientUi.Ivory;
         static Sprite pixelPanel;
         static Sprite PixelPanel()
         {
@@ -23,9 +23,8 @@ namespace DragonTower
         public static void Frame(Image panel,Color edge,bool corners=true)
         {
             if(panel==null)return;panel.sprite=PixelPanel();panel.type=Image.Type.Sliced;
-            if(edge==Gold||edge==GoldDim)edge=new Color(.58f,.49f,.70f,1);
-            var fill=panel.color;float high=Mathf.Max(fill.r,Mathf.Max(fill.g,fill.b));
-            if(high<.31f&&fill.a>.6f&&fill.r<fill.g*1.8f)panel.color=Color.Lerp(new Color(.16f,.13f,.24f,fill.a),new Color(.29f,.25f,.39f,fill.a),Mathf.Clamp01(high/.31f));
+            if(panel.rectTransform.rect.height>=40){AncientUi.Frame(panel,AncientSurfaceKind.Panel);return;}
+            panel.color=AncientUi.Background;
             var shadow=panel.gameObject.GetComponent<Shadow>()??panel.gameObject.AddComponent<Shadow>();shadow.effectColor=new Color(0,0,0,.58f);shadow.effectDistance=new Vector2(0,-6);shadow.useGraphicAlpha=true;
             var outline=panel.gameObject.GetComponent<Outline>()??panel.gameObject.AddComponent<Outline>();outline.effectColor=new Color(edge.r,edge.g,edge.b,1);outline.effectDistance=new Vector2(2,-2);outline.useGraphicAlpha=true;
             var trim=panel.transform.Find("Pixel edge trim");PixelHudFrame pixel;
@@ -34,7 +33,7 @@ namespace DragonTower
         }
         public static void StyleButton(Button button,Color accent)
         {
-            if(button==null)return;var image=button.targetGraphic as Image;if(image==null)return;Frame(image,accent);var colors=button.colors;colors.normalColor=Color.white;colors.highlightedColor=new Color(1.12f,1.12f,1.12f,1);colors.pressedColor=new Color(.68f,.68f,.74f,1);colors.selectedColor=colors.highlightedColor;colors.disabledColor=new Color(.15f,.17f,.2f,.78f);colors.colorMultiplier=1;button.colors=colors;
+            if(button==null)return;var image=button.targetGraphic as Image;if(image==null)return;Frame(image,accent);var colors=button.colors;colors.normalColor=Color.white;colors.highlightedColor=new Color(1.12f,1.12f,1.12f,1);colors.pressedColor=new Color(.68f,.68f,.74f,1);colors.selectedColor=colors.highlightedColor;colors.disabledColor=new Color(.15f,.17f,.2f,.78f);colors.colorMultiplier=1;button.colors=colors;AncientUi.Button(button);
         }
         public static Color Grade(ItemGrade grade){switch(grade){case ItemGrade.Rare:return new Color(.20f,.58f,.82f);case ItemGrade.Epic:return new Color(.63f,.32f,.88f);case ItemGrade.Legendary:return new Color(1,.35f,.25f);case ItemGrade.Unique:return new Color(1,.63f,.18f);default:return Parchment;}}
         public static Color Grade(AugmentGrade grade){switch(grade){case AugmentGrade.Rare:return new Color(.20f,.58f,.82f);case AugmentGrade.Epic:return new Color(.63f,.32f,.88f);case AugmentGrade.Unique:return new Color(1,.63f,.18f);case AugmentGrade.Legendary:return new Color(1,.85f,.36f);default:return Parchment;}}
@@ -60,7 +59,7 @@ namespace DragonTower
         public Button SecondRoomButton { get; private set; }
         public Button DragonButton { get; private set; }
         public Button[] ChoiceButtons { get; private set; }
-        bool AncientScreen=>ScreenName=="드래곤 로비"||ScreenName=="드래곤 상태"||ScreenName=="드래곤 도감";
+        bool AncientScreen=>true;
         Color UiText(Color value)=>!AncientScreen?value:value==Color.white?AncientUi.Ivory:value==Gold||value==DragonTowerTheme.Gold?AncientUi.Gold:value==Muted?AncientUi.Muted:value;
         static Color Background=>new Color(.035f,.055f,.09f);
         static Color Gold=>new Color(1,.76f,.42f);
@@ -93,7 +92,7 @@ namespace DragonTower
         }
         Image Panel(string name,Transform parent,float x,float y,float w,float h,Color color,Color edge)
         {
-            var r=Rect(name,parent,x,y,w,h);var image=r.gameObject.AddComponent<Image>();image.color=color;image.raycastTarget=false;DragonTowerTheme.Frame(image,edge);if(AncientScreen)AncientUi.Frame(image,name.Contains("Title")?AncientSurfaceKind.Title:name.Contains("portrait")?AncientSurfaceKind.Portrait:AncientSurfaceKind.Panel);return image;
+            var r=Rect(name,parent,x,y,w,h);var image=r.gameObject.AddComponent<Image>();image.color=color;image.raycastTarget=false;DragonTowerTheme.Frame(image,edge);if(AncientScreen&&h>=40)AncientUi.Frame(image,name.Contains("Title")?AncientSurfaceKind.Title:name.Contains("portrait")?AncientSurfaceKind.Portrait:AncientSurfaceKind.Panel);return image;
         }
         Text Label(string text,float x,float y,float w,float h,int size,Color color)
         {
@@ -115,15 +114,15 @@ namespace DragonTower
         Button RewardCard(string badge,string title,string summary,Sprite icon,float y,Color fill,Color accent,UnityAction action,ElementType? itemElement=null)
         {
             if(itemElement.HasValue)badge+=" · "+ItemElementName(itemElement.Value);
-            var card=Button("",0,y,410,108,action);StyleCard(card,fill,accent);
-            var iconFrame=Rect("Reward icon frame",card.transform,-154,54,76,76);var frame=iconFrame.gameObject.AddComponent<Image>();frame.color=new Color(.025f,.035f,.055f,.9f);frame.raycastTarget=false;DragonTowerTheme.Frame(frame,accent,false);
+            bool tall=ScreenName=="아이템 선택";var card=Button("",0,y,410,tall?144:108,action);StyleCard(card,fill,accent);
+            var iconFrame=Rect("Reward icon frame",card.transform,-154,54,76,76);var frame=iconFrame.gameObject.AddComponent<Image>();frame.color=new Color(.025f,.035f,.055f,.9f);frame.raycastTarget=false;DragonTowerTheme.Frame(frame,accent,false);if(AncientScreen)AncientUi.Frame(frame,AncientSurfaceKind.Icon);
             var art=Rect("Reward icon",iconFrame,0,38,64,64).gameObject.AddComponent<Image>();art.sprite=icon;art.preserveAspect=true;art.color=icon==null?accent:Color.white;art.raycastTarget=false;
             if(icon==null)CardText(iconFrame,"Fallback icon","◆",0,38,64,64,31,accent,TextAnchor.MiddleCenter);
-            CardText(card.transform,"Reward badge",badge,35,17,250,22,13,accent,TextAnchor.MiddleLeft);
-            CardText(card.transform,"Reward title",title,35,43,250,28,19,Color.white,TextAnchor.MiddleLeft);
-            CardText(card.transform,"Reward summary",summary,35,77,250,36,14,new Color(.80f,.85f,.9f),TextAnchor.UpperLeft);
+            CardText(card.transform,"Reward badge",badge,35,24,250,22,13,accent,TextAnchor.MiddleLeft);
+            CardText(card.transform,"Reward title",title,35,49,250,28,19,Color.white,TextAnchor.MiddleLeft);
+            CardText(card.transform,"Reward summary",summary,35,tall?102:85,250,tall?74:32,14,new Color(.80f,.85f,.9f),TextAnchor.UpperLeft);
             if(itemElement.HasValue){
-                var symbol=ElementBadge(card.transform,itemElement.Value,178,17,18);
+                var symbol=ElementBadge(card.transform,itemElement.Value,178,24,18);
                 var badgeText=card.transform.Find("Reward badge").GetComponent<Text>();
                 badgeText.color=ElementHudThemes.Get(itemElement.Value).primaryColor;
                 badgeText.rectTransform.sizeDelta=new Vector2(228,22);badgeText.rectTransform.anchoredPosition+=new Vector2(-11,0);
@@ -160,10 +159,10 @@ namespace DragonTower
         {if(value==null)return null;if(value.icon!=null)return value.icon;switch(value.elementType){case ElementType.Fire:return RewardIcon(6);case ElementType.Ice:return RewardIcon(7);case ElementType.Lightning:return RewardIcon(8);case ElementType.Wind:return RewardIcon(5);default:return RewardIcon(1);}}
         static string ElementLabel(ElementType value)
         {switch(value){case ElementType.Fire:return "불";case ElementType.Ice:return "얼음";case ElementType.Wind:return "바람";case ElementType.Earth:return "땅";case ElementType.Lightning:return "전기";case ElementType.Water:return "물";case ElementType.Dark:return "어둠";case ElementType.Light:return "빛";default:return "무속성";}}
-        void StyleCard(Button button,Color fill,Color accent){if(button==null)return;button.targetGraphic.color=fill;DragonTowerTheme.StyleButton(button,accent);if(AncientScreen)AncientUi.Button(button,fill.g>fill.r*1.8f&&fill.g>.3f);}
+        void StyleCard(Button button,Color fill,Color accent){if(button==null)return;button.targetGraphic.color=fill;DragonTowerTheme.StyleButton(button,accent);if(AncientScreen){AncientUi.Button(button,fill.g>fill.r*1.8f&&fill.g>.3f);if(ScreenName=="아이템 선택"||ScreenName=="증강방"||ScreenName.EndsWith(" 증강"))RewardAccent(button,accent);}}
         void Screen(string name)
         {
-            CancelRewardReveal();
+            CancelRewardReveal();roomTransitionBusy=false;chestAnimating=false;chestFastForward=false;
             DragonTowerAudio.SetMusic(MusicMood.Lobby);
             if(body!=null){body.gameObject.SetActive(false);Destroy(body.gameObject);}
             portrait=null;roomIcon=null;startPrompt=null;egg=null;HatchButton=TowerButton=ContinueButton=RoomButton=SecondRoomButton=DragonButton=null;ChoiceButtons=null;
@@ -189,7 +188,7 @@ namespace DragonTower
         }
         void Portrait(DragonData dragon,float y=348,int level=1,UnityAction onClick=null,bool framed=true)
         {
-            if(framed)Panel("Dragon portrait frame",body,0,y,AncientScreen?420:286,286,new Color(.025f,.04f,.065f,.72f),new Color(dragon.color.r,dragon.color.g,dragon.color.b,1));
+            if(framed)Panel("Dragon portrait frame",body,0,y,ScreenName=="드래곤 상태"?420:286,286,new Color(.025f,.04f,.065f,.72f),new Color(dragon.color.r,dragon.color.g,dragon.color.b,1));
             portrait=Rect("Selected dragon",body,0,y,framed?260:310,framed?260:310);
             var activeSprite=dragon.BattleSpriteAtLevel(level);
             Graphic target;
@@ -310,21 +309,15 @@ namespace DragonTower
         void ShowTowerChoices()
         {
             if(towerRun==null||!towerRun.Active)return;
-            controller.EndBattle();Screen("다음 길 선택");
-            Label("타워 "+towerRun.Floor+"층",0,154,420,45,23,Gold);
-            Label("유대 "+towerRun.Level+"   HP "+towerRun.CurrentHP+" / "+towerRun.MaxHP+"   GOLD "+towerRun.Gold,0,202,430,35,16,Muted);
-            var first=towerRun.Choices[0];
-            RoomButton=Button(RoomName(first)+"\n"+RoomDetail(first),0,towerRun.Choices.Count==1?385:326,400,112,()=>SelectTowerRoom(0));
-            if(towerRun.Choices.Count>1)
-            {
-                var second=towerRun.Choices[1];
-                SecondRoomButton=Button(RoomName(second)+"\n"+RoomDetail(second),0,492,400,112,()=>SelectTowerRoom(1));
-            }
-            notice.text=towerRun.Floor%10==0?"보스층은 하나의 길만 열립니다.":"두 방 중 하나를 선택하세요. · "+towerRun.Progress.score+"점";
+            controller.EndBattle();ShowStairChoices();
         }
         void SelectTowerRoom(int index)
         {
-            towerRun.BeginFloorRoom(index,UnityEngine.Random.Range(0,int.MaxValue));SaveProgress();ShowChosenRoom();
+            if(roomTransitionBusy||towerRun==null||towerRun.Phase!=FloorPhase.Choosing||index<0||index>=towerRun.Choices.Count)return;
+            roomTransitionBusy=true;
+            towerRun.BeginFloorRoom(index,UnityEngine.Random.Range(0,int.MaxValue));SaveProgress();
+            if(RoomButton!=null)RoomButton.interactable=false;if(SecondRoomButton!=null)SecondRoomButton.interactable=false;
+            StartCoroutine(EnterTowerDoor(index));
         }
         Button IconButton(string symbol,string caption,Color color,UnityAction action)
         {
@@ -385,23 +378,16 @@ namespace DragonTower
             while(time<.55f){time+=Time.deltaTime;float pulse=1+Mathf.Sin(time*18)*.09f;if(roomIcon!=null)roomIcon.localScale=Vector3.one*pulse;yield return null;}
             if(roomIcon!=null)roomIcon.localScale=Vector3.one;done?.Invoke();
         }
-        void ShowItemRoom()
-        {
-            Screen("아이템방");Label("상자를 터치하세요",0,190,420,46,25,Gold);
-            RoomButton=IconButton("▣","상자 열기",new Color(.38f,.24f,.12f),()=>{DragonTowerAudio.PlayChest();StartCoroutine(AnimateRoomAction(ShowItemChoices));});
-            Label(CurrentItemsSummary(),0,570,420,82,14,Color.white);
-            SecondRoomButton=Button("상자를 열지 않고 나간다",0,680,360,56,AdvanceFloor);
-            notice.text="아이템을 얻지 않고 다음 층으로 이동할 수도 있습니다.";
-        }
+        void ShowItemRoom(){if(towerRun.ChestOpened){ShowItemChoices();return;}ShowTreasureChamber();}
         void ShowItemChoices()
         {
             Screen("아이템 선택");Label("하나를 선택하거나 그냥 나갈 수 있습니다",0,154,420,34,18,Muted);
-            Label(CurrentItemsSummary(),0,205,420,58,13,Color.white);
-            var choices=database==null?Array.Empty<ItemData>():database.PickItems(3,towerRun.RewardSeed^towerRun.Floor);
+            Label(CompactInventory(),0,205,420,52,13,Color.white);
+            var choices=ChestChoices();
             if(choices.Length>0)
             {
-                ChoiceButtons=new Button[choices.Length];for(int i=0;i<choices.Length;i++){var item=choices[i];ChoiceButtons[i]=ItemChoice(item,300+i*120);}
-                SecondRoomButton=Button("아무것도 가져가지 않는다",0,690,360,54,AdvanceFloor);
+                ChoiceButtons=new Button[choices.Length];for(int i=0;i<choices.Length;i++){var item=choices[i];ChoiceButtons[i]=ItemChoice(item,320+i*155);}
+                SecondRoomButton=Button("아무것도 가져가지 않는다",0,748,360,54,AdvanceFloor);
             }
             else {Label("등록된 아이템이 없습니다.",0,390,420,50,22,Color.white);RoomButton=Button("다음 층",0,610,360,68,AdvanceFloor);}
         }
@@ -411,7 +397,7 @@ namespace DragonTower
             for(int i=0;i<towerRun.ItemSlots.Count;i++){var slot=towerRun.ItemSlots[i];text+="\n"+(i+1)+". "+slot.DisplayName+(slot.Count>1?" ×"+slot.Count:"")+" — "+ItemCardSummary(slot.Item);}var consumable=towerRun.ItemAt(3);text+="\n소모품 · "+(consumable==null?"없음":consumable.displayName+" ×"+towerRun.ItemCountAt(3));return text;
         }
         Button ItemChoice(ItemData item,float y)
-        {return RewardCard(ItemGradeName(item.grade)+" · "+(item.kind==ItemKind.Consumable?"소모품":"장착"),item.displayName,ItemCardSummary(item),ItemIcon(item),y,DragonTowerTheme.Slate,DragonTowerTheme.Grade(item.grade),()=>AcquireItem(item,()=>ShowRoomResult(item.displayName+"을(를) 획득했습니다.")),item.DamageElement);}
+        {return RewardCard(ItemGradeName(item.grade)+" · "+(item.kind==ItemKind.Consumable?"소모품":"장착"),item.displayName,ItemCardSummary(item),ItemIcon(item),y,DragonTowerTheme.Slate,DragonTowerTheme.Grade(item.grade),()=>{if(ScreenName!="아이템 선택"||towerRun.Phase!=FloorPhase.RoomEvent||choosingReward)return;choosingReward=true;AcquireItem(item,()=>ShowRoomResult(item.displayName+"을(를) 획득했습니다."),()=>ShowItemChoices());},item.DamageElement);}
         string ItemSummary(ItemData item)
         {
             if(item==null)return "효과 없음";string kind=item.kind==ItemKind.Consumable?"소모품":"장착";

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 namespace DragonTower
@@ -421,14 +421,8 @@ namespace DragonTower
             itemButton1.interactable=usableItems[0]&&!b.PlayerStunned&&b.Result==BattleResult.Fighting;
             itemButton2.interactable=usableItems[1]&&!b.PlayerStunned&&b.Result==BattleResult.Fighting;
             itemButton3.interactable=usableItems[2]&&!b.PlayerStunned&&b.Result==BattleResult.Fighting;
-            resultPanel.SetActive(b.Result!=BattleResult.Fighting && (motion==null || motion.ResultReady));
-            if(b.Result!=BattleResult.Fighting)
-            {
-                if(lastAudioResult!=b.Result){lastAudioResult=b.Result;DragonTowerAudio.PlayResult(b.Result==BattleResult.Victory);}
-                resultTitle.text=b.Result==BattleResult.Victory?"승리!":"다시 도전!";
-                resultDetail.text=b.Dragon.displayName+"\n"+(b.Result==BattleResult.Victory?"적을 물리쳤습니다.\n남은 HP  "+b.PlayerHP+" / "+b.Dragon.maxHP:"드래곤이 쓰러졌습니다.\n주황색 게이지가 차기 직전에 회피하세요.");
-                restartButton.GetComponentInChildren<Text>().text=b.Result==BattleResult.Victory?"다음 층":"도전 결과";
-            }
+            ShowResultPresentation(b,motion==null || motion.ResultReady);
+
         }
         void SetButton(Button button,Text label,string title,double remaining,BattleModel model,bool refreshText)
         {
