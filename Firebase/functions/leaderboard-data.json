@@ -1,0 +1,30 @@
+{
+  "normalKill": 10,
+  "bossKill": 200,
+  "newFloor": 50,
+  "achievements": {
+    "first_kill": 100,
+    "normal_50": 300,
+    "first_boss": 200,
+    "floor_10": 200,
+    "floor_20": 500
+  },
+  "dragons": {
+    "ember": "엠버",
+    "luna": "루나",
+    "mir": "미르",
+    "titan": "티탄",
+    "storm": "스톰",
+    "sharkid": "샤키드",
+    "venom": "베놈",
+    "chrono": "크로노",
+    "zephyr": "제피르",
+    "brandy": "블랜디",
+    "volt": "볼트",
+    "okta": "옥타",
+    "nova": "노바",
+    "dante": "단테",
+    "sol": "솔",
+    "aurora": "오로라"
+  }
+}

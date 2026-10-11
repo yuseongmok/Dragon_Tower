@@ -1,0 +1,5 @@
+{
+  "name": "dragon-tower-account-recovery", "private": true,
+  "engines": { "node": "22" }, "main": "index.js",
+  "dependencies": { "firebase-admin": "^13.0.0", "firebase-functions": "^6.0.0", "nodemailer": "^7.0.0" }
+}

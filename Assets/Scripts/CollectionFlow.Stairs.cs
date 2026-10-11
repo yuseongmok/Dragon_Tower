@@ -9,18 +9,20 @@ namespace DragonTower
         RectTransform stairWorld;
         TowerDoorVisual[] towerDoors;
         Text stairFloor;
-        static Sprite[] towerDoorSprites;
+        static readonly System.Collections.Generic.Dictionary<Texture2D,Sprite[]> doorSpriteCache=new System.Collections.Generic.Dictionary<Texture2D,Sprite[]>();
 
-        static Sprite DoorSprite(bool boss)
+        static Sprite DoorSprite(bool boss,int floor)
         {
-            if(towerDoorSprites==null)
+            var skin=Resources.Load<BattleSkin>("PixelBattleSkin");
+            var texture=skin!=null?skin.DoorAtlasForFloor(floor):Resources.Load<Texture2D>("UI/tower-doors");
+            if(texture==null)return null;
+            if(!doorSpriteCache.TryGetValue(texture,out var sprites))
             {
-                var texture=Resources.Load<Texture2D>("UI/tower-doors");
-                if(texture==null)return null;
-                towerDoorSprites=new Sprite[2];
-                for(int i=0;i<2;i++)towerDoorSprites[i]=Sprite.Create(texture,new Rect(i*texture.width/2f,0,texture.width/2f,texture.height),new Vector2(.5f,.5f),100);
+                sprites=new Sprite[2];
+                for(int i=0;i<2;i++)sprites[i]=Sprite.Create(texture,new Rect(i*texture.width/2f,0,texture.width/2f,texture.height),new Vector2(.5f,.5f),100);
+                doorSpriteCache[texture]=sprites;
             }
-            return towerDoorSprites[boss?1:0];
+            return sprites[boss?1:0];
         }
 
         Color DoorColor(TowerRoomKind kind)
@@ -51,7 +53,7 @@ namespace DragonTower
         {
             Screen("다음 길 선택");bool boss=towerRun.Choices.Count==1&&towerRun.Choices[0]==TowerRoomKind.Boss;
             stairWorld=Rect("Tower stair space",body,0,425,480,850);stairWorld.SetSiblingIndex(1);
-            var scenery=RoomScenery(boss?"UI/boss-stairway":"UI/tower-stairways");scenery.transform.SetParent(stairWorld,false);
+            var scenery=RoomScenery(boss?"UI/boss-stairway":"UI/tower-stairways",boss?EnvironmentScreen.BossEntrance:EnvironmentScreen.Stairs);scenery.transform.SetParent(stairWorld,false);
             towerDoors=new TowerDoorVisual[towerRun.Choices.Count];
             for(int i=0;i<towerDoors.Length;i++)
             {
@@ -60,7 +62,7 @@ namespace DragonTower
                 var hit=area.gameObject.AddComponent<Image>();hit.color=Color.clear;
                 var button=area.gameObject.AddComponent<Button>();button.targetGraphic=hit;button.transition=Selectable.Transition.None;
                 button.onClick.AddListener(()=>SelectTowerRoom(index));
-                var door=area.gameObject.AddComponent<TowerDoorVisual>();door.Build(DoorSprite(boss),DoorMark(room),DoorColor(room),boss,room);towerDoors[i]=door;
+                var door=area.gameObject.AddComponent<TowerDoorVisual>();door.Build(DoorSprite(boss,towerRun.Floor),DoorMark(room),DoorColor(room),boss,room);towerDoors[i]=door;
                 if(i==0)RoomButton=button;else SecondRoomButton=button;
                 float labelY=boss?530:370;
                 var caption=Rect("Door caption "+i,stairWorld,x,labelY,boss?330:198,boss?100:114);

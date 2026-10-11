@@ -11,7 +11,7 @@ namespace DragonTower {
   public void BattleSettled(){
    if(towerRun==null||!towerRun.Active||controller.CurrentBattle==null)return;var b=controller.CurrentBattle;
    towerRun.ItemCooldowns=b.CaptureItemCooldowns();towerRun.RecordPassiveUse(b.PassiveConsumed);
-   if(b.Result==BattleResult.Defeat){towerRun.End();Session.FinishRun(towerRun);return;}
+   if(b.Result==BattleResult.Defeat){towerRun.End();Session.FinishRun(towerRun);SubmitPendingLeaderboard();return;}
    if(b.Result==BattleResult.Victory&&towerRun.CompleteFloorCombat(b.PlayerHP,progression,UnityEngine.Random.Range(0,100))){DecideSavedDrop();SaveProgress();}
   }
   void DecideSavedDrop(){

@@ -314,7 +314,7 @@ namespace DragonTower
             modeLabel.text=floor+"F · "+(boss?"BOSS ROOM":"MONSTER ROOM");
             DragonTowerAudio.SetBattleMusic(floor,boss);
             var skin=Resources.Load<BattleSkin>("PixelBattleSkin");
-            if(arenaImage!=null&&skin!=null)arenaImage.sprite=skin.BackgroundForFloor(floor);
+            if(arenaImage!=null&&skin!=null)arenaImage.sprite=skin.BackgroundForScreen(floor,boss?EnvironmentScreen.BossBattle:EnvironmentScreen.Battle);
             if(pixelEnemy!=null&&enemySprite!=null)pixelEnemy.sprite=enemySprite;
             enemyArt.rectTransform.sizeDelta=boss?new Vector2(310,310):new Vector2(256,256);
         }

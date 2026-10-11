@@ -1,0 +1,15 @@
+using System;using System.Linq;using UnityEditor;using UnityEditor.SceneManagement;using UnityEngine;using UnityEngine.UI;using TMPro;using UnityEngine.EventSystems;
+namespace DragonTower.Editor {
+ [InitializeOnLoad]public static class LobbyGuideValidation{
+ static bool done;static LobbyGuideValidation(){if(SessionState.GetBool("LobbyGuideQA",false))EditorApplication.update+=Tick;}
+ public static void Run(){Environment.SetEnvironmentVariable("DRAGON_TOWER_TEST_SAVE","DragonTower.Test.LobbyGuide");SessionState.SetBool("LobbyGuideQA",true);EditorSceneManager.OpenScene("Assets/Scenes/Battle.unity");EditorApplication.EnterPlaymode();}
+ static void Check(bool b,string s){if(!b)throw new Exception(s);}
+ static void Tick(){if(done||!EditorApplication.isPlaying)return;var flow=UnityEngine.Object.FindFirstObjectByType<CollectionFlow>();if(flow?.Session==null)return;done=true;try{
+ if(flow.Session.Selected==null)flow.Session.Hatch(0);flow.ShowLobby();var button=flow.TowerButton;Check(button.GetComponentInChildren<TextMeshProUGUI>()!=null,"TMP label");Check(button.transform.Find("Guide button face").GetComponent<Image>().sprite!=null,"individual sprite");Check(!button.GetComponentsInChildren<Text>().Any(x=>x.enabled&&x.gameObject.activeInHierarchy),"legacy text hidden");
+ var pos=((RectTransform)button.transform).anchoredPosition;var e=new PointerEventData(EventSystem.current){button=PointerEventData.InputButton.Left};ExecuteEvents.Execute(button.gameObject,e,ExecuteEvents.pointerDownHandler);Check(((RectTransform)button.transform).anchoredPosition==pos,"touch target stable");ExecuteEvents.Execute(button.gameObject,e,ExecuteEvents.pointerUpHandler);
+ var codex=UnityEngine.Object.FindObjectsByType<Button>(FindObjectsSortMode.None).First(b=>b.name=="드래곤 도감"&&b.gameObject.activeInHierarchy);codex.onClick.Invoke();Check(flow.ScreenName=="드래곤 도감","codex action");Check(!UnityEngine.Object.FindObjectsByType<LobbyGuideButton>(FindObjectsSortMode.None).Any(x=>x.gameObject.activeInHierarchy),"lobby skin isolated");flow.ShowLobby();
+ foreach(var name in new[]{"드래곤 상태","업적 · 도전 기록"}){var action=UnityEngine.Object.FindObjectsByType<Button>(FindObjectsSortMode.None).First(b=>b.name==name&&b.gameObject.activeInHierarchy);action.onClick.Invoke();Check(flow.ScreenName!="드래곤 로비",name+" navigation");flow.ShowLobby();}
+ var nickname=UnityEngine.Object.FindObjectsByType<Button>(FindObjectsSortMode.None).First(b=>(b.name=="닉네임 설정"||b.name.StartsWith("플레이어 · "))&&b.gameObject.activeInHierarchy);nickname.onClick.Invoke();Check(flow.ScreenName=="플레이어 닉네임","nickname navigation");flow.ShowLobby();flow.TowerButton.onClick.Invoke();Check(flow.CurrentRun!=null,"tower event preserved");flow.ShowLobby();Check(flow.Session.HasSavedRun,"resume preserved");Debug.Log("LOBBY_GUIDE_QA_OK TMP assets press target codex status records nickname scope start resume");SessionState.SetBool("LobbyGuideQA",false);EditorApplication.Exit(0);
+ }catch(Exception ex){Debug.LogException(ex);SessionState.SetBool("LobbyGuideQA",false);EditorApplication.Exit(1);}}
+ }
+}

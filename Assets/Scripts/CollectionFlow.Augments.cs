@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,9 +27,9 @@ namespace DragonTower
             var art=Rect("Reward icon",card.transform,-179,35,42,42).gameObject.AddComponent<Image>();art.sprite=icon;art.preserveAspect=true;art.raycastTarget=false;
             CardText(card.transform,"Reward badge",badge,-8,18,288,19,13,accent,TextAnchor.MiddleLeft);
             CardText(card.transform,"Reward title",title,-8,44,288,30,23,Color.white,TextAnchor.MiddleLeft);
-            var desc=CardText(card.transform,"Reward summary",EmphasizeNumbers(summary),0,104,394,74,16,new Color(.91f,.94f,1),TextAnchor.UpperLeft);
+            var desc=CardText(card.transform,"Reward summary",EmphasizeNumbers(summary),0,104,394,74,16,GoldenUi.Ivory,TextAnchor.UpperLeft);
             desc.resizeTextForBestFit=true;desc.resizeTextMinSize=14;desc.resizeTextMaxSize=16;desc.lineSpacing=1.1f;desc.supportRichText=true;
-            CardText(card.transform,"Read detail","자세히 보기  ›",131,149,126,18,13,new Color(.72f,.8f,.91f),TextAnchor.MiddleRight);
+            CardText(card.transform,"Read detail","자세히 보기  ›",131,149,126,18,13,GoldenUi.Muted,TextAnchor.MiddleRight);
             var group=card.gameObject.AddComponent<CanvasGroup>();group.alpha=0;group.interactable=false;group.blocksRaycasts=false;
             return card;
         }
@@ -74,7 +74,7 @@ namespace DragonTower
             Color accent=augment!=null?DragonTowerTheme.Grade(augment.grade):new Color(.4f,.8f,1);
             CardText(overlay,"Detail grade",augment!=null?GradeName(augment.grade)+" 증강":"스킬 교체",0,128,404,30,17,accent,TextAnchor.MiddleLeft);
             CardText(overlay,"Detail name",title,0,176,404,48,31,Color.white,TextAnchor.MiddleLeft);
-            CardText(overlay,"Detail tags",augment!=null?augment.buildTags:ElementLabel(skill.elementType)+" 속성",0,220,404,32,16,new Color(.72f,.8f,.91f),TextAnchor.MiddleLeft);
+            CardText(overlay,"Detail tags",augment!=null?augment.buildTags:ElementLabel(skill.elementType)+" 속성",0,220,404,32,16,GoldenUi.Muted,TextAnchor.MiddleLeft);
             // Scroll only the reading area; confirmation never covers the text.
             var viewport=Rect("Reading viewport",overlay,0,445,404,370);viewport.gameObject.AddComponent<RectMask2D>();
             var scroll=viewport.gameObject.AddComponent<ScrollRect>();scroll.horizontal=false;scroll.movementType=ScrollRect.MovementType.Clamped;scroll.viewport=viewport;
@@ -82,7 +82,7 @@ namespace DragonTower
             var ray=viewport.gameObject.AddComponent<Image>();ray.color=new Color(0,0,0,.001f);
             string main=augment!=null?augment.description:SkillSummary(skill);
             string details=augment!=null?augment.rulesDescription:skill.description;
-            var text=CardText(content,"Full effect",EmphasizeNumbers(main)+"\n\n<color=#B9C8DF>발동 조건과 제한</color>\n"+EmphasizeNumbers(details),0,0,388,370,20,new Color(.94f,.96f,1),TextAnchor.UpperLeft);
+            var text=CardText(content,"Full effect",EmphasizeNumbers(main)+"\n\n<color=#D6B794>발동 조건과 제한</color>\n"+EmphasizeNumbers(details),0,0,388,370,20,GoldenUi.Ivory,TextAnchor.UpperLeft);
             text.lineSpacing=1.25f;text.rectTransform.pivot=new Vector2(.5f,1);text.rectTransform.anchoredPosition=Vector2.zero;
             Canvas.ForceUpdateCanvases();float height=Mathf.Max(370,text.preferredHeight+20);text.rectTransform.sizeDelta=new Vector2(388,height);content.sizeDelta=new Vector2(394,height);
             var confirm=Button("이 선택으로 성장",0,697,404,62,()=>

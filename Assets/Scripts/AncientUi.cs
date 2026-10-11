@@ -1,4 +1,4 @@
-﻿using UnityEngine;using UnityEngine.UI;
+using UnityEngine;using UnityEngine.UI;
 namespace DragonTower {
  public enum AncientSurfaceKind { Panel,Button,Primary,Title,Portrait,Information,Collection,Popup,Icon }
  public static class AncientUi {
@@ -10,12 +10,12 @@ namespace DragonTower {
    image.color=Color.clear;
    var child=image.transform.Find("Ancient stone surface");AncientStoneSurface art;
    if(child==null){var go=new GameObject("Ancient stone surface",typeof(RectTransform),typeof(AncientStoneSurface));var r=go.GetComponent<RectTransform>();r.SetParent(image.transform,false);r.anchorMin=Vector2.zero;r.anchorMax=Vector2.one;r.offsetMin=r.offsetMax=Vector2.zero;r.SetAsFirstSibling();art=go.GetComponent<AncientStoneSurface>();}else art=child.GetComponent<AncientStoneSurface>();
-   art.kind=kind;art.raycastTarget=false;art.SetVerticesDirty();return art;
+   art.kind=kind;art.raycastTarget=false;art.SetVerticesDirty();if(CozyMenuSurface.InScope(image.transform)&&art.GetComponent<CozyMenuSurface>()==null)art.gameObject.AddComponent<CozyMenuSurface>();return art;
   }
   public static void Button(Button button,bool primary=false,bool selected=false,bool muted=false){
    var art=Frame((Image)button.targetGraphic,primary?AncientSurfaceKind.Primary:AncientSurfaceKind.Button);art.muted=muted;
    button.transition=Selectable.Transition.None;var feedback=button.GetComponent<AncientButtonFeedback>()??button.gameObject.AddComponent<AncientButtonFeedback>();feedback.Bind(button,art,selected);
-   foreach(var text in button.GetComponentsInChildren<Text>()){text.color=Ivory;foreach(var shadow in text.GetComponents<Shadow>()){shadow.effectColor=new Color(0,0,0,.35f);shadow.effectDistance=new Vector2(0,-1);}}
+   foreach(var text in button.GetComponentsInChildren<Text>()){text.color=CozyMenuSurface.InScope(button.transform)?GoldenUi.Ivory:Ivory;foreach(var shadow in text.GetComponents<Shadow>()){shadow.effectColor=new Color(0,0,0,.35f);shadow.effectDistance=new Vector2(0,-1);}}
   }
  }
  [RequireComponent(typeof(CanvasRenderer))]

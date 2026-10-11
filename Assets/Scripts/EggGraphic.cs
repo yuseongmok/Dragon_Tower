@@ -2,13 +2,29 @@ using UnityEngine;
 using UnityEngine.UI;
 namespace DragonTower
 {
-    // Small code-drawn UI symbol; no extra texture to download.
+    // Shared intact/cracked artwork; procedural fallback keeps old saves and missing-art builds usable.
+    [RequireComponent(typeof(CanvasRenderer))]
     public sealed class EggGraphic : MaskableGraphic
     {
         public bool cracked;
+        static Texture2D artwork;
+        public override Texture mainTexture => Artwork != null ? Artwork : base.mainTexture;
+        static Texture2D Artwork => artwork != null ? artwork : (artwork=Resources.Load<Texture2D>("UI/dragon-egg-pixel"));
         protected override void OnPopulateMesh(VertexHelper vh)
         {
             vh.Clear();
+            if(Artwork!=null)
+            {
+                // UV windows remove atlas padding without altering the existing egg's footprint/pedestal contact.
+                float left=cracked?989f:156f,right=cracked?1617f:785f;
+                float u0=left/1774f,u1=right/1774f,v0=66f/887f,v1=804f/887f;
+                float s=rectTransform.rect.width/40f;
+                vh.AddVert(new Vector3(-15*s,-15*s),color,new Vector2(u0,v0));
+                vh.AddVert(new Vector3(15*s,-15*s),color,new Vector2(u1,v0));
+                vh.AddVert(new Vector3(15*s,21*s),color,new Vector2(u1,v1));
+                vh.AddVert(new Vector3(-15*s,21*s),color,new Vector2(u0,v1));
+                vh.AddTriangle(0,1,2);vh.AddTriangle(0,2,3);return;
+            }
             int[] widths={4,7,9,11,13,14,15,15,15,14,12,8};
             for(int row=0;row<widths.Length;row++)
             {

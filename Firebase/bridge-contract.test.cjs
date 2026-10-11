@@ -1,0 +1,13 @@
+const assert=require('node:assert/strict');
+const {clean,nameValid}=require('../Assets/WebGLTemplates/DragonTower/firebase-bridge.js');
+const valid={displayName:'조련사_01',bodyType:0,skinTone:0,hairStyle:0,equippedOutfit:'starter',equippedHeadAccessory:'',equippedFaceAccessory:'',selectedDragonId:'ember'};
+for(let b=0;b<2;b++)for(let s=0;s<3;s++)for(let h=0;h<3;h++) assert.equal(clean({...valid,bodyType:b,skinTone:s,hairStyle:h}).hairStyle,h);
+for(const n of ['',' ','________','1234567890123','<b>x</b>','a\nb',' a','a ','🙂'])assert.equal(nameValid(n),false,n);
+assert.equal(nameValid('가나다라마바사아자차카타'),true);
+assert.throws(()=>clean({...valid,equippedOutfit:'paid'}));
+assert.throws(()=>clean({...valid,bodyType:2}));
+assert.throws(()=>clean({...valid,selectedDragonId:'users/other'}));
+assert.equal(Object.hasOwn(clean({...valid,permanentCurrency:999999,bestScore:999999}),'permanentCurrency'),false);
+assert.equal(Object.hasOwn(clean({...valid,bestScore:999999}),'bestScore'),false);
+let replies=[];global.dragonTower={SendMessage:(receiver,method,json)=>replies.push(JSON.parse(json))};
+(async()=>{await global.DragonTowerFirebase.request('test',JSON.stringify({id:'1',op:'guest'}));assert.equal(replies[0].code,'not-configured');assert.equal(replies[0].ok,false);console.log('BRIDGE_CONTRACT_OK 18 variants validation privileged-field exclusion missing-config error');})();

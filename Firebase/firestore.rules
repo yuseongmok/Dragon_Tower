@@ -1,0 +1,53 @@
+rules_version = '2';
+service cloud.firestore {
+ match /databases/{database}/documents {
+  function owner(uid) { return request.auth != null && request.auth.uid == uid; }
+  function deleting(uid) { return exists(/databases/$(database)/documents/accountDeletions/$(uid)); }
+  function deleteOwner(uid) {
+   return owner(uid) && (
+    request.auth.token.firebase.sign_in_provider == 'anonymous'
+    || request.time < timestamp.value(request.auth.token.auth_time * 1000) + duration.value(5, 'm')
+   );
+  }
+  function validProfile(d) {
+   return d.keys().hasAll(['schemaVersion','revision','displayName','bodyType','skinTone','hairStyle','equippedOutfit','equippedHeadAccessory','equippedFaceAccessory','selectedDragonId','createdAt','updatedAt'])
+    && d.schemaVersion == 1 && d.revision is int && d.revision > 0
+    && d.displayName is string && d.displayName.size() >= 1 && d.displayName.size() <= 12
+    && d.displayName.matches('[A-Za-z0-9가-힣_-]([A-Za-z0-9가-힣 _-]*[A-Za-z0-9가-힣_-])?')
+    && d.displayName.matches('.*[A-Za-z0-9가-힣].*')
+    && d.bodyType is int && d.bodyType >= 0 && d.bodyType < 2
+    && d.skinTone is int && d.skinTone >= 0 && d.skinTone < 3
+    && d.hairStyle is int && d.hairStyle >= 0 && d.hairStyle < 3
+    && d.equippedOutfit == 'starter' && d.equippedHeadAccessory == '' && d.equippedFaceAccessory == ''
+    && d.selectedDragonId is string && d.selectedDragonId.matches('[A-Za-z0-9_-]{0,80}')
+    && d.createdAt is timestamp && d.updatedAt == request.time;
+  }
+  match /users/{uid} {
+   allow get: if owner(uid) && !deleting(uid);
+   allow list: if false;
+   allow create: if owner(uid) && !deleting(uid) && validProfile(request.resource.data)
+    && request.resource.data.keys().hasOnly(['schemaVersion','revision','displayName','bodyType','skinTone','hairStyle','equippedOutfit','equippedHeadAccessory','equippedFaceAccessory','selectedDragonId','createdAt','updatedAt'])
+    && request.resource.data.revision == 1 && request.resource.data.createdAt == request.time;
+   allow update: if owner(uid) && !deleting(uid) && validProfile(request.resource.data)
+    && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['revision','displayName','bodyType','skinTone','hairStyle','equippedOutfit','equippedHeadAccessory','equippedFaceAccessory','selectedDragonId','updatedAt'])
+    && request.resource.data.revision == resource.data.revision + 1;
+   allow delete: if deleteOwner(uid);
+  }
+  match /accountDeletions/{uid} {
+   allow get: if owner(uid);
+   allow create, update: if deleteOwner(uid) && request.resource.data.keys().hasOnly(['requested']) && request.resource.data.requested == true;
+   allow list, delete: if false;
+  }
+  match /accountRecovery/{uid} {
+   allow delete: if deleteOwner(uid);
+   allow read, create, update: if false;
+  }
+  match /leaderboardPlaytest/{uid} {
+   // Rankings are read through the authenticated, App Check protected callable.
+   allow read, create, update: if false;
+   allow delete: if deleteOwner(uid) && existsAfter(/databases/$(database)/documents/accountDeletions/$(uid));
+  }
+  // All score writes, receipts and rank queries are server-only. Rules cannot prove a game score.
+  match /{document=**} { allow read, write: if false; }
+ }
+}

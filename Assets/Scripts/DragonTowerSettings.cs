@@ -43,13 +43,13 @@ namespace DragonTower
         {var r=Rect(name,parent,anchor,position,size);var image=r.gameObject.AddComponent<Image>();image.color=color;return image;}
         Text Label(string value,Transform parent,Vector2 anchor,Vector2 position,Vector2 size,int fontSize,Color color,TextAnchor alignment=TextAnchor.MiddleCenter)
         {
-            var r=Rect(value,parent,anchor,position,size);var text=r.gameObject.AddComponent<Text>();text.font=font;text.text=value;text.fontSize=fontSize;text.color=color;text.alignment=alignment;text.raycastTarget=false;return text;
+            var r=Rect(value,parent,anchor,position,size);var text=r.gameObject.AddComponent<Text>();text.font=font;text.text=value;text.fontSize=fontSize;text.color=GoldenUi.TextColor(color);text.alignment=alignment;text.raycastTarget=false;return text;
         }
         Button MakeButton(string title,Transform parent,Vector2 anchor,Vector2 position,Vector2 size,Color color,UnityAction action)
         {
             var image=Box(title,parent,anchor,position,size,color);var button=image.gameObject.AddComponent<Button>();button.targetGraphic=image;button.onClick.AddListener(action);
             var nav=button.navigation;nav.mode=Navigation.Mode.None;button.navigation=nav;button.gameObject.AddComponent<DragonTowerUiSound>();
-            DragonTowerTheme.StyleButton(button,DragonTowerTheme.Gold);Label(title,button.transform,new Vector2(.5f,.5f),Vector2.zero,new Vector2(size.x-14,size.y-8),18,Color.white);return button;
+            DragonTowerTheme.StyleButton(button,DragonTowerTheme.Gold);Label(title,button.transform,new Vector2(.5f,.5f),Vector2.zero,new Vector2(size.x-14,size.y-8),18,Color.white);CozySymbols.Add(button);return button;
         }
         static Sprite CircleSprite()
         {
@@ -86,15 +86,16 @@ namespace DragonTower
             safeAreaRoot=Rect("Portrait game area",transform,new Vector2(.5f,.5f),Vector2.zero,new Vector2(480,850));
             MakeGearButton(safeAreaRoot);
 
-            panel=Box("Settings dimmer",safeAreaRoot,Vector2.zero,Vector2.zero,Vector2.zero,new Color(.01f,.015f,.025f,.86f)).gameObject;
+            panel=Box("Settings dimmer",safeAreaRoot,Vector2.zero,Vector2.zero,Vector2.zero,new Color(.08f,.045f,.03f,.86f)).gameObject;
             var dim=panel.GetComponent<RectTransform>();dim.anchorMin=Vector2.zero;dim.anchorMax=Vector2.one;dim.offsetMin=dim.offsetMax=Vector2.zero;
             var card=Box("Settings card",panel.transform,new Vector2(.5f,.5f),Vector2.zero,new Vector2(420,650),new Color(.045f,.065f,.10f,.99f));DragonTowerTheme.Frame(card,DragonTowerTheme.Gold);
             Label("설정",card.transform,new Vector2(.5f,1),new Vector2(0,-40),new Vector2(350,52),30,DragonTowerTheme.Gold);
             musicSlider=MakeSlider("배경음",card.transform,-105,out musicValue);sfxSlider=MakeSlider("효과음",card.transform,-200,out sfxValue);
-            MakeButton("로비로 돌아가기",card.transform,new Vector2(.5f,1),new Vector2(0,-330),new Vector2(340,60),new Color(.13f,.25f,.31f,.98f),ReturnLobby);
-            MakeButton("게임 데이터 초기화",card.transform,new Vector2(.5f,1),new Vector2(0,-415),new Vector2(340,58),new Color(.42f,.15f,.14f,.98f),ShowResetConfirmation);
-            MakeButton("계속하기",card.transform,new Vector2(.5f,1),new Vector2(0,-500),new Vector2(340,60),new Color(.20f,.38f,.28f,.98f),Close);
-            Label("설정을 닫으면 게임이 다시 시작됩니다.",card.transform,new Vector2(.5f,1),new Vector2(0,-570),new Vector2(350,32),14,new Color(.66f,.72f,.78f));
+            MakeButton("로비로 돌아가기",card.transform,new Vector2(.5f,1),new Vector2(0,-315),new Vector2(340,60),new Color(.13f,.25f,.31f,.98f),ReturnLobby);
+            MakeButton("게임 데이터 초기화",card.transform,new Vector2(.5f,1),new Vector2(0,-390),new Vector2(340,58),new Color(.42f,.15f,.14f,.98f),ShowResetConfirmation);
+            MakeButton("플레이어 닉네임",card.transform,new Vector2(.5f,1),new Vector2(0,-465),new Vector2(340,58),DragonTowerTheme.SlateLight,()=>{Close();var controller=FindFirstObjectByType<BattleController>();if(controller?.Flow!=null)controller.Flow.ShowLocalPlayer();});
+            MakeButton("계속하기",card.transform,new Vector2(.5f,1),new Vector2(0,-545),new Vector2(340,60),new Color(.20f,.38f,.28f,.98f),Close);
+            Label("설정을 닫으면 게임이 다시 시작됩니다.",card.transform,new Vector2(.5f,1),new Vector2(0,-608),new Vector2(350,32),14,GoldenUi.Muted);
 
             confirmation=Box("Reset confirmation",panel.transform,new Vector2(.5f,.5f),Vector2.zero,new Vector2(380,300),new Color(.075f,.065f,.07f,1)).gameObject;
             DragonTowerTheme.Frame(confirmation.GetComponent<Image>(),new Color(1,.38f,.28f));
@@ -116,9 +117,9 @@ namespace DragonTower
         Slider MakeSlider(string title,Transform parent,float y,out Text valueLabel)
         {
             Label(title,parent,new Vector2(.5f,1),new Vector2(-125,y),new Vector2(130,38),19,Color.white,TextAnchor.MiddleLeft);
-            valueLabel=Label("100%",parent,new Vector2(.5f,1),new Vector2(140,y),new Vector2(70,38),17,new Color(.72f,.81f,.9f));
+            valueLabel=Label("100%",parent,new Vector2(.5f,1),new Vector2(140,y),new Vector2(70,38),17,GoldenUi.Muted);
             var root=Rect(title+" slider",parent,new Vector2(.5f,1),new Vector2(5,y-43),new Vector2(300,28));
-            var background=Box("Background",root,Vector2.zero,Vector2.zero,Vector2.zero,new Color(.12f,.15f,.19f,1));var br=background.rectTransform;br.anchorMax=Vector2.one;br.offsetMin=br.offsetMax=Vector2.zero;
+            var background=Box("Background",root,Vector2.zero,Vector2.zero,Vector2.zero,GoldenUi.Dark);var br=background.rectTransform;br.anchorMax=Vector2.one;br.offsetMin=br.offsetMax=Vector2.zero;
             var fillArea=Rect("Fill Area",root,Vector2.zero,new Vector2(8,0),new Vector2(-16,0));fillArea.anchorMax=Vector2.one;
             var fill=Box("Fill",fillArea,Vector2.zero,Vector2.zero,Vector2.zero,DragonTowerTheme.Gold);var fr=fill.rectTransform;fr.anchorMax=Vector2.one;fr.offsetMin=fr.offsetMax=Vector2.zero;
             var handleArea=Rect("Handle Slide Area",root,Vector2.zero,new Vector2(10,0),new Vector2(-20,0));handleArea.anchorMax=Vector2.one;
@@ -148,7 +149,9 @@ namespace DragonTower
         void ShowResetConfirmation(){confirmation.SetActive(true);confirmation.transform.SetAsLastSibling();}
         void ResetGame()
         {
-            PlayerPrefs.DeleteKey("DragonTower.Profile.v1.A");PlayerPrefs.DeleteKey("DragonTower.Profile.v1.B");PlayerPrefs.Save();
+            const string root="DragonTower.Profile.v1";string selected=PlayerPrefs.GetString(root+".OfflineStore",root);
+            if(selected!=root&&!selected.StartsWith(root+".Offline.",System.StringComparison.Ordinal))return;
+            var store=new ProfileStore(selected);store.Load();store.Save(new PlayerProfile{starterGiftClaimed=true,eggs=1,localRecordsVersion=1});
             open=false;Time.timeScale=1;DragonTowerAudio.SetPaused(false);panel.SetActive(false);SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
         void OnDestroy(){if(instance==this&&open){Time.timeScale=previousTimeScale<=0?1:previousTimeScale;DragonTowerAudio.SetPaused(false);}}

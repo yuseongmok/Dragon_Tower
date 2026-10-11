@@ -13,11 +13,14 @@ namespace DragonTower {
    if(run.Progress.finalized)return;
    var next=ProfileStore.Clone(Profile);var snapshot=run.Capture();var earned=UpdateProgress(next,snapshot);snapshot.progress.finalized=true;
    next.lastRun=new RunResultRecord{instanceId=run.InstanceId,floor=run.Floor,level=run.Level,monsters=run.MonstersDefeated,cleared=cleared,progress=snapshot.progress};
+   if(next.pendingLeaderboardRecords==null)next.pendingLeaderboardRecords=new System.Collections.Generic.List<RunProgressRecord>();
+   if(OnlineFeatures.Enabled&&!next.pendingLeaderboardRecords.Exists(p=>p.runId==snapshot.progress.runId))next.pendingLeaderboardRecords.Add(JsonUtility.FromJson<RunProgressRecord>(JsonUtility.ToJson(snapshot.progress)));
    next.hasActiveRun=false;next.activeRun=null;CommitProgress(next,run,snapshot,earned);
   }
   public void SaveNestReward(TowerRun run,DragonData dragon){
    var next=ProfileStore.Clone(Profile);next.dragons.Add(new OwnedDragon{instanceId=Guid.NewGuid().ToString("N"),speciesId=dragon.StableId});
    var snapshot=run.Capture();var earned=UpdateProgress(next,snapshot);next.hasActiveRun=true;next.activeRun=snapshot;CommitProgress(next,run,snapshot,earned);
   }
+  public void AcknowledgeLeaderboard(string runId){var next=ProfileStore.Clone(Profile);if(next.pendingLeaderboardRecords==null)return;next.pendingLeaderboardRecords.RemoveAll(p=>p.runId==runId);store.Save(next);Profile=next;}
  }
 }

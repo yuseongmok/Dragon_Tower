@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
@@ -15,10 +15,14 @@ namespace DragonTower
     {
         public int version=1;
         public string playerName;
+        public int bestBond,bestScore;
+        public int bestFloor,localRecordsVersion;
+        public RunProgressRecord bestScoreRun;
         public AchievementProgress achievementProgress;
         public bool hasActiveRun;
         public TowerRunSave activeRun;
         public RunResultRecord lastRun;
+        public List<RunProgressRecord> pendingLeaderboardRecords=new List<RunProgressRecord>();
         public bool starterGiftClaimed;
         public int eggs;
         public List<OwnedDragon> dragons=new List<OwnedDragon>();

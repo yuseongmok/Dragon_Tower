@@ -14,6 +14,16 @@ namespace DragonTower
         static PixelHudFrame PixelFrame(Image image,bool prominent=false)
         {
             foreach(var effect in image.GetComponents<Shadow>())effect.enabled=false;
+            // Legacy menu decoration is a child Graphic: disabling only the Image
+            // left its gold atlas on top of the original element-coloured HUD.
+            foreach(Transform child in image.transform)
+                if(child.name=="Ancient stone surface"||child.name=="Pixel edge trim"||child.name=="Cozy pixel surface")child.gameObject.SetActive(false);
+            var menuFeedback=image.GetComponent<AncientButtonFeedback>();
+            if(menuFeedback!=null)menuFeedback.enabled=false;
+            var cozyFeedback=image.GetComponent<CozyButtonFeedback>();
+            if(cozyFeedback!=null)cozyFeedback.enabled=false;
+            var control=image.GetComponent<Button>();
+            if(control!=null)control.transition=Selectable.Transition.ColorTint;
             image.enabled=false;
             var obj=new GameObject("Pixel bevel",typeof(RectTransform),typeof(CanvasRenderer),typeof(PixelHudFrame));
             var rect=obj.GetComponent<RectTransform>();rect.SetParent(image.transform,false);rect.anchorMin=Vector2.zero;rect.anchorMax=Vector2.one;rect.offsetMin=rect.offsetMax=Vector2.zero;rect.SetAsFirstSibling();
