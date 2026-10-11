@@ -14,6 +14,8 @@ namespace DragonTower
     [Serializable] public sealed class PlayerProfile
     {
         public int version=1;
+        public List<string> discoveredRegions=new List<string>();
+        public string lastRegionPresentationRunId,lastRegionPresentationId;
         public string playerName;
         public int bestBond,bestScore;
         public int bestFloor,localRecordsVersion;
@@ -114,6 +116,17 @@ namespace DragonTower
             foreach(var d in Profile.dragons)if(Find(d.speciesId)==null)throw new InvalidOperationException("보유 드래곤 데이터를 찾을 수 없습니다. 저장은 유지됩니다.");
         }
         public DragonData Find(string id){foreach(var d in catalog)if(d.StableId==id)return d;return null;}
+        public bool HasDiscoveredRegion(string id)=>Profile.discoveredRegions!=null&&Profile.discoveredRegions.Contains(id);
+        public bool HasPresentedRegion(string id,string runId)=>!string.IsNullOrEmpty(runId)&&Profile.lastRegionPresentationRunId==runId&&Profile.lastRegionPresentationId==id;
+        public void DiscoverRegion(string id,string runId=null)
+        {
+            if(string.IsNullOrEmpty(id)||(HasDiscoveredRegion(id)&&(string.IsNullOrEmpty(runId)||HasPresentedRegion(id,runId))))return;
+            var next=ProfileStore.Clone(Profile);
+            if(next.discoveredRegions==null)next.discoveredRegions=new List<string>();
+            if(!next.discoveredRegions.Contains(id))next.discoveredRegions.Add(id);
+            if(!string.IsNullOrEmpty(runId)){next.lastRegionPresentationRunId=runId;next.lastRegionPresentationId=id;}
+            store.Save(next);Profile=next;
+        }
         public DragonData Selected
         {
             get {foreach(var d in Profile.dragons)if(d.instanceId==Profile.selectedInstanceId)return Find(d.speciesId);return null;}

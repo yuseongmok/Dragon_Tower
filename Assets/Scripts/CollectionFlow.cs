@@ -310,7 +310,7 @@ namespace DragonTower
         void ShowTowerChoices()
         {
             if(towerRun==null||!towerRun.Active)return;
-            controller.EndBattle();ShowStairChoices();
+            controller.EndBattle();if(TryShowRegionEntrance())return;ShowStairChoices();
         }
         void SelectTowerRoom(int index)
         {
@@ -612,7 +612,9 @@ namespace DragonTower
             if(towerRun.Phase!=FloorPhase.Complete||towerRun.PendingEvolutionStage>0||towerRun.PendingLevelAugments>0){ContinueRunPhase();return;}
             if(towerRun.Floor>=80){Session.FinishRun(towerRun,true);SubmitPendingLeaderboard();towerRun.End();Screen("타워 완주");Label("80층을 돌파했습니다!\n최종 점수 "+towerRun.Progress.score+"점",0,350,420,80,28,Gold);Button("로비로",0,610,360,60,ShowLobby);return;}
             int clearedFloor=towerRun.Floor;towerRun.MoveToNextFloor(UnityEngine.Random.Range(0,100),UnityEngine.Random.Range(0,100));SaveProgress();
-            if(towerRun.Floor%10==1)StartCoroutine(ShowFloorTransition(clearedFloor,towerRun.Floor,false));else ShowTowerChoices();
+            var skin=Resources.Load<BattleSkin>("PixelBattleSkin");
+            if(skin!=null&&skin.EntranceForFloor(towerRun.Floor)!=null)ShowTowerChoices();
+            else if(towerRun.Floor%10==1)StartCoroutine(ShowFloorTransition(clearedFloor,towerRun.Floor,false));else ShowTowerChoices();
         }
         static int TowerAreaIndex(int floor)
         {return floor>=100?10:Mathf.Clamp((Mathf.Max(1,floor)-1)/10,0,9);}

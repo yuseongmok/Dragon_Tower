@@ -39,3 +39,76 @@ MonoBehaviour:
     bossEntrance: {fileID: 21300000, guid: 497bfe82a243437dba75a07744e611eb, type: 3}
     bossBattle: {fileID: 21300000, guid: bd7b008d0d964eb1a5f1ff76dc1fd995, type: 3}
     doorAtlas: {fileID: 2800000, guid: ccef2570bd1446d699194f256d460381, type: 3}
+  - firstFloor: 11
+    lastFloor: 20
+    regionId: ancient-aqueduct
+    regionName: 버려진 고대 수로
+    regionNumber: 2
+    playEntrance: 1
+    entranceTint: {r: 0.16, g: 0.78, b: 0.79, a: 1}
+    particleTint: {r: 0.45, g: 0.92, b: 1, a: 1}
+    entranceSeconds: 4.2
+    particleCount: 28
+    stairs: {fileID: 21300000, guid: b6d6bec093484168a39af663d78cdf66, type: 3}
+    item: {fileID: 21300000, guid: de2e3a3daafb4e3193d22a228b8b6aea, type: 3}
+    battle: {fileID: 21300000, guid: 95d621c61eb54c80a61197c5d0cd6a0d, type: 3}
+    bossEntrance: {fileID: 21300000, guid: c4c7552846ef4bbc927a33af8be75099, type: 3}
+    bossBattle: {fileID: 21300000, guid: 164fe9f9c2074da9b7b90b5626a7973b, type: 3}
+    doorAtlas: {fileID: 2800000, guid: ccef2570bd1446d699194f256d460381, type: 3}
+  - firstFloor: 21
+    lastFloor: 30
+    regionId: ancient-forge
+    regionName: 잊혀진 용광로 공방
+    regionNumber: 3
+    playEntrance: 1
+    forgeEffects: 1
+    replayDiscovered: 1
+    entranceMessage: 잠든 용광로의 문이 열립니다
+    entranceTint: {r: 0.949, g: 0.545, b: 0.22, a: 1}
+    particleTint: {r: 1, g: 0.765, b: 0.42, a: 1}
+    entranceSeconds: 2.8
+    particleCount: 20
+    battle: {fileID: 21300000, guid: 95cacdcde7bf492e9daf69cefa128470, type: 3}
+    item: {fileID: 21300000, guid: 89bd7b2b3dcb45cb82aa6312c8bdd218, type: 3}
+    stairs: {fileID: 21300000, guid: 06d51f797e1243a89f3c14cbaf8f87c3, type: 3}
+    bossEntrance: {fileID: 21300000, guid: 755f07cc3950430c8335ab18a929054e, type: 3}
+    bossBattle: {fileID: 21300000, guid: d60570c92efc49ff9290360b43dd4762, type: 3}
+    doorAtlas: {fileID: 2800000, guid: ccef2570bd1446d699194f256d460381, type: 3}
+  - firstFloor: 31
+    lastFloor: 40
+    regionId: sky-corridor
+    regionName: 휘몰아치는 천공 회랑
+    regionNumber: 4
+    playEntrance: 1
+    skyEffects: 1
+    replayDiscovered: 1
+    entranceMessage: 구름 너머 새로운 길이 열립니다
+    entranceTint: {r: 0.47, g: 0.725, b: 0.906, a: 1}
+    particleTint: {r: 0.91, g: 0.945, b: 0.96, a: 1}
+    entranceSeconds: 2.8
+    particleCount: 18
+    battle: {fileID: 21300000, guid: ff7b7d86d9ab4993a595bccb77a1d59b, type: 3}
+    item: {fileID: 21300000, guid: 74966bf9057e4ada80b3eb5418eeb66d, type: 3}
+    stairs: {fileID: 21300000, guid: 91f20083117f44899943edc25bd6721e, type: 3}
+    bossEntrance: {fileID: 21300000, guid: c40dc157616445b79edb731b562d50d2, type: 3}
+    bossBattle: {fileID: 21300000, guid: d5cafe739ce44510b12533c7653f42cc, type: 3}
+    doorAtlas: {fileID: 2800000, guid: 0f20c40ed3874091b175d741262ce43e, type: 3}
+  - firstFloor: 41
+    lastFloor: 50
+    regionId: thunder-spire
+    regionName: 뇌운의 피뢰탑
+    regionNumber: 5
+    playEntrance: 1
+    thunderEffects: 1
+    replayDiscovered: 1
+    entranceMessage: 뇌운 너머 새로운 길이 열립니다
+    entranceTint: {r: 0.51, g: 0.86, b: 0.95, a: 1}
+    particleTint: {r: 0.51, g: 0.86, b: 0.95, a: 1}
+    entranceSeconds: 2.8
+    particleCount: 14
+    battle: {fileID: 21300000, guid: 6862eb6f40774251a21c7024147ef706, type: 3}
+    item: {fileID: 21300000, guid: 3eb570d429ed4f97a3003475a8b06413, type: 3}
+    stairs: {fileID: 21300000, guid: bc034306ad964999b7a3756535c7228c, type: 3}
+    bossEntrance: {fileID: 21300000, guid: 3a6df998aa6d46bfae05ef993cdaa4fb, type: 3}
+    bossBattle: {fileID: 21300000, guid: ed7fae9d7188474d9085f2e9157d0de5, type: 3}
+    doorAtlas: {fileID: 2800000, guid: 4e5b54b12f1846af9c45f45819435081, type: 3}
