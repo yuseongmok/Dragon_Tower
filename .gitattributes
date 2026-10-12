@@ -1,0 +1,2 @@
+# Keep release checksums identical on Windows and the Pages Linux runner.
+docs/** -text

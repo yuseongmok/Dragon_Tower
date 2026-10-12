@@ -1,0 +1,133 @@
+{
+  "version": "2026.10.13.structure4",
+  "files": [
+    {
+      "path": ".nojekyll",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Build/8698536b200f9dbc7e284f3129040c97.loader.js",
+      "size": 47866,
+      "sha256": "c93ba0f585e09f1cb8eba047bb73433fe8ae4b41b0ff25146b8dd86e9207f5ee"
+    },
+    {
+      "path": "Build/a03711650ae121df835ffc46804277a8.framework.js.unityweb",
+      "size": 87232,
+      "sha256": "25f6fad332a84307ee4073e034f09b7671f082dea961e04791b619a7cb192de4"
+    },
+    {
+      "path": "Build/a84da76752064fa4d59cb2edbd1608cc.wasm.unityweb",
+      "size": 8777545,
+      "sha256": "4a84a58c6222b5efbf2aeda361f657f50fe62170d419184acb80e976388cea7f"
+    },
+    {
+      "path": "Build/ba0d23ce2f835b51a82e3347f2330d73.data.unityweb",
+      "size": 308792458,
+      "sha256": "5315ec52af37a4877c53a2168c814e35c9188df4e8e0a6c0759dc87f8d0253f9",
+      "parts": [
+        {
+          "path": "Build/ba0d23ce2f835b51a82e3347f2330d73.data.unityweb.part00",
+          "size": 67108864,
+          "sha256": "7acd1e256ba8a34a54a0989d24b19694bfd04f0170aa55aad443be1064948416"
+        },
+        {
+          "path": "Build/ba0d23ce2f835b51a82e3347f2330d73.data.unityweb.part01",
+          "size": 67108864,
+          "sha256": "dae594df999942eec52c99fc41ec1c5f519172291be229bb0c511432b2e50f40"
+        },
+        {
+          "path": "Build/ba0d23ce2f835b51a82e3347f2330d73.data.unityweb.part02",
+          "size": 67108864,
+          "sha256": "98a7bbc24b88070f72eb005c662b3aad3b8e3237866d89ce0f4684ada4475350"
+        },
+        {
+          "path": "Build/ba0d23ce2f835b51a82e3347f2330d73.data.unityweb.part03",
+          "size": 67108864,
+          "sha256": "b91dcdc03a6ea0ed3768d2d55f767fcd6bf688c54f2d257c278efdf38ec1307b"
+        },
+        {
+          "path": "Build/ba0d23ce2f835b51a82e3347f2330d73.data.unityweb.part04",
+          "size": 40357002,
+          "sha256": "a31aa4b2b6ecb4cd7a70afd14b98c0d9f76818d00b169e602f5dd026e19e94b3"
+        }
+      ]
+    },
+    {
+      "path": "firebase-config.js",
+      "size": 709,
+      "sha256": "59e17e401a1beef7e096d9de4f1b76b2d98bb6f7bf0601b21a6f8d42f12bacde"
+    },
+    {
+      "path": "index.html",
+      "size": 2729,
+      "sha256": "387ac86a875a3be92bdbb3b90e387120c2040b5fce3084c6ae457bf2fbb3b94a"
+    },
+    {
+      "path": "offline-save-bridge.js",
+      "size": 1661,
+      "sha256": "87368953f70761c4af3c034cdab3071a796bd708e72d7e11977e8805675b0411"
+    }
+  ],
+  "environmentAssets": {
+    "Assets\\Resources\\Environments\\Aqueduct\\battle.png": "ef4fdc65da63bb30fcc0c88387291d3a98b2190a7a812ab9895a098145cb618f",
+    "Assets\\Resources\\Environments\\Aqueduct\\boss-battle.png": "5d5f1a681116f6a870625b6c0bffb948988c911aab281b1556761b8074af2783",
+    "Assets\\Resources\\Environments\\Aqueduct\\boss-entrance.png": "5b742dde991ffdfaaa639cc6a6137b6c36f38f0fefd36fc30a79a157ca237d91",
+    "Assets\\Resources\\Environments\\Aqueduct\\item.png": "80b837e26f893a2ffd6a155404f2390218eb9b30e49a1666fe6ccb24203fbadf",
+    "Assets\\Resources\\Environments\\Aqueduct\\stairs.png": "843a45d5d3379bc57a4a262ca0fddf204cead252f29c0c778fa13f8b1331e502",
+    "Assets\\Resources\\Environments\\Dungeon\\battle.png": "d0199454ea3fd95774f3d4f8cb5c44bea533bf2640f9af319de4640b66547003",
+    "Assets\\Resources\\Environments\\Dungeon\\boss-battle.png": "660ef54180bf576b18069ef7c6efd7e3b4d58a91df9263b4af730c34b042c8c7",
+    "Assets\\Resources\\Environments\\Dungeon\\boss-entrance.png": "f948143569b92ba5c1586a5343ba3d20dbc2f58d0ff5818ea38162101e7fd9f5",
+    "Assets\\Resources\\Environments\\Dungeon\\doors.png": "0ebac5dbfc9fe6235c7d5e0c0522d3c8b348a74e68eddeb44b43430052c32eb6",
+    "Assets\\Resources\\Environments\\Dungeon\\item.png": "a68e4768ef06f1d9306f6f001486f5133c0e7c3c98a31e497a44debf5cb51f88",
+    "Assets\\Resources\\Environments\\Dungeon\\stairs.png": "dd3d81c9488736fa7a00c974e7d6677f4a212aa918cf4570d8ec736fa093dd08",
+    "Assets\\Resources\\Environments\\Forge\\battle.png": "8068e65b696b9f42394590cb5fa195f7340ddd86fcc2d5573a8a610eff07a868",
+    "Assets\\Resources\\Environments\\Forge\\boss-battle.png": "ee74e98fb5fe2e86653fdfabca630b785d831c5659db34abda2ea463b778d2af",
+    "Assets\\Resources\\Environments\\Forge\\boss-entrance.png": "32cce973c088d0c5354fa6deb693c4bfe967206004e0ba78e70c486fbfd19904",
+    "Assets\\Resources\\Environments\\Forge\\item.png": "3ebc7c09a7f1e1d26d8928eb92b6ecae8556c866befabf7714a096d778d19f00",
+    "Assets\\Resources\\Environments\\Forge\\stairs.png": "426969dd9980c404f88daadc03c74987ec4c2f151e6cf41b27aed0fb9812e939",
+    "Assets\\Resources\\Environments\\IcePalace\\battle.png": "bb26e9eab73b783f3afffe3c7cd1d62fc27051a7185f662e43601236badd522a",
+    "Assets\\Resources\\Environments\\IcePalace\\boss-battle.png": "b38f833320eb8b93da9cfd9e64e69622665b517469c7ebae8df625bff5169ac7",
+    "Assets\\Resources\\Environments\\IcePalace\\boss-entrance.png": "aa8f88e1e64b4531ab537e3ec2374e57c0ceb46fd28934358eb323a4ad4cab3e",
+    "Assets\\Resources\\Environments\\IcePalace\\doors.png": "0f6ed7202e3124ed4652e8daa7ebf006e05603b993a44e9971cf11db732d1314",
+    "Assets\\Resources\\Environments\\IcePalace\\item.png": "7bdaae8f264d01ac95955b83df37c37248bc62e651d5e7cf58083c6527d1b9af",
+    "Assets\\Resources\\Environments\\IcePalace\\stairs.png": "6e5948cd7f5da3a5b4942f70f44ba53effc19e704dcfb92e01b0967109a9be41",
+    "Assets\\Resources\\Environments\\Library\\battle.png": "2048d9c44ddc697407487e09220881ab1047205abea95770a5805072b455701c",
+    "Assets\\Resources\\Environments\\Library\\boss-battle.png": "94792c417307b8346be30eafcb1a506f6337fa3f6b5fbae04569daa7713a06ac",
+    "Assets\\Resources\\Environments\\Library\\boss-entrance.png": "2b6f0b42b185e69faa71af71cf7c6e4ddea47f79ebfcd170d3443fb70f3db310",
+    "Assets\\Resources\\Environments\\Library\\doors.png": "100af4d617be54207d6dcb34bfbb413d984225e222363234de099a40d85d202e",
+    "Assets\\Resources\\Environments\\Library\\item.png": "a91edd22f290910bf7c73b797894c9f344c1d454d1ae0b894e5aaf319b6bab6a",
+    "Assets\\Resources\\Environments\\Library\\stairs.png": "a85bd8e9db8d772ba1c8325a8e1e5be77b9c97e4bbf02130f0da8dc18e8bc46b",
+    "Assets\\Resources\\Environments\\Sky\\battle.png": "613c58ffa31ae8cc109b42db2ab93f5124e8c9e7e577f8ed1710133d1dc4bf98",
+    "Assets\\Resources\\Environments\\Sky\\boss-battle.png": "406d9ddd78182359580e064998e232cedc0d565d78152af3baf6ea296df968a5",
+    "Assets\\Resources\\Environments\\Sky\\boss-entrance.png": "e133ebe067422fae889b348c5d2ee343368b42e89ea194aad1e5731abea048a0",
+    "Assets\\Resources\\Environments\\Sky\\doors.png": "64caba85d973c982b06a7a846db4d82583b77c72e8b0cb2c78b4b7569ce3bc3b",
+    "Assets\\Resources\\Environments\\Sky\\item.png": "955c5048d751ce6dec2307a0bb2782487a956246dc84f427c02e43af75cdab72",
+    "Assets\\Resources\\Environments\\Sky\\stairs.png": "45786bbe33aa52801d28a5168db9a39991b26af646b72d6ac7b65d98dcb8cf3a",
+    "Assets\\Resources\\Environments\\Sunlight\\battle.png": "35f13bbaf94264fe657865a819be518a0eac39654c51e4fbbc742e807d65d55c",
+    "Assets\\Resources\\Environments\\Sunlight\\boss-battle.png": "cc65c2c1dab3205002c4cdd6ca5960cbfb2a79704176f5c755097c29c006eb7e",
+    "Assets\\Resources\\Environments\\Sunlight\\boss-entrance.png": "92e2f60880862724c6179cfc93f7e1a57e66731779442517e536806057d199f0",
+    "Assets\\Resources\\Environments\\Sunlight\\doors.png": "31808bb2d84f6d6260e71606aee025ba6772735e02ffc5b0ef89ba468efc3555",
+    "Assets\\Resources\\Environments\\Sunlight\\item.png": "597f40587cc8cebd9ebb36a022ae2ff4d14f4c4750fdd407d24057ba8479466f",
+    "Assets\\Resources\\Environments\\Sunlight\\stairs.png": "60432b973c3f9d0630c082581f1c4b9e4113bba2da145def2e2246efa68d6304",
+    "Assets\\Resources\\Environments\\Throne\\arena.png": "10ba3bf3ba387f07501447c014e36208fe96926cdfaad64c870d1ad534f27629",
+    "Assets\\Resources\\Environments\\Throne\\battle.png": "d64327d90087a53f08f6e17e7db518af7797fe452ede5c438c3347b01c3bd45f",
+    "Assets\\Resources\\Environments\\Throne\\boss-entrance.png": "c86ab6cac137254f3395051ed5562eb35259db0ae2068be1a0f5c4781105ae13",
+    "Assets\\Resources\\Environments\\Throne\\doors.png": "5facf67852d6e8a7a4c7390d8ae43b3814c4c6f317e05f9eb8e1b7a1abf3ccea",
+    "Assets\\Resources\\Environments\\Throne\\heart.png": "b54b0a5d90c6bf45b60886635d3578c413b3f8fb85eb16a0c7ad163da42e183f",
+    "Assets\\Resources\\Environments\\Throne\\item.png": "ecc6bccf1cdd56b3aa911d5832d52c61c294a0e9c0a8475f7a6d7196fe846c92",
+    "Assets\\Resources\\Environments\\Throne\\stairs.png": "3e5a3870d9425e710ea145062d86699e89ee5ee552b731d284002d0623ab95f1",
+    "Assets\\Resources\\Environments\\Thunder\\battle.png": "85d651d16acef17f9371c410aac66e10bd3f9b2bbf9a50343bf58cf68dc6add8",
+    "Assets\\Resources\\Environments\\Thunder\\boss-battle.png": "5d87c959622b85f8fb1cb03861d8a2bad12576e1eabea3a13b7c8751de788ebd",
+    "Assets\\Resources\\Environments\\Thunder\\boss-entrance.png": "52c6475014331a5cb687eb4a7de9f87e1ce31171ad67448c4011d6699919df80",
+    "Assets\\Resources\\Environments\\Thunder\\doors.png": "b16d5e5a3db3be9ad9e229f192c8d867cb10cb2dc87621bd8c5dc6f9b0b7c209",
+    "Assets\\Resources\\Environments\\Thunder\\item.png": "cdef5c32dd1b8816726dc24c8fed8981a1905a7f5e43e22c95e9f9739756323f",
+    "Assets\\Resources\\Environments\\Thunder\\stairs.png": "8543432670e876482701cc5945c0f0f06fcb9c7a7a770badd3f9425a6dcb7019",
+    "Assets\\Resources\\Environments\\Void\\battle.png": "fee09a8d6e66a09f94a1cb509b16c16379ec5b705b65f1dc739f5e901e5326cd",
+    "Assets\\Resources\\Environments\\Void\\boss-battle.png": "3c61e07de76db390a6ded5c4579942d0e7e5882e8c8d2bf0a584bdafb818d859",
+    "Assets\\Resources\\Environments\\Void\\boss-entrance.png": "10b909e668a5b8eb8dbd01fd18103bbb0bba029cb937ba3c2999c30ea2cdb9a8",
+    "Assets\\Resources\\Environments\\Void\\doors.png": "e265f735859a0fc6dff852268fecba4a8b12eed321a6897181c13658be1e3b3e",
+    "Assets\\Resources\\Environments\\Void\\item.png": "f6229c007a802eb96da6a6fade1446c966fa8609e79700805cbe0bf919d34259",
+    "Assets\\Resources\\Environments\\Void\\stairs.png": "7703dec52da35a22eb0fc4d6c412f39fe913a97768b831b701fb8a3f0fb9bac7"
+  }
+}
