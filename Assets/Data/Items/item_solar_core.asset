@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.ItemData
   contentId: item_solar_core
   displayName: "태양 핵"
-  description: "추가 공격은 발동 조건 충족 2초 후 시작. 스킬 사용 시 스킬 피해의 100% 화염 운석 3회. 재사용 24초."
+  description: "추가 공격은 발동 조건 충족 2초 후 시작. 스킬 사용 시 공격력의 200% 화염 운석 3회. 재사용 24초."
   rarity: 4
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 130c82e5ecc5c8f4faa39d5b8689084b, type: 3}
   grade: 4
   kind: 1
   mechanic: 0

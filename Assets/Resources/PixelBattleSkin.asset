@@ -112,3 +112,117 @@ MonoBehaviour:
     bossEntrance: {fileID: 21300000, guid: 3a6df998aa6d46bfae05ef993cdaa4fb, type: 3}
     bossBattle: {fileID: 21300000, guid: ed7fae9d7188474d9085f2e9157d0de5, type: 3}
     doorAtlas: {fileID: 2800000, guid: 4e5b54b12f1846af9c45f45819435081, type: 3}
+  - firstFloor: 51
+    lastFloor: 60
+    regionId: frozen-palace
+    regionName: 영구동토의 수정 궁전
+    regionNumber: 6
+    playEntrance: 1
+    iceEffects: 1
+    replayDiscovered: 1
+    entranceMessage: 잠든 겨울의 문이 열립니다
+    entranceTint: {r: 0.427, g: 0.722, b: 0.859, a: 1}
+    particleTint: {r: 0.718, g: 0.894, b: 0.949, a: 1}
+    entranceSeconds: 2.8
+    particleCount: 16
+    battle: {fileID: 21300000, guid: d12b184af7834e8b96fa48e3f4f74186, type: 3}
+    item: {fileID: 21300000, guid: 6f2f4fa166eb47c1a4a140e5ed9c5155, type: 3}
+    stairs: {fileID: 21300000, guid: 927b42484ea84608ba4903b44efdcad5, type: 3}
+    bossEntrance: {fileID: 21300000, guid: 21f756e7f5ff40739d4d078d93ec3e59, type: 3}
+    bossBattle: {fileID: 21300000, guid: fbad49b58f53429394f32d40ff38e98e, type: 3}
+    doorAtlas: {fileID: 2800000, guid: c6d89a18e905429cb5e69767430b2644, type: 3}
+  - firstFloor: 61
+    lastFloor: 70
+    regionId: forgotten-library
+    regionName: 잊혀진 대도서관
+    regionNumber: 7
+    playEntrance: 1
+    libraryEffects: 1
+    replayDiscovered: 1
+    entranceMessage: 잠든 기록의 문이 열립니다
+    entranceTint: {r: 0.451, g: 0.341, b: 0.494, a: 1}
+    particleTint: {r: 0.722, g: 0.604, b: 0.4, a: 1}
+    entranceSeconds: 2.8
+    particleCount: 10
+    battle: {fileID: 21300000, guid: f3da9add5ed645449cea12bc7825aaba, type: 3}
+    item: {fileID: 21300000, guid: 73b1785d2f04498993feef6a763480f8, type: 3}
+    stairs: {fileID: 21300000, guid: fad774562c434ca7870b937951b7eb37, type: 3}
+    bossEntrance: {fileID: 21300000, guid: b51f2c5f597a49fdb181955a56d67fc8, type: 3}
+    bossBattle: {fileID: 21300000, guid: 5aefbe68f18948baba335c1f5043658c, type: 3}
+    doorAtlas: {fileID: 2800000, guid: 202e06f6ff754d41b6a41659a5baf1e6, type: 3}
+  - firstFloor: 71
+    lastFloor: 80
+    regionId: eternal-sunlight
+    regionName: 영겁의 일광 성소
+    regionNumber: 8
+    playEntrance: 1
+    sunlightEffects: 1
+    replayDiscovered: 1
+    entranceMessage: 따뜻한 빛의 문이 열립니다
+    entranceTint: {r: 0.902, g: 0.761, b: 0.478, a: 1}
+    particleTint: {r: 0.902, g: 0.761, b: 0.478, a: 1}
+    entranceSeconds: 2.8
+    particleCount: 12
+    battle: {fileID: 21300000, guid: 34da9dc7d1454f518bc75958a5aa6ddd, type: 3}
+    item: {fileID: 21300000, guid: ea8d2024cdd54005a577c52966c03871, type: 3}
+    stairs: {fileID: 21300000, guid: 9f175dd1655b4d4c9237ad6c5160f970, type: 3}
+    bossEntrance: {fileID: 21300000, guid: b21c65373087456bbe4dbfe3be3c34e9, type: 3}
+    bossBattle: {fileID: 21300000, guid: 211bf22da916428b81ed7e773ae406d4, type: 3}
+    doorAtlas: {fileID: 2800000, guid: 2f3fdc11d45a4db7a9a039ba944bf2ff, type: 3}
+  - firstFloor: 81
+    lastFloor: 90
+    regionId: shattered-void
+    regionName: 찢겨진 공허 회랑
+    regionNumber: 9
+    playEntrance: 0
+    voidEffects: 1
+    replayDiscovered: 1
+    entranceMessage: 경계의 문이 열립니다
+    entranceTint: {r: 0.439, g: 0.275, b: 0.647, a: 1}
+    particleTint: {r: 0.710, g: 0.608, b: 0.886, a: 1}
+    entranceSeconds: 2.8
+    particleCount: 10
+    battle: {fileID: 21300000, guid: 068e6d5765fe4288afd8102ff4b02c1d, type: 3}
+    item: {fileID: 21300000, guid: 7e799f5f2b3b4cd196dbc302fb3e193b, type: 3}
+    stairs: {fileID: 21300000, guid: 938053782faf41e099547bd9737b7760, type: 3}
+    bossEntrance: {fileID: 21300000, guid: bf66831e74fb4418ba7134269e1a82a5, type: 3}
+    bossBattle: {fileID: 21300000, guid: 4eacb06f64b643afae54d3545dd212f2, type: 3}
+    doorAtlas: {fileID: 2800000, guid: ca53caa46c964b4188a9c7a2bab9f88a, type: 3}
+  - firstFloor: 91
+    lastFloor: 99
+    regionId: primordial-throne
+    regionName: 태초의 용좌
+    regionNumber: 10
+    playEntrance: 0
+    throneEffects: 1
+    replayDiscovered: 1
+    entranceMessage: 태초의 문이 열립니다
+    entranceTint: {r: 0.56, g: 0.73, b: 0.91, a: 1}
+    particleTint: {r: 0.78, g: 0.66, b: 0.42, a: 1}
+    entranceSeconds: 2.8
+    particleCount: 10
+    battle: {fileID: 21300000, guid: 48bd199a44d948e7a60bc55122580341, type: 3}
+    item: {fileID: 21300000, guid: 56e3c723e80d42e4be504ff9ac50a114, type: 3}
+    stairs: {fileID: 21300000, guid: c2d27a7cc454435d8de90a8ab900416c, type: 3}
+    bossEntrance: {fileID: 21300000, guid: d413f728d46647c3958faa201df80976, type: 3}
+    bossBattle: {fileID: 21300000, guid: 48bd199a44d948e7a60bc55122580341, type: 3}
+    doorAtlas: {fileID: 2800000, guid: 5d70d790f46741f1b1ae63adef6d4ad6, type: 3}
+  - firstFloor: 100
+    lastFloor: 100
+    regionId: primordial-throne-arena
+    regionName: 태초의 제단
+    regionNumber: 10
+    playEntrance: 0
+    throneEffects: 1
+    replayDiscovered: 1
+    entranceMessage: 태초의 문이 열립니다
+    entranceTint: {r: 0.56, g: 0.73, b: 0.91, a: 1}
+    particleTint: {r: 0.78, g: 0.66, b: 0.42, a: 1}
+    entranceSeconds: 2.8
+    particleCount: 10
+    battle: {fileID: 21300000, guid: 0700182bdce143c7a6fe4741d53444b5, type: 3}
+    item: {fileID: 21300000, guid: 56e3c723e80d42e4be504ff9ac50a114, type: 3}
+    stairs: {fileID: 21300000, guid: c2d27a7cc454435d8de90a8ab900416c, type: 3}
+    bossEntrance: {fileID: 21300000, guid: d413f728d46647c3958faa201df80976, type: 3}
+    bossBattle: {fileID: 21300000, guid: 0700182bdce143c7a6fe4741d53444b5, type: 3}
+    doorAtlas: {fileID: 2800000, guid: 5d70d790f46741f1b1ae63adef6d4ad6, type: 3}

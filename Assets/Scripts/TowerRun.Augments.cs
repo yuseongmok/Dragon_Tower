@@ -31,14 +31,14 @@ namespace DragonTower
             return ((r&AugmentRequirement.Burn)==0||burn)&&((r&AugmentRequirement.Poison)==0||poison)&&((r&AugmentRequirement.Slow)==0||slow)&&((r&AugmentRequirement.Shield)==0||shield)&&((r&AugmentRequirement.HpCost)==0||hpCost)&&((r&AugmentRequirement.Critical)==0||crit)&&((r&AugmentRequirement.AnyStatus)==0||status);
         }
         float AugmentValue(AugmentMechanic mechanic)=>augmentData.Where(a=>a.mechanic==mechanic).Sum(a=>a.primaryValue);
-        SkillStats BuildAugmentedSkill(SkillStats selected,int itemSkillPercent,int affinityPassiveBonus,int itemSkillCooldown)
+        SkillStats BuildAugmentedSkill(SkillStats selected,int itemSkillPercent,int affinityPassiveBonus,int itemSkillCooldown,float passiveCooldown=0)
         {
             var skill=selected.Copy();
             float damageFactor=Math.Max(0,1+(SkillDamagePercent+itemSkillPercent+affinityPassiveBonus)/100f);
             skill.damage=Math.Max(1,(int)Math.Round(skill.damage*damageFactor));
             skill.attackEmpowerDamage=Math.Max(0,(int)Math.Round(skill.attackEmpowerDamage*damageFactor));
             skill.celestialExtraDamage=Math.Max(0,(int)Math.Round(skill.celestialExtraDamage*damageFactor));
-            int reduction=SkillCooldownPercent+itemSkillCooldown;
+            float reduction=SkillCooldownPercent+itemSkillCooldown+passiveCooldown;
             if(!skill.isSignature&&string.IsNullOrEmpty(skill.exclusiveDragonId))
             {
                 if(HasAugment(AugmentMechanic.DoubleCasting))reduction-=(int)augmentData.First(a=>a.mechanic==AugmentMechanic.DoubleCasting).secondaryValue;

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 namespace DragonTower
@@ -117,27 +117,30 @@ namespace DragonTower
             if(roll<92)return TowerRoomKind.Gold;
             return TowerRoomKind.Shop;
         }
-        public BattleStats BuildBattleStats(BattleStats source)
+        public BattleStats BuildBattleStats(BattleStats source,bool legacyBalance=false,int combatRulesVersion=CombatBalanceVersion.Current,int passiveImprintLevel=-1)
         {
             int evolutionStage=DragonData.EvolutionStage(Level);
+            if(passiveImprintLevel<0)passiveImprintLevel=combatRulesVersion>=4?Imprint.levels[0]:0;
             var selected=replacedSkill==null?source.skill:replacedSkill.Snapshot();
+            if(legacyBalance)selected=CombatBalanceVersion.LegacySkill(selected);
             int itemAttack=ItemEffect(ContentEffectType.AttackDamage),itemAttackPercent=ItemEffect(ContentEffectType.AttackDamagePercent);
             int itemSkillPercent=ItemEffect(ContentEffectType.SkillDamagePercent),itemSkillCooldown=ItemEffect(ContentEffectType.SkillCooldownPercent);
             int itemAttackCooldown=ItemEffect(ContentEffectType.AttackCooldownPercent),itemDodgeCooldown=ItemEffect(ContentEffectType.DodgeCooldownPercent);
             int itemDodgeDuration=ItemEffect(ContentEffectType.DodgeDurationPercent),itemCrit=ItemEffect(ContentEffectType.CriticalChancePercent);
             int itemCritDamage=ItemEffect(ContentEffectType.CriticalDamagePercent),itemReduction=ItemEffect(ContentEffectType.DamageReductionPercent);
-            int affinityPassiveBonus=(source.passiveMechanic==DragonPassiveMechanic.StormAffinity||source.passiveMechanic==DragonPassiveMechanic.FrozenBlade)?evolutionStage*10:0;
+            bool oldPassives=legacyBalance||combatRulesVersion<3;
+            int affinityPassiveBonus=oldPassives&&(source.passiveMechanic==DragonPassiveMechanic.StormAffinity||source.passiveMechanic==DragonPassiveMechanic.FrozenBlade)?evolutionStage*10:0;
             int rawAttack=Math.Max(1,(int)Math.Round(source.attackDamage*(definition==null?AttackEvolutionMultiplier(evolutionStage):definition.AttackMultiplier(evolutionStage))+AttackBonus+itemAttack));
-            return new BattleStats{baseAttackDamage=rawAttack,baseAttackCooldown=source.attackCooldown,baseSkillCooldown=selected.cooldown,attackDamageBonusPercent=AttackDamagePercent+itemAttackPercent,skillDamageBonusPercent=SkillDamagePercent+itemSkillPercent+affinityPassiveBonus,speciesId=source.speciesId,displayName=source.displayName,element=source.element,elementType=source.elementType,skillEffect=replacedSkill==null?source.skillEffect:replacedSkill.effectKind,maxHP=MaxHP,attackDamage=Math.Max(1,(int)Math.Round((source.attackDamage*(definition==null?AttackEvolutionMultiplier(evolutionStage):definition.AttackMultiplier(evolutionStage))+AttackBonus+itemAttack)*(1+(AttackDamagePercent+itemAttackPercent)/100f))),
+            return new BattleStats{basicImprintLevel=combatRulesVersion>=4?Imprint.levels[1]:0,skillImprintLevel=combatRulesVersion>=4?Imprint.levels[2]:0,legacyBalance=legacyBalance,combatRulesVersion=combatRulesVersion,passiveCooldownApplied=true,passiveImprintLevel=PassiveImprintRules.Clamp(passiveImprintLevel),passiveBaseMaxHP=(float)Math.Round(BaseMaxHP*(definition==null?HealthEvolutionMultiplier(evolutionStage):definition.HealthMultiplier(evolutionStage))),baseAttackDamage=rawAttack,baseAttackCooldown=source.attackCooldown,baseSkillCooldown=selected.cooldown,attackDamageBonusPercent=AttackDamagePercent+itemAttackPercent,skillDamageBonusPercent=SkillDamagePercent+itemSkillPercent+affinityPassiveBonus,speciesId=source.speciesId,displayName=source.displayName,element=source.element,elementType=source.elementType,skillEffect=replacedSkill==null?source.skillEffect:replacedSkill.effectKind,maxHP=MaxHP,attackDamage=Math.Max(1,(int)Math.Round((source.attackDamage*(definition==null?AttackEvolutionMultiplier(evolutionStage):definition.AttackMultiplier(evolutionStage))+AttackBonus+itemAttack)*(1+(AttackDamagePercent+itemAttackPercent)/100f))),
                 attackCooldown=ScaleTime(source.attackCooldown,AttackCooldownPercent+itemAttackCooldown,.08f),dodgeCooldown=ScaleTime(source.dodgeCooldown,DodgeCooldownPercent+itemDodgeCooldown,.2f),
                 dodgeDuration=Math.Max(.05f,source.dodgeDuration*(1+(DodgeDurationPercent+itemDodgeDuration)/100f)),criticalChance=Math.Max(0,source.criticalChance+(CriticalChancePercent+itemCrit)/100f),criticalDamage=Math.Max(1,source.criticalDamage+(CriticalDamagePercent+itemCritDamage)/100f),damageReductionPercent=Math.Max(0,Math.Min(80,DamageReductionPercent+itemReduction)),skillDisabled=SkillDisabled,augments=augmentData.Select(x=>x.Snapshot()).ToArray(),items=itemSlots.Where(x=>x.Item!=null&&x.Item.kind==ItemKind.Equipment).Select(x=>x.Item.Snapshot(x.Count)).ToArray(),
                 passiveName=source.passiveName,passiveDescription=source.passiveDescription,passiveMechanic=source.passiveMechanic,alternateSkillElement=source.alternateSkillElement,passiveAvailable=PassiveAvailable,passiveStage=evolutionStage,
-                skill=BuildAugmentedSkill(selected,itemSkillPercent,affinityPassiveBonus,itemSkillCooldown)};
+                skill=BuildAugmentedSkill(selected,itemSkillPercent,affinityPassiveBonus,itemSkillCooldown,!oldPassives&&source.passiveMechanic==DragonPassiveMechanic.HolyLight?PassiveImprintRules.CooldownReduction(passiveImprintLevel):0)};
         }
         public static float HealthEvolutionMultiplier(int stage)=>stage>=2?1.45f:stage>=1?1.20f:1f;
         public static float AttackEvolutionMultiplier(int stage)=>stage>=2?1.40f:stage>=1?1.18f:1f;
-        public static float PassiveEvolutionMultiplier(int stage)=>1+Math.Max(0,Math.Min(2,stage))*.25f;
-        static float ScaleTime(float value,int reductionPercent,float minimum)=>Math.Max(minimum,value*(1-Math.Min(60,reductionPercent)/100f));
+        public static float PassiveEvolutionMultiplier(int stage)=>1f; // New progression never scales passive coefficients by evolution.
+        static float ScaleTime(float value,float reductionPercent,float minimum)=>Math.Max(minimum,value*(1-Math.Min(60,reductionPercent)/100f));
         public void RecordBattleVictory(int remainingHP,int experienceGain=100)
         {
             CurrentHP=Math.Max(0,Math.Min(MaxHP,remainingHP));MonstersDefeated++;
@@ -251,7 +254,7 @@ namespace DragonTower
         void RecalculateMaxHP()
         {
             int previous=MaxHP;int itemFlat=ItemEffect(ContentEffectType.MaxHP),itemPercent=ItemEffect(ContentEffectType.MaxHPPercent);
-            MaxHP=Math.Max(1,(int)Math.Round((BaseMaxHP*(definition==null?HealthEvolutionMultiplier(DragonData.EvolutionStage(Level)):definition.HealthMultiplier(DragonData.EvolutionStage(Level)))+FlatMaxHPBonus+itemFlat)*(1+(MaxHPPercent+itemPercent)/100f)));
+            MaxHP=Math.Max(1,(int)Math.Round((BaseMaxHP*(1+Imprint.levels[3]*.02f)*(definition==null?HealthEvolutionMultiplier(DragonData.EvolutionStage(Level)):definition.HealthMultiplier(DragonData.EvolutionStage(Level)))+FlatMaxHPBonus+itemFlat)*(1+(MaxHPPercent+itemPercent)/100f)));
             if(MaxHP>previous)CurrentHP+=MaxHP-previous;else CurrentHP=Math.Min(CurrentHP,MaxHP);
         }
         public void AddAugment(string id,bool levelReward)

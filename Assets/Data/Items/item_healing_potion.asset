@@ -16,7 +16,7 @@ MonoBehaviour:
   displayName: "회복약"
   description: "사용 시 최대 HP의 20% 즉시 회복"
   rarity: 0
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 6edd3e421926e914893d3aece6faa52d, type: 3}
   grade: 0
   kind: 0
   mechanic: 12

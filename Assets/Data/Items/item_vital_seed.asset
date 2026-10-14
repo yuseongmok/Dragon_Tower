@@ -16,7 +16,7 @@ MonoBehaviour:
   displayName: "생명의 씨앗"
   description: "최대 HP 10% 증가."
   rarity: 0
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 8f2bebd30e7e6084a85ff5d751e123d6, type: 3}
   grade: 0
   kind: 1
   mechanic: 0

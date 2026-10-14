@@ -16,7 +16,7 @@ MonoBehaviour:
   displayName: "화염구"
   description: "일반공격 적중 시 화염구 발사. 공격력의 10% 추가 피해. 재사용 10초."
   rarity: 2
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: cc5bd8594a54e744e8a42f52bf2b88cb, type: 3}
   grade: 1
   kind: 1
   mechanic: 0

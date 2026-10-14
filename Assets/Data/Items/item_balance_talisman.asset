@@ -16,7 +16,7 @@ MonoBehaviour:
   displayName: "균형의 부적"
   description: "최대 HP·일반공격·스킬 피해 각각 8% 증가."
   rarity: 2
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 204d7ea8b5b36214080f97e63560dc4e, type: 3}
   grade: 1
   kind: 1
   mechanic: 0

@@ -16,7 +16,7 @@ MonoBehaviour:
   displayName: "단단한 갑옷"
   description: "최대 HP 20% 증가."
   rarity: 0
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 6534f0b8e97b44d43a205dfad75e3ed1, type: 3}
   grade: 0
   kind: 1
   mechanic: 0

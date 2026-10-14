@@ -40,6 +40,19 @@ namespace DragonTower
             }
             return result.ToArray();
         }
+        public ItemData[] PickShopItems(int seed)
+        {
+            ItemData healing=null;var pool=new List<ItemData>();
+            foreach(var item in items??Array.Empty<ItemData>())
+            {
+                if(item==null)continue;
+                if(item.StableId=="item_healing_potion")healing=item;
+                else pool.Add(item);
+            }
+            if(healing==null)throw new InvalidOperationException("상점 고정 상품인 회복약을 찾을 수 없습니다.");
+            var other=PickWeightedItem(pool,new System.Random(seed));
+            return other==null?new[]{healing}:new[]{healing,other};
+        }
         public static int ItemGradeWeight(ItemGrade grade)
         {switch(grade){case ItemGrade.Rare:return 30;case ItemGrade.Epic:return 12;case ItemGrade.Unique:return 3;case ItemGrade.Legendary:return 1;default:return 55;}}
         public static ItemData PickWeightedItem(IReadOnlyList<ItemData> candidates,System.Random random)

@@ -43,7 +43,7 @@ MonoBehaviour:
   genesisPresentation: 0
   attackEmpowerDuration: 5
   attackEmpowerDelay: 0.24
-  attackEmpowerDamage: 48
+  attackEmpowerDamage: 24
   chargedBeam: 0
   chargeDuration: 5
   beamIgnitionDelay: 0.18

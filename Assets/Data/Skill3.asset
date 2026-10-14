@@ -66,7 +66,7 @@ MonoBehaviour:
   icePresentation: 0
   iceKind: 0
   statusOnHit: 0
-  battleVfx: {fileID: 2470284903044977092, guid: f0dc881e8af566c49b61e96aa3ea0ae7, type: 3}
+  battleVfx: {fileID: 0}
   vfxScale: 0.45
   vfxOffset: {x: 0, y: -55}
   vfxEuler: {x: 0, y: 0, z: 0}

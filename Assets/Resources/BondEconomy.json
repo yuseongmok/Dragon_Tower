@@ -1,0 +1,1 @@
+{"costs":[50,75,100,140,190,250,330,430,550,700],"successPercent":[100,95,90,85,80,75,70,65,60,55],"normalRewards":[5,7,9,11,13,15,17,19],"bossRewards":[30,40,50,60,70,80,90,100],"redistributionCost":200,"pityStart":2,"pityStep":10,"guaranteedFailures":5,"rerollCost":120}

@@ -16,7 +16,7 @@ MonoBehaviour:
   displayName: "시간의 톱니"
   description: "일반공격과 스킬 쿨타임 12% 감소."
   rarity: 5
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: d46cb03b03a1961468d50872d3c939c6, type: 3}
   grade: 3
   kind: 1
   mechanic: 0

@@ -13,11 +13,25 @@ MonoBehaviour:
   m_Name: skill_volcanic_meteor
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
   skillId: skill_volcanic_meteor
+  hydraPresentation: 0
+  poisonAccelerationDuration: 0
+  poisonIntervalFactor: 1
+  eclipsePresentation: 0
+  castLockDuration: 0
+  cooldownRecastMaxHpPercent: 0
+  persistentAttack: {fileID: 0}
   displayName: "\uC720\uC131 \uD654\uC0B0"
   description: "\uC5E0\uBC84 \uC804\uC6A9 \xB7 \uC720\uC131 \uD3ED\uACA9\uACFC \uD654\uC0B0
     \uBD84\uD654. \uCD5C\uC885 \uC801\uC911 \uD6C4 5\uCD08 \uD655\uC815 \uD654\uC0C1,
     \uD604\uC7AC \uC801\uC5D0\uAC8C \uCE58\uBA85\uD0C0 \uD655\uB960 +50%p."
   elementType: 2
+  celestialSignature: 0
+  celestialExtraDamage: 42
+  timeDomain: 0
+  timeDomainDelay: 0.24
+  timeDomainDuration: 5
+  useSecondaryElement: 0
+  secondaryElement: 0
   effectKind: 0
   icon: {fileID: -8557489305587580150, guid: d7f5e1bbe695ebb4ca88bb66dbf422ca, type: 3}
   rarity: 4
@@ -26,6 +40,17 @@ MonoBehaviour:
   lunarPresentation: 0
   solarPresentation: 0
   volcanicPresentation: 1
+  genesisPresentation: 0
+  attackEmpowerDuration: 0
+  attackEmpowerDelay: 0
+  attackEmpowerDamage: 0
+  chargedBeam: 0
+  chargeDuration: 5
+  beamIgnitionDelay: 0.18
+  beamDuration: 5
+  protectedCastDelay: 0
+  completionDefenseDuration: 0
+  completionDefensePercent: 0
   statusOnFinalHit: 1
   targetCriticalBonus: 50
   targetCriticalDuration: 5

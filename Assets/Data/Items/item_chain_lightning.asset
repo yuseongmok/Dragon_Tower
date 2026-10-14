@@ -16,7 +16,7 @@ MonoBehaviour:
   displayName: "연쇄 번개"
   description: "일반공격 적중 시 일반공격 피해의 25% 번개 추가타 3회. 재사용 12초."
   rarity: 2
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: baec65a6e0495e24694c9791dc5a0ddd, type: 3}
   grade: 1
   kind: 1
   mechanic: 0

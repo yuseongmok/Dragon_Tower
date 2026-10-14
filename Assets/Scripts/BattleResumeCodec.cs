@@ -27,7 +27,7 @@ namespace DragonTower
                 }
                 return new BattleResumeData
                 {
-                    initialRunJson = source.initialRunJson, seed = source.seed,
+                    combatBalanceVersion = source.combatBalanceVersion, passiveImprintLevel=source.passiveImprintLevel, initialRunJson = source.initialRunJson, seed = source.seed,
                     enemy = source.enemy, monsterId = source.monsterId,
                     packedInputs = Convert.ToBase64String(buffer.ToArray())
                 };
@@ -39,7 +39,7 @@ namespace DragonTower
             if (string.IsNullOrEmpty(saved.packedInputs)) return saved;
             var restored = new BattleResumeData
             {
-                initialRunJson = saved.initialRunJson, seed = saved.seed,
+                combatBalanceVersion = saved.combatBalanceVersion, passiveImprintLevel=saved.passiveImprintLevel, initialRunJson = saved.initialRunJson, seed = saved.seed,
                 enemy = saved.enemy, monsterId = saved.monsterId
             };
             using (var buffer = new MemoryStream(Convert.FromBase64String(saved.packedInputs)))

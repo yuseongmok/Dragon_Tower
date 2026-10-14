@@ -7,10 +7,37 @@ namespace DragonTower
         public Color edge=new Color(.28f,.49f,.45f);
         public bool prominent;
         public bool outlineOnly;
+        public bool minimal;
         [Range(0,1)] public float progress=1;
         protected override void OnPopulateMesh(VertexHelper vh)
         {
             vh.Clear();var r=rectTransform.rect;float l=r.xMin,b=r.yMin,w=r.width,h=r.height;
+            if(minimal)
+            {
+                var ink=new Color(.025f,.045f,.065f,.94f);
+                var face=new Color(.065f,.09f,.11f,.91f);
+                var lip=Color.Lerp(edge,new Color(.89f,.81f,.65f),.35f);
+                if(prominent)
+                {
+                    float radius=Mathf.Min(w,h)*.5f;const float pixel=2;
+                    for(float y=-radius;y<radius;y+=pixel)for(float x=-radius;x<radius;x+=pixel)
+                    {
+                        var p=new Vector2(x+1,y+1);float d=p.magnitude;if(d>radius-1)continue;
+                        float angle=Mathf.Repeat(Mathf.Atan2(p.x,p.y)/(2*Mathf.PI),1);
+                        var tint=d>radius-3?(angle<=progress?lip:ink):d>radius-5?ink:d>radius-7?edge:d>radius-10?ink:face;
+                        Box(vh,r.center.x+x,r.center.y+y,pixel,pixel,tint);
+                    }
+                }
+                else
+                {
+                    if(!outlineOnly)Box(vh,l+1,b+1,w-2,h-2,face);
+                    Box(vh,l+2,b,w-4,1,ink);Box(vh,l+2,b+h-1,w-4,1,lip);
+                    Box(vh,l,b+2,1,h-4,lip);Box(vh,l+w-1,b+2,1,h-4,edge);
+                    Box(vh,l+1,b+1,w-2,1,edge);
+                    foreach(float x in new[]{l+1,l+w-3})foreach(float y in new[]{b+1,b+h-3})Box(vh,x,y,2,2,lip);
+                }
+                return;
+            }
             var bright=Color.Lerp(edge,Color.white,.35f);
             var fill=Color.Lerp(color,new Color(.22f,.23f,.25f,color.a),.8f);
             var shadow=Color.Lerp(edge,new Color(.01f,.035f,.055f),.72f);

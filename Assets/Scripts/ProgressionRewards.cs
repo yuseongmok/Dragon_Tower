@@ -52,8 +52,10 @@ namespace DragonTower {
    return earned;
   }
   void CommitProgress(PlayerProfile next,TowerRun run,TowerRunSave snapshot,List<AchievementDefinition> earned){
+   int bondEarned=ApplyBondReward(next,snapshot);
    OfflineRecords.ApplyFinished(next,snapshot.progress);
    store.Save(next);Profile=next;run.Progress=JsonUtility.FromJson<RunProgressRecord>(JsonUtility.ToJson(snapshot.progress));
+   if(bondEarned>0)try{BondPointsEarned?.Invoke(bondEarned);}catch(Exception e){Debug.LogException(e);}
    foreach(var a in earned)try{AchievementUnlocked?.Invoke(a);}catch(Exception e){Debug.LogException(e);}
   }
  }

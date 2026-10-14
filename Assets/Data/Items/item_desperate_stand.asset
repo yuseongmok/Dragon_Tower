@@ -16,7 +16,7 @@ MonoBehaviour:
   displayName: "배수의 진"
   description: "HP 30% 미만에서 일반공격 적중 시 일반공격 피해의 180% 암흑 피해. 재사용 8초."
   rarity: 5
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 73337b3f91fb1f6499e4d46a80b9bfc7, type: 3}
   grade: 3
   kind: 1
   mechanic: 0

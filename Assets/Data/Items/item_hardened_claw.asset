@@ -16,7 +16,7 @@ MonoBehaviour:
   displayName: "단단한 발톱"
   description: "일반공격 피해 10% 증가."
   rarity: 0
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: d74cdda2e7bcc9f47a10d45d0b511aa6, type: 3}
   grade: 0
   kind: 1
   mechanic: 0

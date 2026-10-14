@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.ItemData
   contentId: item_ground_fissure
   displayName: "대지 균열"
-  description: "공격 회피 성공 시 스킬 피해의 80% 대지 피해. 재사용 12초."
+  description: "공격 회피 성공 시 공격력의 160% 대지 피해. 재사용 12초."
   rarity: 2
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 7fef119b443a9b74da43932884bc8c56, type: 3}
   grade: 1
   kind: 1
   mechanic: 0

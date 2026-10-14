@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: skill_eclipse
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
   skillId: skill_eclipse
+  hydraPresentation: 0
+  poisonAccelerationDuration: 0
+  poisonIntervalFactor: 1
   eclipsePresentation: 1
   castLockDuration: 4.25
   cooldownRecastMaxHpPercent: 10

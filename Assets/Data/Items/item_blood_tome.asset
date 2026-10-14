@@ -16,7 +16,7 @@ MonoBehaviour:
   displayName: "혈투의 서"
   description: "스킬 적중 시 최대 HP의 3% 회복. 재사용 20초."
   rarity: 5
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 0b97aa5bc8f669740a2c402e44415480, type: 3}
   grade: 3
   kind: 1
   mechanic: 0

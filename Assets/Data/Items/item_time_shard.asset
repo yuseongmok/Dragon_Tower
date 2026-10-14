@@ -16,7 +16,7 @@ MonoBehaviour:
   displayName: "시공의 파편"
   description: "사용 시 1초간 모든 피해에 무적"
   rarity: 3
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 1934ac44511b10545a4e6582a023c92b, type: 3}
   grade: 2
   kind: 0
   mechanic: 1

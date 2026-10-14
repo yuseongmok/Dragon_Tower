@@ -16,7 +16,7 @@ MonoBehaviour:
   displayName: "피의 물약"
   description: "최대 HP의 25%를 회복하고 6초간 일반 공격 피해 25% 증가"
   rarity: 2
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 17c6ad0b6aa7dee4ab4455bd23c7d0fa, type: 3}
   grade: 1
   kind: 0
   mechanic: 20

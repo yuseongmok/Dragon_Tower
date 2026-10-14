@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.ItemData
   contentId: item_stun_gun
   displayName: "전기충격기"
-  description: "사용 시 적의 행동을 5초간 봉쇄"
+  description: "사용 시 적에게 5초간 마비 부여: 적 공격이 20% 확률로 실패합니다."
   rarity: 3
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 20b8dcd89f4b2dc46b092f69fb67c108, type: 3}
   grade: 2
   kind: 0
   mechanic: 11

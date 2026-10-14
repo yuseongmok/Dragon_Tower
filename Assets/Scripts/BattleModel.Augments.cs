@@ -21,7 +21,8 @@ namespace DragonTower
         AugmentCast activeAugmentCast,persistentAugmentCast;
         int augmentCastSerial,frostStacks,alternatingLast;
         double frostReady,lastBasicAt=-100,steadyHealAt=5,refundWindow,lifestealWindow;
-        float refundedSeconds,lifestealUsed,costSpent,costRefunded;
+        float refundedSeconds,refundedThisCast,lifestealUsed,costSpent,costRefunded;
+        double lastSkillCastAt=-100;
         bool basicResolving,firstBasicUsed,basicForceCritical,basicReversal,basicDestiny,signatureStatusApplication;
         float basicBonus,basicCritBonus,basicCritDamage;
         int basicCriticalDamage,basicActualDamage;
@@ -87,13 +88,14 @@ namespace DragonTower
             get
             {
                 float p=Param(AugmentMechanic.ManaRampage)+(SignatureSkill?0:Param(AugmentMechanic.Vampire));
-                if(Time<SkillReady&&Dragon.passiveMechanic==DragonPassiveMechanic.VoidAccelerator)p+=Dragon.skill.cooldownRecastMaxHpPercent>0?Dragon.skill.cooldownRecastMaxHpPercent:Math.Max(6,10-Dragon.passiveStage*2);
+                if(Time<SkillReady&&Dragon.passiveMechanic==DragonPassiveMechanic.VoidAccelerator)p+=NewPassives?PassiveImprintRules.OvercastCost(PassiveLevel):Dragon.skill.cooldownRecastMaxHpPercent>0?Dragon.skill.cooldownRecastMaxHpPercent:Math.Max(6,10-Dragon.passiveStage*2);
                 return PercentHP(p);
             }
         }
         bool CanAffordAugmentSkill=>PlayerHP>AugmentSkillCost;
         void BeginAugmentCast()
         {
+            lastSkillCastAt=Time;refundedThisCast=0;
             if(activeAugmentCast!=null&&!activeAugmentCast.completed&&activeAugmentCast!=persistentAugmentCast)activeAugmentCast.cancelled=true;
             var c=new AugmentCast{serial=++augmentCastSerial,cost=AugmentSkillCost};
             activeAugmentCast=c;augmentCasts.Add(c);
@@ -123,6 +125,7 @@ namespace DragonTower
         void CancelAugmentCast(){if(activeAugmentCast!=null&&!activeAugmentCast.completed)activeAugmentCast.cancelled=true;}
         void NotifyAugmentCastStarted()
         {
+            if(NewPassives)return;
             if(Dragon.passiveMechanic==DragonPassiveMechanic.JetStream){passiveRapidUntil=Time+Passive(1);AttackReady=Time+Math.Max(0,AttackReady-Time)*.5;}
             if(Dragon.passiveMechanic==DragonPassiveMechanic.IronArmor&&ShieldHP<=0)AddWard("iron",PercentHP(Passive(5)),double.MaxValue);
             TriggerAttackStatus();
@@ -141,12 +144,12 @@ namespace DragonTower
         }
         void NotifyAugmentSkillHit(int damage,bool critical)
         {
-            var c=activeAugmentCast;if(c==null||c.cancelled||damage<=0)return;c.damage+=damage;c.hits++;
+            var c=activeAugmentCast;if(c==null||c.cancelled||damage<=0)return;NewPassiveSkillHit(damage);c.damage+=damage;c.hits++;
             if(c.hits==1)
             {
                 if(Has(AugmentMechanic.AbsoluteFrost)&&EnemySlowStacks>=5&&Ready(AugmentMechanic.AbsoluteFrost))
                 {c.slowConsumed=true;frostStacks=0;State(AugmentMechanic.AbsoluteFrost).ready=Time+Rule(AugmentMechanic.AbsoluteFrost).internalCooldown;AugmentExtra(BaseAttack,Param(AugmentMechanic.AbsoluteFrost),ElementType.Ice);}
-                var burn=Rule(AugmentMechanic.FlameRemnant);if(burn!=null)ApplyBurn(burn.duration,Math.Max(1,(int)Math.Round(BaseAttack*burn.primaryValue/100f)));
+                var burn=Rule(AugmentMechanic.FlameRemnant);if(burn!=null)ApplyBurn(burn.duration,Math.Max(1,(int)Math.Round(BaseAttack*burn.primaryValue/100f)),"augment:flame");
                 var slow=Rule(AugmentMechanic.IceCream);if(slow!=null&&Roll(slow.chancePercent))ApplySlow(slow.duration,slow.primaryValue);
                 var para=Rule(AugmentMechanic.Tingly);if(para!=null&&Roll(para.chancePercent))ApplyParalyze(para.duration);
             }
@@ -273,8 +276,17 @@ namespace DragonTower
         {
             if(Time>=refundWindow+1){refundWindow=Time;refundedSeconds=0;}
             float baseCd=Dragon.baseSkillCooldown>0?Dragon.baseSkillCooldown:Dragon.skill.cooldown;
-            float allow=Math.Min(Math.Max(0,amount),Math.Max(0,baseCd*.2f-refundedSeconds));
-            float used=(float)Math.Min(allow,Math.Max(0,SkillReady-Time));SkillReady-=used;refundedSeconds+=used;
+            if(Dragon.legacyBalance){
+                float oldAllow=Math.Min(Math.Max(0,amount),Math.Max(0,baseCd*.2f-refundedSeconds));
+                float oldUsed=(float)Math.Min(oldAllow,Math.Max(0,SkillReady-Time));SkillReady-=oldUsed;refundedSeconds+=oldUsed;return;
+            }
+            // Shared by augments and automatic equipment. Static CDR stays capped at 60%.
+            // A cast can refund at most 10% of base CD; at most 1 second per window.
+            float budget=Math.Max(0,baseCd*.1f);
+            float allow=Math.Min(Math.Max(0,amount),Math.Min(Math.Max(0,Math.Min(1,budget)-refundedSeconds),Math.Max(0,budget-refundedThisCast)));
+            double earliest=Math.Max(Time,lastSkillCastAt+baseCd*.3f);
+            float used=(float)Math.Min(allow,Math.Max(0,SkillReady-earliest));
+            SkillReady-=used;refundedSeconds+=used;refundedThisCast+=used;
         }
         public void CancelAugmentEffects()
         {augmentStates.Clear();augmentWards.Clear();augmentEchoes.Clear();augmentCasts.Clear();activeAugmentCast=persistentAugmentCast=null;frostStacks=0;basicResolving=false;}

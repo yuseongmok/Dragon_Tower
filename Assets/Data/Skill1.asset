@@ -33,7 +33,7 @@ MonoBehaviour:
   vfxEuler: {x: 0, y: 0, z: 0}
   vfxDuration: 1.4
   vfxSystemLimit: 10
-  damage: 52
+  damage: 20
   cooldown: 5.5
   hitCount: 3
   hitInterval: 0.11

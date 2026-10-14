@@ -16,7 +16,7 @@ MonoBehaviour:
   displayName: "가벼운 장화"
   description: "회피 쿨타임 10% 감소."
   rarity: 0
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: d53dac2045ce1c5448a5c3d1ddb519bd, type: 3}
   grade: 0
   kind: 1
   mechanic: 0

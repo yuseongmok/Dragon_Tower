@@ -16,7 +16,7 @@ MonoBehaviour:
   displayName: "돌멩이 부적"
   description: "일반공격 적중 시 일반공격 피해의 5% 추가 속성 피해. 재사용 12초."
   rarity: 0
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: d29d445f75d57e44b8770ac8ad574785, type: 3}
   grade: 0
   kind: 1
   mechanic: 0

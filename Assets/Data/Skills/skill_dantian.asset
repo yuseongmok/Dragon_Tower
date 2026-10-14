@@ -13,17 +13,60 @@ MonoBehaviour:
   m_Name: skill_dantian
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
   skillId: skill_dantian
+  hydraPresentation: 0
+  poisonAccelerationDuration: 0
+  poisonIntervalFactor: 1
+  eclipsePresentation: 0
+  castLockDuration: 0
+  cooldownRecastMaxHpPercent: 0
+  persistentAttack: {fileID: 0}
   displayName: "\uB2E8\uCC9C"
   description: "\uC81C\uD53C\uB974 \uC804\uC6A9 \xB7 \uACF5\uAC04 \uC808\uB2E8 \uD6C4
     \uD3ED\uBC1C \xB7 \uC5F0\uCD9C \uC911 \uBB34\uC801"
   elementType: 4
+  celestialSignature: 0
+  celestialExtraDamage: 42
+  timeDomain: 0
+  timeDomainDelay: 0.24
+  timeDomainDuration: 5
+  useSecondaryElement: 0
+  secondaryElement: 0
   effectKind: 2
   icon: {fileID: 5372653320162380514, guid: dd5db9bf166cabe4d8384956b5154a10, type: 3}
   rarity: 4
   exclusiveDragonId: zephyr
+  wispPresentation: 0
+  lunarPresentation: 0
+  solarPresentation: 0
+  volcanicPresentation: 0
+  genesisPresentation: 0
+  attackEmpowerDuration: 0
+  attackEmpowerDelay: 0
+  attackEmpowerDamage: 0
+  chargedBeam: 0
+  chargeDuration: 5
+  beamIgnitionDelay: 0.18
+  beamDuration: 5
+  protectedCastDelay: 0
+  completionDefenseDuration: 0
+  completionDefensePercent: 0
+  statusOnFinalHit: 0
+  targetCriticalBonus: 0
+  targetCriticalDuration: 0
+  hitTimeOffsets: []
+  completionHealPercent: 0
+  completionHealDelay: 0.22
+  slowBonusDamagePercent: 0
+  slowBonusDelay: 0.16
+  dodgeFreeCastDuration: 0
+  dodgeFreeAfterDuration: 0
+  finalHitDamageMultiplier: 1
   rewardEligibilityPercent: 0.5
   protectedCastDuration: 1.3
   initialHitDelay: 0.45
+  icePresentation: 0
+  iceKind: 0
+  statusOnHit: 0
   battleVfx: {fileID: 0}
   vfxScale: 0.65
   vfxOffset: {x: 0, y: 0}

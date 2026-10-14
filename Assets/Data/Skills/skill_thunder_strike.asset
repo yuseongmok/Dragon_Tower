@@ -21,7 +21,7 @@ MonoBehaviour:
   cooldownRecastMaxHpPercent: 0
   persistentAttack: {fileID: 0}
   displayName: "\uB1CC\uACA9"
-  description: "24 \uD53C\uD574\uB97C 4\uD68C \xB7 Paralyze 55%"
+  description: "15 \uD53C\uD574\uB97C 4\uD68C \xB7 Paralyze 55%"
   elementType: 6
   celestialSignature: 0
   celestialExtraDamage: 42
@@ -66,14 +66,14 @@ MonoBehaviour:
   icePresentation: 0
   iceKind: 0
   statusOnHit: 0
-  battleVfx: {fileID: 6702296993860459083, guid: 79af4417bd6d595409cc4b5e1343ab83, type: 3}
+  battleVfx: {fileID: 0}
   vfxScale: 0.55
   vfxOffset: {x: 0, y: 0}
   vfxEuler: {x: 0, y: 0, z: 0}
   vfxDuration: 1.6
   vfxSystemLimit: 14
-  damage: 24
-  cooldown: 9
+  damage: 15
+  cooldown: 6
   hitCount: 4
   hitInterval: 0.18
   statusEffect: 2

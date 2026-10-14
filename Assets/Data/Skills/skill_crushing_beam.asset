@@ -13,6 +13,13 @@ MonoBehaviour:
   m_Name: skill_crushing_beam
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
   skillId: skill_crushing_beam
+  hydraPresentation: 0
+  poisonAccelerationDuration: 0
+  poisonIntervalFactor: 1
+  eclipsePresentation: 0
+  castLockDuration: 0
+  cooldownRecastMaxHpPercent: 0
+  persistentAttack: {fileID: 0}
   displayName: "\uBD84\uC1C4\uAD11\uC120"
   description: "\uD2F0\uD0C4 \uC804\uC6A9 \xB7 \uACF5\uACA9\uACFC \uD68C\uD53C\uB97C
     \uC720\uC9C0\uD558\uBA70 5\uCD08\uAC04 \uBB34\uD53C\uACA9 \uCDA9\uC804. \uC2E4\uC81C
@@ -21,6 +28,13 @@ MonoBehaviour:
     \uB3D9\uC548 \uBB34\uC801 \uAD11\uC120\uC744 \uBC1C\uC0AC\uD558\uACE0 \uB300\uD3ED\uBC1C\uB85C
     \uB9C8\uBB34\uB9AC\uD569\uB2C8\uB2E4."
   elementType: 5
+  celestialSignature: 0
+  celestialExtraDamage: 42
+  timeDomain: 0
+  timeDomainDelay: 0.24
+  timeDomainDuration: 5
+  useSecondaryElement: 0
+  secondaryElement: 0
   effectKind: 3
   icon: {fileID: -2046163835631259418, guid: e8ecca9005eb3684ca52fd70a14c16ea, type: 3}
   rarity: 4
@@ -30,6 +44,9 @@ MonoBehaviour:
   solarPresentation: 0
   volcanicPresentation: 0
   genesisPresentation: 0
+  attackEmpowerDuration: 0
+  attackEmpowerDelay: 0
+  attackEmpowerDamage: 0
   chargedBeam: 1
   chargeDuration: 5
   beamIgnitionDelay: 0.18
@@ -47,7 +64,7 @@ MonoBehaviour:
   slowBonusDelay: 0.16
   dodgeFreeCastDuration: 0
   dodgeFreeAfterDuration: 0
-  finalHitDamageMultiplier: 10
+  finalHitDamageMultiplier: 6
   rewardEligibilityPercent: 100
   protectedCastDuration: 0
   initialHitDelay: 0
@@ -60,7 +77,7 @@ MonoBehaviour:
   vfxEuler: {x: 0, y: 0, z: 0}
   vfxDuration: 11.8
   vfxSystemLimit: 14
-  damage: 80
+  damage: 24
   cooldown: 24
   hitCount: 21
   hitInterval: 0.25

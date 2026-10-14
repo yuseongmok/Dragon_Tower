@@ -13,6 +13,13 @@ MonoBehaviour:
   m_Name: skill_genesis
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
   skillId: skill_genesis
+  hydraPresentation: 0
+  poisonAccelerationDuration: 0
+  poisonIntervalFactor: 1
+  eclipsePresentation: 0
+  castLockDuration: 0
+  cooldownRecastMaxHpPercent: 0
+  persistentAttack: {fileID: 0}
   displayName: "\uCC9C\uC9C0\uAC1C\uBCBD"
   description: "\uBE14\uB79C\uB514 \uC804\uC6A9 \xB7 \uC9C0\uD558\uB85C \uC7A0\uC785\uD574
     \uAC70\uB300\uD55C \uC0B0\uB9E5\uC744 \uBD84\uCD9C\uC2DC\uD0B5\uB2C8\uB2E4. \uC7A0\uC785
@@ -20,6 +27,13 @@ MonoBehaviour:
     \uBCF5\uADC0 \uD6C4 5\uCD08 \uB3D9\uC548 \uBC1B\uB294 \uCD5C\uC885 \uD53C\uD574
     50% \uAC10\uC18C."
   elementType: 5
+  celestialSignature: 0
+  celestialExtraDamage: 42
+  timeDomain: 0
+  timeDomainDelay: 0.24
+  timeDomainDuration: 5
+  useSecondaryElement: 0
+  secondaryElement: 0
   effectKind: 3
   icon: {fileID: 2937712580021560020, guid: 8a607d1885a25534b9164758e78bfabd, type: 3}
   rarity: 4
@@ -29,6 +43,13 @@ MonoBehaviour:
   solarPresentation: 0
   volcanicPresentation: 0
   genesisPresentation: 1
+  attackEmpowerDuration: 0
+  attackEmpowerDelay: 0
+  attackEmpowerDamage: 0
+  chargedBeam: 0
+  chargeDuration: 5
+  beamIgnitionDelay: 0.18
+  beamDuration: 5
   protectedCastDelay: 0.3
   completionDefenseDuration: 5
   completionDefensePercent: 50

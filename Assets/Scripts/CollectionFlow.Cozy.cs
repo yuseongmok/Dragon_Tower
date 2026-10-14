@@ -13,7 +13,7 @@ namespace DragonTower {
    foreach(var b in buttons){if(b==DragonButton||b.name=="Selected dragon")continue;string title=b.name;
     if(b==TowerButton||title=="첫 드래곤 부화"){GuideButton(b,"primary",0,624,390,65,title,"tower",true,27);}
     else if(title=="드래곤 도감")GuideButton(b,"secondary",Session.Selected==null?0:-100,691,Session.Selected==null?380:188,49,title,"book",true,22);
-    else if(title=="드래곤 상태")GuideButton(b,"secondary",100,691,188,49,title,"dragon",true,22);
+    else if(title=="드래곤 강화")GuideButton(b,"secondary",100,691,188,49,title,"dragon",true,22);
     else if(title=="업적 · 도전 기록")GuideButton(b,"secondary",0,748,344,49,title,"trophy",true,23);
     else if(title=="닉네임 설정"||title.StartsWith("플레이어 · "))GuideButton(b,"secondary",166,141,116,34,string.IsNullOrEmpty(Session.Profile.playerName)?"닉네임 설정":Session.Profile.playerName,"person",false,13,true);
     else if(title.StartsWith("보관 알"))GuideButton(b,"secondary",165,181,113,28,title,null,false,12);

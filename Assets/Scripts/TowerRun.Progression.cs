@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 namespace DragonTower {
  public enum FloorPhase { Choosing, RoomEvent, CombatPending, CombatActive, BattleRewards, Complete, Ended, PostBattleShop }
  [Serializable] public sealed class BattleInputRecord { public int action;public float delta;public string itemId; }
- [Serializable] public sealed class BattleResumeData {public string initialRunJson;public int seed;public BattleEnemyStats enemy;public string monsterId;public string packedInputs;public List<BattleInputRecord> inputs=new List<BattleInputRecord>();}
+ [Serializable] public sealed class BattleResumeData {public int combatBalanceVersion;public int passiveImprintLevel;public string initialRunJson;public int seed;public BattleEnemyStats enemy;public string monsterId;public string packedInputs;public List<BattleInputRecord> inputs=new List<BattleInputRecord>();}
  [Serializable] public sealed class RunResultRecord { public string instanceId;public int floor,level,monsters;public bool cleared;public RunProgressRecord progress; }
  public sealed partial class TowerRun {
   public FloorPhase Phase {get;private set;}
@@ -41,7 +41,7 @@ namespace DragonTower {
   }
   public bool CompleteFloorCombat(int hp,FloorProgressionConfig config,int shopRoll=100){
    if(Phase!=FloorPhase.CombatActive||BattleExperienceClaimed)return false;
-   BattleExperienceClaimed=true;LastBattleGold=Math.Max(0,Room==TowerRoomKind.Boss?config.bossKillGold:config.normalKillGold);AddGold(LastBattleGold);PostBattleShopPending=Room==TowerRoomKind.Monster&&shopRoll<config.monsterShopChance;if(Room==TowerRoomKind.Boss)BossesDefeated++;RecordBattleVictory(hp,(int)Math.Round(config.baseBattleExperience*BattleExperiencePercent/100f));RecalculateMaxHP();Phase=FloorPhase.BattleRewards;BattleResume=null;return true;
+   BattleExperienceClaimed=true;BondKills.Add(new BondKillReward{floor=Floor,boss=Room==TowerRoomKind.Boss});LastBattleGold=Math.Max(0,Room==TowerRoomKind.Boss?config.bossKillGold:config.normalKillGold);AddGold(LastBattleGold);PostBattleShopPending=Room==TowerRoomKind.Monster&&shopRoll<config.monsterShopChance;if(Room==TowerRoomKind.Boss)BossesDefeated++;RecordBattleVictory(hp,(int)Math.Round(config.baseBattleExperience*BattleExperiencePercent/100f));RecalculateMaxHP();Phase=FloorPhase.BattleRewards;BattleResume=null;return true;
   }
   public void DecideDrop(string id){if(DropDecided)return;DropDecided=true;PendingDropId=id;}
   public void ConsumeDrop(){PendingDropId=null;}

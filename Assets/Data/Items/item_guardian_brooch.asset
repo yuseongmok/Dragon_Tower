@@ -16,7 +16,7 @@ MonoBehaviour:
   displayName: "수호석"
   description: "피격 시 해당 공격의 최종 피해 12% 감소. 재사용 15초."
   rarity: 0
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: b7f8354852b0bdf4b9ee235214e9c590, type: 3}
   grade: 0
   kind: 1
   mechanic: 0

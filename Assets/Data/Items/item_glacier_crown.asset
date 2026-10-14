@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.ItemData
   contentId: item_glacier_crown
   displayName: "빙하왕관"
-  description: "추가 공격은 발동 조건 충족 2초 후 시작. 스킬 적중 시 스킬 피해의 70% 얼음 추가타 4회 및 4초간 30% 둔화. 재사용 22초."
+  description: "추가 공격은 발동 조건 충족 2초 후 시작. 스킬 적중 시 공격력의 140% 얼음 추가타 4회 및 4초간 30% 둔화. 재사용 22초."
   rarity: 4
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: dcd1f3c20a90d9c4085c9d866469983d, type: 3}
   grade: 4
   kind: 1
   mechanic: 0

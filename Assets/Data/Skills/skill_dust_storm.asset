@@ -20,7 +20,7 @@ MonoBehaviour:
   castLockDuration: 0
   cooldownRecastMaxHpPercent: 0
   persistentAttack: {fileID: 0}
-  displayName: "\uBAA8\uB798\uD3ED\uD48D"
+  displayName: "\uAC15\uCCA0 \uD074\uB85C"
   description: "13 \uD53C\uD574\uB97C 4\uD68C \xB7 Slow 35%"
   elementType: 5
   celestialSignature: 0
@@ -66,7 +66,7 @@ MonoBehaviour:
   icePresentation: 0
   iceKind: 0
   statusOnHit: 0
-  battleVfx: {fileID: 1578780317956153704, guid: 61757c9eb8f1b4247b48469c13360cc2, type: 3}
+  battleVfx: {fileID: 0}
   vfxScale: 0.5
   vfxOffset: {x: 0, y: 0}
   vfxEuler: {x: 0, y: 0, z: 0}

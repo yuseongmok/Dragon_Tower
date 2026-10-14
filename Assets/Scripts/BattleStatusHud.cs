@@ -7,8 +7,8 @@ namespace DragonTower
     public sealed class BattleStatusHud : MonoBehaviour
     {
         sealed class Badge { public RectTransform rect; public Image panel; public Text text; public BattleStatusIcon icon; public bool active; public double appeared; public int kind=-1; }
-        RectTransform root; readonly Badge[] enemies=new Badge[5],players=new Badge[7];
-        static readonly Color[] Colors={new Color(1,.40f,.16f),new Color(1,.85f,.20f),new Color(.35f,.87f,1),new Color(.86f,.57f,1),new Color(.55f,1,.32f),new Color(1,.35f,.46f),new Color(.90f,.65f,1),new Color(1,.65f,.45f)};
+        RectTransform root; readonly Badge[] enemies=new Badge[5],players=new Badge[8];
+        static readonly Color[] Colors={new Color(1,.40f,.16f),new Color(1,.85f,.20f),new Color(.35f,.87f,1),new Color(.86f,.57f,1),new Color(.55f,1,.32f),new Color(1,.35f,.46f),new Color(.90f,.65f,1),new Color(1,.65f,.45f),WindVFXStyle.Mint};
         static RectTransform Rect(Transform parent,string name,float w,float h)
         {var r=new GameObject(name,typeof(RectTransform)).GetComponent<RectTransform>();r.SetParent(parent,false);r.anchorMin=r.anchorMax=new Vector2(.5f,1);r.sizeDelta=new Vector2(w,h);return r;}
         public void Initialize(BattleView view)
@@ -44,6 +44,7 @@ namespace DragonTower
             Add(players,ref p,b.PlayerRending,5,"찰과상",b.PlayerRendRemaining,b.Time,579);
             Add(players,ref p,b.PlayerSkillSealed,6,"스킬봉인",b.SkillSealRemaining,b.Time,579);
             Add(players,ref p,b.PlayerAttackSealed,7,"공격봉인",b.AttackSealRemaining,b.Time,579);
+            Add(players,ref p,b.BossStormActive,8,"폭풍",b.BossStormRemaining,b.Time,579);
             Hide(enemies,e);Hide(players,p);
         }
         static void Hide(Badge[] badges,int from){for(int i=from;i<badges.Length;i++){badges[i].active=false;badges[i].rect.gameObject.SetActive(false);}}
@@ -73,6 +74,7 @@ namespace DragonTower
             else if(kind==2){for(int i=0;i<6;i++){float a=i*Mathf.PI/3;Line(vh,Vector2.zero,new Vector2(Mathf.Cos(a),Mathf.Sin(a))*.9f,.12f);}}
             else if(kind==3){for(int i=0;i<5;i++){float a=i*Mathf.PI*2/5+Mathf.PI/2;Poly(vh,Vector2.zero,new Vector2(Mathf.Cos(a),Mathf.Sin(a)),new Vector2(Mathf.Cos(a+.6f),Mathf.Sin(a+.6f))*.4f);Poly(vh,Vector2.zero,new Vector2(Mathf.Cos(a-.6f),Mathf.Sin(a-.6f))*.4f,new Vector2(Mathf.Cos(a),Mathf.Sin(a)));}}
             else if(kind==5){for(int i=-1;i<=1;i++)Line(vh,new Vector2(i*.4f-.2f,-.8f),new Vector2(i*.4f+.2f,.8f),.16f);}
+            else if(kind==8){for(int j=0;j<3;j++){float y=.6f-j*.6f;Line(vh,new Vector2(-.9f,y),new Vector2(.4f,y),.12f);Line(vh,new Vector2(.4f,y),new Vector2(.75f,y+.2f),.12f);}}
             else if(kind>=6){Quad(vh,-.7f,-.8f,.7f,.2f);Line(vh,new Vector2(-.4f,.2f),new Vector2(-.4f,.75f),.18f);Line(vh,new Vector2(-.4f,.75f),new Vector2(.4f,.75f),.18f);Line(vh,new Vector2(.4f,.75f),new Vector2(.4f,.2f),.18f);}
             else {Poly(vh,new Vector2(0,1),new Vector2(-.75f,-.25f),new Vector2(.7f,-.3f));Poly(vh,new Vector2(-.75f,-.25f),new Vector2(0,-.9f),new Vector2(.7f,-.3f));if(kind==0)Poly(vh,new Vector2(.5f,.75f),new Vector2(0,-.7f),new Vector2(.85f,-.3f));}
         }
@@ -81,4 +83,5 @@ namespace DragonTower
         void Poly(VertexHelper vh,params Vector2[] points){int start=vh.currentVertCount;var rect=rectTransform.rect;foreach(var p in points)vh.AddVert(new Vector3(rect.center.x+p.x*rect.width*.45f,rect.center.y+p.y*rect.height*.45f),color,Vector2.zero);vh.AddTriangle(start,start+1,start+2);}
     }
 }
+
 

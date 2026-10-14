@@ -16,7 +16,7 @@ MonoBehaviour:
   displayName: "처형자의 표식"
   description: "HP 40% 이하인 적에게 기존 처형 효과: 일반공격·스킬 피해 50% 증가."
   rarity: 5
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 6683dc380ab3c8f42afce9aaea5bbfbb, type: 3}
   grade: 3
   kind: 1
   mechanic: 14

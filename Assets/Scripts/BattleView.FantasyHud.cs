@@ -28,6 +28,7 @@ namespace DragonTower
             var obj=new GameObject("Pixel bevel",typeof(RectTransform),typeof(CanvasRenderer),typeof(PixelHudFrame));
             var rect=obj.GetComponent<RectTransform>();rect.SetParent(image.transform,false);rect.anchorMin=Vector2.zero;rect.anchorMax=Vector2.one;rect.offsetMin=rect.offsetMax=Vector2.zero;rect.SetAsFirstSibling();
             var border=obj.GetComponent<PixelHudFrame>();
+            border.minimal=true;
             border.color=new Color(.065f,.16f,.18f,.96f);border.prominent=prominent;border.raycastTarget=image.raycastTarget;
             border.edge=prominent?Jade:new Color(.23f,.39f,.38f);border.SetAllDirty();return border;
         }
@@ -81,6 +82,7 @@ namespace DragonTower
             foreach(var label in new[]{floorLabel,modeLabel,levelLabel,enemyName,enemyHP,playerName,playerHP,warning,message}){var outline=label.GetComponent<Outline>()??label.gameObject.AddComponent<Outline>();outline.effectColor=new Color(.01f,.025f,.035f,.95f);outline.effectDistance=new Vector2(1,-1);}
             EnsureOverlaySlots();
             EnsureReferenceDetails();
+            EnsureCasualHud();
         }
         void UpdateFantasyHud(BattleModel b)
         {
@@ -97,6 +99,7 @@ namespace DragonTower
             UpdateElementTheme(b);
             skillLabel.rectTransform.offsetMin=new Vector2(20,16);skillLabel.rectTransform.offsetMax=new Vector2(-20,-38);skillLabel.fontSize=16;
             UpdateReferenceDetails(b,remaining,progress);
+            UpdateCasualHud(b);
         }
     }
 }

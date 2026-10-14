@@ -16,7 +16,7 @@ MonoBehaviour:
   displayName: "암살자의 검"
   description: "치명타 확률 20% 증가."
   rarity: 2
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: b0f33057dab1ed44fb6077673a490847, type: 3}
   grade: 1
   kind: 1
   mechanic: 0

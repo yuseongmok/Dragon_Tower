@@ -16,7 +16,7 @@ MonoBehaviour:
   displayName: "세계수의 씨앗"
   description: "피격 후 최대 HP의 10% 회복 및 최대 HP 20% 보호막 6초. 재사용 25초."
   rarity: 4
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 1892d6ee7e46d1d4d94921cb25349bf0, type: 3}
   grade: 4
   kind: 1
   mechanic: 0

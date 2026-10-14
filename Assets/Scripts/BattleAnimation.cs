@@ -23,6 +23,8 @@ namespace DragonTower
         RectTransform player,enemy,layer;
         Graphic playerGraphic,enemyGraphic;
         Vector2 playerHome,enemyHome;
+        public Vector2 BossSkillPlayerGround=>playerHome+new Vector2(0,-70);
+        public Vector2 BossSkillEnemyGround=>enemyHome+new Vector2(0,-enemy.rect.height*.5f);
         Color playerColor,enemyColor,skillColor;
         SkillEffectKind skillEffect;
         BattleAssetVfx assetVfx;
@@ -460,11 +462,13 @@ namespace DragonTower
             float breath=fighting&&!hasIdle?Mathf.Sin(clock*3.6f):0;
             float bounce=fighting?Mathf.Abs(Mathf.Sin(enemyClock*3.3f)):0;
             float windup=fighting?battle.EnemyWindupProgress:0;
+            if(battle.BossPreparation)windup=.3f+.7f*battle.BossPhaseProgress;
             float attack=Pulse(attackAge,.24f),cast=Pulse(skillAge,.4f),dodge=Pulse(dodgeAge,dodgeLength);
             if(spriteSkill)attack=0;
             if(spriteDodge){attack=0;cast=0;}
             if(spriteHit){attack=0;cast=0;dodge=0;}
             float enemyAttack=Pulse(enemyAttackAge,.28f);
+            if(battle.BossSkillBusy)enemyAttack=battle.BossState==BossSkillState.Travel?Pulse(battle.BossPhaseProgress*battle.ActiveBossSkill.damageTime,.28f):0;
             if(battle.EnemyStunned){enemyAttack=0;enemyAttackAge=10;bounce=0;}
             var playerOffset=new Vector2(28*attack+66*dodge*dodgeDirection-9*cast,4*breath+48*attack+12*dodge);
             var enemyOffset=new Vector2(-20*enemyAttack,9*bounce-46*enemyAttack-12*windup);

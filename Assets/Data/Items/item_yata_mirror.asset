@@ -16,7 +16,7 @@ MonoBehaviour:
   displayName: "회오리 장치"
   description: "실제 회피 성공 시 회오리. 공격력의 30% 추가 피해. 재사용 12초."
   rarity: 2
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 0a7c4c0bc8ef48d4e9b1c341a1d7cfaf, type: 3}
   grade: 1
   kind: 1
   mechanic: 0

@@ -16,7 +16,7 @@ MonoBehaviour:
   displayName: "약점 분석 렌즈"
   description: "사용 시 5초간 치명타 확률 100% 증가"
   rarity: 3
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 841dd436a4b4ca4418f9dec32a8ca507, type: 3}
   grade: 2
   kind: 0
   mechanic: 9

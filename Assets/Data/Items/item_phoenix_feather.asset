@@ -16,7 +16,7 @@ MonoBehaviour:
   displayName: "불사조의 깃털"
   description: "전투당 1회, 치명상 시 최대 HP의 25%로 부활."
   rarity: 4
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 0bbd779bec2f93846960e0fe5e2e2a1e, type: 3}
   grade: 4
   kind: 1
   mechanic: 19

@@ -16,7 +16,7 @@ namespace DragonTower {
  public static class BattleReplay {public static BattleModel Restore(BattleResumeData tape,ContentDatabase db,string displayName,Action<BattleModel> preparePresentation=null,Action<float> stepPresentation=null){
    var rng=new System.Random(tape.seed);
    var saved=JsonUtility.FromJson<TowerRunSave>(tape.initialRunJson);var initial=TowerRun.Restore(saved,db,true);var dragon=db.dragons.First(x=>x.StableId==saved.speciesId);
-   var initialStats=initial.BuildBattleStats(dragon.Snapshot(initial.Level));initialStats.displayName=displayName;
+   var initialStats=initial.BuildBattleStats(dragon.Snapshot(initial.Level),tape.combatBalanceVersion<2,tape.combatBalanceVersion,tape.passiveImprintLevel);initialStats.displayName=displayName;
    var model=new BattleModel(initialStats,tape.enemy,initial.CurrentHP,()=>rng.NextDouble());model.RestoreItemCooldowns(initial.ItemCooldowns);
    // Rebuild recent visual events without replaying sound or awarding rewards.
    // Thirty seconds covers existing persistent signatures and their residual layers.

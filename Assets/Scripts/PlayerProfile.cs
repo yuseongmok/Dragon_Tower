@@ -14,6 +14,9 @@ namespace DragonTower
     [Serializable] public sealed class PlayerProfile
     {
         public int version=1;
+        public int bondPoints; public long bondRevision;
+        public List<DragonImprint> imprints=new List<DragonImprint>();
+        public List<BondRewardReceipt> bondReceipts=new List<BondRewardReceipt>();
         public List<string> discoveredRegions=new List<string>();
         public string lastRegionPresentationRunId,lastRegionPresentationId;
         public string playerName;
@@ -98,6 +101,9 @@ namespace DragonTower
                 if(d.instanceId==p.selectedInstanceId)selected=true;
             }
             if(!selected)throw new InvalidOperationException("Invalid selection");
+            if(p.bondPoints<0||p.bondRevision<0)throw new InvalidOperationException("Invalid currency");
+            var species=new HashSet<string>();foreach(var x in p.imprints??new List<DragonImprint>()){if(x==null||string.IsNullOrEmpty(x.speciesId)||!species.Add(x.speciesId)||!p.dragons.Exists(d=>d.speciesId==x.speciesId))throw new InvalidOperationException("Invalid imprint owner");x.Validate();}
+            var receipts=new HashSet<string>();foreach(var x in p.bondReceipts??new List<BondRewardReceipt>())if(x==null||string.IsNullOrEmpty(x.runId)||x.floor<1||x.floor>80||!receipts.Add(x.runId))throw new InvalidOperationException("Invalid reward receipt");
         }
     }
     public sealed partial class CollectionSession

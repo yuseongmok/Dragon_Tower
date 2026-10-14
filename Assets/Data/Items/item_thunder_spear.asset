@@ -16,7 +16,7 @@ MonoBehaviour:
   displayName: "천둥왕의 창"
   description: "일반공격 적중 시 일반공격 피해의 60% 번개 추가타 5회. 재사용 20초."
   rarity: 4
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 89ab274c452dfd84fa7c1664cd7e2ebf, type: 3}
   grade: 4
   kind: 1
   mechanic: 0

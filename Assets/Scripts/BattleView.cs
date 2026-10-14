@@ -406,7 +406,7 @@ namespace DragonTower
             enemyStatus.text=status;enemyStatus.color=tint;
             ShowGestureStatus(b);
             if(b.Dragon.skillDisabled){skillButton.interactable=false;skillLabel.text="스킬\n봉인됨";}
-            else if(b.Dragon.passiveMechanic==DragonPassiveMechanic.VoidAccelerator&&b.Result==BattleResult.Fighting){skillButton.interactable=true;skillLabel.text=b.Dragon.skill.displayName+"\n"+(b.SkillReady>b.Time?"HP 10%":"TAP");}
+            else if(b.Dragon.passiveMechanic==DragonPassiveMechanic.VoidAccelerator&&b.Result==BattleResult.Fighting){skillButton.interactable=b.CanUseSkill;skillLabel.text=b.Dragon.skill.displayName+"\n"+(b.SkillReady>b.Time?"HP "+b.PassiveRecastPercent.ToString("0.#")+"%":"TAP");}
             else SetButton(skillButton,skillLabel,b.Dragon.skill.displayName,b.SkillReady-b.Time,b,refreshText);
 
             if(b.PlayerSkillSealed){skillButton.interactable=false;skillLabel.text="스킬 봉인\n"+b.SkillSealRemaining.ToString("0.0")+"초";}
@@ -417,6 +417,7 @@ namespace DragonTower
                 skillLabel.text="기절\n"+b.StunRemaining.ToString("0.0")+"초";
             }
             UpdateFantasyHud(b);
+            if(b.BossSkillBusy)warning.text="";
             if(RecoveryButton!=null)RecoveryButton.interactable=recoveryAction!=null&&recoveryAmount>0&&!b.PlayerStunned&&b.Result==BattleResult.Fighting;
             itemButton1.interactable=usableItems[0]&&!b.PlayerStunned&&b.Result==BattleResult.Fighting;
             itemButton2.interactable=usableItems[1]&&!b.PlayerStunned&&b.Result==BattleResult.Fighting;

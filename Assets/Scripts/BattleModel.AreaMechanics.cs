@@ -34,6 +34,7 @@ namespace DragonTower
             {
                 if(Enemy.bossPattern==EnemyBossPattern.SentryParalysis)return "뇌운 결계 · 전투 내내 마비, 공격·스킬 25% 실패";
                 if(Enemy.floor>=21&&Enemy.floor<=30)return "용광로 · 피격 시 4초 화상";
+                if(GarudaDecisionBattle)return "천공의 칼날 · 방향을 관찰하세요";
                 if(Enemy.floor<=40&&Enemy.floor>=31)return "천공 회랑 · 돌풍이 자동 회피를 발동합니다";
                 if(Enemy.floor<=50&&Enemy.floor>=41)return "피뢰탑 · 피격 시 4초 마비, 행동 25% 실패";
                 if(Enemy.floor<=60&&Enemy.floor>=51)return "수정 궁전 · 피격 시 4초 쿨타임 회복 둔화";
@@ -47,6 +48,7 @@ namespace DragonTower
             get
             {
                 var parts=new List<string>();
+                if(BossStormActive)parts.Add("폭풍 · 회피 쿨타임 +30% · "+BossStormRemaining.ToString("0.0")+"초");
                 if(PlayerBurning)parts.Add("화상 "+Remaining(playerBurnUntil));
                 if(PlayerRending)parts.Add("찰과상 "+Remaining(playerRendUntil));
                 if(PlayerParalyzed)parts.Add(Enemy.bossPattern==EnemyBossPattern.SentryParalysis?"상시 마비 25%":"마비 "+Remaining(playerParalyzeUntil));
@@ -64,7 +66,7 @@ namespace DragonTower
             {
                 if(EnemyReflecting)return "반사 중! 공격 중지 · "+Remaining(reflectUntil);
                 if(specialWarning)return SpecialName+" · "+Remaining(nextSpecialAt)+" 후 발동";
-                if(Enemy.floor>=31&&Enemy.floor<=40&&nextWindAt-Time<=.8)return "돌풍 접근 · 자동 회피 주의!";
+                if(!GarudaDecisionBattle&&Enemy.floor>=31&&Enemy.floor<=40&&nextWindAt-Time<=.8)return "돌풍 접근 · 자동 회피 주의!";
                 return "";
             }
         }
@@ -90,7 +92,7 @@ namespace DragonTower
             while(playerRendNext>0&&playerRendNext<=Time+1e-8&&playerRendNext<=playerRendUntil+1e-8&&Result==BattleResult.Fighting)
             {DamagePlayer(Math.Max(1,(int)Math.Ceiling(Dragon.maxHP*.01)),"찰과상");playerRendNext+=.5;}
             if(Result!=BattleResult.Fighting)return;
-            if(Enemy.floor>=31&&Enemy.floor<=40&&Time>=nextWindAt)
+            if(!GarudaDecisionBattle&&Enemy.floor>=31&&Enemy.floor<=40&&Time>=nextWindAt)
             {
                 if(Dodge())Feedback?.Invoke("돌풍! 자동 회피 발동 · 회피 쿨타임 소모");
                 nextWindAt=Time+7+random()*3;
@@ -170,7 +172,7 @@ namespace DragonTower
         }
         void ResolvePlayerSurvival()
         {
-            if(Dragon.passiveMechanic==DragonPassiveMechanic.Phoenix&&Dragon.passiveAvailable&&!PassiveConsumed&&PlayerHP<=Dragon.maxHP*Passive(.2f))
+            if(!NewPassives&&Dragon.passiveMechanic==DragonPassiveMechanic.Phoenix&&Dragon.passiveAvailable&&!PassiveConsumed&&PlayerHP<=Dragon.maxHP*Passive(.2f))
             {PlayerHP=Dragon.maxHP;PassiveConsumed=true;Feedback?.Invoke("불사조! 체력을 완전히 회복했습니다");}
             if(PlayerHP>0)return;
             var feather=ItemRule(ItemMechanic.PhoenixFeather);

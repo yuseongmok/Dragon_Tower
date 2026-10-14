@@ -67,14 +67,14 @@ MonoBehaviour:
   icePresentation: 1
   iceKind: 3
   statusOnHit: 1
-  battleVfx: {fileID: 4977817801729983008, guid: 8522ad370789914478752d834e83c649, type: 3}
+  battleVfx: {fileID: 0}
   vfxScale: 0.55
   vfxOffset: {x: 0, y: 0}
   vfxEuler: {x: 0, y: 0, z: 0}
   vfxDuration: 1.6
   vfxSystemLimit: 14
-  damage: 15
-  cooldown: 10
+  damage: 44
+  cooldown: 8
   hitCount: 3
   hitInterval: 0.18
   statusEffect: 3

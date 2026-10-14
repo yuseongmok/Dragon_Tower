@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.ItemData
   contentId: item_emergency_accelerator
   displayName: "비상용 가속 장치"
-  description: "공격 회피 성공 시 남은 스킬 쿨타임 2초 단축. 재사용 12초."
+  description: "공격 회피 성공 시 남은 스킬 쿨타임 환급. 1회 최대 1초, 시전당 기본 쿨타임의 10% 한도(다른 환급과 공유). 재사용 12초."
   rarity: 5
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 233fb09a4fe439d40ab8b22f44988cc5, type: 3}
   grade: 3
   kind: 1
   mechanic: 0

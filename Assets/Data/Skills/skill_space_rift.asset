@@ -21,7 +21,7 @@ MonoBehaviour:
   cooldownRecastMaxHpPercent: 0
   persistentAttack: {fileID: 0}
   displayName: "\uC6B0\uC8FC \uADE0\uC5F4"
-  description: "22 \uD53C\uD574\uB97C 4\uD68C \xB7 Burn 35%"
+  description: "15 \uD53C\uD574\uB97C 4\uD68C \xB7 Burn 35%"
   elementType: 7
   celestialSignature: 0
   celestialExtraDamage: 42
@@ -66,14 +66,14 @@ MonoBehaviour:
   icePresentation: 0
   iceKind: 0
   statusOnHit: 0
-  battleVfx: {fileID: 5165536119710316828, guid: bfdcc578323e0014480454083cf8b062, type: 3}
+  battleVfx: {fileID: 0}
   vfxScale: 0.55
   vfxOffset: {x: 0, y: 0}
   vfxEuler: {x: 0, y: 0, z: 0}
   vfxDuration: 1.6
   vfxSystemLimit: 13
-  damage: 22
-  cooldown: 8
+  damage: 15
+  cooldown: 6
   hitCount: 4
   hitInterval: 0.18
   statusEffect: 1

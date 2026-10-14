@@ -16,7 +16,7 @@ MonoBehaviour:
   displayName: "예리한 반지"
   description: "치명타 피해 15% 증가."
   rarity: 0
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 55bcb1fe2cb96864e8bc9c7d1ec6f07c, type: 3}
   grade: 0
   kind: 1
   mechanic: 0

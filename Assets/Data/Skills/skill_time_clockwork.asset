@@ -13,11 +13,20 @@ MonoBehaviour:
   m_Name: skill_time_clockwork
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
   skillId: skill_time_clockwork
+  hydraPresentation: 0
+  poisonAccelerationDuration: 0
+  poisonIntervalFactor: 1
+  eclipsePresentation: 0
+  castLockDuration: 0
+  cooldownRecastMaxHpPercent: 0
+  persistentAttack: {fileID: 0}
   displayName: "\uC2DC\uAC04\uC758 \uD0DC\uC5FD"
   description: "\uD06C\uB85C\uB178 \uC804\uC6A9 \xB7 5\uCD08\uAC04 \uC801\uC758 \uC2DC\uAC04\uC744
     \uBA48\uCD94\uACE0 \uC77C\uBC18\uACF5\uACA9 \uCD5C\uC885 \uD53C\uD574\uB97C \uC800\uC7A5\uD55C
     \uB4A4 \uD55C \uBC88\uC5D0 \uD574\uBC29."
   elementType: 8
+  celestialSignature: 0
+  celestialExtraDamage: 42
   timeDomain: 1
   timeDomainDelay: 0.24
   timeDomainDuration: 5

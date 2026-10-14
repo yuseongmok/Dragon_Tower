@@ -13,6 +13,12 @@ MonoBehaviour:
   m_Name: skill_kraken
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
   skillId: skill_kraken
+  hydraPresentation: 0
+  poisonAccelerationDuration: 0
+  poisonIntervalFactor: 1
+  eclipsePresentation: 0
+  castLockDuration: 0
+  cooldownRecastMaxHpPercent: 0
   persistentAttack: {fileID: 11400000, guid: 2d2f00d69b4e1a94b9a81c350339a53c, type: 2}
   displayName: "\uD06C\uB77C\uCF04"
   description: "\uC625\uD0C0 \uC804\uC6A9 \xB7 \uC2EC\uD574\uC758 \uCD09\uC218\uAC00

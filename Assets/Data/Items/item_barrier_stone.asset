@@ -16,7 +16,7 @@ MonoBehaviour:
   displayName: "수호 결계석"
   description: "사용 시 최대 HP의 30% 보호막을 8초간 획득"
   rarity: 3
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: de925dbe8735b344584ef738d42501fc, type: 3}
   grade: 2
   kind: 0
   mechanic: 21

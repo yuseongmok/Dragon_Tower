@@ -13,6 +13,13 @@ MonoBehaviour:
   m_Name: skill_celestial
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
   skillId: skill_celestial
+  hydraPresentation: 0
+  poisonAccelerationDuration: 0
+  poisonIntervalFactor: 1
+  eclipsePresentation: 0
+  castLockDuration: 0
+  cooldownRecastMaxHpPercent: 0
+  persistentAttack: {fileID: 0}
   displayName: "\uC131\uCC9C"
   description: "\uB2E8\uD14C \uC804\uC6A9 \xB7 \uACF5\uAC04 \uB9C8\uBC95\uC9C4\uC758
     \uB3D9\uC2DC \uC131\uAD11 \uD3EC\uACA9. \uCFE8\uD0C0\uC784 \uC911 \uC77C\uBC18\uACF5\uACA9

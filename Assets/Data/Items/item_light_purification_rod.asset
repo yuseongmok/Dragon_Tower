@@ -16,7 +16,7 @@ MonoBehaviour:
   displayName: "빛의 정화봉"
   description: "사용 시 HP를 100% 회복"
   rarity: 4
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 3a98b03539171e64986de88024bbbe23, type: 3}
   grade: 3
   kind: 0
   mechanic: 6

@@ -44,7 +44,7 @@ namespace DragonTower {
     PlayerPrefs.Save();
     var next=new CollectionSession(new ProfileStore(prefix),catalog);next.PrepareOfflineRecords();
     if(string.IsNullOrEmpty(next.Profile.playerName)&&prefix==offlinePrefix){var cached=new LocalTrainerSave(offlinePrefix).Load("offline");if(cached?.profile!=null)next.SetTrainerName(cached.profile.displayName);}
-    if(Session!=null)Session.AchievementUnlocked-=achievementToast.Show;Session=next;Session.AchievementUnlocked+=achievementToast.Show;
+    if(Session!=null){Session.AchievementUnlocked-=achievementToast.Show;Session.BondPointsEarned-=achievementToast.ShowBond;}Session=next;Session.AchievementUnlocked+=achievementToast.Show;Session.BondPointsEarned+=achievementToast.ShowBond;
     PlayerPrefs.SetString(offlinePrefix+".OfflineStore",prefix);PlayerPrefs.Save();offlineChoiceCommitted=true;identity=null;activeOwner="offline";if(Session.Selected==null&&Session.Profile.eggs>0)ShowEgg();else ShowLobby();if(!string.IsNullOrEmpty(offlineNotice))notice.text=offlineNotice;
    }catch(Exception){Screen("저장 확인 필요");Label("저장을 읽지 못했습니다.\n기존 기록은 보존되며 자동 초기화하지 않습니다.",0,350,410,140,23,Color.white);}
   }

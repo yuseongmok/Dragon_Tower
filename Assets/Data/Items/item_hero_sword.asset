@@ -16,7 +16,7 @@ MonoBehaviour:
   displayName: "용사의 검"
   description: "스킬 피해 10% 증가."
   rarity: 0
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 3ec31c2a740555848a4034e3995e1f28, type: 3}
   grade: 0
   kind: 1
   mechanic: 0

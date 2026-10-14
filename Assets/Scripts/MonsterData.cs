@@ -41,7 +41,7 @@ namespace DragonTower
         {
             int steps=Math.Max(0,floor-minimumFloor);
             float hpScale=1f+steps*hpGrowthPerFloorPercent/100f,attackScale=1f+steps*attackGrowthPerFloorPercent/100f;
-            return new BattleEnemyStats{floor=floor,displayName=displayName,elementType=elementType,maxHP=Math.Max(1,(int)Math.Round((baseHP+steps*hpGrowthPerFloor)*hpScale)),
+            return new BattleEnemyStats{bossSkills=boss?BossSkillCatalog.ForBoss(StableId,floor):null,floor=floor,displayName=displayName,elementType=elementType,maxHP=Math.Max(1,(int)Math.Round((baseHP+steps*hpGrowthPerFloor)*hpScale)),
                 damage=Math.Max(0,(int)Math.Round((attackDamage+steps*attackGrowthPerFloor)*attackScale)),interval=Math.Max(.1f,attackInterval),
                 timingVariancePercent=timingVariancePercent,quickAttackChancePercent=quickAttackChancePercent,
                 quickAttackIntervalMultiplier=Math.Max(.35f,quickAttackIntervalMultiplier),bossPattern=bossPattern,

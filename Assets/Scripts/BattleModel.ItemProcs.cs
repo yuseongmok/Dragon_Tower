@@ -48,12 +48,12 @@ namespace DragonTower {
       s.lastEvent=e.serial;if(e.trigger==ItemTrigger.SkillHit&&!s.rule.eachSkillHit)s.casts.Add(e.cast);
       if(s.rule.belowHealthPercent>0&&PlayerHP*100.0/Dragon.maxHP>=s.rule.belowHealthPercent)continue;
       if(!Roll(s.rule.chancePercent))continue;
-      s.ready=Time+Math.Max(0,s.rule.cooldown);ItemProcCount++;
+      s.ready=Time+AutoItemCooldown(s.rule.cooldown);ItemProcCount++;
       if(s.rule.effect!=ItemProcEffect.Attack){
        ItemProcVisual?.Invoke(new ItemProcVisual{itemId=s.id,slot=s.slot,started=true,effect=s.rule});
        if(s.rule.effect==ItemProcEffect.Heal||s.rule.effect==ItemProcEffect.HealAndWard)HealPlayer(Math.Max(1,(int)Math.Ceiling(Dragon.maxHP*s.rule.healthPercent/100)));
        if(s.rule.effect==ItemProcEffect.Ward||s.rule.effect==ItemProcEffect.HealAndWard)AddWard("proc:"+s.id,Math.Max(1,(int)Math.Ceiling(Dragon.maxHP*s.rule.wardPercent/100)),s.rule.buffDuration);
-       if(s.rule.effect==ItemProcEffect.SkillRecharge)SkillReady=Math.Max(Time,SkillReady-s.rule.rechargeSeconds);
+       if(s.rule.effect==ItemProcEffect.SkillRecharge){if(Dragon.legacyBalance)SkillReady=Math.Max(Time,SkillReady-s.rule.rechargeSeconds);else RefundSkill(s.rule.rechargeSeconds);}
        continue;
       }
       // A kill event can start an effect/cooldown, but never damages an already dead target.
@@ -70,11 +70,13 @@ namespace DragonTower {
     itemHits.Sort((a,b)=>{int time=a.due.CompareTo(b.due);return time!=0?time:a.serial.CompareTo(b.serial);});
     while(itemHits.Count>0&&itemHits[0].due<=Time+1e-8&&Result==BattleResult.Fighting){
      var hit=itemHits[0];itemHits.RemoveAt(0);if(!itemProcStates.TryGetValue(hit.id,out var state))continue;
-     int basis=hit.rule.damageBasis==ItemDamageBasis.BasicAttack?Dragon.attackDamage:hit.rule.damageBasis==ItemDamageBasis.Skill?Dragon.skill.damage:hit.rule.damage;
-     // basis is a pre-matchup stat, not the original hit's already scaled damage.
+     int basis=hit.rule.damageBasis==ItemDamageBasis.BasicAttack?CurrentAttack:hit.rule.damageBasis==ItemDamageBasis.Skill?(Dragon.legacyBalance?Dragon.skill.damage:CurrentAttack*2):hit.rule.damage;
+     // Skill-triggered equipment uses independent item power (2x attack stat),
+     // never a skill's per-hit damage. Single/multi-hit skills share the same budget.
+     // basis is pre-matchup; equipment still gets only its own element once.
      // Extra attacks retain the existing no-critical/no-basic-or-skill-augment path.
      int damage=basis>0&&hit.rule.damagePercent>0?ElementalExtra(basis,hit.rule.damagePercent,hit.rule.DamageElement):0;ItemProcHitCount++;
-     if(Result==BattleResult.Fighting&&hit.rule.status!=CombatStatusEffect.None&&Roll(hit.rule.statusChancePercent))ApplyItemProcStatus(hit.rule);
+     if(Result==BattleResult.Fighting&&hit.rule.status!=CombatStatusEffect.None&&Roll(hit.rule.statusChancePercent))ApplyItemProcStatus(hit.rule,"item:"+hit.id);
      ItemProcVisual?.Invoke(new ItemProcVisual{itemId=hit.id,slot=state.slot,damage=damage,hitIndex=hit.index,effect=hit.rule});
     }
     if(Result!=BattleResult.Fighting){itemHits.Clear();itemLaunches.Clear();}
@@ -87,17 +89,17 @@ namespace DragonTower {
    foreach(var s in itemProcStates.Values.OrderBy(x=>x.slot)){
     if(s.rule.effect!=ItemProcEffect.IncomingReduction||s.rule.trigger!=ItemTrigger.DamageTaken||Time+1e-8<s.ready||!Roll(s.rule.chancePercent))continue;
     int next=(int)Math.Round(damage*(1-Math.Max(0,Math.Min(100,s.rule.reductionPercent))/100),MidpointRounding.AwayFromZero);
-    s.ready=Time+Math.Max(0,s.rule.cooldown);ItemProcCount++;
+    s.ready=Time+AutoItemCooldown(s.rule.cooldown);ItemProcCount++;
     ItemProcVisual?.Invoke(new ItemProcVisual{itemId=s.id,slot=s.slot,started=true,damage=damage-next,effect=s.rule});damage=next;
    }
    return damage;
   }
-  void ApplyItemProcStatus(ItemAutoTrigger rule){switch(rule.status){
-   case CombatStatusEffect.Burn:ApplyBurn(rule.statusDuration,Math.Max(1,(int)Math.Round(rule.statusPower)));break;
+  void ApplyItemProcStatus(ItemAutoTrigger rule,string source){switch(rule.status){
+   case CombatStatusEffect.Burn:ApplyBurn(rule.statusDuration,Math.Max(1,(int)Math.Round(rule.statusPower)),source);break;
    case CombatStatusEffect.Slow:ApplySlow(rule.statusDuration,rule.statusPower);break;
    case CombatStatusEffect.Paralyze:ApplyParalyze(rule.statusDuration);break;
    case CombatStatusEffect.Stun:ApplyStun(rule.statusDuration);break;
-   case CombatStatusEffect.Poison:ApplyPoison(Math.Max(1,(int)Math.Round(rule.statusPower)));break;
+   case CombatStatusEffect.Poison:ApplyPoison(Math.Max(1,(int)Math.Round(rule.statusPower)),source);break;
   }}
  }
 }

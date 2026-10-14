@@ -13,10 +13,24 @@ MonoBehaviour:
   m_Name: skill_wind_claw
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
   skillId: skill_wind_claw
+  hydraPresentation: 0
+  poisonAccelerationDuration: 0
+  poisonIntervalFactor: 1
+  eclipsePresentation: 0
+  castLockDuration: 0
+  cooldownRecastMaxHpPercent: 0
+  persistentAttack: {fileID: 0}
   displayName: "\uADC0\uCC38"
   description: "\uC138 \uC904 \uBC14\uB78C \uBC1C\uD1B1\uC73C\uB85C \uB450 \uBC88
     \uAD50\uCC28 \uC808\uB2E8"
   elementType: 4
+  celestialSignature: 0
+  celestialExtraDamage: 42
+  timeDomain: 0
+  timeDomainDelay: 0.24
+  timeDomainDuration: 5
+  useSecondaryElement: 0
+  secondaryElement: 0
   effectKind: 2
   icon: {fileID: -3841170894649450732, guid: 49a2c17adca20e34b93829d8a2f01c86, type: 3}
   rarity: 5
@@ -26,6 +40,9 @@ MonoBehaviour:
   solarPresentation: 0
   volcanicPresentation: 0
   genesisPresentation: 0
+  attackEmpowerDuration: 0
+  attackEmpowerDelay: 0
+  attackEmpowerDamage: 0
   chargedBeam: 0
   chargeDuration: 5
   beamIgnitionDelay: 0.18
@@ -56,7 +73,7 @@ MonoBehaviour:
   vfxEuler: {x: 0, y: 0, z: 0}
   vfxDuration: 1.6
   vfxSystemLimit: 14
-  damage: 42
+  damage: 70
   cooldown: 6.5
   hitCount: 2
   hitInterval: 0.14

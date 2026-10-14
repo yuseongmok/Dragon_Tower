@@ -21,7 +21,7 @@ MonoBehaviour:
   cooldownRecastMaxHpPercent: 0
   persistentAttack: {fileID: 0}
   displayName: "\uBC14\uB78C\uCE7C\uB0A0"
-  description: "12 \uD53C\uD574\uB97C 3\uD68C \xB7 Slow 25%"
+  description: "30 \uD53C\uD574\uB97C 3\uD68C \xB7 Slow 25%"
   elementType: 4
   celestialSignature: 0
   celestialExtraDamage: 42
@@ -66,13 +66,13 @@ MonoBehaviour:
   icePresentation: 0
   iceKind: 0
   statusOnHit: 0
-  battleVfx: {fileID: 2503177505187395060, guid: 37b6918afc8d24f478a7cb4be2376816, type: 3}
+  battleVfx: {fileID: 0}
   vfxScale: 0.55
   vfxOffset: {x: 0, y: 0}
   vfxEuler: {x: 0, y: 0, z: 0}
   vfxDuration: 1.6
   vfxSystemLimit: 10
-  damage: 12
+  damage: 30
   cooldown: 3.5
   hitCount: 3
   hitInterval: 0.1

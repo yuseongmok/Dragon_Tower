@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.ItemData
   contentId: item_mana_prism
   displayName: "서리 창"
-  description: "추가 공격은 발동 조건 충족 2초 후 시작. 스킬 적중 시 서리 창. 스킬 피해의 25% 추가 피해 및 3초간 30% 둔화. 재사용 12초."
+  description: "추가 공격은 발동 조건 충족 2초 후 시작. 스킬 적중 시 서리 창. 공격력의 50% 추가 피해 및 3초간 30% 둔화. 재사용 12초."
   rarity: 2
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 0717e3d4d9317754b8d87383cdbe0009, type: 3}
   grade: 1
   kind: 1
   mechanic: 0

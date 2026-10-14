@@ -49,7 +49,7 @@ namespace DragonTower
             levelLabel.rectTransform.anchoredPosition=new Vector2(-146,-684);levelLabel.rectTransform.sizeDelta=new Vector2(58,24);levelLabel.fontSize=13;levelLabel.alignment=TextAnchor.MiddleLeft;
             playerName.rectTransform.anchoredPosition=new Vector2(-21,-684);playerName.rectTransform.sizeDelta=new Vector2(194,28);playerName.fontSize=16;playerName.text=playerName.text.Replace(" / "," · ");
             var theme=ElementHudThemes.Get(battle.Dragon.elementType);
-            bool wind=battle.Dragon.elementType==ElementType.Wind&&theme.elementIcon==null;
+            bool wind=battle.Dragon.elementType==ElementType.Wind&&playerElementIcon.sprite==null;
             windSkill.gameObject.SetActive(wind);windBadge.gameObject.SetActive(wind);
             if(wind){skillEmblem.enabled=false;playerElementIcon.enabled=false;}
             windSkill.color=battle.CanUseSkill?theme.primaryColor:Color.Lerp(theme.secondaryColor,Color.black,.45f);

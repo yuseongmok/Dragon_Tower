@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.ItemData
   contentId: item_giant_roar
   displayName: "거인의 외침"
-  description: "피격 시 스킬 피해의 40% 대지 피해 및 1초 기절. 재사용 12초."
+  description: "피격 시 공격력의 80% 대지 피해 및 1초 기절. 재사용 12초."
   rarity: 2
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: a0cd65ef473f84349b84532ec4ffd994, type: 3}
   grade: 1
   kind: 1
   mechanic: 0

@@ -13,12 +13,24 @@ MonoBehaviour:
   m_Name: skill_catastrophe
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
   skillId: skill_catastrophe
+  hydraPresentation: 0
+  poisonAccelerationDuration: 0
+  poisonIntervalFactor: 1
+  eclipsePresentation: 0
+  castLockDuration: 0
+  cooldownRecastMaxHpPercent: 0
+  persistentAttack: {fileID: 0}
   displayName: "\uC7AC\uD574"
   description: "\uC2A4\uD1B0 \uC804\uC6A9 \xB7 \uC804\uC7A5\uC744 \uD729\uC4F0\uB294
     \uB2E4\uC911 \uD5C8\uB9AC\uCF00\uC778\uACFC \uB099\uB8B0. \uBC14\uB78C/\uBC88\uAC1C
     \uC911 \uC720\uB9AC\uD55C \uC0C1\uC131\uC744 \uC801\uC6A9\uD558\uACE0 \uCD5C\uC885
     \uC801\uC911 \uC2DC \uD655\uC815 \uB9C8\uBE44."
   elementType: 6
+  celestialSignature: 0
+  celestialExtraDamage: 42
+  timeDomain: 0
+  timeDomainDelay: 0.24
+  timeDomainDuration: 5
   useSecondaryElement: 1
   secondaryElement: 4
   effectKind: 4

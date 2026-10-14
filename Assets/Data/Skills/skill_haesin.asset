@@ -13,6 +13,13 @@ MonoBehaviour:
   m_Name: skill_haesin
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.SkillData
   skillId: skill_haesin
+  hydraPresentation: 0
+  poisonAccelerationDuration: 0
+  poisonIntervalFactor: 1
+  eclipsePresentation: 0
+  castLockDuration: 0
+  cooldownRecastMaxHpPercent: 0
+  persistentAttack: {fileID: 0}
   displayName: "\uD574\uC2E0"
   description: "\uC0E4\uD0A4\uB4DC \uC804\uC6A9 \xB7 \uAC70\uB300 \uC218\uC555 \uC0C1\uC5B4\uB97C
     \uC0BC\uD0B4\uACFC \uB300\uAC01\uC120 \uC808\uB2E8\uC73C\uB85C \uD3ED\uBC1C\uC2DC\uD0B5\uB2C8\uB2E4.

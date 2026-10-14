@@ -16,7 +16,7 @@ MonoBehaviour:
   displayName: "버스트 코어"
   description: "사용 시 남은 스킬 쿨타임 즉시 초기화"
   rarity: 2
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: da89f80961ebf26458cd86a75c22ae1e, type: 3}
   grade: 1
   kind: 0
   mechanic: 2

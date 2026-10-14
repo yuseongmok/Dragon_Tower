@@ -16,7 +16,7 @@ MonoBehaviour:
   displayName: "전류 핀"
   description: "일반공격 적중 시 일반공격 피해의 5% 추가 속성 피해. 재사용 12초."
   rarity: 0
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: f1d1b4b75a5682142b3b7dff8e3edc3a, type: 3}
   grade: 0
   kind: 1
   mechanic: 0

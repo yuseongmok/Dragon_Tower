@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragonTower.ItemData
   contentId: item_void_lens
   displayName: "공허의 렌즈"
-  description: "추가 공격은 발동 조건 충족 2초 후 시작. 스킬 적중 시 스킬 피해의 60% 암흑 추가타 3회. 재사용 18초."
+  description: "추가 공격은 발동 조건 충족 2초 후 시작. 스킬 적중 시 공격력의 120% 암흑 추가타 3회. 재사용 18초."
   rarity: 5
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 92e5e2185a6db2646af9127abd824f7a, type: 3}
   grade: 3
   kind: 1
   mechanic: 0

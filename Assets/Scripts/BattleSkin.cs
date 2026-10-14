@@ -14,6 +14,11 @@ namespace DragonTower
         public bool forgeEffects,replayDiscovered;
         public bool skyEffects;
         public bool thunderEffects;
+        public bool iceEffects;
+        public bool libraryEffects;
+        public bool sunlightEffects;
+        public bool voidEffects;
+        public bool throneEffects;
         public string entranceMessage;
         public Color entranceTint=new Color(.16f,.78f,.79f,1);
         public Color particleTint=new Color(.45f,.92f,1,1);
