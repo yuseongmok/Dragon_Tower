@@ -1,6 +1,6 @@
 {
-  "version": "2026.10.14.itemicons-garuda",
-  "sourceBuild": "C:\\Users\\PC\\Documents\\Codex\\ItemIcons-20261014\\WebGL",
+  "version": "2026.10.28.finalboss-audio",
+  "sourceBuild": "C:\\Users\\PC\\Documents\\Codex\\WebRelease-20261028\\WebGL",
   "files": [
     {
       "path": ".nojekyll",
@@ -8,61 +8,71 @@
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     {
-      "path": "Build/30192a0f8fe031d24ab29949.framework.js.unityweb",
-      "size": 87409,
-      "sha256": "30192a0f8fe031d24ab29949ffed2c90f56d0d9eda301b8ccc23283199d8c950"
-    },
-    {
-      "path": "Build/7fb589ebaec9a469b51d86d0.loader.js",
-      "size": 47866,
-      "sha256": "7fb589ebaec9a469b51d86d044afb8b5a7bb3eff3c3e2a7528b07d85ad794cd1"
-    },
-    {
-      "path": "Build/a2a635a5de8202a5fc4883ab.data.unityweb",
-      "size": 303276318,
-      "sha256": "a2a635a5de8202a5fc4883abaaea5d92702f9b6af35ddd7f5435aa4e83426f52",
+      "path": "Build/24d07454c051ea2f7d833541.data.unityweb",
+      "size": 372652200,
+      "sha256": "24d07454c051ea2f7d8335413c08858bb27e54f344433127eea82d7f553bef7c",
       "parts": [
         {
-          "path": "Build/a2a635a5de8202a5fc4883ab.data.unityweb.part00",
+          "path": "Build/24d07454c051ea2f7d833541.data.unityweb.part00",
           "size": 67108864,
-          "sha256": "2be62d2879689c7b64228fe659907d9e8be9dfd58cba0902f8be0ccd24d81e83"
+          "sha256": "f65964178ad53c5d0d60f5422c45b3a2669ec46320a6ac3f3c66b1dbb34e1adf"
         },
         {
-          "path": "Build/a2a635a5de8202a5fc4883ab.data.unityweb.part01",
+          "path": "Build/24d07454c051ea2f7d833541.data.unityweb.part01",
           "size": 67108864,
-          "sha256": "f215a49d0f90056cb83a5e02503e58e26c2269f7fe4e8ce4bbd75809d00fecbc"
+          "sha256": "3a3460b996ccfd18f4220dbaaf437ac05b42bace378cf73cca221959e0e67ba3"
         },
         {
-          "path": "Build/a2a635a5de8202a5fc4883ab.data.unityweb.part02",
+          "path": "Build/24d07454c051ea2f7d833541.data.unityweb.part02",
           "size": 67108864,
-          "sha256": "a416582b0f9e631887560202391c5154286bc70fe3260e329aaa72315c51f4d6"
+          "sha256": "849babd42e03d77d31c2afbafd813a1a2cf6184475c30da2b42244eef6aac7f8"
         },
         {
-          "path": "Build/a2a635a5de8202a5fc4883ab.data.unityweb.part03",
+          "path": "Build/24d07454c051ea2f7d833541.data.unityweb.part03",
           "size": 67108864,
-          "sha256": "b9dc0be78df8f54a51c5495ec29fe105af889b0dffe18e9f73d5f8d28843f277"
+          "sha256": "26424f9cb960277ae36481ed2a4621406b0e1532407e59169ad2b0ccd312d36e"
         },
         {
-          "path": "Build/a2a635a5de8202a5fc4883ab.data.unityweb.part04",
-          "size": 34840862,
-          "sha256": "e1dc7878b23656e85fbccee0f7cf9d9d1270052ca746a207629277436b5ef143"
+          "path": "Build/24d07454c051ea2f7d833541.data.unityweb.part04",
+          "size": 67108864,
+          "sha256": "a4727cabe50955edb2bb11f28398e5a3148fad4ed9f64e34f2ed9625486e3c0b"
+        },
+        {
+          "path": "Build/24d07454c051ea2f7d833541.data.unityweb.part05",
+          "size": 37107880,
+          "sha256": "05b577127e7c354548428844446d65ed53401845dcc31673164396520dbc97b0"
         }
       ]
     },
     {
-      "path": "Build/c18a84f570542fc63421618e.wasm.unityweb",
-      "size": 8843011,
-      "sha256": "c18a84f570542fc63421618e6d795b85dda1a5471ec944ef6899cd6becd25c0c"
+      "path": "Build/3556a8b4510b2f5a354219e0.wasm.unityweb",
+      "size": 8936334,
+      "sha256": "3556a8b4510b2f5a354219e047979f27a92cb23884143df3e337aa284df0be12"
+    },
+    {
+      "path": "Build/3c2f459dab206967c729e772.loader.js",
+      "size": 47866,
+      "sha256": "3c2f459dab206967c729e7728322eb70bdd94c534b8234da517d9d8e99cdd420"
+    },
+    {
+      "path": "Build/59dc60b01c3a624a4c992c4c.framework.js.unityweb",
+      "size": 87721,
+      "sha256": "59dc60b01c3a624a4c992c4c4d641f9b9cbb96104ea585b0cd7f336a91879b6b"
+    },
+    {
+      "path": "firebase-bridge.js",
+      "size": 8469,
+      "sha256": "a91b27be0f498b4101dd1bc32c91a827d8f78d2b7a86c9307e10c0198fd2bcf9"
     },
     {
       "path": "firebase-config.js",
-      "size": 709,
-      "sha256": "59e17e401a1beef7e096d9de4f1b76b2d98bb6f7bf0601b21a6f8d42f12bacde"
+      "size": 719,
+      "sha256": "8343f7ea42570ff7826ee2e235ad693ff04a5311f23e22b6377c18157fa29024"
     },
     {
       "path": "index.html",
-      "size": 2821,
-      "sha256": "50314783ebf02872d38977e69f6a81d771e8ea6159dbbee831f015dc7fee379d"
+      "size": 2724,
+      "sha256": "872539f103fae6ca850ad6c6d2d335b8f4a8d02803794296889d8ee845218509"
     },
     {
       "path": "offline-save-bridge.js",
