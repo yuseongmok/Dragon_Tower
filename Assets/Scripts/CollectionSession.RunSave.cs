@@ -19,7 +19,8 @@ namespace DragonTower {
    next.hasActiveRun=false;next.activeRun=null;CommitProgress(next,run,snapshot,earned);
   }
   public void SaveNestReward(TowerRun run,DragonData dragon){
-   var next=ProfileStore.Clone(Profile);next.dragons.Add(new OwnedDragon{instanceId=Guid.NewGuid().ToString("N"),speciesId=dragon.StableId});
+   if(dragon==null||Find(dragon.StableId)==null)throw new ArgumentException("Unknown dragon data.");
+   var next=ProfileStore.Clone(Profile);GetOrAddDragon(next,dragon.StableId);
    var snapshot=run.Capture();var earned=UpdateProgress(next,snapshot);next.hasActiveRun=true;next.activeRun=snapshot;CommitProgress(next,run,snapshot,earned);
   }
   public void AcknowledgeLeaderboard(string runId){var next=ProfileStore.Clone(Profile);if(next.pendingLeaderboardRecords==null)return;next.pendingLeaderboardRecords.RemoveAll(p=>p.runId==runId);store.Save(next);Profile=next;}

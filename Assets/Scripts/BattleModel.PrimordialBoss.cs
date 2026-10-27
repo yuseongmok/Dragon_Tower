@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 namespace DragonTower {
  public sealed partial class BattleModel {
   public bool PrimordialBossBattle=>Dragon.combatRulesVersion>=15&&!Dragon.legacyBalance&&Enemy.bossPattern==EnemyBossPattern.PrimordialContract;
@@ -34,7 +34,7 @@ namespace DragonTower {
    bool endReady=PrimordialPhase==1&&!FirstContractEndUsed&&EnemyHP*10<=CurrentEnemyMaxHP*3&&Array.Exists(bossSkills,x=>x.id=="first_contract_end");
    if(s.id=="first_contract_end")return endReady&&!PlayerStunned;
    if(endReady&&!PlayerStunned)return false;
-   bool finale=PrimordialPhase==2&&!PrimordialFinaleUsed&&EnemyHP*4<=CurrentEnemyMaxHP;
+   bool finale=PrimordialPhase==2&&!PrimordialFinaleUsed&&EnemyHP*4<=CurrentEnemyMaxHP&&Array.Exists(bossSkills,x=>x.oncePerEncounter);
    return s.oncePerEncounter?finale:!finale;
   }
   float ShotValue(float[] values,float fallback)=>PrimordialSpectacle&&values!=null&&values.Length>0?values[Math.Min(values.Length-1,Math.Max(0,BossShotNumber-1))]:fallback;

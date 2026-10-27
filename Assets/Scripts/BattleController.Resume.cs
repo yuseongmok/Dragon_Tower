@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using UnityEngine;
 namespace DragonTower {
@@ -21,7 +21,7 @@ namespace DragonTower {
    // Rebuild recent visual events without replaying sound or awarding rewards.
    // Thirty seconds covers existing persistent signatures and their residual layers.
    double start=Math.Max(0,tape.inputs.Where(x=>x.action==0).Sum(x=>(double)x.delta)-30);bool prepared=false;
-   foreach(var input in tape.inputs){if(!prepared&&model.Time>=start){preparePresentation?.Invoke(model);prepared=true;}switch(input.action){case 0:model.Tick(input.delta);if(prepared)stepPresentation?.Invoke(input.delta);break;case 1:model.Attack();break;case 2:model.Skill();break;case 3:model.Dodge();break;case 4:var item=db.items.First(x=>x.StableId==input.itemId);model.UseItem(item.AsSavedConsumable());break;case 5:model.SelectBossBook(0);break;case 6:model.SelectBossBook(1);break;}}
+   foreach(var input in tape.inputs){if(!prepared&&model.Time>=start){preparePresentation?.Invoke(model);prepared=true;}switch(input.action){case 0:model.Tick(input.delta);if(prepared)stepPresentation?.Invoke(input.delta);break;case 1:model.Attack();break;case 2:model.Skill();break;case 3:model.Dodge();break;case 4:var item=db.items.First(x=>x.StableId==input.itemId);model.UseItem(item.AsSavedConsumable());break;case 5:model.SelectBossBook(0);break;case 6:model.SelectBossBook(1);break;case 7:model.CheatInvincible=!model.CheatInvincible;break;case 9:initial.CheatEquipSignature(dragon,true);DesktopCheatRules.ApplySignature(model,initial,dragon);break;case 8:initial.CheatEquipSignature(dragon);DesktopCheatRules.ApplySignature(model,initial,dragon);break;}}
    if(!prepared)preparePresentation?.Invoke(model);
    return model;
  }}

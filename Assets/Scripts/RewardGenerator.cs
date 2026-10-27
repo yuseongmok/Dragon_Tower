@@ -5,7 +5,7 @@ namespace DragonTower {
   // Original mixed reward sampler, unchanged RNG order and eligibility rules.
   public static RewardCandidate[] Mixed(TowerRun run,ContentDatabase db,DragonData dragon,int seed,int count) {
             if(db==null)return Array.Empty<RewardCandidate>();
-            var augments=(db.augments??Array.Empty<AugmentData>()).Where(a=>a!=null&&run.CanTakeAugment(a)).ToList();
+            var augments=(db.augments??Array.Empty<AugmentData>()).Where(a=>a!=null&&run.CanTakeAugment(a)&&!run.Augments.Contains(a.StableId)).ToList();
             var skills=(db.skills??Array.Empty<SkillData>()).Where(s=>s!=null&&run.CanOfferSkill(s)&&s.StableId!=run.CurrentSkillId(dragon.SkillAtLevel(run.Level))).ToList();
             var result=new System.Collections.Generic.List<RewardCandidate>();var random=new System.Random(seed);
             // Separate eligibility roll: ordinary rewards retain their existing random stream.
@@ -22,8 +22,8 @@ namespace DragonTower {
                 }
                 else
                 {
-                    var augment=ContentDatabase.PickWeightedAugment(augments,random);if(augment==null)break;
-                    result.Add(new RewardCandidate{augment=augment});augments.Remove(augment);
+                    var augment=ContentDatabase.PickWeightedAugment(augments,random,run.Floor);if(augment==null)break;
+                    result.Add(new RewardCandidate{augment=augment});augments.RemoveAll(a=>a.StableId==augment.StableId);
                 }
             }
             return result.ToArray();

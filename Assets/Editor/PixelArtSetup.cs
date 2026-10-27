@@ -26,9 +26,11 @@ namespace DragonTower.Editor
             {
                 var ui=(TextureImporter)assetImporter;
                 ui.textureType=TextureImporterType.Sprite;ui.spriteImportMode=SpriteImportMode.Single;
-                ui.filterMode=FilterMode.Bilinear;ui.wrapMode=TextureWrapMode.Clamp;
+                bool roomIcon=assetPath.StartsWith("Assets/Resources/UI/RoomIcons/");
+                ui.filterMode=roomIcon?FilterMode.Point:FilterMode.Bilinear;ui.wrapMode=TextureWrapMode.Clamp;
                 ui.mipmapEnabled=false;ui.isReadable=false;ui.alphaIsTransparency=true;
-                ui.maxTextureSize=1024;ui.textureCompression=TextureImporterCompression.CompressedHQ;
+                ui.maxTextureSize=roomIcon?128:1024;ui.textureCompression=roomIcon?TextureImporterCompression.Uncompressed:TextureImporterCompression.CompressedHQ;
+                if(roomIcon)ui.npotScale=TextureImporterNPOTScale.None;
                 return;
             }
             if (!assetPath.StartsWith("Assets/Art/PixelBattle/")) return;
@@ -174,3 +176,4 @@ namespace DragonTower.Editor
         }
     }
 }
+

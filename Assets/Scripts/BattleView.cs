@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 namespace DragonTower
@@ -361,8 +361,14 @@ namespace DragonTower
         {
             switch(type){case ContentEffectType.Heal:return "HP 회복";case ContentEffectType.MaxHP:return "최대 HP";case ContentEffectType.MaxHPPercent:return "최대 HP %";case ContentEffectType.AttackDamage:return "공격력";case ContentEffectType.AttackDamagePercent:return "공격 피해 %";case ContentEffectType.SkillDamagePercent:return "스킬 피해 %";case ContentEffectType.SkillCooldownPercent:return "스킬 쿨타임 %";case ContentEffectType.AttackCooldownPercent:return "공격 쿨타임 %";case ContentEffectType.DodgeCooldownPercent:return "회피 쿨타임 %";case ContentEffectType.CriticalChancePercent:return "치명타 확률 %";case ContentEffectType.CriticalDamagePercent:return "치명타 피해 %";case ContentEffectType.DamageReductionPercent:return "피해 감소 %";default:return type.ToString();}
         }
+        OctaPassiveVfx octaPassiveVfx;
+        DragonPassiveFeedback passiveFeedback;
         public void Show(BattleModel b)
         {
+            if(octaPassiveVfx==null&&b.NewPassives&&b.Dragon.passiveMechanic==DragonPassiveMechanic.Tentacle){octaPassiveVfx=gameObject.AddComponent<OctaPassiveVfx>();octaPassiveVfx.Initialize(this);}
+            octaPassiveVfx?.Render(b);
+            if(passiveFeedback==null&&b.NewPassives&&DragonPassiveFeedback.Supports(b.Dragon.passiveMechanic)){passiveFeedback=gameObject.AddComponent<DragonPassiveFeedback>();passiveFeedback.Initialize(this);}
+            passiveFeedback?.Render(b);
             if(statusHud==null){statusHud=gameObject.AddComponent<BattleStatusHud>();statusHud.Initialize(this);}
             statusHud.Show(b);
             if(enemyStatus==null&&frame!=null)enemyStatus=Label("",frame,0,352,420,30,16,Color.white);

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 namespace DragonTower {
  public sealed partial class BattleModel {
   public bool NewPassives=>!Dragon.legacyBalance&&Dragon.combatRulesVersion>=3;
@@ -8,6 +8,11 @@ namespace DragonTower {
   public int PassiveDamage{get;private set;}
   public int PassiveHealing{get;private set;}
   public int AuroraStacks=>NewPassives&&Time<auroraUntil?auroraStacks:0;
+  double jetStreamUntil;
+  public double JetStreamRemaining=>NewPassives&&Dragon.combatRulesVersion>=18&&Dragon.passiveMechanic==DragonPassiveMechanic.JetStream?Math.Max(0,jetStreamUntil-Time):0;
+  public int PassivePresentationCastSerial=>augmentCastSerial;
+  public float TitanPassiveBonus=>NewPassives&&Dragon.passiveMechanic==DragonPassiveMechanic.HardenedShell?PassiveImprintRules.TitanBonus(PassiveLevel,Dragon.maxHP,Dragon.passiveBaseMaxHP):0;
+  public double AuroraRemaining=>AuroraStacks>0?Math.Max(0,auroraUntil-Time):0;
   public double TentacleRemaining=>Math.Max(0,tentacleUntil-Time);
   public bool BossPassiveStunProtected=>NewPassives&&IsPassiveBoss&&(EnemyStunned||Time<bossStunGuardUntil||bossNeedsAttack);
   public double BossStunGuardRemaining=>Math.Max(0,bossStunGuardUntil-Time);
@@ -24,7 +29,7 @@ namespace DragonTower {
   void InitializeNewPassives(){if(!NewPassives)return;if(Dragon.passiveMechanic==DragonPassiveMechanic.HolyLight&&!Dragon.passiveCooldownApplied){float basis=Dragon.baseSkillCooldown>0?Dragon.baseSkillCooldown:Dragon.skill.cooldown;Dragon.skill=Dragon.skill.Copy();Dragon.skill.cooldown=Dragon.skill.cooldown<=0?0:Math.Max(basis*.4f,Dragon.skill.cooldown-basis*PassiveImprintRules.CooldownReduction(PassiveLevel)/100);Dragon.passiveCooldownApplied=true;}if(Dragon.passiveMechanic==DragonPassiveMechanic.HydraVenom){SetSourceDot(true,"passive:venom",PassiveBasis*PassiveImprintRules.DotPercent(PassiveLevel)/100.0,PassiveImprintRules.PoisonPeriod(PassiveLevel),double.PositiveInfinity);PassiveProcCount++;}}
   void NewPassiveCast(){if(!NewPassives)return;switch(Dragon.passiveMechanic){
    case DragonPassiveMechanic.VoidAccelerator:if(Time<SkillReady)PassiveProcCount++;break;
-   case DragonPassiveMechanic.JetStream:AttackReady=Time+Math.Max(0,AttackReady-Time)*(1-PassiveImprintRules.Value(PassiveLevel,15,40)/100);PassiveProcCount++;break;
+   case DragonPassiveMechanic.JetStream:if(Dragon.combatRulesVersion>=18)jetStreamUntil=Time+1;else AttackReady=Time+Math.Max(0,AttackReady-Time)*(1-PassiveImprintRules.Value(PassiveLevel,15,40)/100);PassiveProcCount++;break;
    case DragonPassiveMechanic.Tentacle:if(PassiveRoll()){if(tentacleUntil<=Time){tentacleLast=Time;tentacleTick=Time+1;}tentacleUntil=Time+PassiveImprintRules.Duration(Dragon.passiveMechanic,PassiveLevel);}break;
    case DragonPassiveMechanic.IronArmor:if(PassiveRoll())AddWard("passive:iron",PercentHP(10),5);break;
    case DragonPassiveMechanic.Phoenix:if((!EnableSolarRecoveryCooldown||Time>=solarRecoveryReady)&&PassiveRoll()){int before=PlayerHP;HealPercent(PassiveImprintRules.Value(PassiveLevel,10,30));PassiveHealing+=PlayerHP-before;solarRecoveryReady=Time+3;}break;

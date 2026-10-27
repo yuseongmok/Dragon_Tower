@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 namespace DragonTower {
  // Pure, fractional design values. Production starts at zero; no currency or upgrade action.
  public static class PassiveImprintRules {
@@ -23,7 +23,7 @@ namespace DragonTower {
   public static float TitanBonus(int level,float hp,float baseline)=>baseline<=0?0:Math.Min(30,Math.Max(0,hp/baseline-1)*10*Value(level,1,3));
   public static string Description(DragonPassiveMechanic kind){switch(kind){
    case DragonPassiveMechanic.TimeRift:return "공격 시 5% 확률로 0.5초 기절. 각인 최대: 30%, 1.5초. 보스 연속 기절 보호 적용.";
-   case DragonPassiveMechanic.JetStream:return "스킬 시전당 한 번, 남은 일반공격 대기시간 15% 감소. 각인 최대 40%.";
+   case DragonPassiveMechanic.JetStream:return "스킬 사용 후 1초간 일반공격 쿨타임 15% 감소. 각인 최대 40%. 재발동 시 지속시간 갱신, 중첩 없음.";
    case DragonPassiveMechanic.VoidAccelerator:return "쿨타임 중 최대 HP 20%를 소비해 재시전. 각인 최대 5%. 진행 중 시전 보호 유지.";
    case DragonPassiveMechanic.FreezingGaze:return "공격 시 5% 확률로 1초간 적 공격 간격 20% 증가. 각인 최대: 40%, 4초.";
    case DragonPassiveMechanic.RuyiOrb:return "일반공격 시 5% 확률로 원본 피해의 30% 추가타. 각인 최대 확률 30%. 추가타 연쇄 없음.";

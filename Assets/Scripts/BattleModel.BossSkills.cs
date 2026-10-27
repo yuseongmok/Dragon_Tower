@@ -164,7 +164,7 @@ namespace DragonTower {
      bossReady[bossIndex]=Math.Max(bossStart+skill.cooldown*(voidCastCollapsed?.9:1),Time);
      bossIndex=-1;BossState=BossSkillState.Cooldown;
      NextEnemyStrike=Math.Max(Time+Math.Max(Enemy.interval,Dragon.dodgeCooldown+.25),DodgeReady+.25);
-     if(VoidExpandedBattle||PrimordialBossBattle)voidNextPatternAt=NextEnemyStrike+.05;
+     if(VoidExpandedBattle||PrimordialBossBattle)voidNextPatternAt=skill.patternRestAfter>0?Time+skill.patternRestAfter:NextEnemyStrike+.05;
      nextEnemyDamageMultiplier=1;EnemyIntent="일반 공격";enemyWindupDuration=WindupDuration;
      if(LibraryBossBattle||SolarBossBattle||VoidBossBattle||PrimordialBossBattle)TickBossSkills(); // Dispatch an already-ready spell at this event, not the next rendered frame.
      break;
@@ -257,6 +257,7 @@ namespace DragonTower {
   }
  }
 }
+
 
 
 

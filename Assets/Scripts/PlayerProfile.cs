@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
@@ -17,6 +17,7 @@ namespace DragonTower
         public string finalEntryRunId,finalVictoryRunId,finalSceneRunId,finalEndingRunId;
         public int finalEntryPage,finalVictoryPage,endingPage;
         public bool endingPending,endingUnlocked;
+        public bool simpleCombatGuideSeen;
         public int onboardingVersion,introPage,tutorialStep; public bool tutorialCompleted;
         public int bondPoints; public long bondRevision;
         public List<DragonImprint> imprints=new List<DragonImprint>();
@@ -142,13 +143,33 @@ namespace DragonTower
             get {foreach(var d in Profile.dragons)if(d.instanceId==Profile.selectedInstanceId)return Find(d.speciesId);return null;}
         }
         public bool Owns(string speciesId){foreach(var d in Profile.dragons)if(d.speciesId==speciesId)return true;return false;}
+        // Preserve legacy instance IDs for saved runs, but expose one selectable partner per species.
+        public OwnedDragon[] SelectableDragons {
+            get {
+                var result=new List<OwnedDragon>();
+                foreach(var d in Profile.dragons){
+                    int index=result.FindIndex(x=>x.speciesId==d.speciesId);
+                    if(index<0)result.Add(d);
+                    else if(d.instanceId==Profile.selectedInstanceId)result[index]=d;
+                }
+                return result.ToArray();
+            }
+        }
+        static OwnedDragon GetOrAddDragon(PlayerProfile profile,string speciesId){
+            var owned=profile.dragons.Find(d=>d.speciesId==speciesId&&d.instanceId==profile.selectedInstanceId)
+                ??profile.dragons.Find(d=>d.speciesId==speciesId);
+            if(owned!=null)return owned;
+            owned=new OwnedDragon{instanceId=Guid.NewGuid().ToString("N"),speciesId=speciesId};
+            profile.dragons.Add(owned);return owned;
+        }
+        public DragonData[] UndiscoveredDragons { get { var result=new List<DragonData>();foreach(var d in catalog)if(!Owns(d.StableId))result.Add(d);return result.ToArray(); } }
         public DragonData Hatch(int randomIndex)
         {
             if(Profile.eggs<=0)return null;
             if(randomIndex<0||randomIndex>=catalog.Length)throw new ArgumentOutOfRangeException(nameof(randomIndex));
             var next=ProfileStore.Clone(Profile);var dragon=catalog[randomIndex];
-            var owned=new OwnedDragon{instanceId=Guid.NewGuid().ToString("N"),speciesId=dragon.StableId};
-            next.eggs--;next.dragons.Add(owned);next.selectedInstanceId=owned.instanceId;
+            var owned=GetOrAddDragon(next,dragon.StableId);
+            next.eggs--;next.selectedInstanceId=owned.instanceId;
             store.Save(next);Profile=next;return dragon;
         }
         public bool Select(string instanceId)
@@ -160,8 +181,8 @@ namespace DragonTower
         {
             if(dragon==null||Find(dragon.StableId)==null)throw new ArgumentException("Unknown dragon data.");
             var next=ProfileStore.Clone(Profile);
-            var owned=new OwnedDragon{instanceId=Guid.NewGuid().ToString("N"),speciesId=dragon.StableId};
-            next.dragons.Add(owned);store.Save(next);Profile=next;return owned;
+            var owned=GetOrAddDragon(next,dragon.StableId);
+            store.Save(next);Profile=next;return owned;
         }
     }
 }

@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
@@ -12,17 +12,28 @@ namespace DragonTower
         {
             var g=new GameObject(name,typeof(RectTransform),typeof(Image));var r=g.GetComponent<RectTransform>();r.SetParent(parent,false);r.anchorMin=r.anchorMax=r.pivot=new Vector2(.5f,.5f);r.sizeDelta=new Vector2(w,h);var im=g.GetComponent<Image>();im.raycastTarget=false;return im;
         }
-        public void Build(Sprite sprite,Sprite icon,Color color,bool boss,TowerRoomKind kind)
+        public void Build(Sprite sprite,Sprite icon,Color color,bool boss,TowerRoomKind kind,int floor=0,int choice=0)
         {
-            accent=color;float width=boss?178:122,height=boss?240:192;
-            var glow=new GameObject("Light beyond door",typeof(RectTransform),typeof(TowerPortalLight));var gr=glow.GetComponent<RectTransform>();gr.SetParent(transform,false);gr.anchorMin=gr.anchorMax=gr.pivot=new Vector2(.5f,.5f);gr.sizeDelta=new Vector2(width*.90f,height*.86f);gr.anchoredPosition=new Vector2(0,-height*.05f);light=glow.GetComponent<TowerPortalLight>();light.raycastTarget=false;light.color=new Color(color.r,color.g,color.b,.10f);
-            left=Make(transform,"Left door leaf",width*.5f,height);right=Make(transform,"Right door leaf",width*.5f,height);
+            accent=color;
+            var layout=TowerDoorAperture.Layout(floor,boss,choice);
+            float width=floor==0?(boss?178:122):layout.width*1.6f,height=floor==0?(boss?240:192):layout.height*1.6f;
+            var aperture=new GameObject("Background door aperture",typeof(RectTransform),typeof(TowerDoorAperture),typeof(Mask));
+            var ar=aperture.GetComponent<RectTransform>();ar.SetParent(transform,false);ar.anchorMin=ar.anchorMax=ar.pivot=new Vector2(.5f,.5f);ar.sizeDelta=new Vector2(width,height);
+            float parentX=boss?240:(choice==0?137:343),parentY=boss?235:225;
+            ar.anchoredPosition=floor==0?Vector2.zero:new Vector2(layout.center.x*1.6f-parentX,parentY-layout.center.y*1.6f);
+            aperture.GetComponent<TowerDoorAperture>().arch=floor==0?0:boss?.28f:((floor<=10||floor>=21&&floor<=30)?0:.29f);
+            aperture.GetComponent<TowerDoorAperture>().raycastTarget=false;
+            aperture.GetComponent<Mask>().showMaskGraphic=false;
+            if(!boss&&floor>=81&&floor<=90&&choice==0)ar.localEulerAngles=new Vector3(0,0,-8);
+            Transform leafParent=ar;
+            var glow=new GameObject("Light beyond door",typeof(RectTransform),typeof(TowerPortalLight));var gr=glow.GetComponent<RectTransform>();gr.SetParent(leafParent,false);gr.anchorMin=gr.anchorMax=gr.pivot=new Vector2(.5f,.5f);gr.sizeDelta=new Vector2(width*.90f,height*.86f);gr.anchoredPosition=new Vector2(0,-height*.05f);light=glow.GetComponent<TowerPortalLight>();light.raycastTarget=false;light.color=new Color(color.r,color.g,color.b,.10f);
+            left=Make(leafParent,"Left door leaf",width*.5f,height);right=Make(leafParent,"Right door leaf",width*.5f,height);
             if(sprite!=null)
             {
-                var r=sprite.rect;leftSprite=Sprite.Create(sprite.texture,new Rect(r.x,r.y,r.width*.5f,r.height),new Vector2(0,.5f),100);rightSprite=Sprite.Create(sprite.texture,new Rect(r.x+r.width*.5f,r.y,r.width*.5f,r.height),new Vector2(1,.5f),100);left.sprite=leftSprite;right.sprite=rightSprite;
+                var r=sprite.rect; if(floor>0)r=new Rect(r.x+r.width*.20f,r.y+r.height*.145f,r.width*.60f,r.height*.50f);leftSprite=Sprite.Create(sprite.texture,new Rect(r.x,r.y,r.width*.5f,r.height),new Vector2(0,.5f),100);rightSprite=Sprite.Create(sprite.texture,new Rect(r.x+r.width*.5f,r.y,r.width*.5f,r.height),new Vector2(1,.5f),100);left.sprite=leftSprite;right.sprite=rightSprite;
             }
             leftLeaf=left.rectTransform;rightLeaf=right.rectTransform;leftLeaf.pivot=new Vector2(0,.5f);rightLeaf.pivot=new Vector2(1,.5f);leftLeaf.anchoredPosition=new Vector2(-width*.5f,0);rightLeaf.anchoredPosition=new Vector2(width*.5f,0);
-            mark=Make(transform,"Room crest",boss?68:48,boss?68:48);mark.sprite=icon;mark.preserveAspect=true;mark.rectTransform.anchoredPosition=new Vector2(0,boss?-25:-14);crestGroup=mark.gameObject.AddComponent<CanvasGroup>();
+            mark=Make(leafParent,"Room crest",boss?68:48,boss?68:48);mark.sprite=icon;mark.preserveAspect=true;mark.rectTransform.anchoredPosition=new Vector2(0,boss?-25:-14);crestGroup=mark.gameObject.AddComponent<CanvasGroup>();
             if(icon==null){mark.color=Color.clear;var symbol=new GameObject("Room symbol",typeof(RectTransform));var sr=symbol.GetComponent<RectTransform>();sr.SetParent(mark.transform,false);sr.anchorMin=Vector2.zero;sr.anchorMax=Vector2.one;sr.offsetMin=sr.offsetMax=Vector2.zero;Graphic graphic=kind==TowerRoomKind.Nest?(Graphic)symbol.AddComponent<EggGraphic>():symbol.AddComponent<TowerCoinEmblem>();graphic.raycastTarget=false;}
         }
         public void SetOpening(float amount)

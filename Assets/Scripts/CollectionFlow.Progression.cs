@@ -16,7 +16,7 @@ namespace DragonTower {
   }
   void DecideSavedDrop(){
    if(towerRun.DropDecided)return;int chance=towerRun.Room==TowerRoomKind.Boss?25:12;string id=null;
-   if(database.items!=null&&database.items.Length>0&&UnityEngine.Random.Range(0,100)<chance)id=database.PickItems(1,UnityEngine.Random.Range(0,int.MaxValue))[0].StableId;
+   if(database.items!=null&&database.items.Length>0&&UnityEngine.Random.Range(0,100)<chance)id=database.PickItems(1,UnityEngine.Random.Range(0,int.MaxValue),towerRun).FirstOrDefault()?.StableId;
    towerRun.DecideDrop(id);
   }
   public void ResumeRun(){

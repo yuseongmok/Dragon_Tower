@@ -121,7 +121,10 @@ namespace DragonTower
     {
         public const float AttackCooldown = .3f, DodgeCooldown = 1.4f, DodgeDuration = .42f;
         public const float EnemyInterval = 2.4f, WindupDuration = .85f;
-        public int PlayerHP { get; private set; }
+        public bool CheatCanChangeSkill=>!SkillSequencePending&&!TimeDomainBusy&&!ChargedBeamBusy&&!SignatureCastLocked&&!PrimordialCinematic;
+        public bool CheatInvincible { get; set; }
+        int playerHP;
+        public int PlayerHP { get => playerHP; private set { if(!CheatInvincible||value>=playerHP)playerHP=value; } }
         public int EnemyHP { get; private set; }
         public int ShieldHP => (Time<shieldUntil?shieldHP:0)+ExtraShieldHP;
         public bool EnemyBurning => NewPassives?SourceActive(false):Time<burnUntil;
@@ -561,6 +564,7 @@ namespace DragonTower
         {
             if(Time<noAttackCooldownUntil)return .02f;
             float cooldown=Dragon.attackCooldown>0?Dragon.attackCooldown:AttackCooldown;
+            if(JetStreamRemaining>0)cooldown*=1-PassiveImprintRules.Value(PassiveLevel,15,40)/100f;
             if(Time<rapidUntil)cooldown*=1-Value(AugmentMechanic.RapidFireInstinct,15)/100f;
             if(!NewPassives&&Time<passiveRapidUntil)cooldown*=.5f;
             if(Time<firstAidUntil)cooldown*=1-Param(AugmentMechanic.FirstAid)/100f;return Math.Max(Math.Max(.02f,Dragon.baseAttackCooldown*.4f),cooldown);

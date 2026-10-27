@@ -1,8 +1,8 @@
-﻿using System;using System.Linq;using System.Collections;using UnityEngine;using UnityEngine.UI;
+using System;using System.Linq;using System.Collections;using UnityEngine;using UnityEngine.UI;
 namespace DragonTower {public sealed partial class CollectionFlow {
  bool roomTransitionBusy,chestAnimating,chestFastForward;
  static Sprite[] chestSprites;
- ItemData[] ChestChoices(){if(database==null)return Array.Empty<ItemData>();if(towerRun.ChestOpened&&towerRun.ChestRewardIds!=null)return towerRun.ChestRewardIds.Select(id=>database.items.FirstOrDefault(x=>x!=null&&x.StableId==id)).Where(x=>x!=null).ToArray();return database.PickItems(3,towerRun.RewardSeed^towerRun.Floor);}
+ ItemData[] ChestChoices(){if(database==null)return Array.Empty<ItemData>();if(towerRun.ChestOpened&&towerRun.ChestRewardIds!=null)return towerRun.ChestRewardIds.Select(id=>database.items.FirstOrDefault(x=>x!=null&&x.StableId==id)).Where(x=>x!=null).ToArray();return database.PickItems(3,towerRun.RewardSeed^towerRun.Floor,towerRun);}
  Image RoomScenery(string resource,EnvironmentScreen screen){foreach(string n in new[]{"Ornate content frame","Dim tower backdrop"}){var t=body.Find(n);if(t!=null)t.gameObject.SetActive(false);}var r=Rect("Room scenery",body,0,425,480,850);r.SetSiblingIndex(1);var im=r.gameObject.AddComponent<Image>();var skin=Resources.Load<BattleSkin>("PixelBattleSkin");im.sprite=skin!=null&&towerRun!=null?skin.BackgroundForScreen(towerRun.Floor,screen):Resources.Load<Sprite>(resource);im.raycastTarget=false;return im;}
  Image RoomImage(Transform parent,string name,Sprite sprite,float x,float y,float w,float h){var im=Rect(name,parent,x,y,w,h).gameObject.AddComponent<Image>();im.sprite=sprite;im.color=Color.white;im.preserveAspect=true;im.raycastTarget=false;return im;}
  static Sprite ChestSprite(int index){if(chestSprites==null){var t=Resources.Load<Texture2D>("UI/reward-chest");if(t==null)return null;chestSprites=new Sprite[2];for(int i=0;i<2;i++)chestSprites[i]=Sprite.Create(t,new Rect(i*t.width/2f,0,t.width/2f,t.height),new Vector2(.5f,.5f),100);}return chestSprites[index];}

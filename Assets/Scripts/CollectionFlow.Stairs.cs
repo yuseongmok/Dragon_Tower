@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -36,8 +36,11 @@ namespace DragonTower
                 default:return AncientUi.Hex(0xEBC580);
             }
         }
+        static readonly System.Collections.Generic.Dictionary<TowerRoomKind,Sprite> roomIconCache=new System.Collections.Generic.Dictionary<TowerRoomKind,Sprite>();
         Sprite DoorMark(TowerRoomKind kind)
         {
+            if(!roomIconCache.TryGetValue(kind,out var icon)){icon=Resources.Load<Sprite>("UI/RoomIcons/"+kind.ToString().ToLowerInvariant());if(icon!=null)roomIconCache[kind]=icon;}
+            if(icon!=null)return icon;
             switch(kind)
             {
                 case TowerRoomKind.Item:return ChestSprite(0);
@@ -62,11 +65,13 @@ namespace DragonTower
                 var hit=area.gameObject.AddComponent<Image>();hit.color=Color.clear;
                 var button=area.gameObject.AddComponent<Button>();button.targetGraphic=hit;button.transition=Selectable.Transition.None;
                 button.onClick.AddListener(()=>SelectTowerRoom(index));
-                var door=area.gameObject.AddComponent<TowerDoorVisual>();door.Build(DoorSprite(boss,towerRun.Floor),DoorMark(room),DoorColor(room),boss,room);towerDoors[i]=door;
+                var door=area.gameObject.AddComponent<TowerDoorVisual>();door.Build(DoorSprite(boss,towerRun.Floor),DoorMark(room),DoorColor(room),boss,room,towerRun.Floor,i);towerDoors[i]=door;
                 if(i==0)RoomButton=button;else SecondRoomButton=button;
                 float labelY=boss?530:370;
                 var caption=Rect("Door caption "+i,stairWorld,x,labelY,boss?330:198,boss?100:114);
-                var surface=caption.gameObject.AddComponent<Image>();AncientUi.Frame(surface,AncientSurfaceKind.Information);surface.raycastTarget=false;
+                var surface=caption.gameObject.AddComponent<Image>();AncientUi.Frame(surface,AncientSurfaceKind.Information);surface.raycastTarget=true;
+                var captionButton=caption.gameObject.AddComponent<Button>();captionButton.targetGraphic=surface;captionButton.transition=Selectable.Transition.None;
+                captionButton.onClick.AddListener(()=>SelectTowerRoom(index));
                 CardText(caption,"Room name",RoomName(room),0,25,boss?310:182,32,22,DoorColor(room),TextAnchor.MiddleCenter);
                 var detail=CardText(caption,"Room reward",RoomDetail(room),0,72,boss?310:172,52,15,AncientUi.Ivory,TextAnchor.UpperCenter);detail.resizeTextForBestFit=true;detail.resizeTextMinSize=14;detail.resizeTextMaxSize=15;
             }
@@ -76,7 +81,7 @@ namespace DragonTower
             var status=Panel("Tower travel status",body,0,710,424,98,AncientUi.Stone,AncientUi.DarkGold);
             CardText(status.transform,"Travel stats","유대 "+towerRun.Level+"     HP "+towerRun.CurrentHP+" / "+towerRun.MaxHP,0,29,398,28,19,AncientUi.Ivory,TextAnchor.MiddleCenter);
             CardText(status.transform,"Travel gold","GOLD "+towerRun.Gold+"     ·     "+towerRun.Progress.score+"점",0,65,398,28,17,Gold,TextAnchor.MiddleCenter);
-            notice.text=boss?"수호자의 문 · 준비되면 문을 터치하세요":"계단 위의 문을 터치해 길을 선택하세요";
+            notice.text=boss?"수호자의 문 · 문 또는 안내 패널을 터치하세요":"문 또는 방 이름 패널을 터치해 길을 선택하세요";
         }
         IEnumerator EnterTowerDoor(int index)
         {
@@ -100,3 +105,5 @@ namespace DragonTower
         }
     }
 }
+
+

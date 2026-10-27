@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 namespace DragonTower
 {
     public partial class BattleController : MonoBehaviour
@@ -47,7 +47,7 @@ namespace DragonTower
             var ice=view.GetComponent<IceSkillVfx>();if(ice!=null)ice.DamageFromSkill=battle.ResolvingSkillHit;
             var wisp=view.GetComponent<WispVfx>();if(wisp!=null)wisp.DamageFromSkill=battle.ResolvingSkillHit;
             var lunar=view.GetComponent<LunarVfx>();if(lunar!=null)lunar.DamageFromSkill=battle.ResolvingSkillHit;
-            view.PlayCue(cue,damage,!restoringPresentation);
+            view.PlayCue(cue,damage,!restoringPresentation&&!(cue==CombatCue.BossSkill&&battle.PrimordialBossBattle));
         }
         void Start()
         {
@@ -57,7 +57,7 @@ namespace DragonTower
             view.BindRecoveryAction(()=>UseItem(TowerRun.ConsumableSlotIndex));
             Flow.Initialize(this,view,dragons);
         }
-        public void EndBattle() { view.HideResultPresentation(); ClearItemProcVisuals();CancelSignature();view.CancelGesture();battle=null; }
+        public void EndBattle() { DragonTowerAudio.StopFinalBossAudio(); view.HideResultPresentation(); ClearItemProcVisuals();CancelSignature();view.CancelGesture();battle=null; }
         void CancelSignature(){bossSkillVfx?.Clear();imprintAttackVfx?.Clear();view.GetComponent<MirLegendaryVfx>()?.Cancel();view.GetComponent<HydraVfx>()?.Cancel();battle?.CancelPoisonAcceleration();view.GetComponent<EclipseVfx>()?.Cancel();view.GetComponent<DarkSkillVfx>()?.Clear();battle?.CancelPersistentAttack();view.GetComponent<KrakenVfx>()?.Cancel();view.GetComponent<HaesinVfx>()?.Cancel();battle?.CancelCelestial();view.GetComponent<CelestialVfx>()?.Cancel();battle?.CancelTimeDomain();view.GetComponent<TimeClockworkVfx>()?.Cancel();view.GetComponent<CatastropheVfx>()?.Cancel();view.GetComponent<AscensionVfx>()?.Cancel();battle?.CancelAttackEmpower();view.GetComponent<WaterSkillVfx>()?.Clear();view.GetComponent<LightSkillVfx>()?.Clear();view.GetComponent<LightningSkillVfx>()?.Clear();view.GetComponent<CrushingBeamVfx>()?.Cancel();battle?.CancelChargedBeam();view.GetComponent<GenesisVfx>()?.Cancel();battle?.CancelCompletionDefense();view.GetComponent<EarthSkillVfx>()?.Clear();battle?.CancelTargetModifier();view.GetComponent<VolcanicMeteorVfx>()?.Cancel();battle?.CancelCompletionHeal();view.GetComponent<SolarPierceVfx>()?.Cancel();view.GetComponent<FireSkillVfx>()?.Clear();battle?.CancelSlowSignature();view.GetComponent<LunarVfx>()?.Cancel();battle?.CancelDodgeRelease();view.GetComponent<WispVfx>()?.Cancel();view.GetComponent<IceSkillVfx>()?.Clear();battle?.CancelProtectedSkill();view.GetComponent<DantianVfx>()?.Cancel();view.GetComponent<DantianFeedback>()?.Clear();}
         void OnDisable(){ClearItemProcVisuals();if(view!=null)CancelSignature();}
         public void BeginBattle(DragonData dragon) { BeginBattle(dragon,BattleEnemyStats.Normal(),1,false); }
@@ -74,12 +74,15 @@ namespace DragonTower
             view.SetSkillPresentation(activeSkill??dragon.SkillAtLevel(dragonLevel));
             view.SetEncounter(enemy,floor,boss,enemySprite);
             battle=RestoreOrCreateBattle(stats,enemy,initialHP);
+            if(DesktopCheatsAvailable){if(cheatGod&&!battle.CheatInvincible){battle.CheatInvincible=true;RecordBattleInput(7);}cheatGod=battle.CheatInvincible;}
+            else if(battle.CheatInvincible){battle.CheatInvincible=false;RecordBattleInput(7);}
             var run=Flow==null?null:Flow.CurrentRun;
             view.PrepareResultPresentation(run);
             view.SetRunProgress(run==null?dragonLevel:run.Level,run==null?0:run.Experience,run==null?100:run.ExperienceToNext);
             view.message.text=battle.AreaHint;
             view.Show(battle);
-            bossSkillVfx?.Render(battle);
+            Flow?.ShowSimpleCombatGuide();
+            bossSkillVfx?.Render(battle);DragonTowerAudio.UpdateFinalBossAudio(battle);
             view.SetItems(Flow==null?null:Flow.CurrentRun);
             view.restartButton.GetComponentInChildren<UnityEngine.UI.Text>().text="결과 확인";
         }
@@ -100,6 +103,7 @@ namespace DragonTower
         }
         void Update()
         {
+            TickDesktopCheats();
             if(battle==null || !focused) return;
             // Returning from a hidden browser tab must not cause accumulated hits.
             float delta=Flow.TutorialDelta(Mathf.Min(Time.deltaTime,.1f));
@@ -109,7 +113,7 @@ namespace DragonTower
             imprintAttackVfx?.Step(delta);
             view.StepAnimation(battle,delta);StepItemProcVisuals(delta);
             view.Show(battle);
-            bossSkillVfx?.Render(battle);
+            bossSkillVfx?.Render(battle);DragonTowerAudio.UpdateFinalBossAudio(battle);
         }
         void OnApplicationFocus(bool value) { focused=value;if(!value){view.CancelGesture();Flow?.CheckpointBattle();} }
         void OnApplicationPause(bool paused) { focused=!paused;if(paused){view.CancelGesture();Flow?.CheckpointBattle();} }

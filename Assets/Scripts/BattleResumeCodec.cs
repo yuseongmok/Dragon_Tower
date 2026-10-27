@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
@@ -52,7 +52,7 @@ namespace DragonTower
                 for (int i = 0; i < count; i++)
                 {
                     int action = reader.ReadByte();
-                    if (action > (saved.combatBalanceVersion>=11?6:4)) throw new InvalidDataException("Invalid battle action.");
+                    if (action > 9) throw new InvalidDataException("Invalid battle action.");
                     restored.inputs.Add(new BattleInputRecord
                     {
                         action = action, delta = action == 0 ? reader.ReadSingle() : 0,

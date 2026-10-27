@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,16 +11,21 @@ namespace DragonTower
         {
             if(towerRun==null||towerRun.Phase!=FloorPhase.Choosing)return false;
             var skin=Resources.Load<BattleSkin>("PixelBattleSkin");
-            var region=skin!=null?skin.EntranceForFloor(towerRun.Floor):null;
+            var region=skin!=null?(towerRun.Floor==1?DungeonEntrance():skin.EntranceForFloor(towerRun.Floor)):null;
             if(region==null)return false;
             if(Session.HasDiscoveredRegion(region.regionId)&&!region.replayDiscovered)return false;
             if(Session.HasPresentedRegion(region.regionId,towerRun.Progress.runId))return false;
             if(regionEntranceOwner!=null&&regionEntranceOwner==body)return true;
             StartCoroutine(ShowRegionEntrance(region,skin));return true;
         }
+        static EnvironmentBackgroundSet DungeonEntrance()=>new EnvironmentBackgroundSet{
+            firstFloor=1,lastFloor=10,regionId="dungeon-entry",regionNumber=1,regionName="지하 감옥",
+            entranceMessage="지하 감옥의 문이 열립니다",entranceSeconds=2.6f,replayDiscovered=true,
+            entranceTint=new Color(.78f,.57f,.29f,1),particleTint=new Color(.91f,.73f,.43f,1),particleCount=0};
         IEnumerator ShowRegionEntrance(EnvironmentBackgroundSet region,BattleSkin skin)
         {
             // The next floor was already committed by AdvanceFloor. This presentation never awards or advances.
+            bool dungeon=region.regionId=="dungeon-entry";
             bool canSkip=region.replayDiscovered&&Session.HasDiscoveredRegion(region.regionId),skip=false;
             Screen("구역 진입");var owner=body;regionEntranceOwner=owner;notice.text=string.IsNullOrEmpty(region.entranceMessage)?"새로운 물길이 열립니다":region.entranceMessage;
             if(canSkip)notice.text+=" · 터치하여 건너뛰기";
@@ -29,7 +34,7 @@ namespace DragonTower
             scenery.transform.SetParent(world,false);
             var doorRoot=Rect("Region gate",world,0,235,300,350);
             var door=doorRoot.gameObject.AddComponent<TowerDoorVisual>();
-            door.Build(DoorSprite(true,towerRun.Floor),RewardIcon(14),region.entranceTint,true,TowerRoomKind.Boss);
+            door.Build(DoorSprite(true,towerRun.Floor),RewardIcon(14),region.entranceTint,true,TowerRoomKind.Boss,dungeon?1:0,0);
             RectTransform gear=null;
             if(region.forgeEffects){gear=Rect("Region rotating gear",doorRoot,0,150,64,64);var graphic=gear.gameObject.AddComponent<RegionGearGraphic>();graphic.raycastTarget=false;}
             var water=Rect("Region water particles",owner,0,425,480,850).gameObject.AddComponent<RegionWaterParticles>();
@@ -51,7 +56,8 @@ namespace DragonTower
                 world.localScale=Vector3.one*(1+rise*.40f);world.anchoredPosition=origin+new Vector2(0,-rise*100);
                 float flash=Mathf.Clamp01(1-Mathf.Abs(t-.64f)/.15f);
                 // Thunder darkens gently. Its cyan light stays inside the existing gate, never a screen flash.
-                if(region.throneEffects)
+                if(dungeon){veil.color=new Color(.015f,.02f,.025f,.6f*(1-Mathf.SmoothStep(0,1,t*3)));}
+                else if(region.throneEffects)
                 {
                     veil.color=new Color(.18f,.13f,.27f,.18f*(1-Mathf.SmoothStep(0,1,t*3)));
                 }

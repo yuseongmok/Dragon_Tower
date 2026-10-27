@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,7 +10,7 @@ namespace DragonTower {
    if(ability>0)return ImprintNames[ability]+" +"+(level*2)+"%";
    var k=d.passiveMechanic;float chance=PassiveImprintRules.Chance(k,level),duration=PassiveImprintRules.Duration(k,level);
    switch(k){
-    case DragonPassiveMechanic.JetStream:return "남은 일반공격 대기시간 -"+PassiveImprintRules.Value(level,15,40)+"%";
+    case DragonPassiveMechanic.JetStream:return "스킬 사용 후 1초간 일반공격 쿨타임 -"+PassiveImprintRules.Value(level,15,40)+"%";
     case DragonPassiveMechanic.VoidAccelerator:return "재시전 최대 HP 소비 "+PassiveImprintRules.OvercastCost(level)+"%";
     case DragonPassiveMechanic.HydraVenom:return PassiveImprintRules.PoisonPeriod(level).ToString("0.0")+"초마다 공격력 "+PassiveImprintRules.DotPercent(level)+"% 중독";
     case DragonPassiveMechanic.HardenedShell:return "증가 HP 10%당 스킬 +"+PassiveImprintRules.Value(level,1,3).ToString("0.0")+"% (상한 30%)";

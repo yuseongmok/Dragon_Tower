@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -9,11 +9,13 @@ namespace DragonTower
     public enum MusicMood { Lobby, Battle, Boss }
 
     /// <summary>Persistent, self-contained audio for WebGL and desktop builds.</summary>
-    public sealed class DragonTowerAudio : MonoBehaviour
+    public sealed partial class DragonTowerAudio : MonoBehaviour
     {
         const int Rate=22050;
         static DragonTowerAudio instance;
-        AudioSource music,sfx;
+        AudioSource music,sfx,finalBossSfx;
+        BattleModel finalAudioOwner;int finalAudioPhase,finalAudioCast;double finalAudioImpact;
+        readonly Dictionary<string,AudioClip> finalClips=new Dictionary<string,AudioClip>();
         AudioListener fallbackListener;
         AudioClip lobby,battle,boss,stage2,stage3,ancientBoss,krakenBoss,vulcanBoss,ui,attack,impact,skill,dodge,hurt,bossSkill,chest,victory,defeat,evolution,augment,purchase,levelUp;
         readonly Dictionary<string,AudioClip> skillClips=new Dictionary<string,AudioClip>();
@@ -33,11 +35,13 @@ namespace DragonTower
             if(instance!=null&&instance!=this){Destroy(gameObject);return;}instance=this;DontDestroyOnLoad(gameObject);
             music=gameObject.AddComponent<AudioSource>();music.loop=true;music.playOnAwake=false;music.volume=PlayerPrefs.GetFloat("DragonTower.MusicVolume",.28f);
             sfx=gameObject.AddComponent<AudioSource>();sfx.playOnAwake=false;sfx.volume=PlayerPrefs.GetFloat("DragonTower.SfxVolume",.72f);
+            finalBossSfx=gameObject.AddComponent<AudioSource>();finalBossSfx.playOnAwake=false;finalBossSfx.volume=sfx.volume;
             fallbackListener=gameObject.AddComponent<AudioListener>();
-            BuildClips();SetMusic(MusicMood.Lobby);
+            InitializeMusicBlend();BuildClips();SetMusic(MusicMood.Lobby);
         }
         void Update()
         {
+            TickMusicBlend();
             if(Time.unscaledTime<scanAt)return;scanAt=Time.unscaledTime+1;
             EnsureListener();
             foreach(var button in FindObjectsByType<Button>(FindObjectsInactive.Include,FindObjectsSortMode.None))if(button.GetComponent<DragonTowerUiSound>()==null)button.gameObject.AddComponent<DragonTowerUiSound>();
@@ -60,18 +64,35 @@ namespace DragonTower
             AudioClip clip=isBoss?(floor>=30?a.vulcanBoss:floor>=20?a.krakenBoss:a.ancientBoss):(floor>=21?a.stage3:floor>=11?a.stage2:a.battle);
             a.SwitchMusic(clip);
         }
+        AudioClip FinalClip(string name){if(!finalClips.TryGetValue(name,out var clip)){clip=Resources.Load<AudioClip>("Audio/Boss/"+name);finalClips[name]=clip;if(clip==null)Debug.LogWarning("Missing final boss audio: "+name);}return clip;}
+        public static string FinalPatternClip(string id){switch(id){case "contract_spears":case "contract_spears_echo":return "성창";case "rotating_judgment":case "sanctuary_eight":return "성역";case "dragon_fear":return "드래곤피어";case "first_contract_end":return "빅뱅";case "contract_void_claw":return "공허 발톱";case "contract_apocalypse":return "종언의 계약";default:return null;}}
+        public static void StopFinalBossAudio(){if(instance==null)return;instance.finalBossSfx.Stop();instance.finalAudioOwner=null;instance.finalAudioPhase=0;}
+        public static void UpdateFinalBossAudio(BattleModel model){
+            var a=Instance;if(model==null||!model.PrimordialBossBattle||model.Result!=BattleResult.Fighting){if(a.finalAudioOwner!=null)StopFinalBossAudio();return;}
+            if(a.finalAudioOwner!=model){a.finalBossSfx.Stop();a.finalAudioOwner=model;a.finalAudioPhase=0;a.finalAudioCast=model.BossCastCount;a.finalAudioImpact=model.BossImpactAt;a.finalBossSfx.loop=false;a.introRoarPlayed=!model.PrimordialIntroducing||model.PrimordialIntroProgress>=.50f;
+                if(model.PrimordialIntroducing&&model.PrimordialIntroProgress<.1f){a.finalBossSfx.clip=a.FinalClip("등장");a.finalBossSfx.Play();}}
+            if(!a.introRoarPlayed&&model.PrimordialIntroducing&&model.PrimordialIntroProgress>=.4991f){a.introRoarPlayed=true;a.finalBossSfx.PlayOneShot(a.FinalClip("드래곤피어"));}
+            int phase=model.PrimordialTransitioning&&model.PrimordialTransitionProgress>=.6f?2:model.PrimordialPhase;
+            if(a.finalAudioPhase!=phase){a.finalAudioPhase=phase;a.mood=MusicMood.Boss;a.BlendFinalMusic(a.FinalClip(phase==2?"페이즈2 브금":"페이즈1 브금"),phase==2);}
+            string name=FinalPatternClip(model.ActiveBossSkill?.id);
+            if(model.BossCastCount!=a.finalAudioCast){a.finalAudioCast=model.BossCastCount;a.finalBossSfx.loop=false;if(name=="드래곤피어"){a.finalBossSfx.Stop();a.finalBossSfx.clip=a.FinalClip(name);a.finalBossSfx.Play();}}
+            bool cross=name=="성역"&&model.BossState==BossSkillState.Travel;
+            if(cross&&!a.finalBossSfx.loop){a.finalBossSfx.Stop();a.finalBossSfx.clip=a.FinalClip("성역");a.finalBossSfx.loop=true;a.finalBossSfx.Play();}
+            if(!cross&&a.finalBossSfx.loop){a.finalBossSfx.Stop();a.finalBossSfx.loop=false;}
+            if(model.BossImpactAt!=a.finalAudioImpact){a.finalAudioImpact=model.BossImpactAt;if(name!=null&&name!="성역"&&name!="드래곤피어"){a.finalBossSfx.Stop();a.finalBossSfx.clip=a.FinalClip(name);a.finalBossSfx.Play();}}
+        }
         public static void SetVolumes(float musicVolume,float sfxVolume)
         {
-            var a=Instance;a.music.volume=Mathf.Clamp01(musicVolume);a.sfx.volume=Mathf.Clamp01(sfxVolume);
-            PlayerPrefs.SetFloat("DragonTower.MusicVolume",a.music.volume);PlayerPrefs.SetFloat("DragonTower.SfxVolume",a.sfx.volume);PlayerPrefs.Save();
+            var a=Instance;a.musicLevel=Mathf.Clamp01(musicVolume);a.ApplyMusicBlend();a.sfx.volume=Mathf.Clamp01(sfxVolume);a.finalBossSfx.volume=a.sfx.volume;
+            PlayerPrefs.SetFloat("DragonTower.MusicVolume",a.musicLevel);PlayerPrefs.SetFloat("DragonTower.SfxVolume",a.sfx.volume);PlayerPrefs.Save();
         }
         public static void GetVolumes(out float musicVolume,out float sfxVolume)
-        {var a=Instance;musicVolume=a.music.volume;sfxVolume=a.sfx.volume;}
+        {var a=Instance;musicVolume=a.musicLevel;sfxVolume=a.sfx.volume;}
         public static void SetPaused(bool paused)
         {
-            var a=Instance;a.sfx.ignoreListenerPause=true;
-            if(paused){a.music.Pause();a.sfx.Stop();}
-            else if(a.music.clip!=null)a.music.UnPause();
+            var a=Instance;a.audioPaused=paused;a.sfx.ignoreListenerPause=true;
+            if(paused){a.music.Pause();a.musicOther.Pause();a.sfx.Stop();a.finalBossSfx.Pause();}
+            else {if(a.music.clip!=null)a.music.UnPause();a.musicOther.UnPause();a.finalBossSfx.UnPause();}
         }
         public static void PlayUi(){var a=Instance;a.UnlockWebAudio();a.One(a.ui,.72f,UnityEngine.Random.Range(.96f,1.05f));}
         public static void PlayChest(){Instance.One(Instance.chest,1);}
@@ -96,7 +117,7 @@ namespace DragonTower
         static float ElementPitch(SkillEffectKind element)
         {switch(element){case SkillEffectKind.Frost:return 1.2f;case SkillEffectKind.Wind:return 1.12f;case SkillEffectKind.Earth:return .78f;case SkillEffectKind.Lightning:return 1.35f;case SkillEffectKind.Water:return .92f;case SkillEffectKind.Dark:return .7f;case SkillEffectKind.Light:return 1.28f;default:return 1;}}
         void UnlockWebAudio(){if(music.clip!=null&&!music.isPlaying)music.Play();}
-        void SwitchMusic(AudioClip clip){if(clip==null||music.clip==clip&&music.isPlaying)return;music.clip=clip;music.pitch=1;music.Play();}
+        void SwitchMusic(AudioClip clip){if(clip==null||music.clip==clip&&music.isPlaying)return;CancelMusicBlend();music.loop=true;music.clip=clip;music.pitch=1;music.Play();}
         void One(AudioClip clip,float volume,float pitch=1){if(clip==null)return;sfx.pitch=pitch;sfx.PlayOneShot(clip,volume);}
         static string Key(string value)=>(value??string.Empty).Replace(" ",string.Empty).Replace("_",string.Empty).ToLowerInvariant();
         bool HasSkillClip(string skillName)=>skillClips.ContainsKey(Key(skillName));

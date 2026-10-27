@@ -38,7 +38,7 @@ namespace DragonTower {
    int cost=BondEconomy.Load().rerollCost;
    if(Profile.bondPoints<cost){message="유대 포인트 "+(cost-Profile.bondPoints)+"P 부족";return false;}
    string[] ids;
-   if(kind==RewardRerollKind.Chest||kind==RewardRerollKind.Drop)ids=db.PickItems(kind==RewardRerollKind.Drop?1:(run.ChestRewardIds?.Length??0),seed).Select(x=>x.StableId).ToArray();
+   if(kind==RewardRerollKind.Chest||kind==RewardRerollKind.Drop)ids=db.PickItems(kind==RewardRerollKind.Drop?1:(run.ChestRewardIds?.Length??0),seed,run).Select(x=>x.StableId).ToArray();
    else ids=RewardGenerator.Mixed(run,db,Selected,seed,3).Select(x=>x.augment!=null?"a:"+x.augment.StableId:"s:"+x.skill.StableId).ToArray();
    if(ids.Length==0){message="재추첨할 수 있는 보상이 없습니다.";return false;}
    var record=new RewardRerollRecord{key=expectedKey,candidates=ids};

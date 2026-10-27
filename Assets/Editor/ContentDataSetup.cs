@@ -57,7 +57,7 @@ namespace DragonTower.Editor
             database.items=FindAll<ItemData>();database.augments=FindAll<AugmentData>();
             EditorUtility.SetDirty(database);AssetDatabase.SaveAssets();
         }
-        static T[] FindAll<T>() where T:UnityEngine.Object=>AssetDatabase.FindAssets("t:"+typeof(T).Name,new[]{Root})
+        static T[] FindAll<T>() where T:UnityEngine.Object=>AssetDatabase.FindAssets("t:"+typeof(T).Name,typeof(T)==typeof(MonsterData)?new[]{Root,"Assets/Resources/Enemies"}:new[]{Root})
             .Select(g=>AssetDatabase.LoadAssetAtPath<T>(AssetDatabase.GUIDToAssetPath(g))).Where(x=>x!=null).OrderBy(x=>x.name).ToArray();
         static void EnsureFolder(string parent,string child){string path=parent+"/"+child;if(!AssetDatabase.IsValidFolder(path))AssetDatabase.CreateFolder(parent,child);}
         static void EnsureMonster(string id,string name,ElementType element,int hp,int damage,float interval,int minFloor,int maxFloor,int weight,bool boss,string spriteFile)

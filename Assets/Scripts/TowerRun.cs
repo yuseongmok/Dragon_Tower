@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 namespace DragonTower
@@ -113,7 +113,7 @@ namespace DragonTower
             if(roll<57)return TowerRoomKind.Item;
             if(roll<67)return TowerRoomKind.Augment;
             if(roll<77)return TowerRoomKind.Recovery;
-            if(roll<80)return TowerRoomKind.Nest;
+            if(roll<79)return TowerRoomKind.Nest;
             if(roll<92)return TowerRoomKind.Gold;
             return TowerRoomKind.Shop;
         }
@@ -131,7 +131,7 @@ namespace DragonTower
             bool oldPassives=legacyBalance||combatRulesVersion<3;
             int affinityPassiveBonus=oldPassives&&(source.passiveMechanic==DragonPassiveMechanic.StormAffinity||source.passiveMechanic==DragonPassiveMechanic.FrozenBlade)?evolutionStage*10:0;
             int rawAttack=Math.Max(1,(int)Math.Round(source.attackDamage*(definition==null?AttackEvolutionMultiplier(evolutionStage):definition.AttackMultiplier(evolutionStage))+AttackBonus+itemAttack));
-            return new BattleStats{basicImprintLevel=combatRulesVersion>=4?Imprint.levels[1]:0,skillImprintLevel=combatRulesVersion>=4?Imprint.levels[2]:0,legacyBalance=legacyBalance,combatRulesVersion=combatRulesVersion,passiveCooldownApplied=true,passiveImprintLevel=PassiveImprintRules.Clamp(passiveImprintLevel),passiveBaseMaxHP=(float)Math.Round(BaseMaxHP*(definition==null?HealthEvolutionMultiplier(evolutionStage):definition.HealthMultiplier(evolutionStage))),baseAttackDamage=rawAttack,baseAttackCooldown=source.attackCooldown,baseSkillCooldown=selected.cooldown,attackDamageBonusPercent=AttackDamagePercent+itemAttackPercent,skillDamageBonusPercent=SkillDamagePercent+itemSkillPercent+affinityPassiveBonus,speciesId=source.speciesId,displayName=source.displayName,element=source.element,elementType=source.elementType,skillEffect=replacedSkill==null?source.skillEffect:replacedSkill.effectKind,maxHP=MaxHP,attackDamage=Math.Max(1,(int)Math.Round((source.attackDamage*(definition==null?AttackEvolutionMultiplier(evolutionStage):definition.AttackMultiplier(evolutionStage))+AttackBonus+itemAttack)*(1+(AttackDamagePercent+itemAttackPercent)/100f))),
+            return new BattleStats{basicImprintLevel=combatRulesVersion>=4?Imprint.levels[1]:0,skillImprintLevel=combatRulesVersion>=4?Imprint.levels[2]:0,legacyBalance=legacyBalance,combatRulesVersion=combatRulesVersion,passiveCooldownApplied=true,passiveImprintLevel=PassiveImprintRules.Clamp(passiveImprintLevel),passiveBaseMaxHP=(float)Math.Round(BaseMaxHP*(definition==null?HealthEvolutionMultiplier(evolutionStage):definition.HealthMultiplier(evolutionStage))),baseAttackDamage=rawAttack,baseAttackCooldown=source.attackCooldown,baseSkillCooldown=CheatSignatureNoCooldown?0:selected.cooldown,attackDamageBonusPercent=AttackDamagePercent+itemAttackPercent,skillDamageBonusPercent=SkillDamagePercent+itemSkillPercent+affinityPassiveBonus,speciesId=source.speciesId,displayName=source.displayName,element=source.element,elementType=source.elementType,skillEffect=replacedSkill==null?source.skillEffect:replacedSkill.effectKind,maxHP=MaxHP,attackDamage=Math.Max(1,(int)Math.Round((source.attackDamage*(definition==null?AttackEvolutionMultiplier(evolutionStage):definition.AttackMultiplier(evolutionStage))+AttackBonus+itemAttack)*(1+(AttackDamagePercent+itemAttackPercent)/100f))),
                 attackCooldown=ScaleTime(source.attackCooldown,AttackCooldownPercent+itemAttackCooldown,.08f),dodgeCooldown=ScaleTime(source.dodgeCooldown,DodgeCooldownPercent+itemDodgeCooldown,.2f),
                 dodgeDuration=Math.Max(.05f,source.dodgeDuration*(1+(DodgeDurationPercent+itemDodgeDuration)/100f)),criticalChance=Math.Max(0,source.criticalChance+(CriticalChancePercent+itemCrit)/100f),criticalDamage=Math.Max(1,source.criticalDamage+(CriticalDamagePercent+itemCritDamage)/100f),damageReductionPercent=Math.Max(0,Math.Min(80,DamageReductionPercent+itemReduction)),skillDisabled=SkillDisabled,augments=augmentData.Select(x=>x.Snapshot()).ToArray(),items=itemSlots.Where(x=>x.Item!=null&&x.Item.kind==ItemKind.Equipment).Select(x=>x.Item.Snapshot(x.Count)).ToArray(),
                 passiveName=source.passiveName,passiveDescription=source.passiveDescription,passiveMechanic=source.passiveMechanic,alternateSkillElement=source.alternateSkillElement,passiveAvailable=PassiveAvailable,passiveStage=evolutionStage,

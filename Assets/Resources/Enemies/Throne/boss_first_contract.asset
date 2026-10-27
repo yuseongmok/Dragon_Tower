@@ -18,7 +18,7 @@ MonoBehaviour:
   rarity: 0
   icon: {fileID: -5985431472191410055, guid: 4f997d9357e31a4438b546459c46cfb2, type: 3}
   elementType: 8
-  baseHP: 5600
+  baseHP: 7000
   attackDamage: 70
   attackInterval: 2.8
   hpGrowthPerFloor: 0

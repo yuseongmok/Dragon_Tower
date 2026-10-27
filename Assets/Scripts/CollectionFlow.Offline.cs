@@ -1,4 +1,4 @@
-using System;using System.Runtime.InteropServices;using UnityEngine;
+﻿using System;using System.Runtime.InteropServices;using UnityEngine;
 namespace DragonTower {
  public sealed partial class CollectionFlow {
   string offlineNotice="",offlinePrefix;bool offlineIdentityPending,offlineChoiceCommitted;float offlineDeadline;
@@ -50,7 +50,7 @@ namespace DragonTower {
   }
   void AddLocalNickname(){var b=Button(string.IsNullOrEmpty(Session.Profile.playerName)?"닉네임 설정":"플레이어 · "+Session.Profile.playerName,0,205,300,42,ShowLocalPlayer);b.GetComponentInChildren<UnityEngine.UI.Text>().supportRichText=false;}
   void ShowOfflineStarterLobby(){Screen("드래곤 로비");AddLocalNickname();var art=Rect("첫 드래곤의 알",body,0,389,180,180);art.gameObject.AddComponent<EggGraphic>().raycastTarget=false;Label("첫 드래곤을 만나보세요",0,493,390,38,26,Gold);AddPersonalRecords();Button("첫 드래곤 부화",0,650,400,66,ShowEgg);Button("드래곤 도감",0,719,380,54,ShowCodex);Button("업적 · 도전 기록",0,771,380,40,ShowProgressRecords);notice.text="로그인 없이 시작 · 알을 부화하면 탑에 도전할 수 있습니다.";ApplyCozyLobby();}
-  public void ShowLocalPlayer(){CheckpointBattle();controller.EndBattle();towerRun=null;AccountScreen("플레이어 닉네임");var input=AccountInput("이 기기에서 사용할 닉네임",330,Session.Profile.playerName??"");input.characterLimit=12;var feedback=Label("한글·영문·숫자 1~12자",0,425,390,70,22,Color.white);Button("저장",0,575,380,60,()=>{var n=input.text.Trim();if(!TrainerProfile.ValidName(n)){feedback.text="닉네임을 확인해주세요. 공백만 사용할 수 없습니다.";return;}try{Session.SetTrainerName(n);ShowLobby();}catch{feedback.text="저장하지 못했습니다. 기존 이름은 유지됩니다.";}});Button("돌아가기",0,660,380,55,ShowLobby);Button("이야기 · 조작 연습",0,735,380,45,ShowStoryArchive);notice.text="닉네임과 진행 기록은 이 브라우저에 저장됩니다.";}
+  public void ShowLocalPlayer(){CheckpointBattle();controller.EndBattle();towerRun=null;AccountScreen("플레이어 닉네임");var input=AccountInput("이 기기에서 사용할 닉네임",330,Session.Profile.playerName??"");input.characterLimit=12;var feedback=Label("한글·영문·숫자 1~12자",0,425,390,70,22,Color.white);Button("저장",0,575,380,60,()=>{var n=input.text.Trim();if(!TrainerProfile.ValidName(n)){feedback.text="닉네임을 확인해주세요. 공백만 사용할 수 없습니다.";return;}try{Session.SetTrainerName(n);ShowLobby();}catch{feedback.text="저장하지 못했습니다. 기존 이름은 유지됩니다.";}});Button("돌아가기",0,660,380,55,ShowLobby);notice.text="닉네임과 진행 기록은 이 브라우저에 저장됩니다.";}
   string BestPartner(){var r=Session.Profile.bestScoreRun;if(r==null||string.IsNullOrEmpty(r.runId)||r.score!=Session.Profile.bestScore)return Session.Profile.bestScore>0?"이전 기록 · 파트너 정보 없음":"아직 완료한 도전이 없습니다";return string.IsNullOrEmpty(r.customDragonName)?r.originalDragonName:r.customDragonName+" ("+r.originalDragonName+")";}
   void AddPersonalRecords(){Panel("나의 탑 기록",body,0,560,400,98,AncientUi.Stone,AncientUi.Gold);Label("나의 탑 기록",0,527,380,24,18,Gold);var p=Session.Profile;Label(p.bestScore.ToString("N0")+"점   ·   최고 "+p.bestFloor+"층   ·   유대 "+p.bestBond,0,551,382,29,19,Color.white);var t=Label(BestPartner(),0,583,382,25,16,Muted);t.supportRichText=false;}
  }

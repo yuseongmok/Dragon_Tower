@@ -7,7 +7,7 @@ namespace DragonTower
     public sealed class BattleStatusHud : MonoBehaviour
     {
         sealed class Badge { public RectTransform rect; public Image panel; public Text text; public BattleStatusIcon icon; public bool active; public double appeared; public int kind=-1; }
-        RectTransform root; readonly Badge[] enemies=new Badge[5],players=new Badge[8];
+        RectTransform root,auroraPanel; Text auroraText; readonly Badge[] enemies=new Badge[5],players=new Badge[8];
         static readonly Color[] Colors={new Color(1,.40f,.16f),new Color(1,.85f,.20f),new Color(.35f,.87f,1),new Color(.86f,.57f,1),new Color(.55f,1,.32f),new Color(1,.35f,.46f),new Color(.90f,.65f,1),new Color(1,.65f,.45f),WindVFXStyle.Mint};
         static RectTransform Rect(Transform parent,string name,float w,float h)
         {var r=new GameObject(name,typeof(RectTransform)).GetComponent<RectTransform>();r.SetParent(parent,false);r.anchorMin=r.anchorMax=new Vector2(.5f,1);r.sizeDelta=new Vector2(w,h);return r;}
@@ -16,6 +16,11 @@ namespace DragonTower
             root=Rect(view.frame,"Combat status indicators",480,850);root.pivot=new Vector2(.5f,1);root.anchoredPosition=Vector2.zero;
             root.SetSiblingIndex(view.resultPanel.transform.GetSiblingIndex());
             Create(enemies,view.font);Create(players,view.font);
+            auroraPanel=Rect(root,"Aurora passive stacks",310,25);auroraPanel.anchoredPosition=new Vector2(0,-500);
+            var bg=auroraPanel.gameObject.AddComponent<Image>();bg.color=new Color(.06f,.035f,.10f,.85f);bg.raycastTarget=false;
+            var tr=Rect(auroraPanel,"Aurora stack count and timer",306,25);tr.anchoredPosition=new Vector2(0,-12.5f);
+            auroraText=tr.gameObject.AddComponent<Text>();auroraText.font=view.font;auroraText.fontSize=14;auroraText.alignment=TextAnchor.MiddleCenter;auroraText.color=new Color(.88f,.75f,1);auroraText.raycastTarget=false;
+            auroraPanel.gameObject.SetActive(false);
         }
         void Create(Badge[] badges,Font font)
         {
@@ -31,6 +36,9 @@ namespace DragonTower
         public void Show(BattleModel b)
         {
             root.gameObject.SetActive(b.Result==BattleResult.Fighting);if(b.Result!=BattleResult.Fighting)return;
+            bool aurora=b.Dragon.passiveMechanic==DragonPassiveMechanic.Mirage&&b.AuroraStacks>0;
+            auroraPanel.gameObject.SetActive(aurora);
+            if(aurora)auroraText.text="신기루 "+b.AuroraStacks+"/5 · 공격력 +"+(b.AuroraStacks*2)+"% · "+b.AuroraRemaining.ToString("0.0")+"초";
             int e=0,p=0;
             Add(enemies,ref e,b.EnemyBurning,0,"화상",b.EnemyBurnRemaining,b.Time,181);
             Add(enemies,ref e,b.EnemyParalyzed,1,"마비",b.EnemyParalyzeRemaining,b.Time,181);
@@ -83,5 +91,6 @@ namespace DragonTower
         void Poly(VertexHelper vh,params Vector2[] points){int start=vh.currentVertCount;var rect=rectTransform.rect;foreach(var p in points)vh.AddVert(new Vector3(rect.center.x+p.x*rect.width*.45f,rect.center.y+p.y*rect.height*.45f),color,Vector2.zero);vh.AddTriangle(start,start+1,start+2);}
     }
 }
+
 
 

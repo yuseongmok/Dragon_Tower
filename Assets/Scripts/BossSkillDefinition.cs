@@ -16,6 +16,7 @@ namespace DragonTower {
   public float[] shotPreparationTimes,shotTravelTimes,shotDamageMultipliers;
   public BossBladeDirection[] shotDirections;
   public bool oncePerEncounter;
+  public float patternRestAfter; // Zero preserves the saved encounter normal-attack gap.
   public bool statusOnly; // No damage pipeline or minimum damage for pure control skills.
   public bool randomClawJudgment; // Snapshot opt-in: legacy claw encounters retain fixed judgments.
   public bool eightRayCross; // Snapshot opt-in for phase-two 45-degree crossings.
@@ -61,3 +62,4 @@ namespace DragonTower {
   }
  }
 }
+

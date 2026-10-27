@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 
 namespace DragonTower
@@ -44,7 +44,7 @@ namespace DragonTower
                 if(HasAugment(AugmentMechanic.DoubleCasting))reduction-=(int)augmentData.First(a=>a.mechanic==AugmentMechanic.DoubleCasting).secondaryValue;
                 if(HasAugment(AugmentMechanic.Vampire))reduction+=(int)augmentData.First(a=>a.mechanic==AugmentMechanic.Vampire).duration;
             }
-            skill.cooldown=SkillCooldownZero?0:ScaleTime(selected.cooldown,reduction,.2f);
+            skill.cooldown=(SkillCooldownZero||CheatSignatureNoCooldown)?0:ScaleTime(selected.cooldown,reduction,.2f);
             return skill;
         }
     }

@@ -1,16 +1,16 @@
-using System;
+﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
 namespace DragonTower {
  public sealed partial class CollectionSession {
-  public void SaveIntroduction(int page,int step,bool completed){var n=ProfileStore.Clone(Profile);n.introPage=Mathf.Clamp(page,0,8);n.tutorialStep=Mathf.Clamp(step,0,2);n.tutorialCompleted=completed;store.Save(n);Profile=n;}
+  public void SaveIntroduction(int page,int step,bool completed){var n=ProfileStore.Clone(Profile);n.onboardingVersion=1;n.introPage=Mathf.Clamp(page,0,8);n.tutorialStep=Mathf.Clamp(step,0,2);n.tutorialCompleted=completed;store.Save(n);Profile=n;}
  }
  public sealed partial class CollectionFlow {
   bool storyReplay,tutorialActive,dodgeSent;int lesson;float lessonEnd=-1;GameObject tutorialUI;Text tutorialText;RectTransform storyArt;float storyAge;StoryTowerCinema storyCinema;
   public bool TutorialActive=>tutorialActive;public int TutorialLesson=>lesson;
   static readonly string[] StoryTitles={"끝나지 않던 전쟁","최초의 유대","새로운 만남","","평화의 탑","최초의 계약","탑의 오염","남겨진 두 계약자","끝나지 않은 약속"};
   static readonly string[] StoryLines={"먼 옛날, 인간과 드래곤은 긴 전쟁을 벌였다.\n서로를 두려워하며, 끝없이 상처를 남겼다.","서로를 살려준 인간과 드래곤.\n두 존재의 유대는 전쟁을 멈췄다.\n서로를 믿을 수 있다는 것을 모두에게 보여주었다.","오랜 시간이 흐른 뒤,\n사람들이 사라진 폐허 속에서\n당신은 아직 식지 않은 알을 발견한다.","","인간은 돌을 쌓고, 드래곤은 하늘길을 열었다.\n서로 다른 삶이 층층이 이어져\n평화를 기리는 하나의 탑이 되었다.","탑의 가장 높은 제단에서, 두 존재는 약속했다.\n서로를 지배하지 않고, 함께 살아가겠다고.\n그 유대가 탑의 심장에 새겨졌다.","그러나 어느 날, 탑의 빛에 균열이 생겼다.\n공허가 스며들고, 금빛 문양이 꺼져 갔다.\n그 시작을 아는 이는 없었다.","사람들이 떠난 뒤에도,\n최초의 계약자들은 제단을 떠나지 않았다.\n함께 맺은 약속을 지키기 위해.","인간의 시간은 끝났지만,\n드래곤은 그 자리에 남았다.\n그는 떠났지만, 약속은 남았다."};
-  public bool TryBeginIntroduction(){if(Session==null||Session.Profile.onboardingVersion!=1||Session.Profile.tutorialCompleted||Session.HasSavedRun)return false;storyReplay=false;if(Session.Profile.introPage!=3)ShowStoryPage(Session.Profile.introPage);else if(Session.Selected==null)ShowEgg();else BeginTutorial(false);return true;}
+  public bool TryBeginIntroduction()=>false;
   public void ShowStoryArchive(){CheckpointBattle();controller.EndBattle();towerRun=null;Screen("이야기 · 조작 연습");Label("평화의 탑에 남은 첫 번째 기억",0,290,400,80,25,Gold);Button("오프닝 다시 보기",0,450,380,60,()=>{storyReplay=true;ShowStoryPage(0);});Button("전투 조작 연습",0,530,380,60,()=>BeginTutorial(true));Button("로비로",0,710,380,55,ShowLobby);notice.text="다시 보기는 기존 도전과 보상을 변경하지 않습니다.";}
   public void ShowStoryPage(int page){
    page=Mathf.Clamp(page,0,8);if(page==3)page=2;if(!storyReplay)Session.SaveIntroduction(page,0,false);

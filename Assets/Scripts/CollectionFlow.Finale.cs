@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 namespace DragonTower {
  public sealed partial class CollectionSession {
@@ -19,16 +19,11 @@ namespace DragonTower {
    new[]{"공허가 걷히자, 드래곤은 고개를 낮췄다.\n\n“너희는…… 함께 싸우고 있었구나.”","“지켜야 했던 것은…… 이 자리가 아니라,\n우리가 함께할 수 있다는 믿음이었구나.”"},
    new[]{"낡은 망토가 바람에 움직였다.\n오랜 기다림 끝에, 제단에 빛이 돌아왔다.","한 사람의 시간은 끝났지만,\n그 약속은 새로운 유대로 이어졌다."}
   };
-  bool TryFinalEntry(){
-   if(towerRun==null||towerRun.Floor!=100||towerRun.Room!=TowerRoomKind.Boss||towerRun.BattleResume!=null||towerRun.Phase==FloorPhase.CombatActive||Session.Profile.finalEntryRunId==towerRun.Progress.runId)return false;
-   SaveProgress();ShowFinalStory(0,Session.Profile.finalSceneRunId==towerRun.Progress.runId?Session.Profile.finalEntryPage:0);return true;
-  }
+  bool TryFinalEntry()=>false;
   bool TryFinalVictory(){
-   if(towerRun==null||towerRun.Floor!=100||towerRun.Room!=TowerRoomKind.Boss||towerRun.Phase!=FloorPhase.BattleRewards )return false;
-   string id=towerRun.Progress.runId;
-   if(Session.Profile.finalVictoryRunId!=id){ShowFinalStory(1,Session.Profile.finalSceneRunId==id?Session.Profile.finalVictoryPage:0);return true;}
-   if(Session.Profile.finalEndingRunId!=id){ShowFinalStory(2,Session.Profile.endingPage);return true;}
-   return false;
+   if(towerRun==null||towerRun.Floor!=100||towerRun.Room!=TowerRoomKind.Boss||towerRun.Phase!=FloorPhase.BattleRewards)return false;
+   Session.FinishRun(towerRun,true);SubmitPendingLeaderboard();towerRun.End();
+   Session.SaveFinalScene(towerRun.Progress.runId,2,0,true);controller.EndBattle();ShowFinalCompletion();return true;
   }
   public void ShowFinalStory(int kind,int page,bool replay=false){
    kind=Mathf.Clamp(kind,0,2);page=Mathf.Clamp(page,0,1);
@@ -63,8 +58,9 @@ namespace DragonTower {
    if(kind==1||(kind==2&&towerRun!=null&&towerRun.Active&&!towerRun.Progress.finalized)){ContinueRunPhase();return;}
    ShowFinalCompletion();
   }
+  System.Collections.IEnumerator ReturnAfterClear(Transform owner){yield return new WaitForSecondsRealtime(2.5f);if(body==owner)ShowLobby();}
   void ShowFinalCompletion(){
-   Screen("타워 완주");Label("100층을 돌파했습니다!\n최종 점수 "+(Session.Profile.lastRun?.progress?.score??0)+"점",0,350,420,80,28,Gold);Button("로비로",0,610,360,60,ShowLobby);
+   Screen("100층 돌파");Label("100층을 돌파했습니다!\n최종 점수 "+(Session.Profile.lastRun?.progress?.score??0)+"점",0,350,420,80,28,Gold);Button("로비로",0,610,360,60,ShowLobby);StartCoroutine(ReturnAfterClear(body));
   }
  }
 }
