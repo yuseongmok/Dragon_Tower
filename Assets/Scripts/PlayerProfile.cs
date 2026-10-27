@@ -14,6 +14,10 @@ namespace DragonTower
     [Serializable] public sealed class PlayerProfile
     {
         public int version=1;
+        public string finalEntryRunId,finalVictoryRunId,finalSceneRunId,finalEndingRunId;
+        public int finalEntryPage,finalVictoryPage,endingPage;
+        public bool endingPending,endingUnlocked;
+        public int onboardingVersion,introPage,tutorialStep; public bool tutorialCompleted;
         public int bondPoints; public long bondRevision;
         public List<DragonImprint> imprints=new List<DragonImprint>();
         public List<BondRewardReceipt> bondReceipts=new List<BondRewardReceipt>();
@@ -68,7 +72,7 @@ namespace DragonTower
             }
             if(best!=null){sequence=best.sequence;RecoveredBackup=invalid;return JsonUtility.FromJson<PlayerProfile>(best.payload);}
             if(exists)throw new InvalidOperationException("저장 데이터를 읽지 못했습니다. 기존 데이터를 보존했습니다. 임의로 초기화하지 않습니다.");
-            var fresh=new PlayerProfile{starterGiftClaimed=true,eggs=1};Save(fresh);return fresh;
+            var fresh=new PlayerProfile{starterGiftClaimed=true,eggs=1,onboardingVersion=1};Save(fresh);return fresh;
         }
         public void Save(PlayerProfile profile)
         {
@@ -103,7 +107,7 @@ namespace DragonTower
             if(!selected)throw new InvalidOperationException("Invalid selection");
             if(p.bondPoints<0||p.bondRevision<0)throw new InvalidOperationException("Invalid currency");
             var species=new HashSet<string>();foreach(var x in p.imprints??new List<DragonImprint>()){if(x==null||string.IsNullOrEmpty(x.speciesId)||!species.Add(x.speciesId)||!p.dragons.Exists(d=>d.speciesId==x.speciesId))throw new InvalidOperationException("Invalid imprint owner");x.Validate();}
-            var receipts=new HashSet<string>();foreach(var x in p.bondReceipts??new List<BondRewardReceipt>())if(x==null||string.IsNullOrEmpty(x.runId)||x.floor<1||x.floor>80||!receipts.Add(x.runId))throw new InvalidOperationException("Invalid reward receipt");
+            var receipts=new HashSet<string>();foreach(var x in p.bondReceipts??new List<BondRewardReceipt>())if(x==null||string.IsNullOrEmpty(x.runId)||x.floor<1||x.floor>100||!receipts.Add(x.runId))throw new InvalidOperationException("Invalid reward receipt");
         }
     }
     public sealed partial class CollectionSession

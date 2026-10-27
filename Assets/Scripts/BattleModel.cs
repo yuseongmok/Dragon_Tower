@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 namespace DragonTower
 {
     public enum AugmentMechanic
@@ -133,9 +133,9 @@ namespace DragonTower
         public bool EnemyPoisoned => NewPassives?SourceActive(true):poisonDamage>0||Time<temporaryPoisonUntil;
         public int EnemyShieldHP => enemyShieldHP;
         public int EnemyShieldMaxHP { get; private set; }
-        public double EnemyShieldRemaining => enemyShieldHP>0?Math.Max(0,enemyShieldUntil-Time):0;
+        public double EnemyShieldRemaining => enemyShieldHP>0?((VoidExpandedBattle||PrimordialBossBattle)&&BossBarrierActive?BossPhaseRemaining:Math.Max(0,enemyShieldUntil-Time)):0;
         public bool PassiveConsumed { get; private set; }
-        public bool CanUseSkill => Result==BattleResult.Fighting&&(Dragon.legacyBalance||!SkillSequencePending)&&!TimeDomainBusy&&!ChargedBeamBusy&&ChargeCooldownReady&&!SignatureCastLocked&&(string.IsNullOrEmpty(Dragon.skill.exclusiveDragonId)||Dragon.skill.exclusiveDragonId==Dragon.speciesId)&&!PlayerStunned&&!PlayerSkillSealed&&(!Dragon.skillDisabled||SignatureSkill)&&CanAffordAugmentSkill&&(Time>=SkillReady||(Dragon.passiveMechanic==DragonPassiveMechanic.VoidAccelerator&&(Dragon.legacyBalance||Time+1e-8>=lastSkillCastAt+1)));
+        public bool CanUseSkill => Result==BattleResult.Fighting&&!PrimordialCinematic&&(Dragon.legacyBalance||!SkillSequencePending)&&!TimeDomainBusy&&!ChargedBeamBusy&&ChargeCooldownReady&&!SignatureCastLocked&&(string.IsNullOrEmpty(Dragon.skill.exclusiveDragonId)||Dragon.skill.exclusiveDragonId==Dragon.speciesId)&&!PlayerStunned&&!PlayerSkillSealed&&(!Dragon.skillDisabled||SignatureSkill)&&CanAffordAugmentSkill&&(Time>=SkillReady||(Dragon.passiveMechanic==DragonPassiveMechanic.VoidAccelerator&&(Dragon.legacyBalance||Time+1e-8>=lastSkillCastAt+1)));
         // Reject input before charging HP or replacing any in-flight damage/utility queue.
         bool SkillSequencePending=>pendingSkillHits>0||SlowBonusPending||PersistentAttackActive||AttackEmpowered||AttackEmpowerPriming;
         // Optional exact, nonlethal cost override; legacy overcast remains unchanged at zero.
@@ -195,16 +195,17 @@ namespace DragonTower
             if(float.IsNaN(delta)||float.IsInfinity(delta)||delta<=0)return;
             double remaining=delta;
             while(remaining>0.0000001&&(Result==BattleResult.Fighting||CompletionHealPending))
-            {double step=BossStep(PersistentStep(CelestialStep(TimeDomainStep(AttackEmpowerStep(ChargedBeamStep(Math.Min(.05,remaining)))))));TickCompletionHeal(step);TickStep(step);ProcessItemProcs();if(Result!=BattleResult.Fighting){CancelTimeDomain();CancelCelestial();CancelPersistentAttack();CancelPoisonAcceleration();CancelAugmentEffects();}remaining-=step;}
+            {double step=BossStep(PersistentStep(CelestialStep(TimeDomainStep(AttackEmpowerStep(ChargedBeamStep(Math.Min(.05,remaining)))))));bool cinema=PrimordialAnimated&&PrimordialCinematic;if(!cinema)TickCompletionHeal(step);TickStep(step);if(!cinema)ProcessItemProcs();if(Result!=BattleResult.Fighting){CancelTimeDomain();CancelCelestial();CancelPersistentAttack();CancelPoisonAcceleration();CancelAugmentEffects();}remaining-=step;}
         }
         void TickStep(double delta)
         {
             if (Result != BattleResult.Fighting || delta <= 0) return;
+            if(TickPrimordialIntro(delta)||TickPrimordialTransition(delta))return;
             SlowPlayerCooldowns(delta);
             PauseEnemyTime(delta);
             AdvanceBossClock(delta);
             Time += delta;
-            TickTimeDomain();
+            TickTimeDomain();TickSolarCycle();
             if(Result!=BattleResult.Fighting)return;
             TickAttackEmpower();
             TickAreaMechanics();
@@ -247,12 +248,14 @@ namespace DragonTower
                 bool paralyzed=ResolveEnemyStrike(Enemy.damage*nextEnemyDamageMultiplier,Enemy.elementType,NextEnemyStrike,true,true,true);
                 NewEnemyAttackResolved(EnemyIntent=="일반 공격",paralyzed);dodgeAttemptedForStrike=false;
                 ScheduleNextEnemyAttack();
+                if(LibraryBossBattle||SolarBossBattle||VoidBossBattle||PrimordialBossBattle)TickBossSkills();
             }
             TickChargedBeam();TickAugments();
         }
         bool ResolveEnemyStrike(float rawDamage,ElementType element,double strikeAt,bool dodgeable,bool guardable,bool checkParalysis)
         {
                 bool paralyzed=checkParalysis&&EnemyParalyzed&&Roll(20);
+                if(SolarBossBattle&&checkParalysis){SolarAttackImpactAt=Time;SolarLastAttackMidnight=SolarAttackMidnight;if(SolarAttackMidnight){if(strikeAt>=DodgeUntil){Cue?.Invoke(CombatCue.EnemyMiss,0);Feedback?.Invoke("자정 · 중앙에서 안전하게 버텼습니다");return paralyzed;}dodgeable=false;}}
                 if(ProtectedSkillActive)
                 {
                     // Signature immunity is not a dodge: no dodge rewards or actor hit cue.
@@ -323,15 +326,16 @@ namespace DragonTower
             }
             strikeSlowMultiplier=slow;
             enemyWindupDuration=Math.Min(WindupDuration*slow,interval);
-            NextEnemyStrike+=interval;
+            NextEnemyStrike+=interval;SolarAttackScheduled();
         }
-        public bool Attack(){try{return AttackCore();}finally{ProcessItemProcs();}}
+        public bool Attack(){try{return AttackCore();}finally{solarBasicAttempt=false;ProcessItemProcs();}}
         bool AttackCore()
         {
             if(SignatureCastLocked||ChargedBeamCommitted)return false;
-            if (Result != BattleResult.Fighting || PlayerStunned || PlayerAttackSealed || Time < AttackReady) return false;
+            if (Result != BattleResult.Fighting || PrimordialCinematic || PlayerStunned || PlayerAttackSealed || Time < AttackReady) return false;
             AttackReady = Time + AttackCooldownNow();
             if(PlayerActionMissed(false))return true;
+            solarBasicAttempt=SolarMirrorActive;
             int itemEnemyBefore=EnemyHP+enemyShieldHP;PrepareBasicAugments();bool storing=EnemyTimeStopped;bool critical;int damage;
             if(!NewPassives&&Dragon.passiveMechanic==DragonPassiveMechanic.RuyiOrb){int boosted=Percent(Dragon.attackDamage,Dragon.passiveStage*10);int first=Math.Max(1,boosted/2),second=Math.Max(1,boosted-first);damage=Hit(first,Dragon.elementType,false,out critical);bool secondCritical;damage+=Hit(second,Dragon.elementType,false,out secondCritical);critical|=secondCritical;}
             else damage=Hit(CurrentAttack,Dragon.elementType,false,out critical);
@@ -360,7 +364,7 @@ namespace DragonTower
         {
             if (!CanUseSkill) return false;
             if(Dragon.skill.persistentAttack!=null&&!Dragon.skill.persistentAttack.Valid)return false;
-            BeginAugmentCast();NewPassiveCast();
+            ArmSolarSkill();BeginAugmentCast();NewPassiveCast();
             SkillReady=Time+(Time<noSkillCooldownUntil?0:Math.Max(Dragon.baseSkillCooldown*.4f,Dragon.skill.cooldown*(Time<firstAidUntil?1-Param(AugmentMechanic.FirstAid)/100f:1f)));
             if(Dragon.skill.celestialSignature)CancelCelestial();
             if(PlayerActionMissed(true)){CancelAugmentCast();return true;}
@@ -452,7 +456,7 @@ namespace DragonTower
         public bool Dodge()
         {
             if(SignatureCastLocked||ChargedBeamCommitted)return false;
-            if (Result != BattleResult.Fighting || PlayerStunned || (!DodgeCooldownReleased && Time < DodgeReady)) return false;
+            if (Result != BattleResult.Fighting || PrimordialCinematic || PlayerStunned || (!DodgeCooldownReleased && Time < DodgeReady)) return false;
             DodgeReady = Time + EffectiveDodgeCooldown;
             stormDodge = BossStormActive;
             DodgeUntil = Time + (Dragon.dodgeDuration>0?Dragon.dodgeDuration:DodgeDuration);
@@ -465,7 +469,7 @@ namespace DragonTower
         }
         public bool UseItem(ItemData item)
         {
-            if(item==null||item.kind!=ItemKind.Consumable||Result!=BattleResult.Fighting||PlayerStunned)return false;
+            if(item==null||item.kind!=ItemKind.Consumable||Result!=BattleResult.Fighting||PrimordialCinematic||PlayerStunned)return false;
             float primary=item.primaryValue,secondary=item.secondaryValue,duration=Math.Max(0,item.duration);
             switch(item.mechanic)
             {
@@ -514,7 +518,7 @@ namespace DragonTower
             lastDirectCalculated=damage;
             if(calculateOnly)return damage;
             if(!skill&&EnemyTimeStopped){storedBasicDamage=checked(storedBasicDamage+damage);storedBasicHits++;return damage;}
-            int enemyBefore=EnemyHP;damage=DamageEnemy(damage);if(!skill&&basicResolving)basicActualDamage+=enemyBefore-EnemyHP;
+            int enemyBefore=EnemyHP;damage=DamageEnemy(damage);SolarDirectHit(skill,damage);if(!skill&&basicResolving)basicActualDamage+=enemyBefore-EnemyHP;
             if (EnemyHP == 0 && Result==BattleResult.Fighting) Result = BattleResult.Victory;
             return damage;
         }
@@ -522,14 +526,16 @@ namespace DragonTower
         int ElementalExtra(int baseDamage,float percent,ElementType element,bool skillDirect=false){if(skillDirect&&Dragon.combatRulesVersion>=4)percent*=1+.02f*PassiveImprintRules.Clamp(Dragon.skillImprintLevel);if(skillDirect&&NewPassives)baseDamage=(int)Math.Round(baseDamage*(1+(Dragon.skillDamageBonusPercent+PassiveDirectBonus(true))/100f)/Math.Max(.01f,1+Dragon.skillDamageBonusPercent/100f),MidpointRounding.AwayFromZero);int value=Math.Max(1,(int)Math.Round(baseDamage*percent/100f,MidpointRounding.AwayFromZero));value=ElementRules.Damage(value,element,Enemy.elementType);value=DamageEnemy(value);if(EnemyHP==0&&Result==BattleResult.Fighting)Result=BattleResult.Victory;return value;}
         int DamageEnemy(int value)
         {
-            if(Result!=BattleResult.Fighting)return 0;
+            if(Result!=BattleResult.Fighting||PrimordialCinematic)return 0;
             value=Math.Max(0,value);
+            if(BookChoiceActive)return DamageSelectedBook(value);
             int actual=Math.Min(value,EnemyHP+enemyShieldHP);
-            if(EnemyReflecting&&actual>0)ApplyReflection(actual);
-            if(enemyShieldHP<=0){EnemyHP=Math.Max(0,EnemyHP-value);return value;}
+            if(BigBangCharging)bigBangPressure+=actual;
+            if(!SolarBossBattle&&EnemyReflecting&&actual>0)ApplyReflection(actual);
+            if(enemyShieldHP<=0){EnemyHP=Math.Max(0,EnemyHP-value);GatePrimordialDefeat();return value;}
             int absorbed=Math.Min(enemyShieldHP,value);enemyShieldHP-=absorbed;int overflow=value-absorbed;if(overflow>0)EnemyHP=Math.Max(0,EnemyHP-overflow);
-            if(enemyShieldHP==0){enemyShieldUntil=0;FinishBossBarrier(true);Feedback?.Invoke(Enemy.bossPattern==EnemyBossPattern.FrostRecovery?"빙결 방벽 파괴! 회복을 저지했습니다":"용광로 방벽 파괴! 폭발을 저지했습니다");}
-            return value;
+            if(enemyShieldHP==0){enemyShieldUntil=0;FinishBossBarrier(true);Feedback?.Invoke(PrimordialBossBattle?"봉인 파괴! 공격 기회입니다":VoidExpandedBattle?"봉합 핵 파괴! 차원이 무너집니다":Enemy.bossPattern==EnemyBossPattern.FrostRecovery?"빙결 방벽 파괴! 회복을 저지했습니다":"용광로 방벽 파괴! 폭발을 저지했습니다");}
+            GatePrimordialDefeat();return value;
         }
         void ActivateForgeBarrier()
         {
@@ -575,5 +581,6 @@ namespace DragonTower
         {foreach(var item in Dragon.items??Array.Empty<BattleItem>())if(item!=null&&item.mechanic==mechanic)return item;return null;}
     }
 }
+
 
 

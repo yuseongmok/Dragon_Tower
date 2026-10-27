@@ -57,7 +57,9 @@ namespace DragonTower
         public void SetIdle(DragonIdleFrames frames,Sprite fallback) { idleFrames=frames;restSprite=fallback; }
         float enemyClock;float clock,attackAge,skillAge,dodgeAge,enemyAttackAge,playerHitAge,enemyHitAge,resultAge;
         int particleIndex,numberIndex;
-        public bool ResultReady => resultAge>=.65f;
+        public float PrimordialReleaseProgress=>Mathf.SmoothStep(0,1,Mathf.Clamp01(resultAge/1.6f));
+        bool primordialReleased;
+        public bool ResultReady => resultAge>=(primordialReleased?1.6f:.65f);
         public int PoolObjectCount => ParticleCount+NumberCount;
 
         public void Initialize(BattleView view)
@@ -133,7 +135,7 @@ namespace DragonTower
         }
         void ResetBattle(SkillEffectKind effect,SkillData skill)
         {
-            enemyClock=clock=resultAge=0;particleIndex=numberIndex=0;
+            primordialReleased=false;enemyClock=clock=resultAge=0;particleIndex=numberIndex=0;
             dodgeDirection=-1;
             attackAge=skillAge=dodgeAge=enemyAttackAge=playerHitAge=enemyHitAge=10;
             playerGraphic=ActiveGraphic(player);enemyGraphic=ActiveGraphic(enemy);
@@ -472,6 +474,7 @@ namespace DragonTower
             if(battle.EnemyStunned){enemyAttack=0;enemyAttackAge=10;bounce=0;}
             var playerOffset=new Vector2(28*attack+66*dodge*dodgeDirection-9*cast,4*breath+48*attack+12*dodge);
             var enemyOffset=new Vector2(-20*enemyAttack,9*bounce-46*enemyAttack-12*windup);
+            if(battle.PrimordialFinaleActive)enemyOffset.y+=28;
             if(playerHitAge>=0&&playerHitAge<.24f) playerOffset.x+=Mathf.Sin(playerHitAge*95)*10*(1-playerHitAge/.24f);
             if(!slashVfx.Active&&!clawVfx.Active&&!dantianVfx.Active&&enemyHitAge>=0&&enemyHitAge<.24f) enemyOffset.x+=Mathf.Sin(enemyHitAge*95)*12*(1-enemyHitAge/.24f);
             player.anchoredPosition=playerHome+Snap(playerOffset);enemy.anchoredPosition=enemyHome+Snap(enemyOffset);
@@ -481,6 +484,19 @@ namespace DragonTower
             enemy.localScale=new Vector3(1+.04f*(1-bounce)+.16f*windup-.12f*enemyAttack,1-.06f*(1-bounce)-.19f*windup+.16f*enemyAttack,1);
             player.localRotation=Quaternion.Euler(0,0,-9*attack-13*dodge*dodgeDirection+4*cast);
             enemy.localRotation=Quaternion.Euler(0,0,windup*Mathf.Sin(enemyClock*40)*3+10*enemyAttack);
+            if(fighting&&battle.Enemy.floor>=81&&battle.Enemy.floor<=90&&!battle.EnemyStunned){
+                bool ray=battle.Enemy.displayName=="공허 가오리",knight=battle.Enemy.displayName=="차원 유랑기사";
+                float drift=knight?0:Mathf.Sin(enemyClock*(ray?2.4f:1.8f))*(ray?9:5);
+                enemy.anchoredPosition=enemyHome+Snap(enemyOffset+new Vector2(0,drift));
+                enemy.localScale=new Vector3(1+(ray?.035f:0)*Mathf.Sin(enemyClock*3)+.06f*windup-.08f*enemyAttack,1-.05f*windup+.08f*enemyAttack,1);
+                enemy.localRotation=Quaternion.Euler(0,0,(ray?Mathf.Sin(enemyClock*2)*4:0)+6*enemyAttack);
+            }
+            if(battle.PrimordialAnimated){
+                // Frame animation carries wing/head motion; keep the feet grounded.
+                enemy.anchoredPosition=enemyHome+Snap(new Vector2(enemyOffset.x*.3f,-12*enemyAttack));
+                enemy.localScale=new Vector3(1+.008f*Mathf.Sin(enemyClock*2),1+.008f*Mathf.Sin(enemyClock*2),1);
+                enemy.localRotation=Quaternion.identity;
+            }
             playerGraphic.color=HitColor(playerColor,playerHitAge);
             enemyGraphic.color=HitColor(enemyColor,enemyHitAge);
             if(fighting)
@@ -502,7 +518,13 @@ namespace DragonTower
             {
                 var defeated=battle.Result==BattleResult.Victory?enemy:player;
                 var graphic=battle.Result==BattleResult.Victory?enemyGraphic:playerGraphic;
-                if(spriteDeath)
+                if(battle.Result==BattleResult.Victory&&battle.PrimordialBossBattle)
+                {
+                    primordialReleased=true;float settle=PrimordialReleaseProgress;
+                    Restore(enemy,enemyHome);enemy.anchoredPosition=enemyHome+new Vector2(0,-12*settle);
+                    enemy.localRotation=Quaternion.Euler(0,0,-3*settle);enemyGraphic.color=Color.Lerp(new Color(.72f,.60f,.88f,1),Color.white,settle);
+                }
+                else if(spriteDeath)
                 {
                     Restore(player,playerHome);
                     // Hold the final collapsed pose under the existing result screen.

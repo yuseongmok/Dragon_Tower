@@ -8,8 +8,8 @@ const error=(code,message)=>Object.assign(new Error(message||code),{code});
 const integer=(n,min,max)=>Number.isSafeInteger(n)&&n>=min&&n<=max;
 function validate(r){
  if(!r||r.finalized!==true||!/^([a-f0-9]{32})$/.test(r.runId||''))throw error('invalid-argument','Finalized run required');
- if(!Object.hasOwn(rules.dragons,r.dragonId)||!integer(r.score,0,999999999)||!integer(r.maxFloor,1,80)||!integer(r.maxBond,1,999999))throw error('invalid-argument','Invalid record');
- if(!integer(r.normalKills,0,80)||!integer(r.bossKills,0,8)||r.normalKills+r.bossKills>r.maxFloor||r.bossKills>Math.floor(r.maxFloor/10))throw error('invalid-argument','Invalid kills');
+ if(!Object.hasOwn(rules.dragons,r.dragonId)||!integer(r.score,0,999999999)||!integer(r.maxFloor,1,100)||!integer(r.maxBond,1,999999))throw error('invalid-argument','Invalid record');
+ if(!integer(r.normalKills,0,100)||!integer(r.bossKills,0,10)||r.normalKills+r.bossKills>r.maxFloor||r.bossKills>Math.floor(r.maxFloor/10))throw error('invalid-argument','Invalid kills');
  const a=r.achievements||[];
  if(!Array.isArray(a)||new Set(a).size!==a.length||a.some(x=>!Object.hasOwn(rules.achievements,x)))throw error('invalid-argument','Invalid achievements');
  if(r.score!==r.normalKills*rules.normalKill+r.bossKills*rules.bossKill+r.maxFloor*rules.newFloor+a.reduce((s,x)=>s+rules.achievements[x],0))throw error('invalid-argument','Score does not match counters');
@@ -19,7 +19,8 @@ function validate(r){
 }
 function better(a,b){return !b||a.bestScore>b.bestScore||a.bestScore===b.bestScore&&(a.bestFloor>b.bestFloor||a.bestFloor===b.bestFloor&&a.bestBond>b.bestBond);}
 // One order key drives both top-100 ordering and rank aggregation. Earliest server acceptance wins ties.
-function rankKey(r,time,uid){return [String(999999999-r.bestScore).padStart(9,'0'),String(80-r.bestFloor).padStart(2,'0'),String(999999-r.bestBond).padStart(6,'0'),String(time).padStart(15,'0'),uid].join(':');}
+// Keep 1-90 keys byte-identical; --0..--9 orders floors100..91 before floor90 (-0).
+function rankKey(r,time,uid){return [String(999999999-r.bestScore).padStart(9,'0'),(r.bestFloor>90?'--'+String(100-r.bestFloor):r.bestFloor>80?'-'+String(90-r.bestFloor):String(80-r.bestFloor).padStart(2,'0')),String(999999-r.bestBond).padStart(6,'0'),String(time).padStart(15,'0'),uid].join(':');}
 function publicRecord(d){if(!d)return null;return Object.fromEntries(['uid','runId','playerName','dragonId','dragonName','originalDragonName','bestScore','bestFloor','bestBond','verification','achievedAtMs'].map(k=>[k,d[k]]));}
 function createService(db,Timestamp){
  async function submit(uid,raw){

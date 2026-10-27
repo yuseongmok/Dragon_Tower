@@ -37,7 +37,7 @@ namespace DragonTower {
    if(EnemyHP==0&&before>0)QueueItemEvent(ItemTrigger.EnemyKilled,source,cast);
   }
   void ProcessItemProcs(){
-   if(processingItems)return;processingItems=true;
+   if(processingItems||(PrimordialAnimated&&PrimordialCinematic))return;processingItems=true;
    try{
     SyncItemProcs();
     while(itemEvents.Count>0){var e=itemEvents.Dequeue();

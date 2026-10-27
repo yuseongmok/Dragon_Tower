@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 namespace DragonTower
 {
-    public enum EnemyBossPattern { None, EarthShatter, AbyssalRush, ForgeBarrier, GarudaRend, SentryParalysis, FrostRecovery, AzazelSeals, UrielReflection }
+    public enum EnemyBossPattern { None, EarthShatter, AbyssalRush, ForgeBarrier, GarudaRend, SentryParalysis, FrostRecovery, AzazelSeals, UrielReflection, BarkanBoundary, PrimordialContract }
     [CreateAssetMenu(menuName="Dragon Tower/Monster")]
     public sealed class MonsterData : IdentifiedContent
     {

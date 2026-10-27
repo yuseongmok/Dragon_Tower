@@ -20,7 +20,7 @@ namespace DragonTower {
   public static BondEconomy Load(){if(cached==null){var t=Resources.Load<TextAsset>("BondEconomy");if(t==null)throw new InvalidOperationException("각인 설정을 찾을 수 없습니다.");cached=JsonUtility.FromJson<BondEconomy>(t.text);cached.Validate();}return cached;}
   public void Validate(){if(costs==null||costs.Length!=10||successPercent==null||successPercent.Length!=10||normalRewards==null||normalRewards.Length!=8||bossRewards==null||bossRewards.Length!=8||rerollCost<1||redistributionCost<0||pityStart<1||pityStep<0||guaranteedFailures!=5)throw new InvalidOperationException("Invalid bond economy");foreach(int x in costs)if(x<0)throw new InvalidOperationException();foreach(int x in successPercent)if(x<1||x>100)throw new InvalidOperationException();foreach(int x in normalRewards)if(x<0)throw new InvalidOperationException();foreach(int x in bossRewards)if(x<0)throw new InvalidOperationException();}
   public int Chance(int level,int failures)=>level>=10?0:failures>=guaranteedFailures?100:Math.Min(100,successPercent[level]+Math.Max(0,failures-pityStart+1)*pityStep);
-  public int Reward(int floor,bool boss)=>floor<1||floor>80?0:(boss?bossRewards:normalRewards)[(floor-1)/10];
+  public int Reward(int floor,bool boss)=>floor<1||floor>100?0:(boss?bossRewards:normalRewards)[Math.Min(7,(floor-1)/10)];
  }
  public sealed partial class CollectionSession {
   public event Action<int> BondPointsEarned;

@@ -39,190 +39,281 @@ MonoBehaviour:
     bossEntrance: {fileID: 21300000, guid: 497bfe82a243437dba75a07744e611eb, type: 3}
     bossBattle: {fileID: 21300000, guid: bd7b008d0d964eb1a5f1ff76dc1fd995, type: 3}
     doorAtlas: {fileID: 2800000, guid: ccef2570bd1446d699194f256d460381, type: 3}
-  - firstFloor: 11
-    lastFloor: 20
-    regionId: ancient-aqueduct
-    regionName: 버려진 고대 수로
-    regionNumber: 2
-    playEntrance: 1
+    regionId: 
+    regionName: 
+    regionNumber: 0
+    playEntrance: 0
+    forgeEffects: 0
+    replayDiscovered: 0
+    skyEffects: 0
+    thunderEffects: 0
+    iceEffects: 0
+    libraryEffects: 0
+    sunlightEffects: 0
+    voidEffects: 0
+    throneEffects: 0
+    entranceMessage: 
     entranceTint: {r: 0.16, g: 0.78, b: 0.79, a: 1}
     particleTint: {r: 0.45, g: 0.92, b: 1, a: 1}
     entranceSeconds: 4.2
     particleCount: 28
-    stairs: {fileID: 21300000, guid: b6d6bec093484168a39af663d78cdf66, type: 3}
-    item: {fileID: 21300000, guid: de2e3a3daafb4e3193d22a228b8b6aea, type: 3}
+  - firstFloor: 11
+    lastFloor: 20
     battle: {fileID: 21300000, guid: 95d621c61eb54c80a61197c5d0cd6a0d, type: 3}
+    item: {fileID: 21300000, guid: de2e3a3daafb4e3193d22a228b8b6aea, type: 3}
+    stairs: {fileID: 21300000, guid: b6d6bec093484168a39af663d78cdf66, type: 3}
     bossEntrance: {fileID: 21300000, guid: c4c7552846ef4bbc927a33af8be75099, type: 3}
     bossBattle: {fileID: 21300000, guid: 164fe9f9c2074da9b7b90b5626a7973b, type: 3}
     doorAtlas: {fileID: 2800000, guid: ccef2570bd1446d699194f256d460381, type: 3}
+    regionId: ancient-aqueduct
+    regionName: "\uBC84\uB824\uC9C4 \uACE0\uB300 \uC218\uB85C"
+    regionNumber: 2
+    playEntrance: 1
+    forgeEffects: 0
+    replayDiscovered: 0
+    skyEffects: 0
+    thunderEffects: 0
+    iceEffects: 0
+    libraryEffects: 0
+    sunlightEffects: 0
+    voidEffects: 0
+    throneEffects: 0
+    entranceMessage: 
+    entranceTint: {r: 0.16, g: 0.78, b: 0.79, a: 1}
+    particleTint: {r: 0.45, g: 0.92, b: 1, a: 1}
+    entranceSeconds: 4.2
+    particleCount: 28
   - firstFloor: 21
     lastFloor: 30
-    regionId: ancient-forge
-    regionName: 잊혀진 용광로 공방
-    regionNumber: 3
-    playEntrance: 1
-    forgeEffects: 1
-    replayDiscovered: 1
-    entranceMessage: 잠든 용광로의 문이 열립니다
-    entranceTint: {r: 0.949, g: 0.545, b: 0.22, a: 1}
-    particleTint: {r: 1, g: 0.765, b: 0.42, a: 1}
-    entranceSeconds: 2.8
-    particleCount: 20
     battle: {fileID: 21300000, guid: 95cacdcde7bf492e9daf69cefa128470, type: 3}
     item: {fileID: 21300000, guid: 89bd7b2b3dcb45cb82aa6312c8bdd218, type: 3}
     stairs: {fileID: 21300000, guid: 06d51f797e1243a89f3c14cbaf8f87c3, type: 3}
     bossEntrance: {fileID: 21300000, guid: 755f07cc3950430c8335ab18a929054e, type: 3}
     bossBattle: {fileID: 21300000, guid: d60570c92efc49ff9290360b43dd4762, type: 3}
     doorAtlas: {fileID: 2800000, guid: ccef2570bd1446d699194f256d460381, type: 3}
+    regionId: ancient-forge
+    regionName: "\uC78A\uD600\uC9C4 \uC6A9\uAD11\uB85C \uACF5\uBC29"
+    regionNumber: 3
+    playEntrance: 1
+    forgeEffects: 1
+    replayDiscovered: 1
+    skyEffects: 0
+    thunderEffects: 0
+    iceEffects: 0
+    libraryEffects: 0
+    sunlightEffects: 0
+    voidEffects: 0
+    throneEffects: 0
+    entranceMessage: "\uC7A0\uB4E0 \uC6A9\uAD11\uB85C\uC758 \uBB38\uC774 \uC5F4\uB9BD\uB2C8\uB2E4"
+    entranceTint: {r: 0.949, g: 0.545, b: 0.22, a: 1}
+    particleTint: {r: 1, g: 0.765, b: 0.42, a: 1}
+    entranceSeconds: 2.8
+    particleCount: 20
   - firstFloor: 31
     lastFloor: 40
-    regionId: sky-corridor
-    regionName: 휘몰아치는 천공 회랑
-    regionNumber: 4
-    playEntrance: 1
-    skyEffects: 1
-    replayDiscovered: 1
-    entranceMessage: 구름 너머 새로운 길이 열립니다
-    entranceTint: {r: 0.47, g: 0.725, b: 0.906, a: 1}
-    particleTint: {r: 0.91, g: 0.945, b: 0.96, a: 1}
-    entranceSeconds: 2.8
-    particleCount: 18
     battle: {fileID: 21300000, guid: ff7b7d86d9ab4993a595bccb77a1d59b, type: 3}
     item: {fileID: 21300000, guid: 74966bf9057e4ada80b3eb5418eeb66d, type: 3}
     stairs: {fileID: 21300000, guid: 91f20083117f44899943edc25bd6721e, type: 3}
     bossEntrance: {fileID: 21300000, guid: c40dc157616445b79edb731b562d50d2, type: 3}
     bossBattle: {fileID: 21300000, guid: d5cafe739ce44510b12533c7653f42cc, type: 3}
     doorAtlas: {fileID: 2800000, guid: 0f20c40ed3874091b175d741262ce43e, type: 3}
+    regionId: sky-corridor
+    regionName: "\uD718\uBAB0\uC544\uCE58\uB294 \uCC9C\uACF5 \uD68C\uB791"
+    regionNumber: 4
+    playEntrance: 1
+    forgeEffects: 0
+    replayDiscovered: 1
+    skyEffects: 1
+    thunderEffects: 0
+    iceEffects: 0
+    libraryEffects: 0
+    sunlightEffects: 0
+    voidEffects: 0
+    throneEffects: 0
+    entranceMessage: "\uAD6C\uB984 \uB108\uBA38 \uC0C8\uB85C\uC6B4 \uAE38\uC774 \uC5F4\uB9BD\uB2C8\uB2E4"
+    entranceTint: {r: 0.47, g: 0.725, b: 0.906, a: 1}
+    particleTint: {r: 0.91, g: 0.945, b: 0.96, a: 1}
+    entranceSeconds: 2.8
+    particleCount: 18
   - firstFloor: 41
     lastFloor: 50
-    regionId: thunder-spire
-    regionName: 뇌운의 피뢰탑
-    regionNumber: 5
-    playEntrance: 1
-    thunderEffects: 1
-    replayDiscovered: 1
-    entranceMessage: 뇌운 너머 새로운 길이 열립니다
-    entranceTint: {r: 0.51, g: 0.86, b: 0.95, a: 1}
-    particleTint: {r: 0.51, g: 0.86, b: 0.95, a: 1}
-    entranceSeconds: 2.8
-    particleCount: 14
     battle: {fileID: 21300000, guid: 6862eb6f40774251a21c7024147ef706, type: 3}
     item: {fileID: 21300000, guid: 3eb570d429ed4f97a3003475a8b06413, type: 3}
     stairs: {fileID: 21300000, guid: bc034306ad964999b7a3756535c7228c, type: 3}
     bossEntrance: {fileID: 21300000, guid: 3a6df998aa6d46bfae05ef993cdaa4fb, type: 3}
     bossBattle: {fileID: 21300000, guid: ed7fae9d7188474d9085f2e9157d0de5, type: 3}
     doorAtlas: {fileID: 2800000, guid: 4e5b54b12f1846af9c45f45819435081, type: 3}
+    regionId: thunder-spire
+    regionName: "\uB1CC\uC6B4\uC758 \uD53C\uB8B0\uD0D1"
+    regionNumber: 5
+    playEntrance: 1
+    forgeEffects: 0
+    replayDiscovered: 1
+    skyEffects: 0
+    thunderEffects: 1
+    iceEffects: 0
+    libraryEffects: 0
+    sunlightEffects: 0
+    voidEffects: 0
+    throneEffects: 0
+    entranceMessage: "\uB1CC\uC6B4 \uB108\uBA38 \uC0C8\uB85C\uC6B4 \uAE38\uC774 \uC5F4\uB9BD\uB2C8\uB2E4"
+    entranceTint: {r: 0.51, g: 0.86, b: 0.95, a: 1}
+    particleTint: {r: 0.51, g: 0.86, b: 0.95, a: 1}
+    entranceSeconds: 2.8
+    particleCount: 14
   - firstFloor: 51
     lastFloor: 60
-    regionId: frozen-palace
-    regionName: 영구동토의 수정 궁전
-    regionNumber: 6
-    playEntrance: 1
-    iceEffects: 1
-    replayDiscovered: 1
-    entranceMessage: 잠든 겨울의 문이 열립니다
-    entranceTint: {r: 0.427, g: 0.722, b: 0.859, a: 1}
-    particleTint: {r: 0.718, g: 0.894, b: 0.949, a: 1}
-    entranceSeconds: 2.8
-    particleCount: 16
     battle: {fileID: 21300000, guid: d12b184af7834e8b96fa48e3f4f74186, type: 3}
     item: {fileID: 21300000, guid: 6f2f4fa166eb47c1a4a140e5ed9c5155, type: 3}
     stairs: {fileID: 21300000, guid: 927b42484ea84608ba4903b44efdcad5, type: 3}
     bossEntrance: {fileID: 21300000, guid: 21f756e7f5ff40739d4d078d93ec3e59, type: 3}
     bossBattle: {fileID: 21300000, guid: fbad49b58f53429394f32d40ff38e98e, type: 3}
     doorAtlas: {fileID: 2800000, guid: c6d89a18e905429cb5e69767430b2644, type: 3}
+    regionId: frozen-palace
+    regionName: "\uC601\uAD6C\uB3D9\uD1A0\uC758 \uC218\uC815 \uAD81\uC804"
+    regionNumber: 6
+    playEntrance: 1
+    forgeEffects: 0
+    replayDiscovered: 1
+    skyEffects: 0
+    thunderEffects: 0
+    iceEffects: 1
+    libraryEffects: 0
+    sunlightEffects: 0
+    voidEffects: 0
+    throneEffects: 0
+    entranceMessage: "\uC7A0\uB4E0 \uACA8\uC6B8\uC758 \uBB38\uC774 \uC5F4\uB9BD\uB2C8\uB2E4"
+    entranceTint: {r: 0.427, g: 0.722, b: 0.859, a: 1}
+    particleTint: {r: 0.718, g: 0.894, b: 0.949, a: 1}
+    entranceSeconds: 2.8
+    particleCount: 16
   - firstFloor: 61
     lastFloor: 70
-    regionId: forgotten-library
-    regionName: 잊혀진 대도서관
-    regionNumber: 7
-    playEntrance: 1
-    libraryEffects: 1
-    replayDiscovered: 1
-    entranceMessage: 잠든 기록의 문이 열립니다
-    entranceTint: {r: 0.451, g: 0.341, b: 0.494, a: 1}
-    particleTint: {r: 0.722, g: 0.604, b: 0.4, a: 1}
-    entranceSeconds: 2.8
-    particleCount: 10
     battle: {fileID: 21300000, guid: f3da9add5ed645449cea12bc7825aaba, type: 3}
     item: {fileID: 21300000, guid: 73b1785d2f04498993feef6a763480f8, type: 3}
     stairs: {fileID: 21300000, guid: fad774562c434ca7870b937951b7eb37, type: 3}
     bossEntrance: {fileID: 21300000, guid: b51f2c5f597a49fdb181955a56d67fc8, type: 3}
     bossBattle: {fileID: 21300000, guid: 5aefbe68f18948baba335c1f5043658c, type: 3}
     doorAtlas: {fileID: 2800000, guid: 202e06f6ff754d41b6a41659a5baf1e6, type: 3}
+    regionId: forgotten-library
+    regionName: "\uC78A\uD600\uC9C4 \uB300\uB3C4\uC11C\uAD00"
+    regionNumber: 7
+    playEntrance: 1
+    forgeEffects: 0
+    replayDiscovered: 1
+    skyEffects: 0
+    thunderEffects: 0
+    iceEffects: 0
+    libraryEffects: 1
+    sunlightEffects: 0
+    voidEffects: 0
+    throneEffects: 0
+    entranceMessage: "\uC7A0\uB4E0 \uAE30\uB85D\uC758 \uBB38\uC774 \uC5F4\uB9BD\uB2C8\uB2E4"
+    entranceTint: {r: 0.451, g: 0.341, b: 0.494, a: 1}
+    particleTint: {r: 0.722, g: 0.604, b: 0.4, a: 1}
+    entranceSeconds: 2.8
+    particleCount: 10
   - firstFloor: 71
     lastFloor: 80
-    regionId: eternal-sunlight
-    regionName: 영겁의 일광 성소
-    regionNumber: 8
-    playEntrance: 1
-    sunlightEffects: 1
-    replayDiscovered: 1
-    entranceMessage: 따뜻한 빛의 문이 열립니다
-    entranceTint: {r: 0.902, g: 0.761, b: 0.478, a: 1}
-    particleTint: {r: 0.902, g: 0.761, b: 0.478, a: 1}
-    entranceSeconds: 2.8
-    particleCount: 12
     battle: {fileID: 21300000, guid: 34da9dc7d1454f518bc75958a5aa6ddd, type: 3}
     item: {fileID: 21300000, guid: ea8d2024cdd54005a577c52966c03871, type: 3}
     stairs: {fileID: 21300000, guid: 9f175dd1655b4d4c9237ad6c5160f970, type: 3}
     bossEntrance: {fileID: 21300000, guid: b21c65373087456bbe4dbfe3be3c34e9, type: 3}
     bossBattle: {fileID: 21300000, guid: 211bf22da916428b81ed7e773ae406d4, type: 3}
     doorAtlas: {fileID: 2800000, guid: 2f3fdc11d45a4db7a9a039ba944bf2ff, type: 3}
+    regionId: eternal-sunlight
+    regionName: "\uC601\uAC81\uC758 \uC77C\uAD11 \uC131\uC18C"
+    regionNumber: 8
+    playEntrance: 1
+    forgeEffects: 0
+    replayDiscovered: 1
+    skyEffects: 0
+    thunderEffects: 0
+    iceEffects: 0
+    libraryEffects: 0
+    sunlightEffects: 1
+    voidEffects: 0
+    throneEffects: 0
+    entranceMessage: "\uB530\uB73B\uD55C \uBE5B\uC758 \uBB38\uC774 \uC5F4\uB9BD\uB2C8\uB2E4"
+    entranceTint: {r: 0.902, g: 0.761, b: 0.478, a: 1}
+    particleTint: {r: 0.902, g: 0.761, b: 0.478, a: 1}
+    entranceSeconds: 2.8
+    particleCount: 12
   - firstFloor: 81
     lastFloor: 90
-    regionId: shattered-void
-    regionName: 찢겨진 공허 회랑
-    regionNumber: 9
-    playEntrance: 0
-    voidEffects: 1
-    replayDiscovered: 1
-    entranceMessage: 경계의 문이 열립니다
-    entranceTint: {r: 0.439, g: 0.275, b: 0.647, a: 1}
-    particleTint: {r: 0.710, g: 0.608, b: 0.886, a: 1}
-    entranceSeconds: 2.8
-    particleCount: 10
     battle: {fileID: 21300000, guid: 068e6d5765fe4288afd8102ff4b02c1d, type: 3}
     item: {fileID: 21300000, guid: 7e799f5f2b3b4cd196dbc302fb3e193b, type: 3}
     stairs: {fileID: 21300000, guid: 938053782faf41e099547bd9737b7760, type: 3}
     bossEntrance: {fileID: 21300000, guid: bf66831e74fb4418ba7134269e1a82a5, type: 3}
     bossBattle: {fileID: 21300000, guid: 4eacb06f64b643afae54d3545dd212f2, type: 3}
     doorAtlas: {fileID: 2800000, guid: ca53caa46c964b4188a9c7a2bab9f88a, type: 3}
-  - firstFloor: 91
-    lastFloor: 99
-    regionId: primordial-throne
-    regionName: 태초의 용좌
-    regionNumber: 10
-    playEntrance: 0
-    throneEffects: 1
+    regionId: shattered-void
+    regionName: "\uCC22\uACA8\uC9C4 \uACF5\uD5C8 \uD68C\uB791"
+    regionNumber: 9
+    playEntrance: 1
+    forgeEffects: 0
     replayDiscovered: 1
-    entranceMessage: 태초의 문이 열립니다
-    entranceTint: {r: 0.56, g: 0.73, b: 0.91, a: 1}
-    particleTint: {r: 0.78, g: 0.66, b: 0.42, a: 1}
+    skyEffects: 0
+    thunderEffects: 0
+    iceEffects: 0
+    libraryEffects: 0
+    sunlightEffects: 0
+    voidEffects: 1
+    throneEffects: 0
+    entranceMessage: "\uACBD\uACC4\uC758 \uBB38\uC774 \uC5F4\uB9BD\uB2C8\uB2E4"
+    entranceTint: {r: 0.439, g: 0.275, b: 0.647, a: 1}
+    particleTint: {r: 0.71, g: 0.608, b: 0.886, a: 1}
     entranceSeconds: 2.8
     particleCount: 10
+  - firstFloor: 91
+    lastFloor: 99
     battle: {fileID: 21300000, guid: 48bd199a44d948e7a60bc55122580341, type: 3}
     item: {fileID: 21300000, guid: 56e3c723e80d42e4be504ff9ac50a114, type: 3}
     stairs: {fileID: 21300000, guid: c2d27a7cc454435d8de90a8ab900416c, type: 3}
     bossEntrance: {fileID: 21300000, guid: d413f728d46647c3958faa201df80976, type: 3}
     bossBattle: {fileID: 21300000, guid: 48bd199a44d948e7a60bc55122580341, type: 3}
     doorAtlas: {fileID: 2800000, guid: 5d70d790f46741f1b1ae63adef6d4ad6, type: 3}
-  - firstFloor: 100
-    lastFloor: 100
-    regionId: primordial-throne-arena
-    regionName: 태초의 제단
+    regionId: primordial-throne
+    regionName: "\uD0DC\uCD08\uC758 \uC6A9\uC88C"
     regionNumber: 10
-    playEntrance: 0
-    throneEffects: 1
+    playEntrance: 1
+    forgeEffects: 0
     replayDiscovered: 1
-    entranceMessage: 태초의 문이 열립니다
+    skyEffects: 0
+    thunderEffects: 0
+    iceEffects: 0
+    libraryEffects: 0
+    sunlightEffects: 0
+    voidEffects: 0
+    throneEffects: 1
+    entranceMessage: "\uD0DC\uCD08\uC758 \uBB38\uC774 \uC5F4\uB9BD\uB2C8\uB2E4"
     entranceTint: {r: 0.56, g: 0.73, b: 0.91, a: 1}
     particleTint: {r: 0.78, g: 0.66, b: 0.42, a: 1}
     entranceSeconds: 2.8
     particleCount: 10
+  - firstFloor: 100
+    lastFloor: 100
     battle: {fileID: 21300000, guid: 0700182bdce143c7a6fe4741d53444b5, type: 3}
     item: {fileID: 21300000, guid: 56e3c723e80d42e4be504ff9ac50a114, type: 3}
     stairs: {fileID: 21300000, guid: c2d27a7cc454435d8de90a8ab900416c, type: 3}
     bossEntrance: {fileID: 21300000, guid: d413f728d46647c3958faa201df80976, type: 3}
     bossBattle: {fileID: 21300000, guid: 0700182bdce143c7a6fe4741d53444b5, type: 3}
     doorAtlas: {fileID: 2800000, guid: 5d70d790f46741f1b1ae63adef6d4ad6, type: 3}
+    regionId: primordial-throne-arena
+    regionName: "\uD0DC\uCD08\uC758 \uC81C\uB2E8"
+    regionNumber: 10
+    playEntrance: 0
+    forgeEffects: 0
+    replayDiscovered: 1
+    skyEffects: 0
+    thunderEffects: 0
+    iceEffects: 0
+    libraryEffects: 0
+    sunlightEffects: 0
+    voidEffects: 0
+    throneEffects: 1
+    entranceMessage: "\uD0DC\uCD08\uC758 \uBB38\uC774 \uC5F4\uB9BD\uB2C8\uB2E4"
+    entranceTint: {r: 0.56, g: 0.73, b: 0.91, a: 1}
+    particleTint: {r: 0.78, g: 0.66, b: 0.42, a: 1}
+    entranceSeconds: 2.8
+    particleCount: 10

@@ -15,6 +15,7 @@ namespace DragonTower {
    next.lastRun=new RunResultRecord{instanceId=run.InstanceId,floor=run.Floor,level=run.Level,monsters=run.MonstersDefeated,cleared=cleared,progress=snapshot.progress};
    if(next.pendingLeaderboardRecords==null)next.pendingLeaderboardRecords=new System.Collections.Generic.List<RunProgressRecord>();
    if(OnlineFeatures.Enabled&&!next.pendingLeaderboardRecords.Exists(p=>p.runId==snapshot.progress.runId))next.pendingLeaderboardRecords.Add(JsonUtility.FromJson<RunProgressRecord>(JsonUtility.ToJson(snapshot.progress)));
+   if(cleared&&run.Floor>=100){next.endingPending=next.finalEndingRunId!=snapshot.progress.runId;if(next.endingPending)next.endingPage=0;next.endingUnlocked=true;}
    next.hasActiveRun=false;next.activeRun=null;CommitProgress(next,run,snapshot,earned);
   }
   public void SaveNestReward(TowerRun run,DragonData dragon){

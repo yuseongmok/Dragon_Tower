@@ -14,16 +14,18 @@ namespace DragonTower
         bool resultPresentationSettled;
         int requestedDodgeDirection=-1;
         public bool CanControl=>focused&&battle!=null&&battle.Result==BattleResult.Fighting&&view.IsBattleUncovered;
-        public bool RequestAttack(){if(!CanControl||!battle.Attack())return false;RecordBattleInput(1);var dragon=Flow?.Session?.Selected;imprintAttackVfx?.Play(dragon,dragon==null?0:Flow.Session.GetImprintLevel(dragon.StableId,1));return true;}
-        public bool RequestSkill(){if(!CanControl||!battle.Skill())return false;RecordBattleInput(2);return true;}
+        public bool RequestBossBook(int index){if(!CanControl||!battle.SelectBossBook(index))return false;RecordBattleInput(index==0?5:6);return true;}
+        public bool RequestAttack(){if(!CanControl||!Flow.TutorialAllows(1)||!battle.Attack())return false;RecordBattleInput(1);Flow.TutorialAction(1);var dragon=Flow?.Session?.Selected;imprintAttackVfx?.Play(dragon,dragon==null?0:Flow.Session.GetImprintLevel(dragon.StableId,1));return true;}
+        public bool RequestSkill(){if(!CanControl||!Flow.TutorialAllows(2)||!battle.Skill())return false;RecordBattleInput(2);Flow.TutorialAction(2);return true;}
         public bool RequestDodge(int direction)
         {
-            if(!CanControl)return false;
+            if(!CanControl||!Flow.TutorialAllows(3))return false;
             requestedDodgeDirection=direction>0?1:-1;
-            try{bool ok=battle.Dodge();if(ok)RecordBattleInput(3);return ok;}finally{requestedDodgeDirection=-1;}
+            try{bool ok=battle.Dodge();if(ok){RecordBattleInput(3);Flow.TutorialAction(3);}return ok;}finally{requestedDodgeDirection=-1;}
         }
         void HandleCue(CombatCue cue,int damage)
         {
+            Flow?.TutorialCue(cue);
             if(cue==CombatCue.Dodge)view.SetDodgeDirection(requestedDodgeDirection);
             var catastrophe=view.GetComponent<CatastropheVfx>();if(catastrophe!=null){catastrophe.DamageFromSkill=battle.ResolvingSkillHit;catastrophe.ScheduledHits=battle.ScheduledSkillHits;}
             var crushing=view.GetComponent<CrushingBeamVfx>();if(crushing!=null)crushing.DamageFromSkill=battle.ResolvingSkillHit;
@@ -100,7 +102,7 @@ namespace DragonTower
         {
             if(battle==null || !focused) return;
             // Returning from a hidden browser tab must not cause accumulated hits.
-            float delta=Mathf.Min(Time.deltaTime,.1f);
+            float delta=Flow.TutorialDelta(Mathf.Min(Time.deltaTime,.1f));
             if(battle.Result==BattleResult.Fighting){battle.Tick(delta);RecordBattleInput(0,delta);}
             if(battle.Result!=BattleResult.Fighting&&!resultPresentationSettled){Flow.BattleSettled();resultPresentationSettled=true;}
             Flow.AutoSaveRun();

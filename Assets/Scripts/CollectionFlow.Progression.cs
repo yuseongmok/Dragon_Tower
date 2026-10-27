@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using UnityEngine;
 namespace DragonTower {
@@ -26,6 +26,7 @@ namespace DragonTower {
   }
   void ContinueRunPhase(){
    if(towerRun==null)return;
+   if(TryFinalVictory())return;
    if(towerRun.PendingInventory.Count>0&&towerRun.Phase!=FloorPhase.CombatActive){
     var item=towerRun.PendingInventory[0].Item;
     Action next=()=>{towerRun.ResolvePendingInventory();SaveProgress();ContinueRunPhase();};

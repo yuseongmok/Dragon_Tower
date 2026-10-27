@@ -2,7 +2,7 @@ namespace DragonTower {
  // Frozen compatibility data: do not retune. Old in-progress encounters finish
  // with their original rules; a newly created encounter always uses Current.
  public static class CombatBalanceVersion {
-  public const int Current=8;
+  public const int Current=17;
   public static SkillStats LegacySkill(SkillStats source){
    var s=source.Copy();switch(s.skillId){
     case "skill_apocalypse":s.damage=20;s.cooldown=11;break;

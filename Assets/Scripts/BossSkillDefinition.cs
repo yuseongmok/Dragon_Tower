@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 namespace DragonTower {
  public enum BossAttackKind { Normal, Skill, Gimmick }
- public enum BossSkillState { Idle, Selection, Warning, Preparation, Travel, Recovery, Cooldown, Barrier, Interval }
+ public enum BossSkillState { Idle, Selection, Warning, Preparation, Travel, Recovery, Cooldown, Barrier, Interval, BookChoice }
  public enum BossBladeDirection { Front, Left, Right }
  public enum BossGimmickOutcome { None, Broken, Failed }
  [Serializable] public sealed class BossSkillDefinition {
@@ -13,13 +13,35 @@ namespace DragonTower {
   public float maximumInitialAttackWait=4;
   // Zero defaults preserve existing encounter snapshots and the gatekeeper timeline.
   public int minimumRulesVersion;
+  public float[] shotPreparationTimes,shotTravelTimes,shotDamageMultipliers;
+  public BossBladeDirection[] shotDirections;
+  public bool oncePerEncounter;
+  public bool statusOnly; // No damage pipeline or minimum damage for pure control skills.
+  public bool randomClawJudgment; // Snapshot opt-in: legacy claw encounters retain fixed judgments.
+  public bool eightRayCross; // Snapshot opt-in for phase-two 45-degree crossings.
+  public bool crossReversals; // Additive snapshot flag: old encounters keep their rotation.
+  public float barrierStrikeDelay; // Optional, one dodgeable strike inside a damage-check window.
+  public int requiredBossPhase; // Zero is unrestricted for old snapshots.
   public bool requiresUnstunnedStart,damageOnLaunch;
   public float lingerTime;
   // Optional common scheduler extensions. Zero preserves all pre-existing snapshots.
   public int directionalShots;
+  public int sequenceShots;
+  public float followupChance; // One seeded roll per cast, never per rendered frame.
+  public int lowHPShots;
+  public float lowHPShotThreshold;
+  public bool requiresFullCore;
+  public float coreChargePerSecond,coreDodgeDischarge;
   public float interShotDelay,stormDuration,dodgeCooldownPenalty;
   public int barrierDurability;
   public float barrierWindow,breakRecovery;
+  public float barrierFailureTelegraph; // Optional dodgeable failure windup; zero retains legacy barriers.
+  public float barrierFailureHealPercent,barrierWeaknessPerStack;
+  public int barrierWeaknessMaxStacks;
+  public bool dodgeWeakensBarrier;
+  public bool solarMirror;
+  public int illusionShots,bookDurability;
+  public float bookWindow,bookSpellWarning,basicSlowPercent,basicSlowDuration;
   public string warningHint;
   public float damageMultiplier=1,minHPPercent=0,maxHPPercent=100;
   public ElementType element=ElementType.Earth;

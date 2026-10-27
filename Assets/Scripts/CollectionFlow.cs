@@ -162,6 +162,8 @@ namespace DragonTower
         void StyleCard(Button button,Color fill,Color accent){if(button==null)return;button.targetGraphic.color=fill;DragonTowerTheme.StyleButton(button,accent);if(AncientScreen){AncientUi.Button(button,fill.g>fill.r*1.8f&&fill.g>.3f);if(ScreenName=="아이템 선택"||ScreenName=="증강방"||ScreenName.EndsWith(" 증강"))RewardAccent(button,accent);}}
         void Screen(string name)
         {
+            ClearFinalStory();
+            if(tutorialActive)StopTutorial();
             rerollButton=null;rerollBusy=false;CancelRewardReveal();roomTransitionBusy=false;chestAnimating=false;chestFastForward=false;
             DragonTowerAudio.SetMusic(MusicMood.Lobby);
             if(body!=null){body.gameObject.SetActive(false);Destroy(body.gameObject);}
@@ -256,13 +258,14 @@ namespace DragonTower
             Screen("부화 성공!");Portrait(hatched);
             Label(hatched.displayName,0,528,430,52,34,Gold);
             Label(hatched.element+" 속성 · 도감에 등록되었습니다",0,587,430,42,18,Color.white);
-            ContinueButton=Button("로비로 가기",0,702,380,68,ShowLobby);
+            ContinueButton=Button(Session.Profile.onboardingVersion==1&&!Session.Profile.tutorialCompleted?"함께 첫걸음":"로비로 가기",0,702,380,68,()=>{if(!TryBeginIntroduction())ShowLobby();});
             notice.text="부화 결과가 저장되었습니다";
         }
         public void ShowLobby()
         {
             if(hatchTime>=0)return;
-            returningToLobby=true;CheckpointBattle();StopAllCoroutines();controller.EndBattle();towerRun=null;returningToLobby=false;
+            StopTutorial();returningToLobby=true;CheckpointBattle();StopAllCoroutines();controller.EndBattle();towerRun=null;returningToLobby=false;
+            if(Session.Profile.endingPending){ShowFinalStory(2,Session.Profile.endingPage);return;}
             if(Session.Selected==null){if(OnlineFeatures.Enabled)ShowEgg();else ShowOfflineStarterLobby();return;}
             Screen("드래곤 로비");var d=Session.Selected;Portrait(d,389,1,ShowDragonSelect,false);
             Panel("Dragon nameplate",body,0,493,254,42,AncientUi.Stone,AncientUi.DarkGold);
@@ -340,13 +343,18 @@ namespace DragonTower
             }
             Screen("타워 "+towerRun.Floor+"층 · "+RoomName(towerRun.Room));
             bool boss=towerRun.Room==TowerRoomKind.Boss;
-            string encounter=boss?(towerRun.Floor==20?"크라켄 수호자가 심해에서 깨어납니다.":"고대 룬 골렘이 깨어납니다."):"이 층의 몬스터가 길을 막고 있습니다.";
+            string encounter=boss?(towerRun.Floor==100?"최초의 계약자가 태초의 용좌를 지키고 있습니다.":towerRun.Floor==90?"경계의 파수자 바르칸이 공허의 문을 막고 있습니다.":towerRun.Floor==20?"크라켄 수호자가 심해에서 깨어납니다.":"고대 룬 골렘이 깨어납니다."):"이 층의 몬스터가 길을 막고 있습니다.";
             Label(encounter,0,300,420,80,22,Color.white);
             Label("유대 "+towerRun.Level+"   HP "+towerRun.CurrentHP+" / "+towerRun.MaxHP,0,438,420,35,17,Muted);
             RoomButton=Button(boss?"보스 전투":"전투 시작",0,585,360,72,StartCurrentBattle);
             notice.text="다음 층에서도 현재 HP가 그대로 이어집니다.";
         }
         void StartCurrentBattle()
+        {
+            if(TryFinalEntry())return;
+            StartCurrentBattleCore();
+        }
+        void StartCurrentBattleCore()
         {
             towerRun.BeginFloorCombat(progression,UnityEngine.Random.Range(0,100));
             bool boss=towerRun.Room==TowerRoomKind.Boss;
@@ -591,7 +599,7 @@ namespace DragonTower
             if(towerRun==null)return;
             if(towerRun.Phase==FloorPhase.RoomEvent){FinishRoomEvent();ContinueRunPhase();return;}
             if(towerRun.Phase!=FloorPhase.Complete||towerRun.PendingEvolutionStage>0||towerRun.PendingLevelAugments>0){ContinueRunPhase();return;}
-            if(towerRun.Floor>=80){Session.FinishRun(towerRun,true);SubmitPendingLeaderboard();towerRun.End();Screen("타워 완주");Label("80층을 돌파했습니다!\n최종 점수 "+towerRun.Progress.score+"점",0,350,420,80,28,Gold);Button("로비로",0,610,360,60,ShowLobby);return;}
+            if(towerRun.Floor>=100){Session.FinishRun(towerRun,true);SubmitPendingLeaderboard();towerRun.End();if(Session.Profile.endingPending)ShowFinalStory(2,Session.Profile.endingPage);else ShowFinalCompletion();return;}
             int clearedFloor=towerRun.Floor;towerRun.MoveToNextFloor(UnityEngine.Random.Range(0,100),UnityEngine.Random.Range(0,100));SaveProgress();
             var skin=Resources.Load<BattleSkin>("PixelBattleSkin");
             if(skin!=null&&skin.EntranceForFloor(towerRun.Floor)!=null)ShowTowerChoices();
@@ -655,7 +663,7 @@ namespace DragonTower
         }
         void ShowExperienceReward(int previousLevel,int previousExperience)
         {
-            Screen(towerRun.Phase==FloorPhase.BattleRewards?"전투 경험치":"방 보상 경험치");
+            Screen(towerRun.Phase==FloorPhase.BattleRewards?(towerRun.Floor==100?"완주 보상":"전투 경험치"):"방 보상 경험치");
             Label(Session.SelectedName(),0,170,420,36,23,Gold);
             var levelText=Label("유대 "+previousLevel,0,230,420,54,31,Color.white);
             var expText=Label("EXP "+previousExperience+" / "+towerRun.ExperienceToNext,0,294,420,34,17,Muted);
@@ -663,8 +671,8 @@ namespace DragonTower
             var fill=Rect("Experience fill",back.transform,-195,12,390,18).gameObject.AddComponent<Image>();fill.color=new Color(.35f,.76f,1);fill.raycastTarget=false;
             fill.rectTransform.anchorMin=fill.rectTransform.anchorMax=new Vector2(0,.5f);fill.rectTransform.pivot=new Vector2(0,.5f);fill.rectTransform.anchoredPosition=Vector2.zero;
             fill.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,390f*previousExperience/towerRun.ExperienceToNext);
-            Label((towerRun.Phase==FloorPhase.BattleRewards?"몬스터 처치  +":"방 보상  +")+towerRun.LastExperienceGain+" EXP",0,410,420,42,21,Gold);
-            if(towerRun.Phase==FloorPhase.BattleRewards&&towerRun.LastBattleGold>0)Label("처치 보상 +"+towerRun.LastBattleGold+" GOLD",0,475,420,40,21,Gold);
+            Label((towerRun.Phase==FloorPhase.BattleRewards?(towerRun.Floor==100?"최종 전투 완료  +":"몬스터 처치  +"):"방 보상  +")+towerRun.LastExperienceGain+" EXP",0,410,420,42,21,Gold);
+            if(towerRun.Phase==FloorPhase.BattleRewards&&towerRun.LastBattleGold>0)Label((towerRun.Floor==100?"최종 전투 보상 +":"처치 보상 +")+towerRun.LastBattleGold+" GOLD",0,475,420,40,21,Gold);
             notice.text="경험치가 가득 차면 유대가 상승합니다.";StartCoroutine(AnimateExperience(previousLevel,previousExperience,fill,expText,levelText));
         }
         IEnumerator AnimateExperience(int previousLevel,int previousExperience,Image fill,Text expText,Text levelText)
@@ -752,7 +760,7 @@ namespace DragonTower
                 "최대 HP +"+Mathf.RoundToInt((dragon.HealthMultiplier(stage)-1)*100)+"% · 공격력 +"+Mathf.RoundToInt((dragon.AttackMultiplier(stage)-1)*100)+"%\n"+
                 "진화: HP·공격력 성장 / 패시브는 각인으로 성장";
             evolutionText.color=Gold;evolutionText.fontSize=20;
-            ContinueButton=Button(towerRun.PendingLevelAugments>0?"증강 선택으로":"다음 층으로",0,710,360,66,FinishEvolution);
+            ContinueButton=Button(towerRun.PendingLevelAugments>0?"증강 선택으로":towerRun.Floor==100?"완주 기록으로":"다음 층으로",0,710,360,66,FinishEvolution);
             notice.text=stage==1?"유대 20에서 최종 진화합니다.":"최종 진화를 완료했습니다.";
         }
         void FinishEvolution()
@@ -881,6 +889,8 @@ namespace DragonTower
         }
         void Update()
         {
+            TickFinalStory();
+            TickTutorial();
             if(offlineIdentityPending&&Time.realtimeSinceStartup>offlineDeadline){offlineIdentityPending=false;OfflineProblem("기기 기록 확인이 지연됩니다. 원본은 보존했습니다.");}
             if(root==null||!root.gameObject.activeInHierarchy)return;
             float dt=Mathf.Min(Time.deltaTime,.1f);clock+=dt;

@@ -4,12 +4,13 @@ namespace DragonTower {
  // One reusable, bounded mesh. Reads model time; never schedules or deals damage.
  public sealed class BossSkillVfx:MonoBehaviour {
   BattleView view;LightningMeshLayer mesh;Text label;
-  KrakenBossSkillVfx kraken;
+  KrakenBossSkillVfx kraken; VoidBossSkillVfx boundary; PrimordialBossSkillVfx throne;
   VulcanBossSkillVfx vulcan; GarudaBossSkillVfx garuda;
+  SentryBossSkillVfx sentry; FrostBossSkillVfx frost; LibraryBossSkillVfx library; SolarBossSkillVfx solar;
   EarthVfxStyle earth;readonly Image[] rocks=new Image[40];int used;
   readonly Color dark=new Color(.18f,.14f,.12f),stone=new Color(.51f,.44f,.34f),edge=new Color(.85f,.73f,.52f);
-  public int QuadCount=>(mesh==null?0:mesh.Count)+(kraken==null?0:kraken.QuadCount)+(vulcan==null?0:vulcan.QuadCount)+(garuda==null?0:garuda.QuadCount);
-  public int DroppedQuads=>(kraken==null?0:kraken.DroppedQuads)+(vulcan==null?0:vulcan.DroppedQuads)+(garuda==null?0:garuda.DroppedQuads);
+  public int QuadCount=>(mesh==null?0:mesh.Count)+(kraken==null?0:kraken.QuadCount)+(vulcan==null?0:vulcan.QuadCount)+(garuda==null?0:garuda.QuadCount)+(sentry==null?0:sentry.QuadCount)+(frost==null?0:frost.QuadCount)+(library==null?0:library.QuadCount)+(solar==null?0:solar.QuadCount)+(boundary==null?0:boundary.QuadCount)+(throne==null?0:throne.QuadCount);
+  public int DroppedQuads=>(kraken==null?0:kraken.DroppedQuads)+(vulcan==null?0:vulcan.DroppedQuads)+(garuda==null?0:garuda.DroppedQuads)+(sentry==null?0:sentry.DroppedQuads)+(frost==null?0:frost.DroppedQuads)+(library==null?0:library.DroppedQuads)+(solar==null?0:solar.DroppedQuads)+(boundary==null?0:boundary.DroppedQuads)+(throne==null?0:throne.DroppedQuads);
   public int PeakQuads{get;private set;}
   public Vector2 WavePosition{get;private set;}
   public void Initialize(BattleView owner){
@@ -25,12 +26,13 @@ namespace DragonTower {
    for(int i=0;i<rocks.Length;i++){var im=new GameObject("Pooled earth fragment "+i,typeof(RectTransform),typeof(Image)).GetComponent<Image>();im.rectTransform.SetParent(r,false);im.rectTransform.anchorMin=im.rectTransform.anchorMax=new Vector2(.5f,1);im.raycastTarget=false;im.enabled=false;rocks[i]=im;}
    kraken=new KrakenBossSkillVfx();kraken.Initialize(view);
    vulcan=new VulcanBossSkillVfx();vulcan.Initialize(view); garuda=new GarudaBossSkillVfx();garuda.Initialize(view);
-   label.transform.SetAsLastSibling();
+   sentry=new SentryBossSkillVfx();sentry.Initialize(view); frost=new FrostBossSkillVfx();frost.Initialize(view);library=new LibraryBossSkillVfx();library.Initialize(view);solar=new SolarBossSkillVfx();solar.Initialize(view);
+   throne=new PrimordialBossSkillVfx();throne.Initialize(view);boundary=new VoidBossSkillVfx();boundary.Initialize(view);label.transform.SetAsLastSibling();
    BattleVfxHudVisibility.BringHudForward(view);Clear();
   }
-  public void Clear(){if(mesh!=null){mesh.Begin();mesh.End();}kraken?.Clear();vulcan?.Clear();garuda?.Clear();if(label!=null)label.enabled=false;foreach(var im in rocks)if(im!=null)im.enabled=false;used=0;}
+  public void Clear(){if(mesh!=null){mesh.Begin();mesh.End();}kraken?.Clear();vulcan?.Clear();garuda?.Clear();sentry?.Clear();frost?.Clear();library?.Clear();solar?.Clear();boundary?.Clear();throne?.Clear();if(label!=null)label.enabled=false;foreach(var im in rocks)if(im!=null)im.enabled=false;used=0;}
   void OnDisable()=>Clear();
-  void OnDestroy(){if(mesh!=null)Destroy(mesh.gameObject);kraken?.Destroy();vulcan?.Destroy();garuda?.Destroy();}
+  void OnDestroy(){if(mesh!=null)Destroy(mesh.gameObject);kraken?.Destroy();vulcan?.Destroy();garuda?.Destroy();sentry?.Destroy();frost?.Destroy();library?.Destroy();solar?.Destroy();boundary?.Destroy();throne?.Destroy();}
   void Block(Vector2 p,float w,float h,Color c){mesh.Quad(p+new Vector2(-w,-h),p+new Vector2(-w,h),p+new Vector2(w,h),p+new Vector2(w,-h),c);}
   void Sprite(EarthModule module,Vector2 p,Vector2 size,float phase=0,float alpha=1){if(earth==null||used>=rocks.Length)return;var im=rocks[used++];im.sprite=earth.Frame(module,phase);im.color=new Color(1,1,1,alpha);im.rectTransform.anchoredPosition=new Vector2(Mathf.Round(p.x/2)*2,Mathf.Round(p.y/2)*2);im.rectTransform.sizeDelta=size;im.enabled=true;}
   void Stone(Vector2 p,float w,float h){if(earth!=null){Sprite(EarthModule.Rock,p,new Vector2(w*3,h*3),(used%7)/8f);return;}Block(p,w+2,h+2,dark);Block(p,w,h,stone);Block(p+new Vector2(-w*.25f,h-2),w*.65f,2,edge);}
@@ -38,7 +40,13 @@ namespace DragonTower {
   public void Render(BattleModel b){
    if(mesh==null)return;mesh.Begin();label.enabled=false;foreach(var im in rocks)im.enabled=false;used=0;
    kraken?.Clear();
-   vulcan?.Clear();garuda?.Clear();
+   vulcan?.Clear();garuda?.Clear();sentry?.Clear();frost?.Clear();library?.Clear();solar?.Clear();boundary?.Clear();throne?.Clear();
+   if(b!=null&&b.PrimordialBossBattle&&b.Result==BattleResult.Fighting&&view.IsBattleUncovered){throne.Render(b);label.enabled=!b.PrimordialIntroducing&&!(b.PrimordialAnimated&&b.PrimordialTransitioning)&&(b.BossPreparation||b.PrimordialTransitioning);label.text=b.PrimordialTransitioning?"봉인 붕괴":b.BossSkillWarning;label.color=new Color(.96f,.89f,.71f);mesh.End();PeakQuads=Mathf.Max(PeakQuads,QuadCount);return;}
+   if(b!=null&&b.VoidBossBattle&&b.Result==BattleResult.Fighting&&view.IsBattleUncovered){boundary.Render(b);label.enabled=b.BossPreparation||b.VoidBoundaryCollapsed&&b.Time-b.VoidBoundaryCollapsedAt<1.2;label.text=b.BossPreparation?b.BossSkillWarning:"경계 붕괴";label.color=new Color(.83f,.76f,.97f);mesh.End();PeakQuads=Mathf.Max(PeakQuads,QuadCount);return;}
+   if(b!=null&&b.SolarBossBattle&&b.Result==BattleResult.Fighting&&view.IsBattleUncovered){solar.Render(b);label.enabled=b.SolarMirrorPreparing||b.SolarMirrorActive;label.text=b.SolarMirrorActive?"태양거울 · 직접 공격 주의 · "+b.BossPhaseRemaining.ToString("0.0")+"초":b.BossSkillWarning;label.color=new Color(1,.85f,.55f);mesh.End();PeakQuads=Mathf.Max(PeakQuads,QuadCount);return;}
+   if(b!=null&&b.LibraryBossBattle&&b.Result==BattleResult.Fighting&&view.IsBattleUncovered){library.Render(b);label.enabled=b.BossPreparation||b.BookChoiceActive;label.text=b.BookChoiceActive?"금서 봉인 · "+b.BossPhaseRemaining.ToString("0.0")+"초":b.BossSkillWarning;label.color=new Color(.82f,.7f,.95f);mesh.End();PeakQuads=Mathf.Max(PeakQuads,QuadCount);return;}
+   if(b!=null&&b.FrostPalaceBattle&&b.Result==BattleResult.Fighting&&view.IsBattleUncovered){frost.Render(b);label.enabled=b.BossPreparation;label.text=b.BossSkillWarning;label.color=new Color(.7f,.9f,1);mesh.End();PeakQuads=Mathf.Max(PeakQuads,QuadCount);return;}
+   if(b!=null&&b.SentryCoreBattle&&b.Result==BattleResult.Fighting&&view.IsBattleUncovered){sentry.Render(b);label.enabled=b.BossPreparation;label.text=b.BossSkillWarning;label.color=new Color(.49f,.86f,.94f);mesh.End();PeakQuads=Mathf.Max(PeakQuads,QuadCount);return;}
    if(b!=null&&b.GarudaDecisionBattle&&b.Result==BattleResult.Fighting&&view.IsBattleUncovered){garuda.Render(b);label.enabled=b.BossPreparation;label.text=b.BossSkillWarning;label.color=WindVFXStyle.Mint;mesh.End();PeakQuads=Mathf.Max(PeakQuads,QuadCount);return;}
    if(b!=null&&b.BossSkillBusy&&(b.ActiveBossSkill.attackVfx=="forge_barrier"||b.ActiveBossSkill.attackVfx=="vulcan_meteor")&&view.IsBattleUncovered){
     label.enabled=b.BossPreparation;label.color=new Color(1,.76f,.35f);

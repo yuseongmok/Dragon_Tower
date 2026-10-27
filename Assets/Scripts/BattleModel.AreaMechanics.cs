@@ -13,26 +13,31 @@ namespace DragonTower
         bool specialWarning,sealAttackNext;
         public bool PlayerBurning=>Time<playerBurnUntil;
         public bool PlayerRending=>Time<playerRendUntil;
-        public bool PlayerParalyzed=>Enemy.bossPattern==EnemyBossPattern.SentryParalysis||Time<playerParalyzeUntil;
+        bool LegacySentryParalysis=>Enemy.bossPattern==EnemyBossPattern.SentryParalysis&&!SentryCoreBattle;
+        public bool PlayerParalyzed=>LegacySentryParalysis||Time<playerParalyzeUntil;
         public bool PlayerSlowed=>Time<playerSlowUntil;
         public bool PlayerStunned=>Time<playerStunUntil;
         public bool PlayerSkillSealed=>Time<skillSealUntil;
         public bool PlayerAttackSealed=>Time<attackSealUntil;
-        public bool EnemyReflecting=>Time<reflectUntil;
-        public double ReflectionRemaining=>Math.Max(0,reflectUntil-Time);
+        public bool EnemyReflecting=>SolarBossBattle?SolarMirrorActive:Time<reflectUntil;
+        public double ReflectionRemaining=>SolarBossBattle?(SolarMirrorActive?BossPhaseRemaining:0):Math.Max(0,reflectUntil-Time);
         public double StunRemaining=>Math.Max(0,playerStunUntil-Time);
         public double SkillSealRemaining=>Math.Max(0,skillSealUntil-Time);
         public double AttackSealRemaining=>Math.Max(0,attackSealUntil-Time);
         public double PlayerBurnRemaining=>Math.Max(0,playerBurnUntil-Time);
         public double PlayerRendRemaining=>Math.Max(0,playerRendUntil-Time);
         public double PlayerSlowRemaining=>Math.Max(0,playerSlowUntil-Time);
-        public double PlayerParalyzeRemaining=>Enemy.bossPattern==EnemyBossPattern.SentryParalysis?double.PositiveInfinity:Math.Max(0,playerParalyzeUntil-Time);
-        public string EnemyBarrierName=>Enemy.bossPattern==EnemyBossPattern.FrostRecovery?"빙결 회복 방벽":"용광로 방벽";
+        public double PlayerParalyzeRemaining=>LegacySentryParalysis?double.PositiveInfinity:Math.Max(0,playerParalyzeUntil-Time);
+        public string EnemyBarrierName=>PrimordialBossBattle?(PrimordialPhase==1?"수호자의 봉인":"공허의 사슬"):VoidExpandedBattle?"차원 봉합 핵":Enemy.bossPattern==EnemyBossPattern.FrostRecovery?"빙결 회복 방벽":"용광로 방벽";
         public string AreaHint
         {
             get
             {
-                if(Enemy.bossPattern==EnemyBossPattern.SentryParalysis)return "뇌운 결계 · 전투 내내 마비, 공격·스킬 25% 실패";
+                if(SolarBossBattle)return SolarMirrorActive?"태양거울 활성 · 직접 공격 주의":SolarAttackMidnight?"자정 · 중앙에서 대기":"정오 · 충돌 순간 회피";
+                if(SentryCoreBattle)return "피뢰 코어 · 전용 공격 회피 시 충전 감소";
+                if(LibraryBossBattle)return BookChoiceActive?"금서를 터치해 공격 대상 선택 · 한 권을 파괴하세요":"실체가 있는 금서의 주문을 관찰하세요";
+                if(FrostPalaceBattle)return FrostWeaknessStacks>0?"얼음 갑옷 균열 · 다음 방벽 약화 ×"+FrostWeaknessStacks:"공명 수정 · 파편 회피 시 다음 방벽 약화";
+                if(LegacySentryParalysis)return "뇌운 결계 · 전투 내내 마비, 공격·스킬 25% 실패";
                 if(Enemy.floor>=21&&Enemy.floor<=30)return "용광로 · 피격 시 4초 화상";
                 if(GarudaDecisionBattle)return "천공의 칼날 · 방향을 관찰하세요";
                 if(Enemy.floor<=40&&Enemy.floor>=31)return "천공 회랑 · 돌풍이 자동 회피를 발동합니다";
@@ -48,10 +53,11 @@ namespace DragonTower
             get
             {
                 var parts=new List<string>();
+                if(BookBindingActive)parts.Add("속박 · 일반공격 주기 +"+bookSlowPercent.ToString("0")+"% · "+BookBindingRemaining.ToString("0.0")+"초");
                 if(BossStormActive)parts.Add("폭풍 · 회피 쿨타임 +30% · "+BossStormRemaining.ToString("0.0")+"초");
                 if(PlayerBurning)parts.Add("화상 "+Remaining(playerBurnUntil));
                 if(PlayerRending)parts.Add("찰과상 "+Remaining(playerRendUntil));
-                if(PlayerParalyzed)parts.Add(Enemy.bossPattern==EnemyBossPattern.SentryParalysis?"상시 마비 25%":"마비 "+Remaining(playerParalyzeUntil));
+                if(PlayerParalyzed)parts.Add(LegacySentryParalysis?"상시 마비 25%":"마비 "+Remaining(playerParalyzeUntil));
                 if(PlayerSlowed)parts.Add("둔화 "+Remaining(playerSlowUntil));
                 if(PlayerSkillSealed)parts.Add("스킬 봉인 "+Remaining(skillSealUntil));
                 if(PlayerAttackSealed)parts.Add("공격 봉인 "+Remaining(attackSealUntil));
@@ -64,6 +70,7 @@ namespace DragonTower
         {
             get
             {
+                if(SolarBossBattle)return SolarMirrorActive?"태양거울 · 반사 중 · "+BossPhaseRemaining.ToString("0.0")+"초":"";
                 if(EnemyReflecting)return "반사 중! 공격 중지 · "+Remaining(reflectUntil);
                 if(specialWarning)return SpecialName+" · "+Remaining(nextSpecialAt)+" 후 발동";
                 if(!GarudaDecisionBattle&&Enemy.floor>=31&&Enemy.floor<=40&&nextWindAt-Time<=.8)return "돌풍 접근 · 자동 회피 주의!";
@@ -79,6 +86,7 @@ namespace DragonTower
         }
         void SlowPlayerCooldowns(double delta)
         {
+            if(BookBindingActive&&AttackReady>Time){double slowed=Math.Min(delta,BookBindingRemaining);AttackReady+=Math.Min(slowed,AttackReady-Time)*(1-1/(1+bookSlowPercent/100.0));}
             if(!PlayerSlowed)return;
             double slowedTime=Math.Min(delta,playerSlowUntil-Time);
             // Slow the countdown itself so recovery immediately returns to normal on expiry.
@@ -98,7 +106,7 @@ namespace DragonTower
                 nextWindAt=Time+7+random()*3;
             }
             if(EnemyTimeStopped)return;
-            bool timed=Enemy.bossPattern==EnemyBossPattern.FrostRecovery||Enemy.bossPattern==EnemyBossPattern.AzazelSeals||Enemy.bossPattern==EnemyBossPattern.UrielReflection;
+            bool timed=Enemy.bossPattern==EnemyBossPattern.FrostRecovery&&!FrostPalaceBattle||Enemy.bossPattern==EnemyBossPattern.AzazelSeals&&!LibraryBossBattle||Enemy.bossPattern==EnemyBossPattern.UrielReflection&&!SolarBossBattle;
             if(!timed)return;
             if(!specialWarning&&Time>=nextSpecialAt-1.2)
             {specialWarning=true;Feedback?.Invoke("보스 예고 · "+SpecialName+"!");}
@@ -132,9 +140,9 @@ namespace DragonTower
                 if(!PlayerBurning)playerBurnNext=Time+1;
                 playerBurnUntil=Time+4;
             }
-            if(Enemy.floor>=41&&Enemy.floor<=50)playerParalyzeUntil=Time+4;
+            if(Enemy.floor>=41&&Enemy.floor<=50&&!SentryCoreBattle)playerParalyzeUntil=Time+4;
             if(Enemy.floor>=51&&Enemy.floor<=60)playerSlowUntil=Time+4;
-            if(Enemy.floor>=61&&Enemy.floor<=70&&Time>=skillSealAllowedAt)
+            if(Enemy.floor>=61&&Enemy.floor<=70&&!LibraryBossBattle&&Time>=skillSealAllowedAt)
             {skillSealUntil=Math.Max(skillSealUntil,Time+3);skillSealAllowedAt=skillSealUntil+2;pendingSkillHits=0;CancelAugmentCast();}
             if(Enemy.floor>=71&&Enemy.floor<=80&&Time>=stunAllowedAt&&Roll(25))
             {playerStunUntil=Time+1;stunAllowedAt=playerStunUntil+3;pendingSkillHits=0;CancelAugmentCast();}

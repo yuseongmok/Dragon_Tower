@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ab168aee88f48c0ac6e0dea2c3c85c4, type: 3}
+  m_Name: monster_wandering_knight
+  m_EditorClassIdentifier: Assembly-CSharp::DragonTower.MonsterData
+  contentId: monster_wandering_knight
+  displayName: "\uCC28\uC6D0 \uC720\uB791\uAE30\uC0AC"
+  description: "\uB04A\uC5B4\uC9C4 \uAC80\uC744 \uC9C0\uB2CC \uCC44 \uCC28\uC6D0
+    \uC0AC\uC774\uB97C \uB5A0\uB3C4\uB294 \uAE30\uC0AC."
+  rarity: 0
+  icon: {fileID: 21300000, guid: 123d346fa29bae44aa48c26c645fe846, type: 3}
+  elementType: 7
+  baseHP: 3250
+  attackDamage: 59
+  attackInterval: 2.55
+  hpGrowthPerFloor: 16
+  attackGrowthPerFloor: 0.2
+  hpGrowthPerFloorPercent: 1.2
+  attackGrowthPerFloorPercent: 0.3
+  minimumFloor: 84
+  maximumFloor: 89
+  spawnWeight: 10
+  boss: 0
+  timingVariancePercent: 12
+  quickAttackChancePercent: 0
+  quickAttackIntervalMultiplier: 0.6
+  bossPattern: 0
+  patternEveryAttacks: 4
+  patternIntervalMultiplier: 1
+  patternDamageMultiplier: 1
+  barrierHP: 0
+  barrierDuration: 4.5
+  barrierFailureDamagePercent: 35
+  specialPatternInterval: 11
+  specialPatternDuration: 3
+  barrierHealPercent: 12
+  reflectionPercent: 20
+  battleSprite: {fileID: 21300000, guid: 123d346fa29bae44aa48c26c645fe846, type: 3}

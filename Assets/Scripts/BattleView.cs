@@ -298,6 +298,7 @@ namespace DragonTower
         public void PlayCue(CombatCue cue,int damage,bool playAudio) { if(playAudio)DragonTowerAudio.PlayCombat(cue,activeSkillEffect,activeSkillName);if(motion!=null) motion.Play(cue,damage); }
         public void SetEncounter(BattleEnemyStats enemy,int floor,bool boss,Sprite enemySprite=null)
         {
+            ResetPrimordialPresentation(enemy.bossPattern==EnemyBossPattern.PrimordialContract);
             EnsureElementIcons();SetElementIcon(enemyElementIcon,enemy.elementType);
             if(floorLabel==null||modeLabel==null||enemyName==null)
             {
@@ -399,10 +400,11 @@ namespace DragonTower
                 warning.rectTransform.sizeDelta=new Vector2(440,46);warning.fontSize=16;
                 if(b.BossWarning.Length>0)warning.text=b.BossWarning+(!b.EnemyStunned&&until<=b.CurrentEnemyWindupDuration?"\n"+b.EnemyIntent+" · "+until.ToString("0.0")+"초 후 공격":"");
             }
+            if(b.SolarBossBattle&&b.SolarAttackMidnight&&!b.EnemyStunned&&!b.BossSkillBusy&&until<=b.CurrentEnemyWindupDuration)warning.text="자정의 공격 · "+until.ToString("0.0")+"초 · 중앙 대기";
             warning.color=until<.42f ? new Color(1,.4f,.3f) : new Color(1,.75f,.43f);
             string status="";Color tint=Color.white;
             if(b.EnemyShieldHP>0){status="["+b.EnemyBarrierName+" "+b.EnemyShieldHP+" · "+b.EnemyShieldRemaining.ToString("0.0")+"초]";tint=new Color(.45f,.8f,1);}
-            if(b.EnemyReflecting){status="[피해 반사 "+b.Enemy.reflectionPercent.ToString("0")+"% · "+b.ReflectionRemaining.ToString("0.0")+"초]";tint=new Color(1,.7f,.25f);}
+            if(b.EnemyReflecting&&!b.SolarBossBattle){status="[피해 반사 "+b.Enemy.reflectionPercent.ToString("0")+"% · "+b.ReflectionRemaining.ToString("0.0")+"초]";tint=new Color(1,.7f,.25f);}
             enemyStatus.text=status;enemyStatus.color=tint;
             ShowGestureStatus(b);
             if(b.Dragon.skillDisabled){skillButton.interactable=false;skillLabel.text="스킬\n봉인됨";}
@@ -422,6 +424,7 @@ namespace DragonTower
             itemButton1.interactable=usableItems[0]&&!b.PlayerStunned&&b.Result==BattleResult.Fighting;
             itemButton2.interactable=usableItems[1]&&!b.PlayerStunned&&b.Result==BattleResult.Fighting;
             itemButton3.interactable=usableItems[2]&&!b.PlayerStunned&&b.Result==BattleResult.Fighting;
+            ShowPrimordialPresentation(b);
             ShowResultPresentation(b,motion==null || motion.ResultReady);
 
         }

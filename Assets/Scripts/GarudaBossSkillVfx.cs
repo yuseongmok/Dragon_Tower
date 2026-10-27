@@ -13,8 +13,8 @@ namespace DragonTower {
   void Depth(LightningMeshLayer m,Transform actor,bool after){int i=actor.GetSiblingIndex()+(after?1:0);if(m.transform.GetSiblingIndex()<actor.GetSiblingIndex())i--;m.transform.SetSiblingIndex(i);}
   void Arc(LightningMeshLayer m,Vector2 p,float rx,float ry,float begin,float length,float width,Color c){for(int i=0;i<18;i++){float a=begin+length*i/18,z=begin+length*(i+1)/18;m.Line(p+new Vector2(Mathf.Cos(a)*rx,Mathf.Sin(a)*ry),p+new Vector2(Mathf.Cos(z)*rx,Mathf.Sin(z)*ry),width,c);}}
   void Crescent(Vector2 p,float size,float tilt,float alpha){
-   // Broad swept crescent with a stepped dark contour, restrained white edge.
-   for(int i=0;i<24;i++){float x=(i-12)/12f,z=(i-11)/12f;var a=p+new Vector2(x*size,(-x*x*.42f+tilt*x)*size);var b=p+new Vector2(z*size,(-z*z*.42f+tilt*z)*size);float w=5+18*(1-Mathf.Abs(x));air.Line(a,b,w+6,A(WindVFXStyle.Deep,alpha));air.Line(a,b,w,A(WindVFXStyle.Teal,alpha));air.Line(a+Vector2.down*3,b+Vector2.down*3,Mathf.Max(2,w*.45f),A(WindVFXStyle.Cyan,alpha));air.Line(a+Vector2.down*6,b+Vector2.down*6,2,A(WindVFXStyle.Pale,alpha));}
+   // Positive curvature places the convex edge toward the downward flight path; trails remain above.
+   for(int i=0;i<24;i++){float x=(i-12)/12f,z=(i-11)/12f;var a=p+new Vector2(x*size,(x*x*.42f+tilt*x)*size);var b=p+new Vector2(z*size,(z*z*.42f+tilt*z)*size);float w=5+18*(1-Mathf.Abs(x));air.Line(a,b,w+6,A(WindVFXStyle.Deep,alpha));air.Line(a,b,w,A(WindVFXStyle.Teal,alpha));air.Line(a+Vector2.down*3,b+Vector2.down*3,Mathf.Max(2,w*.45f),A(WindVFXStyle.Cyan,alpha));air.Line(a+Vector2.down*6,b+Vector2.down*6,2,A(WindVFXStyle.Pale,alpha));}
   }
   public void Render(BattleModel b){
    floor.Begin();air.Begin();Depth(floor,view.enemyArt.transform,false);Depth(air,view.playerArt.transform,true);

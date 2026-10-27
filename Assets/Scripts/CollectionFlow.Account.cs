@@ -77,7 +77,7 @@ namespace DragonTower {
    var error=AccountMessage(553);AccountButton("닉네임 저장",653,()=>{draft.displayName=input.text.Trim();draft.selectedDragonId=Session.Selected?.StableId??"";if(!TrainerProfile.Valid(draft)){error.text="닉네임을 확인해주세요. 공백만 사용할 수 없습니다.";return;}try{trainerCache=new TrainerCache{profile=draft.Copy(),dirty=identity!=null};trainerSaves.Save(activeOwner,trainerCache);Session.SetTrainerName(draft.displayName);if(identity!=null)SaveTrainer(true);else EnterAfterTrainerSetup();}catch(Exception e){error.text=e.Message;}},true);
    AccountButton("돌아가기",729,()=>{if(trainer!=null)ShowTrainerProfile();else ShowAccountEntry();});
   }
-  void EnterAfterTrainerSetup(){Session.SetTrainerName(trainer.displayName);ShowLobby();}
+  void EnterAfterTrainerSetup(){Session.SetTrainerName(trainer.displayName);if(!TryBeginIntroduction())ShowLobby();}
   void SaveTrainer(){SaveTrainer(false);}
   void SaveTrainer(bool enterLobby){if(trainer==null||identity==null)return;SendAccount(new AccountRequest{op="save",uid=identity.uid,profile=trainer.Copy(),revision=trainer.revision},r=>{if(r.ok){trainerCache=new TrainerCache{profile=r.profile};trainerSaves.Save(activeOwner,trainerCache);accountNotice="닉네임을 저장했습니다.";if(enterLobby){EnterAfterTrainerSetup();return;}}ShowTrainerProfile();});}
   public void ShowTrainerProfile(){if(!OnlineFeatures.Enabled){ShowLocalPlayer();return;}EnsureAccounts();AccountScreen("플레이어 정보");
